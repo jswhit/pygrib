@@ -236,7 +236,7 @@ cdef class open(object):
             if self._gh == NULL:
                 raise IOError('not that many messages in file')
             self.messagenumber = self.messagenumber + 1
-        return message(self)
+        return _message(self)
     def __next__(self):
         cdef grib_handle* gh 
         cdef int err
@@ -249,7 +249,7 @@ cdef class open(object):
             raise StopIteration
         if err:
             raise RuntimeError(grib_get_error_message(err))
-        return message(self)
+        return _message(self)
     def __dealloc__(self):
         """special method used by garbage collector"""
         self.close()
@@ -262,7 +262,7 @@ cdef class open(object):
             if err:
                 raise RuntimeError(grib_get_error_message(err))
 
-cdef class message(object):
+cdef class _message(object):
     cdef grib_handle *_gh
     cdef public messagenumber, projparams
     def __new__(self, open grb):
