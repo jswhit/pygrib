@@ -215,20 +215,32 @@ cdef class open(object):
         self._gh = NULL
         self.messagenumber = 0
     def __repr__(self):
+        inventory = []
+        inventory.append(
+        repr(self.messagenumber)+':center '+self['centre']+':'+self['name']+':'+self['units'])
+        if self.has_key('stepType'):
+            inventory.append(' ('+self['stepType']+')')
+        inventory.append(':'+self['typeOfGrid'])
+        if self.has_key('typeOfLevel'):
+            inventory.append(':'+self['typeOfLevel'])
+        if self.has_key('topLevel'):
+            inventory.append(':top level '+repr(self['topLevel'])+\
+            ':bot level '+repr(self['bottomLevel']))
         if self.has_key('stepRange'):
             ftime = self['stepRange']
-        else:
+            inventory.append(':fcst time '+ftime)
+        elif self.has_key('forecastTime'):
             ftime = repr(self['forecastTime'])
-        inventory =\
-        repr(self.messagenumber)+':'+self['name']+':'+self['units']+' ('+self['stepType']+')'+\
-        ':'+self['typeOfGrid']+':'+self['typeOfLevel']+':top level '+repr(self['topLevel'])+\
-        ':bot level '+repr(self['bottomLevel'])+':fcst time '+ftime+\
-        ':from '+repr(self['dataDate'])+repr(self['dataTime'])+\
-        ':valid '+repr(self['validityDate'])+repr(self['validityTime'])
+            inventory.append(':fcst time '+ftime)
+        inventory.append(
+        ':from '+repr(self['dataDate'])+repr(self['dataTime']))
+        if self.has_key('validityDate'):
+            inventory.append(
+            ':valid '+repr(self['validityDate'])+repr(self['validityTime']))
         if self.has_key('perturbationNumber'):
-            inventory = inventory+":ens mem %d of %d" %\
-            (self['perturbationNumber'],self['numberOfForecastsInEnsemble'])
-        return inventory
+            inventory.append(":ens mem %d of %d" %\
+            (self['perturbationNumber'],self['numberOfForecastsInEnsemble']))
+        return ''.join(inventory)
     def __iter__(self):
         return self
     def rewind(self):
