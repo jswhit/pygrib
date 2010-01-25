@@ -250,9 +250,6 @@ cdef class open(object):
         if err:
             raise RuntimeError(grib_get_error_message(err))
         return message(self)
-    def __dealloc__(self):
-        """special method used by garbage collector"""
-        self.close()
     def close(self):
         """deallocate C structures associated with class instance"""
         cdef int err
@@ -455,11 +452,11 @@ cdef class message(object):
             scalea = self['scaleFactorOfMajorAxisOfOblateSpheroidEarth']
             scaleb = self['scaleFactorOfMinorAxisOfOblateSpheroidEarth']
             if scalea:
-                scalea = 1000.*np.power(10,-scalea)
+                scalea = 1000.*np.power(10.0,-scalea)
             else:
                 scalea = 1
             if scaleb:
-                scaleb = 1000.*np.power(10,-scaleb)
+                scaleb = 1000.*np.power(10.0,-scaleb)
             else:
                 scaleb = 1.
         else:
