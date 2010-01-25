@@ -282,10 +282,17 @@ cdef class open(object):
         if self.has_key('scaleFactorOfMajorAxisOfOblateSpheroidEarth'):
             scalea = self['scaleFactorOfMajorAxisOfOblateSpheroidEarth']
             scaleb = self['scaleFactorOfMinorAxisOfOblateSpheroidEarth']
-            scalea = 1000.*np.power(10,-scalea)
-            scaleb = 1000.*np.power(10,-scaleb)
+            if scalea:
+                scalea = 1000.*np.power(10,-scalea)
+            else:
+                scalea = 1
+            if scaleb:
+                scaleb = 1000.*np.power(10,-scaleb)
+            else:
+                scaleb = 1.
         else:
-            scale = 1.
+            scalea = 1.
+            scaleb = 1.
         if self['shapeOfTheEarth'] == 6:
             projparams['a']=self['radius']
             projparams['b']=self['radius']
@@ -311,8 +318,8 @@ cdef class open(object):
             raise ValueError('unknown shape of the earth flag')
 
         if self['typeOfGrid'] in ['regular_gg','regular_ll']: # regular lat/lon grid
-            lons = self['longitudes']
-            lats = self['latitudes']
+            lons = self['distinctLongitudes']
+            lats = self['distinctLatitudes']
             lons,lats = np.meshgrid(lons,lats) 
             projparams['proj']='cyl'
         elif self['typeOfGrid'].startswith('reduced'): # reduced lat/lon grid
