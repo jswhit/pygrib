@@ -141,6 +141,8 @@ cdef extern from "stdio.h":
     ctypedef struct FILE
     FILE *fopen(char *path, char *mode)
     int	fclose(FILE *)
+    int fseek(FILE *stream, long offset, int whence)
+    void rewind (FILE *)
 
 cdef extern from "Python.h":
     char * PyString_AsString(object)
@@ -221,9 +223,32 @@ cdef class open(object):
         return inventory
     def __iter__(self):
         return self
+    def rewind(self):
+        cdef grib_handle* gh 
+        cdef int err
+        rewind(self._fd)
+        self._gh = NULL
+        self.messagenumber = 0
+    def seek(self, messagenumber):
+        cdef int err
+        self.rewind()
+        if messagenumber:
+            for n in range(messagenumber-1):
+                err = grib_handle_delete(self._gh)
+                if err:
+                    raise RuntimeError(grib_get_error_message(err))
+                self._gh = grib_handle_new_from_file(NULL, self._fd, &err)
+                if err:
+                    raise RuntimeError(grib_get_error_message(err))
+                if self._gh == NULL:
+                    raise IOError('not that many messages in file')
+                self.messagenumber = self.messagenumber + 1
     def __next__(self):
         cdef grib_handle* gh 
         cdef int err
+        err = grib_handle_delete(self._gh)
+        if err:
+            raise RuntimeError(grib_get_error_message(err))
         self._gh = grib_handle_new_from_file(NULL, self._fd, &err)
         self.messagenumber = self.messagenumber + 1
         if self._gh == NULL and not err:
