@@ -6,17 +6,17 @@ print '-- all messages --'
 for grb in grbs:
     print grb
 # position iterator at beginning again.
-grbs.rewind() # grb.rewind() will have same effect.
+grbs.rewind() 
 print '-- all messages (again)  --'
 for grb in grbs:
     print grb
 # get grib a specific grib message from the iterator.
 # iterator will be positioned at this message.
-grb = grbs.message(2) # grb.message(2) will have same effect
+grb = grbs.message(2) 
 print '-- 2nd message --'
 print grb # 2nd message
 # position iterator at next grib message.
-grb.next() # grbs.next() has the same effect
+grb = grbs.next() 
 print '-- 3rd message --'
 print grb # 3rd message
 # now the iterator should be positioned at the last (4th) message.

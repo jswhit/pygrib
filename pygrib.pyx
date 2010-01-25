@@ -202,7 +202,7 @@ cdef extern from "grib_api.h":
 cdef class open(object):
     cdef FILE *_fd
     cdef grib_handle *_gh
-    cdef public object filename, projparams, messagenumber
+    cdef public object filename, messagenumber
     def __new__(self, filename):
         cdef grib_handle *gh
         cdef FILE *_fd
@@ -213,6 +213,61 @@ cdef class open(object):
             raise IOError("could not open %s", filename)
         self._gh = NULL
         self.messagenumber = 0
+    def __iter__(self):
+        return self
+    def rewind(self):
+        """rewind iterator"""
+        cdef grib_handle* gh 
+        cdef int err
+        rewind(self._fd)
+        self._gh = NULL
+        self.messagenumber = 0
+    def message(self, N):
+        """retrieve N'th message in iterator"""
+        cdef int err
+        self.rewind()
+        for n in range(N):
+            err = grib_handle_delete(self._gh)
+            if err:
+                raise RuntimeError(grib_get_error_message(err))
+            self._gh = grib_handle_new_from_file(NULL, self._fd, &err)
+            if err:
+                raise RuntimeError(grib_get_error_message(err))
+            if self._gh == NULL:
+                raise IOError('not that many messages in file')
+            self.messagenumber = self.messagenumber + 1
+        return message(self)
+    def __next__(self):
+        cdef grib_handle* gh 
+        cdef int err
+        err = grib_handle_delete(self._gh)
+        if err:
+            raise RuntimeError(grib_get_error_message(err))
+        self._gh = grib_handle_new_from_file(NULL, self._fd, &err)
+        self.messagenumber = self.messagenumber + 1
+        if self._gh == NULL and not err:
+            raise StopIteration
+        if err:
+            raise RuntimeError(grib_get_error_message(err))
+        return message(self)
+    def __dealloc__(self):
+        """special method used by garbage collector"""
+        self.close()
+    def close(self):
+        """deallocate C structures associated with class instance"""
+        cdef int err
+        fclose(self._fd)
+        if self._gh != NULL:
+            err = grib_handle_delete(self._gh)
+            if err:
+                raise RuntimeError(grib_get_error_message(err))
+
+cdef class message(object):
+    cdef grib_handle *_gh
+    cdef public messagenumber, projparams
+    def __new__(self, open grb):
+        self._gh = grb._gh
+        self.messagenumber = grb.messagenumber
     def __repr__(self):
         inventory = []
         inventory.append(
@@ -246,44 +301,6 @@ cdef class open(object):
             inventory.append(":ens mem %d of %d" %\
             (self['perturbationNumber'],self['numberOfForecastsInEnsemble']))
         return ''.join(inventory)
-    def __iter__(self):
-        return self
-    def rewind(self):
-        """rewind iterator"""
-        cdef grib_handle* gh 
-        cdef int err
-        rewind(self._fd)
-        self._gh = NULL
-        self.messagenumber = 0
-    def message(self, N):
-        """retrieve N'th message in iterator"""
-        cdef int err
-        self.rewind()
-        if N:
-            for n in range(N-1):
-                err = grib_handle_delete(self._gh)
-                if err:
-                    raise RuntimeError(grib_get_error_message(err))
-                self._gh = grib_handle_new_from_file(NULL, self._fd, &err)
-                if err:
-                    raise RuntimeError(grib_get_error_message(err))
-                if self._gh == NULL:
-                    raise IOError('not that many messages in file')
-                self.messagenumber = self.messagenumber + 1
-        return self.next()
-    def __next__(self):
-        cdef grib_handle* gh 
-        cdef int err
-        err = grib_handle_delete(self._gh)
-        if err:
-            raise RuntimeError(grib_get_error_message(err))
-        self._gh = grib_handle_new_from_file(NULL, self._fd, &err)
-        self.messagenumber = self.messagenumber + 1
-        if self._gh == NULL and not err:
-            raise StopIteration
-        if err:
-            raise RuntimeError(grib_get_error_message(err))
-        return self
     def keys(self):
         """
  return keys associated with a grib message (a dictionary-like object)
@@ -384,20 +401,6 @@ cdef class open(object):
             return msg.rstrip()
         else:
             raise ValueError("unrecognized grib type % d" % type)
-    def close(self):
-        """deallocate C structures associated with class instance"""
-        cdef int err
-        fclose(self._fd)
-        if self._gh != NULL:
-            err = grib_handle_delete(self._gh)
-            if err:
-                raise RuntimeError(grib_get_error_message(err))
-    def __dealloc__(self):
-        """special method used by garbage collector"""
-        self.close()
-    def __reduce__(self):
-        """special method that allows class instance to be pickled"""
-        return (self.__class__,(self.filename,))
     def has_key(self,key):
         """
  tests whether a grib message object has a specified key.
