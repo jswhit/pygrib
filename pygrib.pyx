@@ -225,8 +225,13 @@ cdef class open(object):
         if self.has_key('typeOfLevel'):
             inventory.append(':'+self['typeOfLevel'])
         if self.has_key('topLevel'):
-            inventory.append(':level '+repr(self['topLevel'])+\
-            '-'+repr(self['bottomLevel']))
+            toplev = self['topLevel']
+            botlev = self['bottomLevel']
+            if toplev == botlev:
+                inventory.append(':level '+repr(toplev))
+            else:
+                inventory.append(':levels '+repr(self['topLevel'])+\
+                '-'+repr(self['bottomLevel']))
         if self.has_key('stepRange'):
             ftime = self['stepRange']
             inventory.append(':fcst time '+ftime)
