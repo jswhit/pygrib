@@ -215,10 +215,15 @@ cdef class open(object):
         self._gh = NULL
         self.messagenumber = 0
     def __repr__(self):
+        if self.has_key('stepRange'):
+            ftime = self['stepRange']
+        else:
+            ftime = repr(self['forecastTime'])
         inventory =\
         repr(self.messagenumber)+':'+self['name']+':'+self['units']+' ('+self['stepType']+')'+\
         ':'+self['typeOfGrid']+':'+self['typeOfLevel']+':top level '+repr(self['topLevel'])+\
-        ':bot level '+repr(self['bottomLevel'])+':fcst time '+repr(self['forecastTime'])+\
+        ':bot level '+repr(self['bottomLevel'])+':fcst time '+ftime+\
+        ':from '+repr(self['dataDate'])+repr(self['dataTime'])+\
         ':valid '+repr(self['validityDate'])+repr(self['validityTime'])
         return inventory
     def __iter__(self):
