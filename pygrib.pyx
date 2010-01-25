@@ -1,3 +1,131 @@
+"""
+Introduction
+============
+
+Python module for reading GRIB (editions 1 and 2) files
+(U{download<http://code.google.com/p/pygrib/downloads/list>}). 
+GRIB is the World Meterological Organization
+U{standard<http://www.wmo.ch/pages/prog/www/WMOCodes/GRIB.html>} 
+for distributing gridded data. 
+The module is a python interface to the
+U{GRIB_API<http://www.ecmwf.int/products/data/software/grib_api.html>} C library
+from the European Centre for Medium-Range Weather Forecasts
+(U{ECMWF<http://www.ecmwf.int}).
+
+Required
+========
+
+- U{Python<http://python.org>} 2.4 or higher.  
+- U{numpy<http://sourceforge.net/project/showfiles.php?group_id=1369>}
+  N-dimensional array object for python. Version 1.2.1 or higher.
+- U{pyproj<http://code.google.com/p/pyproj/>} Python interface to 
+  U{PROJ.4<http://proj.maptools.org>} library for cartographic transformations.
+- U{GRIB_API<http://www.ecmwf.int/products/data/software/grib_api.htm.>} C library
+  for encoding and decoding GRIB messages (edition 1 and edition 2).
+  To be fully functional, the GRIB_API library requires
+  U{Jasper<http://www.ece.uvic.ca/~mdadams/jasper>} or 
+  U{OpenJPEG<http://www.openjpeg.org>} for JPEG200 encoding,
+  and U{PNG<http://www.libpng.org/pub/png/libpng.html>} for PNG encoding.
+
+Installation
+============
+
+ - set the environment variables C{$GRIBAPI_DIR}, C{$JASPER_DIR}, C{$OPENJPEG_DIR},
+ C{$PNG_DIR} and C{$ZLIB_DIR} so that the include files and libraries for
+ GRIB_API, JASPER, OpenJPEG, PNG and zlib will be found.  
+ For example, the include files for 
+ jasper should be found in C{$JASPER_DIR/include}, and the jasper
+ library should be found in C{$JASPER_DIR/lib}. If any of those environment 
+ variables are not set, then the default search paths will be used.  If
+ GRIB_API library was compiled without JASPER, PNG or OpenJPEG support, then the 
+ corresponding environment variable need not be set.
+
+ - Run 'python setup.py install', as root if necessary.
+
+
+Example usage
+=============
+
+ - from the python interpreter prompt, import the package::
+    >>> import pygrib
+ - open a GRIB file, create an grib message iterator::
+    >>> grbs = pygrib.open('sampledata/gfs.grb')  
+ - print an inventory of the file::
+    >>> for grb in grbs:
+    >>>     print grb 
+    1:HGT [gpm]:100000 Pa (Isobaric Surface):72 Hour Forecast initialized 2004120912:Latitude/longitude:Unperturbed high-resolution control forecast member 0 of 10
+    2:HGT [gpm]:97500 Pa (Isobaric Surface):72 Hour Forecast initialized 2004120912:Latitude/longitude:Unperturbed high-resolution control forecast member 0 of 10
+    3:HGT [gpm]:95000 Pa (Isobaric Surface):72 Hour Forecast initialized 2004120912:Latitude/longitude:Unperturbed high-resolution control forecast member 0 of 10
+  
+       .....
+
+ - find the first grib message containing 500 hPa geopotential height:: 
+    >>> z500 = [g for g in grbs if g.parameter=='HGT' and g.vertical_level=='50000 Pa' and g.vertical_level_descriptor=='Isobaric Surface'][0]
+ - extract the 500 hPa height data::
+    >>> z500data = z500.data()
+    >>> print z500.shape, z500data.min(), z500data.max()
+    (73, 144) 4834.89990234 5931.20019531
+ - get the latitudes and longitudes of the grid::
+    >>> lats, lons = z500.grid()
+    >>> print lats.shape, lats.min(), lats.max(), lons.shape, lons.min(), lons.max()
+    (73, 144) -90.0 90.0 (73, 144) 0.0 357.5
+ - dump just this grib message to another file::
+    >>> dump('gfs_z500.grb',[z500])
+ - read that file back in and verify it's contents::
+    >>> grbs = Grib2Decode('gfs_z500.grb')
+    >>> for g in grbs:
+    >>>    print g
+    1:HGT [gpm]:50000 Pa (Isobaric Surface):72 Hour Forecast initialized 2004120912:Latitude/longitude:Unperturbed high-resolution control forecast member 0 of 10
+
+Documentation
+=============
+
+ - see below for python API documentation.
+  
+Links
+=====
+
+ - U{ECMWF GRIP_API<http://www.ecmwf.int/products/data/software/grib2.html>}.
+   This package is a python interface to the GRIB_API library.
+ - U{WMO GRIB information<http://www.wmo.ch/pages/prog/www/WMOCodes/GRIB.html>}.
+ - U{wgrib2<http://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/>}
+ - U{NCEP GRIB2 C and FORTRAN libraries
+   <http://www.nco.ncep.noaa.gov/pmb/codes/GRIB2/>}. 
+ - U{MDL GRIB2 Decoder<http://weather.gov/mdl/iwt/grib2/decoder.htm>}
+ - U{Cython<http://www.cython.org>}
+ (used to create python interface to g2clib and proj4).
+ - U{proj.4<http://trac.osgeo.org/proj>} (used to perform cartographic
+ transformations).
+
+Changelog
+=========
+
+ - B{20100201}: initial release. Read-only support nearly
+   complete, but no support for writing.
+
+@author: Jeffrey Whitaker.
+
+@contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
+
+@version: 20100201
+
+@copyright: copyright 2010 by Jeffrey Whitaker.
+
+@license: Permission to use, copy, modify, and distribute this software and its
+documentation for any purpose and without fee is hereby granted,
+provided that the above copyright notice appear in all copies and that
+both that copyright notice and this permission notice appear in
+supporting documentation.
+THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
+INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO
+EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, INDIRECT OR
+CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF
+USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+""" 
+__version__ = '20100201'
+
 import numpy as np
 from numpy import ma
 import pyproj
@@ -73,7 +201,7 @@ cdef extern from "grib_api.h":
 cdef class open(object):
     cdef FILE *_fd
     cdef grib_handle *_gh
-    cdef public object filename, projparams
+    cdef public object filename, projparams, messagenumber
     def __new__(self, filename):
         cdef grib_handle *gh
         cdef FILE *_fd
@@ -83,12 +211,21 @@ cdef class open(object):
         if self._fd == NULL:
             raise IOError("could not open %s", filename)
         self._gh = NULL
+        self.messagenumber = 0
+    def __repr__(self):
+        inventory =\
+        repr(self.messagenumber)+':'+self['name']+':'+self['units']+' ('+self['stepType']+')'+\
+        ':'+self['typeOfGrid']+':'+self['typeOfLevel']+':top level '+repr(self['topLevel'])+\
+        ':bot level '+repr(self['bottomLevel'])+':fcst time '+repr(self['forecastTime'])+\
+        ':valid '+repr(self['validityDate'])+repr(self['validityTime'])
+        return inventory
     def __iter__(self):
         return self
     def __next__(self):
         cdef grib_handle* gh 
         cdef int err
         self._gh = grib_handle_new_from_file(NULL, self._fd, &err)
+        self.messagenumber = self.messagenumber + 1
         if self._gh == NULL and not err:
             raise StopIteration
         if err:
