@@ -1,8 +1,8 @@
 import pygrib
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
-g = pygrib.open('../sampledata/ds.maxt.grb')
-g.next()
+grbs = pygrib.open('../sampledata/ds.maxt.grb')
+g = grbs.message(1)
 lats, lons = g.latlons()
 data = g['values']
 print data.dtype

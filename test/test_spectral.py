@@ -7,7 +7,8 @@ try:
 except:
     raise ImportError("requires pyspharm (python spherical harmonic module) from http://code.google.com/p/pyspharm")
 
-for g in pygrib.open('../sampledata/spectral.grb'):
+grbs = pygrib.open('../sampledata/spectral.grb')
+for g in grbs:
     if g['name'] == 'Temperature' and\
     g['scaledValueOfFirstFixedSurface']==99598:
         fld = g['values']

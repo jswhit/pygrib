@@ -1,9 +1,8 @@
 import pygrib
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
-grb = pygrib.open('../sampledata/flux.grb')
-grb.next()
-grb.next()
+grbs = pygrib.open('../sampledata/flux.grb')
+grb = grbs.message(2)
 lats, lons = grb.latlons()
 data = grb['values']
 print lats[:,0]

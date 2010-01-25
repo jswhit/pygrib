@@ -2,8 +2,9 @@ import pygrib
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
-grb = pygrib.open('../sampledata/eumetsat_precip.grb')
-grb.next()
+grbs = pygrib.open('../sampledata/eumetsat_precip.grb')
+#grb = grbs.next()
+grb = grbs.message(1)
 fld = grb['values']
 lats, lons = grb.latlons()
 rsphere = (grb.projparams['a'], grb.projparams['b'])
