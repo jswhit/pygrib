@@ -34,7 +34,7 @@ for grb in grbs:
         grb.messagenumber # current message number
         print 'shape/min/max data',data.shape,data.min(), data.max()
         lats, lons = grb.latlons() # returns lat/lon values on grid.
-        print 'min/max lats on %s grid' % grb['typeOfGrid'], lats.min(),\
-        lats.max()
-        print 'min/max lons on %s grid' % grb['typeOfGrid'], lons.min(),\
-        lons.max()
+        print 'min/max of %d lats on %s grid' % (grb['Nj'], grb['typeOfGrid']),\
+        lats.min(),lats.max()
+        print 'min/max of %d lons on %s grid' % (grb['Ni'], grb['typeOfGrid']),\
+        lons.min(),lons.max()
