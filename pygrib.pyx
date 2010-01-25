@@ -129,7 +129,6 @@ __version__ = '20100201'
 import numpy as np
 from numpy import ma
 import pyproj
-import warnings
 import_array()
 
 cdef extern from "stdlib.h":
@@ -383,29 +382,8 @@ cdef class open(object):
                 raise RuntimeError(grib_get_error_message(err))
             msg = PyString_FromString(strdata)
             return msg.rstrip()
-        elif type == GRIB_TYPE_BYTES:
-            msg="cannot read data (size %d) for keys '%s', GRIB_TYPE_BYTES decoding not supported" %\
-            (size,name)
-            warnings.warn(msg)
-            return None
-        elif type == GRIB_TYPE_SECTION:
-            msg="cannot read data (size %d) for keys '%s', GRIB_TYPE_SECTION decoding not supported" %\
-            (size,name)
-            warnings.warn(msg)
-            return None
-        elif type == GRIB_TYPE_LABEL:
-            msg="cannot read data (size %d) for keys '%s', GRIB_TYPE_LABEL decoding not supported" %\
-            (size,name)
-            warnings.warn(msg)
-            return None
-        elif type == GRIB_TYPE_MISSING:
-            msg="cannot read data (size %d) for keys '%s', GRIB_TYPE_MISSING decoding not supported" %\
-            (size,name)
-            warnings.warn(msg)
-            return None
         else:
-            warnings.warn("unrecognized grib type % d" % type)
-            return None
+            raise ValueError("unrecognized grib type % d" % type)
     def close(self):
         """deallocate C structures associated with class instance"""
         cdef int err
@@ -598,10 +576,6 @@ cdef class open(object):
             # general case of 'near-side perspective projection' (untested)
             else:
                 projparams['proj'] = 'nsper'
-                msg = """
-only geostationary perspective is fully supported.
-lat/lon values returned by grid method may be incorrect."""
-                warnings.warn(msg)
             scale = float(self['grib2divider'])
             projparams['h'] = projparams['a'] *\
             self['altitudeOfTheCameraFromTheEarthSCenterMeasuredInUnitsOfTheEarth']/scale
