@@ -25,16 +25,18 @@ for grb in grbs:
     print grb # only last message printed.
 grb.rewind()
 print '-- Maximium temperature --'
+# iterate over all messages until
+# 'Maximum temperature' is found.
 for grb in grbs:
-    if grb['name'] == 'Maximum temperature':
-        # get the data and the lat/lon values of the grid
-        print grb
-        data = grb['values'] # 'values' returns the data
-        print '-- data values, grid info for msg number %d --' % \
-        grb.messagenumber # current message number
-        print 'shape/min/max data',data.shape,data.min(), data.max()
-        lats, lons = grb.latlons() # returns lat/lon values on grid.
-        print 'min/max of %d lats on %s grid' % (grb['Nj'], grb['typeOfGrid']),\
-        lats.min(),lats.max()
-        print 'min/max of %d lons on %s grid' % (grb['Ni'], grb['typeOfGrid']),\
-        lons.min(),lons.max()
+    if grb['name'] == 'Maximum temperature': break
+print grb
+# get the data and the lat/lon values of the Max temp grid 
+data = grb['values'] # 'values' returns the data
+print '-- data values, grid info for msg number %d --' % \
+grb.messagenumber # current message number
+print 'shape/min/max data',data.shape,data.min(), data.max()
+lats, lons = grb.latlons() # returns lat/lon values on grid.
+print 'min/max of %d lats on %s grid' % (grb['Nj'], grb['typeOfGrid']),\
+lats.min(),lats.max()
+print 'min/max of %d lons on %s grid' % (grb['Ni'], grb['typeOfGrid']),\
+lons.min(),lons.max()
