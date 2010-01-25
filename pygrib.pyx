@@ -225,6 +225,9 @@ cdef class open(object):
         ':bot level '+repr(self['bottomLevel'])+':fcst time '+ftime+\
         ':from '+repr(self['dataDate'])+repr(self['dataTime'])+\
         ':valid '+repr(self['validityDate'])+repr(self['validityTime'])
+        if self.has_key('perturbationNumber'):
+            inventory = inventory+":ens mem %d of %d" %\
+            (self['perturbationNumber'],self['numberOfForecastsInEnsemble'])
         return inventory
     def __iter__(self):
         return self
