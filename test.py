@@ -1,5 +1,6 @@
 import pygrib
 # demonstrates basic functionality of module
+# open a grib file, create an iterator.
 grbs = pygrib.open('sampledata/flux.grb')
 # iterate over all grib messages.
 print '-- all messages --'
@@ -10,7 +11,7 @@ grbs.rewind()
 print '-- all messages (again)  --'
 for grb in grbs:
     print grb
-# get grib a specific grib message from the iterator.
+# get a specific grib message from the iterator.
 # iterator will be positioned at this message.
 grb = grbs.message(2) 
 print '-- 2nd message --'
