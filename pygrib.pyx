@@ -232,16 +232,18 @@ cdef class open(object):
     def __iter__(self):
         return self
     def rewind(self):
+        """rewind iterator"""
         cdef grib_handle* gh 
         cdef int err
         rewind(self._fd)
         self._gh = NULL
         self.messagenumber = 0
-    def message(self, messagenumber):
+    def message(self, N):
+        """retrieve N'th message in iterator"""
         cdef int err
         self.rewind()
-        if messagenumber:
-            for n in range(messagenumber-1):
+        if N:
+            for n in range(N-1):
                 err = grib_handle_delete(self._gh)
                 if err:
                     raise RuntimeError(grib_get_error_message(err))
