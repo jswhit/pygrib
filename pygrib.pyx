@@ -237,7 +237,7 @@ cdef class open(object):
         rewind(self._fd)
         self._gh = NULL
         self.messagenumber = 0
-    def seek(self, messagenumber):
+    def message(self, messagenumber):
         cdef int err
         self.rewind()
         if messagenumber:
@@ -251,6 +251,7 @@ cdef class open(object):
                 if self._gh == NULL:
                     raise IOError('not that many messages in file')
                 self.messagenumber = self.messagenumber + 1
+        return self.next()
     def __next__(self):
         cdef grib_handle* gh 
         cdef int err
