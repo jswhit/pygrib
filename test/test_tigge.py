@@ -4,8 +4,7 @@ from numpy import ma
 import pygrib
 import matplotlib.pyplot as plt
 
-grbs = pygrib.open('../sampledata/tigge.grb')
-for grb in grbs:
+for grb in pygrib.open('../sampledata/tigge.grb'):
     fld = 0.01*grb['values'] # convert to hPa
     lats,lons = grb.latlons()
     print grb['centre'], fld.shape, fld.min(), fld.max()

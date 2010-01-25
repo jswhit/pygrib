@@ -1,8 +1,7 @@
 import pygrib
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
-grbs = pygrib.open('../sampledata/gfs.grb')
-for g in grbs:
+for g in pygrib.open('../sampledata/gfs.grb'):
     if g['name'] == 'Volumetric soil moisture content':
         data = g['values']
         lats,lons = g.latlons()
