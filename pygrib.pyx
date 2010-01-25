@@ -575,6 +575,8 @@ cdef class open(object):
                 projparams['proj'] = 'geos'
             # general case of 'near-side perspective projection' (untested)
             else:
+                if projparams['a'] != projparams['b']:
+                    raise ValueError('unsupported grid - earth not a perfect sphere')
                 projparams['proj'] = 'nsper'
             scale = float(self['grib2divider'])
             projparams['h'] = projparams['a'] *\
