@@ -27,12 +27,13 @@ grb.rewind()
 print '-- Maximium temperature --'
 for grb in grbs:
     if grb['name'] == 'Maximum temperature':
+        # get the data and the lat/lon values of the grid
         print grb
-        data = grb['values']
+        data = grb['values'] # 'values' returns the data
         print '-- data values, grid info for msg number %d --' % \
-        grb.messagenumber
+        grb.messagenumber # current message number
         print 'shape/min/max data',data.shape,data.min(), data.max()
-        lats, lons = grb.latlons()
+        lats, lons = grb.latlons() # returns lat/lon values on grid.
         print 'min/max lats on %s grid' % grb['typeOfGrid'], lats.min(),\
         lats.max()
         print 'min/max lons on %s grid' % grb['typeOfGrid'], lons.min(),\
