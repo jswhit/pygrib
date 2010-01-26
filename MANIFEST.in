@@ -1,0 +1,8 @@
+include MANIFEST.in
+include setup.py
+include test.py
+include utils/grib_list
+recursive-include docs *
+include sampledata/*.grb
+include test/README
+include test/*py
