@@ -1,5 +1,4 @@
 pygrib	pygrib-module.html
-pygrib.__test__	pygrib-module.html#__test__
 pygrib.__version__	pygrib-module.html#__version__
 pygrib.gribmessage	pygrib.gribmessage-class.html
 pygrib.gribmessage.__new__	pygrib.gribmessage-class.html#__new__
