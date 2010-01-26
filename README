@@ -1,0 +1,10 @@
+Python module for reading GRIB files (edition 1 and edition 2).
+
+GRIB is the World Meteorological Organization (WMO) standard
+file format for the exchange of weather data.
+
+Provides a python interface for the ECWMF GRIB_API C library.
+
+For installation instructions and API documentation, see docs/index.html.
+
+Questions or comments - contact Jeff Whitaker <jeffrey.s.whitaker@noaa.gov>

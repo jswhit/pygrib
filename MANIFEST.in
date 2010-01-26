@@ -1,6 +1,7 @@
 include MANIFEST.in
 include setup.py
 include test.py
+include README
 include utils/grib_list
 recursive-include docs *
 include sampledata/*.grb
