@@ -21,6 +21,7 @@ Required
   U{PROJ.4<http://proj.maptools.org>} library for cartographic transformations.
 - U{GRIB_API<http://www.ecmwf.int/products/data/software/grib_api.htm.>} C library
   for encoding and decoding GRIB messages (edition 1 and edition 2).
+  Version 1.8.0 or higher required.
   To be fully functional, the GRIB_API library requires
   U{Jasper<http://www.ece.uvic.ca/~mdadams/jasper>} or 
   U{OpenJPEG<http://www.openjpeg.org>} for JPEG200 encoding,
@@ -40,6 +41,7 @@ Installation
  GRIB_API library was compiled without JASPER, PNG or OpenJPEG support, then the 
  corresponding environment variable need not be set.
  - Run 'python setup.py install', as root if necessary.
+ - Run 'python test.py' to test your installation.
 
 
 Example usage
