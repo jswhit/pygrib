@@ -245,7 +245,7 @@ cdef class open(object):
         """
         close()
 
-        close GRIB fie, deallocate C structures associated with class instance"""
+        close GRIB file, deallocate C structures associated with class instance"""
         cdef int err
         fclose(self._fd)
         if self._gh != NULL:
