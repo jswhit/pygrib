@@ -1,0 +1,6 @@
+these examples read GRIB files and generate
+plots of the data using matplotlib and the basemap toolkit
+(both availabe from http://matplotlib.sf.net).
+
+test_spectral.py also uses pyspharm, available from 
+http://code.google.com/p/pyspharm.
