@@ -2,15 +2,14 @@
 Introduction
 ============
 
-Python module for reading GRIB (editions 1 and 2) files
-(U{download<http://code.google.com/p/pygrib/downloads/list>}). 
+Python module for reading GRIB (editions 1 and 2) files.
 GRIB is the World Meterological Organization
 U{standard<http://www.wmo.ch/pages/prog/www/WMOCodes/GRIB.html>} 
 for distributing gridded data. 
 The module is a python interface to the
 U{GRIB_API<http://www.ecmwf.int/products/data/software/grib_api.html>} C library
 from the European Centre for Medium-Range Weather Forecasts
-(U{ECMWF<http://www.ecmwf.int}).
+(U{ECMWF<http://www.ecmwf.int>}).
 
 Required
 ========
@@ -30,6 +29,7 @@ Required
 Installation
 ============
 
+ - U{Download<http://code.google.com/p/pygrib/downloads/list>} the source code. 
  - set the environment variables C{$GRIBAPI_DIR}, C{$JASPER_DIR}, C{$OPENJPEG_DIR},
  C{$PNG_DIR} and C{$ZLIB_DIR} so that the include files and libraries for
  GRIB_API, JASPER, OpenJPEG, PNG and zlib will be found.  
@@ -39,7 +39,6 @@ Installation
  variables are not set, then the default search paths will be used.  If
  GRIB_API library was compiled without JASPER, PNG or OpenJPEG support, then the 
  corresponding environment variable need not be set.
-
  - Run 'python setup.py install', as root if necessary.
 
 
@@ -47,56 +46,34 @@ Example usage
 =============
 
  - from the python interpreter prompt, import the package::
-    >>> import pygrib
- - open a GRIB file, create an grib message iterator::
-    >>> grbs = pygrib.open('sampledata/gfs.grb')  
+   >>> import pygrib
+ - open a GRIB file, create a grib message iterator::
+   >>> grbs = pygrib.open('sampledata/flux.grb')  
  - print an inventory of the file::
-    >>> for grb in grbs:
-    >>>     print grb 
-    1:HGT [gpm]:100000 Pa (Isobaric Surface):72 Hour Forecast initialized 2004120912:Latitude/longitude:Unperturbed high-resolution control forecast member 0 of 10
-    2:HGT [gpm]:97500 Pa (Isobaric Surface):72 Hour Forecast initialized 2004120912:Latitude/longitude:Unperturbed high-resolution control forecast member 0 of 10
-    3:HGT [gpm]:95000 Pa (Isobaric Surface):72 Hour Forecast initialized 2004120912:Latitude/longitude:Unperturbed high-resolution control forecast member 0 of 10
-  
-       .....
-
- - find the first grib message containing 500 hPa geopotential height:: 
-    >>> z500 = [g for g in grbs if g.parameter=='HGT' and g.vertical_level=='50000 Pa' and g.vertical_level_descriptor=='Isobaric Surface'][0]
- - extract the 500 hPa height data::
-    >>> z500data = z500.data()
-    >>> print z500.shape, z500data.min(), z500data.max()
-    (73, 144) 4834.89990234 5931.20019531
+   >>> for grb in grbs:
+   >>>     print grb 
+   1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120:from 200402291200
+   2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
+   3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+   4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+ - find the first grib message with a matching name::
+   >>> for grb in grbs:
+   >>>     if grb['name'] == 'Maximum temperature': break
+ - extract the data values using the 'values' key (grb.keys() will return a
+ list of the available keys)::
+   >>> maxt = grb['values']
+   >>> print maxt.shape, maxt.min(), maxt.max()
+   (94, 192) 223.7 319.9
  - get the latitudes and longitudes of the grid::
-    >>> lats, lons = z500.grid()
-    >>> print lats.shape, lats.min(), lats.max(), lons.shape, lons.min(), lons.max()
-    (73, 144) -90.0 90.0 (73, 144) 0.0 357.5
- - dump just this grib message to another file::
-    >>> dump('gfs_z500.grb',[z500])
- - read that file back in and verify it's contents::
-    >>> grbs = Grib2Decode('gfs_z500.grb')
-    >>> for g in grbs:
-    >>>    print g
-    1:HGT [gpm]:50000 Pa (Isobaric Surface):72 Hour Forecast initialized 2004120912:Latitude/longitude:Unperturbed high-resolution control forecast member 0 of 10
+   >>> lats, lons = grb.latlons()
+   >>> print lats.shape, lats.min(), lats.max(), lons.shape, lons.min(), lons.max()
+   (94, 192) -88.5419501373 88.5419501373  0.0 358.125
 
 Documentation
 =============
 
- - see below for python API documentation.
+ - see below for the full python API documentation.
   
-Links
-=====
-
- - U{ECMWF GRIP_API<http://www.ecmwf.int/products/data/software/grib2.html>}.
-   This package is a python interface to the GRIB_API library.
- - U{WMO GRIB information<http://www.wmo.ch/pages/prog/www/WMOCodes/GRIB.html>}.
- - U{wgrib2<http://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/>}
- - U{NCEP GRIB2 C and FORTRAN libraries
-   <http://www.nco.ncep.noaa.gov/pmb/codes/GRIB2/>}. 
- - U{MDL GRIB2 Decoder<http://weather.gov/mdl/iwt/grib2/decoder.htm>}
- - U{Cython<http://www.cython.org>}
- (used to create python interface to g2clib and proj4).
- - U{proj.4<http://trac.osgeo.org/proj>} (used to perform cartographic
- transformations).
-
 Changelog
 =========
 
@@ -122,8 +99,7 @@ EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, INDIRECT OR
 CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF
 USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-""" 
+PERFORMANCE OF THIS SOFTWARE."""
 __version__ = '20100201'
 
 import numpy as np
@@ -200,6 +176,16 @@ cdef extern from "grib_api.h":
 
 
 cdef class open(object):
+    """ 
+    open(filename)
+    
+    returns iterator object given GRIB filename. When iterated, returns
+    instances of the L{gribmessage} class.
+
+    @ivar messagenumber: The grib message number that the iterator currently
+    points to.
+
+    @ivar filename: The GRIB file which the instance represents."""
     cdef FILE *_fd
     cdef grib_handle *_gh
     cdef public object filename, messagenumber
@@ -223,7 +209,10 @@ cdef class open(object):
         self._gh = NULL
         self.messagenumber = 0
     def message(self, N):
-        """retrieve N'th message in iterator"""
+        """
+        message(N)
+        
+        retrieve N'th message in iterator"""
         cdef int err
         self.rewind()
         for n in range(N):
@@ -236,7 +225,7 @@ cdef class open(object):
             if self._gh == NULL:
                 raise IOError('not that many messages in file')
             self.messagenumber = self.messagenumber + 1
-        return message(self)
+        return gribmessage(self)
     def __next__(self):
         cdef grib_handle* gh 
         cdef int err
@@ -249,9 +238,12 @@ cdef class open(object):
             raise StopIteration
         if err:
             raise RuntimeError(grib_get_error_message(err))
-        return message(self)
+        return gribmessage(self)
     def close(self):
-        """deallocate C structures associated with class instance"""
+        """
+        close()
+
+        close GRIB fie, deallocate C structures associated with class instance"""
         cdef int err
         fclose(self._fd)
         if self._gh != NULL:
@@ -259,13 +251,23 @@ cdef class open(object):
             if err:
                 raise RuntimeError(grib_get_error_message(err))
 
-cdef class message(object):
+cdef class gribmessage(object):
+    """
+    Grib message returned by GRIB file iterator.
+    Grib file iterators are instances of class L{open}.
+    Grib messages are dictionary-like objects.
+
+    @ivar messagenumber: The grib message number in the file.
+
+    @ivar projparams: A dictionary containing proj4 key/value pairs describing 
+    the grid.  Created when the L{latlons} method is invoked."""
     cdef grib_handle *_gh
     cdef public messagenumber, projparams
     def __new__(self, open grb):
         self._gh = grb._gh
         self.messagenumber = grb.messagenumber
     def __repr__(self):
+        """prints a short inventory of the grib message"""
         inventory = []
         inventory.append(
         #repr(self.messagenumber)+':center '+self['centre']+':'+self['name']+':'+self['units'])
@@ -300,7 +302,9 @@ cdef class message(object):
         return ''.join(inventory)
     def keys(self):
         """
- return keys associated with a grib message (a dictionary-like object)
+        keys()
+
+        return keys associated with a grib message (a dictionary-like object)
         """
         cdef grib_keys_iterator* gi
         cdef int err, type
@@ -400,7 +404,9 @@ cdef class message(object):
             raise ValueError("unrecognized grib type % d" % type)
     def has_key(self,key):
         """
- tests whether a grib message object has a specified key.
+        has_key(key)
+
+        tests whether a grib message object has a specified key.
         """
         return key in self.keys()
     def _reshape_mask(self, datarr):
@@ -437,14 +443,16 @@ cdef class message(object):
         return datarr
     def latlons(self):
         """
- return lats,lons (in degrees) of grid.
- currently can handle reg. lat/lon, global gaussian, mercator, stereographic,
- lambert conformal, albers equal-area, space-view, azimuthal 
- equidistant, reduced gaussian, reduced lat/lon and
- lambert azimuthal equal-area grids.
+        latlons()
 
- @return: C{B{lats},B{lons}}, numpy arrays 
- containing latitudes and longitudes of grid (in degrees).
+        compute lats and lons (in degrees) of grid.
+        Currently handles reg. lat/lon, global gaussian, mercator, stereographic,
+        lambert conformal, albers equal-area, space-view, azimuthal 
+        equidistant, reduced gaussian, reduced lat/lon and
+        lambert azimuthal equal-area grids.
+
+        @return: C{B{lats},B{lons}}, numpy arrays 
+        containing latitudes and longitudes of grid (in degrees).
         """
         projparams = {}
 
