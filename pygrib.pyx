@@ -468,11 +468,11 @@ cdef class gribmessage(object):
         if self.has_key('scaleFactorOfMajorAxisOfOblateSpheroidEarth'):
             scalea = self['scaleFactorOfMajorAxisOfOblateSpheroidEarth']
             scaleb = self['scaleFactorOfMinorAxisOfOblateSpheroidEarth']
-            if scalea:
+            if scalea and scalea is not self.missingvalue_long:
                 scalea = 1000.*np.power(10.0,-scalea)
             else:
                 scalea = 1
-            if scaleb:
+            if scaleb and scaleb is not self.missingvalue_long:
                 scaleb = 1000.*np.power(10.0,-scaleb)
             else:
                 scaleb = 1.
