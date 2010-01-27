@@ -179,6 +179,8 @@ cdef extern from "grib_api.h":
     grib_handle* grib_handle_new_from_file(grib_context* c, FILE* f, int* error)        
     char* grib_get_error_message(int code)
     int grib_keys_iterator_delete( grib_keys_iterator* kiter)
+    void grib_multi_support_on(grib_context* c)
+    void grib_multi_support_off(grib_context* c)
 
 
 cdef class open(object):
@@ -205,6 +207,8 @@ cdef class open(object):
             raise IOError("could not open %s", filename)
         self._gh = NULL
         self.messagenumber = 0
+        # turn on support for multi-field grib messages.
+        grib_multi_support_on(NULL)
     def __iter__(self):
         return self
     def rewind(self):
