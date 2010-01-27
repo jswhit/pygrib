@@ -162,6 +162,8 @@ cdef extern from "grib_api.h":
         GRIB_KEYS_ITERATOR_SKIP_COMPUTED         
         GRIB_KEYS_ITERATOR_SKIP_FUNCTION         
         GRIB_KEYS_ITERATOR_SKIP_DUPLICATES       
+        GRIB_MISSING_LONG 
+        GRIB_MISSING_DOUBLE
     int grib_get_size(grib_handle *h, char *name, size_t *size)
     int grib_get_native_type(grib_handle *h, char *name, int *type)
     int grib_get_long(grib_handle *h, char *name, long *ival)
@@ -266,10 +268,13 @@ cdef class gribmessage(object):
     @ivar projparams: A dictionary containing proj4 key/value pairs describing 
     the grid.  Created when the L{latlons} method is invoked."""
     cdef grib_handle *_gh
-    cdef public messagenumber, projparams
+    cdef public messagenumber, projparams, missingvalue_long,\
+    missingvalue_double
     def __new__(self, open grb):
         self._gh = grb._gh
         self.messagenumber = grb.messagenumber
+        self.missingvalue_long = GRIB_MISSING_LONG
+        self.missingvalue_double = GRIB_MISSING_DOUBLE
     def __repr__(self):
         """prints a short inventory of the grib message"""
         inventory = []
@@ -369,7 +374,7 @@ cdef class gribmessage(object):
                     storageorder='F'
                 else:
                     storageorder='C'
-                datarr = np.empty(size, np.int32, order=storageorder)
+                datarr = np.empty(size, np.int, order=storageorder)
                 err = grib_get_long_array(self._gh, name, <long *>datarr.data, &size)
                 if err:
                     raise RuntimeError(grib_get_error_message(err))
@@ -418,7 +423,7 @@ cdef class gribmessage(object):
         if self.has_key('Ni') and self.has_key('Nj'):
             nx = self['Ni']
             ny = self['Nj']
-            if ny > 0 and nx > 0:
+            if ny != GRIB_MISSING_LONG and nx != GRIB_MISSING_LONG:
                 datarr.shape = (ny,nx)
             if self.has_key('typeOfGrid') and self['typeOfGrid'].startswith('reduced'):
                 if self.has_key('missingValue'):
