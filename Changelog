@@ -1,0 +1,5 @@
+version 1.0a1 - svn revision 55
+===============================
+* initial release.  Support for reading GRIB1 and GRIB2 is nearly complete.
+  No support for writing yet.
+
