@@ -1,4 +1,6 @@
 include MANIFEST.in
+include pygrib.pyx
+intluce pygrib.c
 include setup.py
 include test.py
 include README
