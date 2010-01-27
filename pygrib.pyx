@@ -7,7 +7,7 @@ GRIB is the World Meterological Organization
 U{standard<http://www.wmo.ch/pages/prog/www/WMOCodes/GRIB.html>} 
 for distributing gridded data. 
 The module is a python interface to the
-U{GRIB_API<http://www.ecmwf.int/products/data/software/grib_api.html>} C library
+U{GRIB API<http://www.ecmwf.int/products/data/software/grib_api.html>} C library
 from the European Centre for Medium-Range Weather Forecasts
 (U{ECMWF<http://www.ecmwf.int>}).
 
@@ -18,11 +18,11 @@ Required
 - U{numpy<http://sourceforge.net/project/showfiles.php?group_id=1369>}
   N-dimensional array object for python. Version 1.2.1 or higher.
 - U{pyproj<http://code.google.com/p/pyproj/>} Python interface to 
-  U{PROJ.4<http://proj.maptools.org>} library for cartographic transformations.
-- U{GRIB_API<http://www.ecmwf.int/products/data/software/grib_api.htm.>} C library
+  U{PROJ.4<http://trac.osgeo.org/proj>} library for cartographic transformations.
+- U{GRIB API<http://www.ecmwf.int/products/data/software/grib_api.htm.>} C library
   for encoding and decoding GRIB messages (edition 1 and edition 2).
   Version 1.8.0 or higher required.
-  To be fully functional, the GRIB_API library requires
+  To be fully functional, the GRIB API library requires
   U{Jasper<http://www.ece.uvic.ca/~mdadams/jasper>} or 
   U{OpenJPEG<http://www.openjpeg.org>} for JPEG200 encoding,
   and U{PNG<http://www.libpng.org/pub/png/libpng.html>} for PNG encoding.
@@ -33,12 +33,12 @@ Installation
  - U{Download<http://code.google.com/p/pygrib/downloads/list>} the source code. 
  - set the environment variables C{$GRIBAPI_DIR}, C{$JASPER_DIR}, C{$OPENJPEG_DIR},
  C{$PNG_DIR} and C{$ZLIB_DIR} so that the include files and libraries for
- GRIB_API, JASPER, OpenJPEG, PNG and zlib will be found.  
+ GRIB API, Jasper, OpenJPEG, PNG and zlib will be found.  
  For example, the include files for 
  jasper should be found in C{$JASPER_DIR/include}, and the jasper
  library should be found in C{$JASPER_DIR/lib} or C{$JASPER_DIR/lib64}. If any of
  those environment  variables are not set, then the default search paths will be used.  
- If GRIB_API library was compiled without JASPER, PNG or OpenJPEG support, then the 
+ If the GRIB API library was compiled without JASPER, PNG or OpenJPEG support, then the 
  corresponding environment variable need not be set.
  - Run 'python setup.py install', as root if necessary.
  - Run 'python test.py' to test your installation.
