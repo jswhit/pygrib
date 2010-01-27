@@ -36,9 +36,9 @@ Installation
  GRIB_API, JASPER, OpenJPEG, PNG and zlib will be found.  
  For example, the include files for 
  jasper should be found in C{$JASPER_DIR/include}, and the jasper
- library should be found in C{$JASPER_DIR/lib}. If any of those environment 
- variables are not set, then the default search paths will be used.  If
- GRIB_API library was compiled without JASPER, PNG or OpenJPEG support, then the 
+ library should be found in C{$JASPER_DIR/lib} or C{$JASPER_DIR/lib64}. If any of
+ those environment  variables are not set, then the default search paths will be used.  
+ If GRIB_API library was compiled without JASPER, PNG or OpenJPEG support, then the 
  corresponding environment variable need not be set.
  - Run 'python setup.py install', as root if necessary.
  - Run 'python test.py' to test your installation.
@@ -79,14 +79,14 @@ Documentation
 Changelog
 =========
 
- - B{20100201}: initial release. Read-only support nearly
+ - B{1.0a1}: initial release. Read-only support nearly
    complete, but no support for writing.
 
 @author: Jeffrey Whitaker.
 
 @contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
 
-@version: 20100201
+@version: 1.0a1
 
 @copyright: copyright 2010 by Jeffrey Whitaker.
 
@@ -104,7 +104,7 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE."""
 __test__ = None
 del __test__ # hack so epydoc doesn't show __test__
-__version__ = '20100201'
+__version__ = '1.0a1'
 
 import numpy as np
 from numpy import ma
@@ -266,15 +266,21 @@ cdef class gribmessage(object):
     @ivar messagenumber: The grib message number in the file.
 
     @ivar projparams: A dictionary containing proj4 key/value pairs describing 
-    the grid.  Created when the L{latlons} method is invoked."""
+    the grid.  Created when the L{latlons} method is invoked.
+
+    @ivar missingvalue_int:  Value given to an integer grib key whose data is
+    missing.
+
+    @ivar missingvalue_float:  Value given to an float grib key whose data is
+    missing."""
     cdef grib_handle *_gh
-    cdef public messagenumber, projparams, missingvalue_long,\
-    missingvalue_double
+    cdef public messagenumber, projparams, missingvalue_int,\
+    missingvalue_float
     def __new__(self, open grb):
         self._gh = grb._gh
         self.messagenumber = grb.messagenumber
-        self.missingvalue_long = GRIB_MISSING_LONG
-        self.missingvalue_double = GRIB_MISSING_DOUBLE
+        self.missingvalue_int = GRIB_MISSING_LONG
+        self.missingvalue_float = GRIB_MISSING_DOUBLE
     def __repr__(self):
         """prints a short inventory of the grib message"""
         inventory = []
@@ -468,11 +474,11 @@ cdef class gribmessage(object):
         if self.has_key('scaleFactorOfMajorAxisOfOblateSpheroidEarth'):
             scalea = self['scaleFactorOfMajorAxisOfOblateSpheroidEarth']
             scaleb = self['scaleFactorOfMinorAxisOfOblateSpheroidEarth']
-            if scalea and scalea is not self.missingvalue_long:
+            if scalea and scalea is not self.missingvalue_int:
                 scalea = 1000.*np.power(10.0,-scalea)
             else:
                 scalea = 1
-            if scaleb and scaleb is not self.missingvalue_long:
+            if scaleb and scaleb is not self.missingvalue_int:
                 scaleb = 1000.*np.power(10.0,-scaleb)
             else:
                 scaleb = 1.

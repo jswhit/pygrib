@@ -38,7 +38,7 @@ if zlib_dir:
     libraries.append("z")
 
 setup(name = "pygrib",
-      version = "20100201",
+      version = "1.0a1",
       description       = "Python module for reading GRIB files",
       author            = "Jeff Whitaker",
       author_email      = "jeffrey.s.whitaker@noaa.gov",

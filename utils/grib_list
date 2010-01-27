@@ -18,9 +18,9 @@ else:
         for k in grb.keys():
             if k.startswith('mars'): continue
             if k == 'values' or k == 'codedValues': continue
-            if type(grb[k]) == int and grb[k] == grb.missingvalue_long:
+            if type(grb[k]) == int and grb[k] == grb.missingvalue_int:
                 print k,'= MISSING'
-            elif type(grb[k]) == float and grb[k] == grb.missingvalue_double:
+            elif type(grb[k]) == float and grb[k] == grb.missingvalue_float:
                 print k,'= MISSING'
             else:
                 print k,'=',grb[k]
