@@ -48,28 +48,31 @@ Example usage
 =============
 
  - from the python interpreter prompt, import the package::
-   >>> import pygrib
+    >>> import pygrib
  - open a GRIB file, create a grib message iterator::
-   >>> grbs = pygrib.open('sampledata/flux.grb')  
+    >>> grbs = pygrib.open('sampledata/flux.grb')  
  - print an inventory of the file::
-   >>> for grb in grbs:
-   >>>     print grb 
-   1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120:from 200402291200
-   2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
-   3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
-   4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+    >>> for grb in grbs:
+    >>>     print grb 
+    1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120:from 200402291200
+    2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
+    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
  - find the first grib message with a matching name::
-   >>> for grb in grbs:
-   >>>     if grb['name'] == 'Maximum temperature': break
+    >>> for grb in grbs:
+    >>>     if grb['name'] == 'Maximum temperature': break
  - extract the data values using the 'values' key (grb.keys() will return a
- list of the available keys)::
-   >>> maxt = grb['values']
-   >>> print maxt.shape, maxt.min(), maxt.max()
-   (94, 192) 223.7 319.9
+   list of the available keys)::
+    # The data is returned as a numpy array, or if missing values or a bitmap
+    # are present, a numpy masked array.  Reduced lat/lon or gaussian grid
+    # data is automatically expanded to a regular grid.
+    >>> maxt = grb['values']
+    >>> print maxt.shape, maxt.min(), maxt.max()
+    (94, 192) 223.7 319.9
  - get the latitudes and longitudes of the grid::
-   >>> lats, lons = grb.latlons()
-   >>> print lats.shape, lats.min(), lats.max(), lons.shape, lons.min(), lons.max()
-   (94, 192) -88.5419501373 88.5419501373  0.0 358.125
+    >>> lats, lons = grb.latlons()
+    >>> print lats.shape, lats.min(), lats.max(), lons.shape, lons.min(), lons.max()
+    (94, 192) -88.5419501373 88.5419501373  0.0 358.125
 
 Documentation
 =============
