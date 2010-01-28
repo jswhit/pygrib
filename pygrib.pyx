@@ -351,7 +351,15 @@ cdef class gribmessage(object):
             raise RuntimeError(grib_get_error_message(err))
         return keys
     def __getitem__(self, key):
-        """access values associated with grib keys"""
+        """
+        access values associated with grib keys.
+        
+        The key "values" will return the data associated with the grib message.
+        The data is returned as a numpy array, or if missing values or a bitmap
+        are present, a numpy masked array.  Reduced lat/lon or gaussian grid
+        data is automatically expanded to a regular grid using linear
+        interpolation (nearest neighbor if an adjacent grid point is a missing
+        value)."""
         cdef int err, type
         cdef size_t size
         cdef char *name
