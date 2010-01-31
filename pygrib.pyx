@@ -82,14 +82,14 @@ Documentation
 Changelog
 =========
 
- - B{1.0a1}: initial release. Read-only support nearly
+ - B{1.0b1}: initial release. Read-only support nearly
    complete, but no support for writing.
 
 @author: Jeffrey Whitaker.
 
 @contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
 
-@version: 1.0a1
+@version: 1.0b1
 
 @copyright: copyright 2010 by Jeffrey Whitaker.
 
@@ -107,7 +107,7 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE."""
 __test__ = None
 del __test__ # hack so epydoc doesn't show __test__
-__version__ = '1.0a1'
+__version__ = '1.0b1'
 
 import numpy as np
 from numpy import ma
@@ -123,7 +123,12 @@ cdef extern from "stdio.h":
     ctypedef struct FILE
     FILE *fopen(char *path, char *mode)
     int	fclose(FILE *)
+    size_t fwrite(void *ptr, size_t size, size_t nitems, FILE *stream)
     int fseek(FILE *stream, long offset, int whence)
+    cdef enum:
+        SEEK_SET
+        SEEK_CUR
+        SEEK_END
     void rewind (FILE *)
 
 cdef extern from "Python.h":
@@ -184,6 +189,8 @@ cdef extern from "grib_api.h":
     int grib_keys_iterator_delete( grib_keys_iterator* kiter)
     void grib_multi_support_on(grib_context* c)
     void grib_multi_support_off(grib_context* c)
+    int grib_get_message(grib_handle* h ,  void* message,size_t *message_length)
+    int grib_get_message_copy(grib_handle* h ,  void* message,size_t *message_length)
 
 
 cdef class open(object):
@@ -439,6 +446,31 @@ cdef class gribmessage(object):
         tests whether a grib message object has a specified key.
         """
         return key in self.keys()
+    def dump_message(self,filename):
+        """
+        dump_message(filename)
+
+        dump coded grib message to the end of file specified by C{filename}'
+        """
+        cdef int err
+        cdef size_t size
+        cdef void *message
+        cdef char *name
+        cdef FILE *out
+        name = PyString_AsString('values')
+        err = grib_get_size(self._gh, name, &size)
+        if err:
+            raise RuntimeError(grib_get_error_message(err))
+        err = grib_get_message(self._gh, &message, &size)
+        if err:
+            raise RuntimeError(grib_get_error_message(err))
+        name = PyString_AsString(filename)
+        out = fopen(name,"a+")
+        if out == NULL:
+            raise IOError("could not open %s", filename)
+        fseek(out, 0, SEEK_END)
+        fwrite(message, 1, size, out)
+        fclose(out)
     def _reshape_mask(self, datarr):
         cdef double missval
         if self.has_key('Ni') and self.has_key('Nj'):
