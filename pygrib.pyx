@@ -175,11 +175,15 @@ cdef extern from "grib_api.h":
     int grib_get_size(grib_handle *h, char *name, size_t *size)
     int grib_get_native_type(grib_handle *h, char *name, int *type)
     int grib_get_long(grib_handle *h, char *name, long *ival)
+    int grib_set_long(grib_handle *h, char *name, long val)
     int grib_get_long_array(grib_handle *h, char *name, long *ival, size_t *size)
+    int grib_set_long_array(grib_handle *h, char *name, long *ival, size_t *size)
     int grib_get_double(grib_handle *h, char *name, double *dval)
+    int grib_set_double(grib_handle *h, char *name, double dval)
     int grib_get_double_array(grib_handle *h, char *name, double *dval, size_t *size)
+    int grib_set_double_array(grib_handle *h, char *name, double *dval, size_t *size)
     int grib_get_string(grib_handle *h, char *name, char *mesg, size_t *size)
-    int grib_get_bytes(grib_handle* h, char* key, unsigned char*  bytes, size_t *length)
+    int grib_set_string(grib_handle *h, char *name, char *mesg, size_t *size)
     grib_keys_iterator* grib_keys_iterator_new(grib_handle* h,unsigned long filter_flags, char* name_space)
     int grib_keys_iterator_next(grib_keys_iterator *kiter)
     char* grib_keys_iterator_get_name(grib_keys_iterator *kiter)
@@ -360,6 +364,67 @@ cdef class gribmessage(object):
         if err:
             raise RuntimeError(grib_get_error_message(err))
         return keys
+    def __setitem__(self, key, value):
+        """
+        set values associated with grib keys.
+        """
+        cdef int err, type
+        cdef size_t size
+        cdef char *name
+        cdef long longval
+        cdef double doubleval
+        cdef ndarray datarr
+        cdef char *strdata
+        cdef unsigned char *chardata
+        if not self.has_key(key):
+            raise KeyError('grib message does not have key %s' % key)
+        name = PyString_AsString(key)
+        err = grib_get_native_type(self._gh, name, &type)
+        if err:
+            raise RuntimeError(grib_get_error_message(err))
+        if type == GRIB_TYPE_UNDEFINED:
+            pass
+        elif type == GRIB_TYPE_LONG:
+            # is value an array or a scalar?
+            datarr = np.asarray(value, np.int)
+            is_array == False
+            if datarr.shape:
+                is_array = True
+            if not is_array: # scalar
+                longval = value
+                err = grib_set_long(self._gh, name, longval)
+                if err:
+                    raise RuntimeError(grib_get_error_message(err))
+            else:
+                size = datarr.size
+                err = grib_set_long_array(self._gh, name, <long *>datarr.data, &size)
+                if err:
+                    raise RuntimeError(grib_get_error_message(err))
+        elif type == GRIB_TYPE_DOUBLE:
+            # is value an array or a scalar?
+            datarr = np.asarray(value, np.float)
+            is_array == False
+            if datarr.shape:
+                is_array = True
+            if not is_array: # scalar
+                doubleval = value
+                err = grib_set_double(self._gh, name, doubleval)
+                if err:
+                    raise RuntimeError(grib_get_error_message(err))
+            else:
+                size = datarr.size
+                err = grib_set_double_array(self._gh, name, <double *>datarr.data, &size)
+                if err:
+                    raise RuntimeError(grib_get_error_message(err))
+        elif type == GRIB_TYPE_STRING:
+            size=len(value)
+            strdata = PyString_AsString(value)
+            err = grib_set_string(self._gh, name, strdata, &size)
+            if err:
+                raise RuntimeError(grib_get_error_message(err))
+        else:
+            raise ValueError("unrecognized grib type % d" % type)
+            pass
     def __getitem__(self, key):
         """
         access values associated with grib keys.
