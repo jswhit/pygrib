@@ -2,7 +2,7 @@
 Introduction
 ============
 
-Python module for reading GRIB (editions 1 and 2) files.
+Python module for reading and writing GRIB (editions 1 and 2) files.
 GRIB is the World Meterological Organization
 U{standard<http://www.wmo.ch/pages/prog/www/WMOCodes/GRIB.html>} 
 for distributing gridded data. 
@@ -124,16 +124,12 @@ cdef extern from "stdio.h":
     FILE *fopen(char *path, char *mode)
     int	fclose(FILE *)
     size_t fwrite(void *ptr, size_t size, size_t nitems, FILE *stream)
-    int fseek(FILE *stream, long offset, int whence)
-    cdef enum:
-        SEEK_SET
-        SEEK_CUR
-        SEEK_END
     void rewind (FILE *)
 
 cdef extern from "Python.h":
     char * PyString_AsString(object)
     object PyString_FromString(char *s)
+    object PyString_FromStringAndSize(char *s, size_t size)
 
 cdef extern from "numpy/arrayobject.h":
     ctypedef int npy_intp 
@@ -177,11 +173,11 @@ cdef extern from "grib_api.h":
     int grib_get_long(grib_handle *h, char *name, long *ival)
     int grib_set_long(grib_handle *h, char *name, long val)
     int grib_get_long_array(grib_handle *h, char *name, long *ival, size_t *size)
-    int grib_set_long_array(grib_handle *h, char *name, long *ival, size_t *size)
+    int grib_set_long_array(grib_handle *h, char *name, long *ival, size_t size)
     int grib_get_double(grib_handle *h, char *name, double *dval)
     int grib_set_double(grib_handle *h, char *name, double dval)
     int grib_get_double_array(grib_handle *h, char *name, double *dval, size_t *size)
-    int grib_set_double_array(grib_handle *h, char *name, double *dval, size_t *size)
+    int grib_set_double_array(grib_handle *h, char *name, double *dval, size_t size)
     int grib_get_string(grib_handle *h, char *name, char *mesg, size_t *size)
     int grib_set_string(grib_handle *h, char *name, char *mesg, size_t *size)
     grib_keys_iterator* grib_keys_iterator_new(grib_handle* h,unsigned long filter_flags, char* name_space)
@@ -193,9 +189,16 @@ cdef extern from "grib_api.h":
     int grib_keys_iterator_delete( grib_keys_iterator* kiter)
     void grib_multi_support_on(grib_context* c)
     void grib_multi_support_off(grib_context* c)
-    int grib_get_message(grib_handle* h ,  void* message,size_t *message_length)
+    int grib_get_message(grib_handle* h ,  void** message,size_t *message_length)
     int grib_get_message_copy(grib_handle* h ,  void* message,size_t *message_length)
+    long grib_get_api_version()
+    int grib_count_in_file(grib_context* c, FILE* f,int* n)
 
+
+cpdef api_version():
+    cdef long api_version
+    api_version = grib_get_api_version()
+    return api_version
 
 cdef class open(object):
     """ 
@@ -210,11 +213,11 @@ cdef class open(object):
     @ivar filename: The GRIB file which the instance represents."""
     cdef FILE *_fd
     cdef grib_handle *_gh
-    cdef public object filename, messagenumber
+    cdef public object filename, messagenumber, messages
     def __new__(self, filename):
         cdef grib_handle *gh
         cdef FILE *_fd
-        cdef int err
+        cdef int err,nmsgs
         self.filename = filename
         self._fd = fopen(filename, "rb") 
         if self._fd == NULL:
@@ -223,6 +226,10 @@ cdef class open(object):
         self.messagenumber = 0
         # turn on support for multi-field grib messages.
         grib_multi_support_on(NULL)
+        err = grib_count_in_file(NULL, self._fd, &nmsgs)
+        if err:
+            raise RuntimeError(grib_get_error_message(err))
+        self.messages = nmsgs 
     def __iter__(self):
         return self
     def rewind(self):
@@ -293,12 +300,13 @@ cdef class gribmessage(object):
     missing."""
     cdef grib_handle *_gh
     cdef public messagenumber, projparams, missingvalue_int,\
-    missingvalue_float
+    missingvalue_float, expand_reduced
     def __new__(self, open grb):
         self._gh = grb._gh
         self.messagenumber = grb.messagenumber
         self.missingvalue_int = GRIB_MISSING_LONG
         self.missingvalue_float = GRIB_MISSING_DOUBLE
+        self.expand_reduced = True
     def __repr__(self):
         """prints a short inventory of the grib message"""
         inventory = []
@@ -375,7 +383,6 @@ cdef class gribmessage(object):
         cdef double doubleval
         cdef ndarray datarr
         cdef char *strdata
-        cdef unsigned char *chardata
         if not self.has_key(key):
             raise KeyError('grib message does not have key %s' % key)
         name = PyString_AsString(key)
@@ -397,7 +404,7 @@ cdef class gribmessage(object):
                     raise RuntimeError(grib_get_error_message(err))
             else:
                 size = datarr.size
-                err = grib_set_long_array(self._gh, name, <long *>datarr.data, &size)
+                err = grib_set_long_array(self._gh, name, <long *>datarr.data, size)
                 if err:
                     raise RuntimeError(grib_get_error_message(err))
         elif type == GRIB_TYPE_DOUBLE:
@@ -412,8 +419,10 @@ cdef class gribmessage(object):
                 if err:
                     raise RuntimeError(grib_get_error_message(err))
             else:
+                if not PyArray_ISCONTIGUOUS(datarr):
+                    datarr = datarr.copy()
                 size = datarr.size
-                err = grib_set_double_array(self._gh, name, <double *>datarr.data, &size)
+                err = grib_set_double_array(self._gh, name, <double *>datarr.data, size)
                 if err:
                     raise RuntimeError(grib_get_error_message(err))
         elif type == GRIB_TYPE_STRING:
@@ -442,7 +451,6 @@ cdef class gribmessage(object):
         cdef double doubleval
         cdef ndarray datarr
         cdef char strdata[1024]
-        cdef unsigned char *chardata
         name = PyString_AsString(key)
         err = grib_get_size(self._gh, name, &size)
         if err:
@@ -511,11 +519,11 @@ cdef class gribmessage(object):
         tests whether a grib message object has a specified key.
         """
         return key in self.keys()
-    def dump_message(self,filename):
+    def get_message(self):
         """
-        dump_message(filename)
+        get_message()
 
-        dump coded grib message to the end of file specified by C{filename}'
+        return coded grib message in a binary string.
         """
         cdef int err
         cdef size_t size
@@ -526,16 +534,13 @@ cdef class gribmessage(object):
         err = grib_get_size(self._gh, name, &size)
         if err:
             raise RuntimeError(grib_get_error_message(err))
-        err = grib_get_message(self._gh, &message, &size)
+        message = malloc(size*sizeof(char))
+        err = grib_get_message_copy(self._gh, message, &size)
         if err:
             raise RuntimeError(grib_get_error_message(err))
-        name = PyString_AsString(filename)
-        out = fopen(name,"a+")
-        if out == NULL:
-            raise IOError("could not open %s", filename)
-        fseek(out, 0, SEEK_END)
-        fwrite(message, 1, size, out)
-        fclose(out)
+        msg = PyString_FromStringAndSize(<char *>message, size)
+        free(message)
+        return msg
     def _reshape_mask(self, datarr):
         cdef double missval
         if self.has_key('Ni') and self.has_key('Nj'):
@@ -548,7 +553,8 @@ cdef class gribmessage(object):
                     missval = self['missingValue']
                 else:
                     missval = 1.e30
-                datarr = _redtoreg(2*ny, self['pl'], datarr, missval)
+                if self.expand_reduced:
+                    datarr = _redtoreg(2*ny, self['pl'], datarr, missval)
             # check scan modes for rect grids.
             if len(datarr.shape) == 2:
                 # rows scan in the -x direction (so flip)
