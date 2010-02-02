@@ -384,7 +384,7 @@ cdef class gribmessage(object):
         cdef ndarray datarr
         cdef char *strdata
         if not self.has_key(key):
-            raise KeyError('grib message does not have key %s' % key)
+            raise KeyError('can only modify existing grib keys')
         name = PyString_AsString(key)
         err = grib_get_native_type(self._gh, name, &type)
         if err:
