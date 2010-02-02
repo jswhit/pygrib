@@ -3,7 +3,7 @@ import pygrib
 # open a grib file, create an iterator.
 grbs = pygrib.open('sampledata/flux.grb')
 # iterate over all grib messages.
-print '-- all messages --'
+print '-- all %d messages --' % grbs.messages
 for grb in grbs:
     print grb
 # position iterator at beginning again.
@@ -42,3 +42,41 @@ print 'min/max of %d lats on %s grid' % (grb['Nj'], grb['typeOfGrid']),\
 lats.min(),lats.max()
 print 'min/max of %d lons on %s grid' % (grb['Ni'], grb['typeOfGrid']),\
 lons.min(),lons.max()
+
+# get first grib message
+grb = grbs.message(1)
+# turn bitmap on.
+grb['bitmapPresent']=1
+# get the data.
+data = grb['values']
+# put a hole of missing values in the data.
+nx = grb['Ni']; ny = grb['Nj']
+data[ny/4:ny/2,nx/4:nx/2]=grb['missingValue']
+grb['values']=data
+# open an output file for writing
+grbout = open('test.grb','w')
+# get coded binary string for modified message
+msg = grb.get_message()
+# write to file and close.
+grbout.write(msg)
+grbout.close()
+
+# reopen file and plot
+grbs = pygrib.open('test.grb')
+import matplotlib.pyplot as plt
+from mpl_toolkits.basemap import Basemap
+grb = grbs.message(1)
+lats, lons = grb.latlons()
+data = grb['values']
+llcrnrlon = lons[0,0]
+llcrnrlat = lats[0,0]
+urcrnrlon = lons[-1,-1]
+urcrnrlat = lats[-1,-1]
+m = Basemap(llcrnrlon=llcrnrlon,llcrnrlat=llcrnrlat,
+            urcrnrlon=urcrnrlon,urcrnrlat=urcrnrlat,
+            resolution='c',projection='cyl')
+x,y = m(lons,lats)
+m.drawcoastlines()
+m.contourf(x,y,data,15)
+plt.title('Modifed Grib Data')
+plt.show()

@@ -534,12 +534,10 @@ cdef class gribmessage(object):
         err = grib_get_size(self._gh, name, &size)
         if err:
             raise RuntimeError(grib_get_error_message(err))
-        message = malloc(size*sizeof(char))
-        err = grib_get_message_copy(self._gh, message, &size)
+        err = grib_get_message(self._gh, &message, &size)
         if err:
             raise RuntimeError(grib_get_error_message(err))
         msg = PyString_FromStringAndSize(<char *>message, size)
-        free(message)
         return msg
     def _reshape_mask(self, datarr):
         cdef double missval
