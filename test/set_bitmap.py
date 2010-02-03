@@ -6,10 +6,9 @@ outfile = 'out.grib1'
 grbs = pygrib.open(infile)
 print grbs.messages
 grb = grbs.next()
-grb['missingValue']=9999.0
 grb['bitmapPresent']=1
 data = grb['values']
-data[-1,0:10] = 9999.0
+data[-1,0:10] = grb['missingValue']
 grb['values']=data
 msg = grb.tostring()
 f = open(outfile,'wb')
