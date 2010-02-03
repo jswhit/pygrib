@@ -1,7 +1,7 @@
 import pygrib
 
 print 'grib_api version =',pygrib.api_version()
-infile = '../sampledata/regular_latlon_surface.grib1'
+infile = '../sampledata/regular_latlon_surface.grib2'
 outfile = 'out.grib1'
 grbs = pygrib.open(infile)
 print 'number of messages in file =',grbs.messages
