@@ -403,6 +403,9 @@ cdef class gribmessage(object):
                 if err:
                     raise RuntimeError(grib_get_error_message(err))
             else:
+                datarr = self._unshape_mask(datarr)
+                if not PyArray_ISCONTIGUOUS(datarr):
+                    datarr = datarr.copy()
                 size = datarr.size
                 err = grib_set_long_array(self._gh, name, <long *>datarr.data, size)
                 if err:
@@ -541,67 +544,56 @@ cdef class gribmessage(object):
         msg = PyString_FromStringAndSize(<char *>message, size)
         return msg
     def _unshape_mask(self, datarr):
-        cdef double missval
-        if self.has_key('Ni') and self.has_key('Nj'):
-            nx = self['Ni']
-            ny = self['Nj']
-            if ny != GRIB_MISSING_LONG and nx != GRIB_MISSING_LONG:
-                datarr.shape = (ny,nx)
-            if self.has_key('typeOfGrid') and self['typeOfGrid'].startswith('reduced'):
-                if self.has_key('missingValue'):
-                    missval = self['missingValue']
-                else:
-                    missval = 1.e30
-                if self.expand_reduced:
-                    datarr = _redtoreg(2*ny, self['pl'], datarr, missval)
-            # check scan modes for rect grids.
-            if len(datarr.shape) == 2:
-                # rows scan in the -x direction (so flip)
-                if not self['jScansPositively']:
-                    datsave = datarr.copy()
-                    datarr[::-1,:] = datsave[:,:]
-                # columns scan in the -y direction (so flip)
-                if self['iScansNegatively']:
-                    datsave = datarr.copy()
-                    datarr[:,::-1] = datsave[:,:]
-                # adjacent rows scan in opposite direction.
-                # (flip every other row)
-                if self['alternativeRowScanning']:
-                    datsave = datarr.copy()
-                    datarr[1::2,::-1] = datsave[1::2,:]
-            if self.has_key('missingValue') and self['numberOfMissing']:
-                #if (datarr == self['missingValue']).any():
-                datarr = ma.masked_values(datarr, self['missingValue'])
+        if hasattr(datarr,'mask'):
+            datarr = datarr.filled()
+        if self.has_key('typeOfGrid') and self['typeOfGrid'].startswith('reduced'):
+            if datarr.ndim != 1:
+                raise ValueError("reduced grid data array must be 1d")
+        # check scan modes for rect grids.
+        # rows scan in the -x direction (so flip)
+        if not self['jScansPositively']:
+            datsave = datarr.copy()
+            datarr[::-1,:] = datsave[:,:]
+        # columns scan in the -y direction (so flip)
+        if self['iScansNegatively']:
+            datsave = datarr.copy()
+            datarr[:,::-1] = datsave[:,:]
+        # adjacent rows scan in opposite direction.
+        # (flip every other row)
+        if self['alternativeRowScanning']:
+            datsave = datarr.copy()
+            datarr[1::2,::-1] = datsave[1::2,:]
         return datarr
     def _reshape_mask(self, datarr):
         cdef double missval
-        if self.has_key('Ni') and self.has_key('Nj'):
-            nx = self['Ni']
-            ny = self['Nj']
-            if ny != GRIB_MISSING_LONG and nx != GRIB_MISSING_LONG:
-                datarr.shape = (ny,nx)
-            if self.has_key('typeOfGrid') and self['typeOfGrid'].startswith('reduced'):
-                if self.has_key('missingValue'):
-                    missval = self['missingValue']
-                else:
-                    missval = 1.e30
-                if self.expand_reduced:
-                    datarr = _redtoreg(2*ny, self['pl'], datarr, missval)
-            # check scan modes for rect grids.
-            if len(datarr.shape) == 2:
-                # rows scan in the -x direction (so flip)
-                if not self['jScansPositively']:
-                    datsave = datarr.copy()
-                    datarr[:,:] = datsave[::-1,:]
-                # columns scan in the -y direction (so flip)
-                if self['iScansNegatively']:
-                    datsave = datarr.copy()
-                    datarr[:,:] = datsave[:,::-1]
-                # adjacent rows scan in opposite direction.
-                # (flip every other row)
-                if self['alternativeRowScanning']:
-                    datsave = datarr.copy()
-                    datarr[1::2,:] = datsave[1::2,::-1]
+        nx = self['Ni']
+        ny = self['Nj']
+        if ny != GRIB_MISSING_LONG and nx != GRIB_MISSING_LONG:
+            datarr.shape = (ny,nx)
+        if self.has_key('typeOfGrid') and self['typeOfGrid'].startswith('reduced'):
+            if self.has_key('missingValue'):
+                missval = self['missingValue']
+            else:
+                missval = 1.e30
+            if self.expand_reduced:
+                datarr = _redtoreg(2*ny, self['pl'], datarr, missval)
+        # check scan modes for rect grids.
+        if len(datarr.shape) == 2:
+           # rows scan in the -x direction (so flip)
+           if not self['jScansPositively']:
+               datsave = datarr.copy()
+               datarr[:,:] = datsave[::-1,:]
+           # columns scan in the -y direction (so flip)
+           if self['iScansNegatively']:
+               datsave = datarr.copy()
+               datarr[:,:] = datsave[:,::-1]
+           # adjacent rows scan in opposite direction.
+           # (flip every other row)
+           if self['alternativeRowScanning']:
+               datsave = datarr.copy()
+               datarr[1::2,:] = datsave[1::2,::-1]
+           if self.has_key('missingValue') and self['numberOfMissing']:
+               datarr = ma.masked_values(datarr, self['missingValue'])
         return datarr
     def latlons(self):
         """
