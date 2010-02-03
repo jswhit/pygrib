@@ -44,11 +44,13 @@ print 'min/max of %d lons on %s grid' % (grb['Ni'], grb['typeOfGrid']),\
 lons.min(),lons.max()
 
 # get grib message
-grb = grbs.message(2)
+grb = grbs.message(1)
 print grb
 print 'valid date',grb['validityDate']
 # get the data.
 data = grb['values']
+# enable bitmap
+#grb['bitmapPresent']=1 # bitmap is not build correctly!?
 # put a hole in the data.
 nx = grb['Ni']; ny = grb['Nj']
 data[ny/4:ny/2,nx/4:nx/2]=grb['missingValue']

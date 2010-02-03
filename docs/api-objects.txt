@@ -20,6 +20,7 @@ pygrib.gribmessage.__repr__	pygrib.gribmessage-class.html#__repr__
 pygrib.gribmessage.expand_reduced	pygrib.gribmessage-class.html#expand_reduced
 pygrib.open	pygrib.open-class.html
 pygrib.open.__new__	pygrib.open-class.html#__new__
+pygrib.open.messagesr	pygrib.open-class.html#messagesr
 pygrib.open.__next__	pygrib.open-class.html#__next__
 pygrib.open.messages	pygrib.open-class.html#messages
 pygrib.open.filename	pygrib.open-class.html#filename

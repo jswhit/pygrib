@@ -225,6 +225,8 @@ cdef class open(object):
     
     returns iterator object given GRIB filename. When iterated, returns
     instances of the L{gribmessage} class.
+     
+    @ivar messagesr: The total number of grib messages in the file.
 
     @ivar messagenumber: The grib message number that the iterator currently
     points to.
@@ -311,6 +313,11 @@ cdef class gribmessage(object):
 
     @ivar projparams: A dictionary containing proj4 key/value pairs describing 
     the grid.  Created when the L{latlons} method is invoked.
+
+    @ivar expand_reduced:  If True (default), reduced lat/lon and gaussian grids
+    will be expaned to regular grids when data is accessed via "values" key. If
+    False, data is kept on unstructured reduced grid, and is returned in a 1-d
+    array.
 
     @ivar missingvalue_int:  Value given to an integer grib key whose data is
     missing.
@@ -565,28 +572,37 @@ cdef class gribmessage(object):
         msg = PyString_FromStringAndSize(<char *>message, size)
         return msg
     def _unshape_mask(self, datarr):
+        """private method for reshaping and removing mask to "values" array"""
+        if datarr.ndim > 2:
+            raise ValueError('array must be 1d or 2d')
+        # if array is masked, put in masked values and convert to plain numpy array.
         if hasattr(datarr,'mask'):
             datarr = datarr.filled()
+        # raise error is expanded reduced grid array is supplied.
         if self.has_key('typeOfGrid') and self['typeOfGrid'].startswith('reduced'):
             if datarr.ndim != 1:
                 raise ValueError("reduced grid data array must be 1d")
-        # check scan modes for rect grids.
-        # rows scan in the -x direction (so flip)
-        if not self['jScansPositively']:
-            datsave = datarr.copy()
-            datarr[::-1,:] = datsave[:,:]
-        # columns scan in the -y direction (so flip)
-        if self['iScansNegatively']:
-            datsave = datarr.copy()
-            datarr[:,::-1] = datsave[:,:]
-        # adjacent rows scan in opposite direction.
-        # (flip every other row)
-        if self['alternativeRowScanning']:
-            datsave = datarr.copy()
-            datarr[1::2,::-1] = datsave[1::2,:]
+        if datarr.ndim == 2:
+            # check scan modes for rect grids.
+            # rows scan in the -x direction (so flip)
+            if not self['jScansPositively']:
+                datsave = datarr.copy()
+                datarr[::-1,:] = datsave[:,:]
+            # columns scan in the -y direction (so flip)
+            if self['iScansNegatively']:
+                datsave = datarr.copy()
+                datarr[:,::-1] = datsave[:,:]
+            # adjacent rows scan in opposite direction.
+            # (flip every other row)
+            if self['alternativeRowScanning']:
+                datsave = datarr.copy()
+                datarr[1::2,::-1] = datsave[1::2,:]
         return datarr
     def _reshape_mask(self, datarr):
+        """private method for reshaping and adding mask to "values" array"""
         cdef double missval
+        if datarr.ndim > 2:
+            raise ValueError('array must be 1d or 2d')
         nx = self['Ni']
         ny = self['Nj']
         if ny != GRIB_MISSING_LONG and nx != GRIB_MISSING_LONG:
@@ -599,7 +615,7 @@ cdef class gribmessage(object):
             if self.expand_reduced:
                 datarr = _redtoreg(2*ny, self['pl'], datarr, missval)
         # check scan modes for rect grids.
-        if len(datarr.shape) == 2:
+        if datarr.ndim == 2:
            # rows scan in the -x direction (so flip)
            if not self['jScansPositively']:
                datsave = datarr.copy()
@@ -613,6 +629,8 @@ cdef class gribmessage(object):
            if self['alternativeRowScanning']:
                datsave = datarr.copy()
                datarr[1::2,:] = datsave[1::2,::-1]
+           # if there is a missingValue, and some values missing,
+           # create a masked array.
            if self.has_key('missingValue') and self['numberOfMissing']:
                datarr = ma.masked_values(datarr, self['missingValue'])
         return datarr
@@ -674,14 +692,24 @@ cdef class gribmessage(object):
             lats = self['distinctLatitudes']
             lons,lats = np.meshgrid(lons,lats) 
             projparams['proj']='cyl'
-        elif self['typeOfGrid'].startswith('reduced'): # reduced lat/lon grid
+        elif self['typeOfGrid'] == 'reduced_gg': # reduced global gaussian grid
             lats = self['distinctLatitudes']
             ny = self['Nj']
             nx = 2*ny
-            delon = 360./nx
             lon1 = self['longitudeOfFirstGridPointInDegrees']
             lon2 = self['longitudeOfLastGridPointInDegrees']
-            lons = np.arange(lon1,lon2+delon,delon)
+            lons = np.linspace(lon1,lon2,nx)
+            lons,lats = np.meshgrid(lons,lats) 
+            projparams['proj']='cyl'
+        elif self['typeOfGrid'] == 'reduced_ll': # reduced lat/lon grid
+            ny = self['Nj']
+            nx = 2*ny
+            lat1 = self['latitudeOfFirstGridPointInDegrees']
+            lat2 = self['latitudeOfLastGridPointInDegrees']
+            lon1 = self['longitudeOfFirstGridPointInDegrees']
+            lon2 = self['longitudeOfLastGridPointInDegrees']
+            lons = np.linspace(lon1,lon2,nx)
+            lats = np.linspace(lat1,lat2,ny)
             lons,lats = np.meshgrid(lons,lats) 
             projparams['proj']='cyl'
         elif self['typeOfGrid'] == 'polar_stereographic':

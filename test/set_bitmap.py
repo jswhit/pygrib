@@ -1,14 +1,16 @@
 import pygrib
 
-print pygrib.api_version()
+print 'grib_api version =',pygrib.api_version()
 infile = '../sampledata/regular_latlon_surface.grib1'
 outfile = 'out.grib1'
 grbs = pygrib.open(infile)
-print grbs.messages
+print 'number of messages in file =',grbs.messages
 grb = grbs.next()
 grb['bitmapPresent']=1
 data = grb['values']
-data[-1,0:10] = grb['missingValue']
+nx = grb['Ni']; ny = grb['Nj']
+data[3*ny/8:5*ny/8,3*nx/8:5*nx/8]=grb['missingValue']
+grb['values']=data
 grb['values']=data
 msg = grb.tostring()
 f = open(outfile,'wb')
@@ -20,7 +22,7 @@ grb = grbs.next()
 data = grb['values']
 lats,lons = grb.latlons()
 grbs.close()
-# should be some missing values in top left corner of map
+# should be a hole in the middle of the plot
 from mpl_toolkits.basemap import Basemap
 import matplotlib.pyplot as plt
 m = Basemap(llcrnrlon=lons.min(),urcrnrlon=lons.max(),llcrnrlat=lats.min(),urcrnrlat=lats.max(),projection='cyl')
