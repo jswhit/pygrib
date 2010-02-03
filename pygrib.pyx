@@ -99,7 +99,9 @@ Documentation
 Changelog
 =========
 
- - B{1.0b1}: initial release. Read-only support nearly
+ - B{1.0b1}: added ability to modify existing grib messages with
+   __setitem__, get coded binary string with tostring method.
+ - B{1.0a1}: initial release. Read-only support nearly
    complete, but no support for writing.
 
 @author: Jeffrey Whitaker.

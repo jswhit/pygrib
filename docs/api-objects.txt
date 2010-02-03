@@ -12,8 +12,8 @@ pygrib.gribmessage._unshape_mask	pygrib.gribmessage-class.html#_unshape_mask
 pygrib.gribmessage._reshape_mask	pygrib.gribmessage-class.html#_reshape_mask
 pygrib.gribmessage.__getitem__	pygrib.gribmessage-class.html#__getitem__
 pygrib.gribmessage.keys	pygrib.gribmessage-class.html#keys
-pygrib.gribmessage.get_message	pygrib.gribmessage-class.html#get_message
 pygrib.gribmessage.__setitem__	pygrib.gribmessage-class.html#__setitem__
+pygrib.gribmessage.tostring	pygrib.gribmessage-class.html#tostring
 pygrib.gribmessage.missingvalue_float	pygrib.gribmessage-class.html#missingvalue_float
 pygrib.gribmessage.__delitem__	pygrib.gribmessage-class.html#__delitem__
 pygrib.gribmessage.__repr__	pygrib.gribmessage-class.html#__repr__
