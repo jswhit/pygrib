@@ -1,8 +1,8 @@
 import pygrib
 
 print 'grib_api version =',pygrib.api_version()
-infile = '../sampledata/regular_latlon_surface.grib2'
-outfile = 'out.grib2'
+infile = '../sampledata/regular_latlon_surface.grib1'
+outfile = 'out.grib'
 grbs = pygrib.open(infile)
 print 'number of messages in file =',grbs.messages
 grb = grbs.next()
@@ -17,7 +17,7 @@ f = open(outfile,'wb')
 f.write(msg)
 f.close()
 
-grbs = pygrib.open('out.grib1')
+grbs = pygrib.open('out.grib')
 grb = grbs.next()
 data = grb['values']
 lats,lons = grb.latlons()
