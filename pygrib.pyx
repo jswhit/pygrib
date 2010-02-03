@@ -403,7 +403,8 @@ cdef class gribmessage(object):
                 if err:
                     raise RuntimeError(grib_get_error_message(err))
             else:
-                datarr = self._unshape_mask(datarr)
+                if key == 'values':
+                    datarr = self._unshape_mask(datarr)
                 if not PyArray_ISCONTIGUOUS(datarr):
                     datarr = datarr.copy()
                 size = datarr.size
@@ -422,7 +423,8 @@ cdef class gribmessage(object):
                 if err:
                     raise RuntimeError(grib_get_error_message(err))
             else:
-                datarr = self._unshape_mask(datarr)
+                if key == 'values':
+                    datarr = self._unshape_mask(datarr)
                 if not PyArray_ISCONTIGUOUS(datarr):
                     datarr = datarr.copy()
                 size = datarr.size
