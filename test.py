@@ -58,7 +58,7 @@ grb['forecastTime'] = 240
 # open an output file for writing
 grbout = open('test.grb','w')
 # get coded binary string for modified message
-msg = grb.get_message()
+msg = grb.tostring()
 # write to file and close.
 grbout.write(msg)
 grbout.close()

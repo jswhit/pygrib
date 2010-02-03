@@ -73,6 +73,23 @@ Example usage
     >>> lats, lons = grb.latlons()
     >>> print lats.shape, lats.min(), lats.max(), lons.shape, lons.min(), lons.max()
     (94, 192) -88.5419501373 88.5419501373  0.0 358.125
+ - get the second grib message::
+    >>> grb = grbs.message(2)
+    >>> print grb
+    2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
+ - modify the values associated with existing keys::
+    >>> grb['forecast_time'] = 240
+    >>> grb['dataDate'] = 20100101
+ - get the binary string associated with the coded message::
+    >>> msg = grb.tostring()
+ - write the modified message to a new GRIB file::
+    >>> grbout = open('test.grb','wb')
+    >>> grbout.write(msg)
+    >>> grbout.close()
+    >>> grbs = pygrib.open('test.grb')
+    >>> grbs.next()
+    >>> print grb
+    1:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 240:from 201001011200
 
 Documentation
 =============
@@ -374,7 +391,7 @@ cdef class gribmessage(object):
         return keys
     def __setitem__(self, key, value):
         """
-        set values associated with grib keys.
+        change values associated with existing grib keys.
         """
         cdef int err, type
         cdef size_t size
@@ -525,9 +542,9 @@ cdef class gribmessage(object):
         tests whether a grib message object has a specified key.
         """
         return key in self.keys()
-    def get_message(self):
+    def tostring(self):
         """
-        get_message()
+        tostring()
 
         return coded grib message in a binary string.
         """
