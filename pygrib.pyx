@@ -326,14 +326,14 @@ cdef class gribmessage(object):
     missing."""
     cdef grib_handle *_gh
     cdef public messagenumber, projparams, missingvalue_int,\
-    missingvalue_float, expand_reduced, _ro_keys
+    missingvalue_float, expand_reduced, _ro_keys, _all_keys
     def __new__(self, open grb):
         self._gh = grb._gh
         self.messagenumber = grb.messagenumber
         self.missingvalue_int = GRIB_MISSING_LONG
         self.missingvalue_float = GRIB_MISSING_DOUBLE
         self.expand_reduced = True
-        self._ro_keys = self._read_only_keys()
+        self._ro_keys, self._all_keys = self._read_only_keys()
     def __repr__(self):
         """prints a short inventory of the grib message"""
         inventory = []
@@ -435,7 +435,7 @@ cdef class gribmessage(object):
         for key in allkeys:
             if key not in keys_noro:
                 keys.append(key)
-        return keys
+        return keys, allkeys
     def __setitem__(self, key, value):
         """
         change values associated with existing grib keys.
@@ -449,7 +449,7 @@ cdef class gribmessage(object):
         cdef char *strdata
         if key in self._ro_keys:
             raise KeyError('key "%s" is read only' % key)
-        if not self.has_key(key):
+        if key not in self._all_keys:
             raise KeyError('can only modify existing grib keys (key "%s" not found)'
                     % key )
         name = PyString_AsString(key)
@@ -591,7 +591,7 @@ cdef class gribmessage(object):
 
         tests whether a grib message object has a specified key.
         """
-        return key in self.keys()
+        return key in self._all_keys
     def tostring(self):
         """
         tostring()
