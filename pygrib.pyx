@@ -326,13 +326,14 @@ cdef class gribmessage(object):
     missing."""
     cdef grib_handle *_gh
     cdef public messagenumber, projparams, missingvalue_int,\
-    missingvalue_float, expand_reduced
+    missingvalue_float, expand_reduced, _ro_keys
     def __new__(self, open grb):
         self._gh = grb._gh
         self.messagenumber = grb.messagenumber
         self.missingvalue_int = GRIB_MISSING_LONG
         self.missingvalue_float = GRIB_MISSING_DOUBLE
         self.expand_reduced = True
+        self._ro_keys = self._read_only_keys()
     def __repr__(self):
         """prints a short inventory of the grib message"""
         inventory = []
@@ -398,6 +399,43 @@ cdef class gribmessage(object):
         if err:
             raise RuntimeError(grib_get_error_message(err))
         return keys
+    def _read_only_keys(self):
+        """
+        _read_only_keys()
+
+        return read-only keys associated with a grib message (a dictionary-like object)
+        """
+        cdef grib_keys_iterator* gi
+        cdef int err, type
+        cdef char *name
+
+        gi = grib_keys_iterator_new(self._gh,\
+                GRIB_KEYS_ITERATOR_SKIP_READ_ONLY, NULL)
+        keys_noro = []
+        while grib_keys_iterator_next(gi):
+            name = grib_keys_iterator_get_name(gi)
+            key = PyString_AsString(name)
+            keys_noro.append(key)
+        err = grib_keys_iterator_delete(gi)
+        if err:
+            raise RuntimeError(grib_get_error_message(err))
+
+        gi = grib_keys_iterator_new(self._gh,\
+                GRIB_KEYS_ITERATOR_ALL_KEYS, NULL)
+        allkeys = []
+        while grib_keys_iterator_next(gi):
+            name = grib_keys_iterator_get_name(gi)
+            key = PyString_AsString(name)
+            allkeys.append(key)
+        err = grib_keys_iterator_delete(gi)
+        if err:
+            raise RuntimeError(grib_get_error_message(err))
+
+        keys = []
+        for key in allkeys:
+            if key not in keys_noro:
+                keys.append(key)
+        return keys
     def __setitem__(self, key, value):
         """
         change values associated with existing grib keys.
@@ -409,8 +447,11 @@ cdef class gribmessage(object):
         cdef double doubleval
         cdef ndarray datarr
         cdef char *strdata
+        if key in self._ro_keys:
+            raise KeyError('key "%s" is read only' % key)
         if not self.has_key(key):
-            raise KeyError('can only modify existing grib keys')
+            raise KeyError('can only modify existing grib keys (key "%s" not found)'
+                    % key )
         name = PyString_AsString(key)
         err = grib_get_native_type(self._gh, name, &type)
         if err:
