@@ -1,0 +1,57 @@
+#!/usr/bin/env python
+"""
+ command line program to change packing scheme in a grib2 file
+
+ 'grib_repack -h' for help.
+"""
+from optparse import OptionParser
+import sys
+import pygrib
+
+usage = """
+ %prog [options] grib2filein grib2fileout
+
+ repack the data in grib2filein with a different packing scheme
+
+ example:
+
+'%prog -p32 grib2filein grib2fileout' converts grib2filein to complex packing with 2nd-order differencing, saves result to grib2fileout."""
+
+parser = OptionParser(usage=usage)
+parser.add_option("-p", default=False, action="store",dest="ipack",
+                        help="desired packing scheme - 0 for simple packing, 2 for complex packing, 31 for complex packing with 1st order differences, 32 for complex packing with 2nd order differences, 40 or 40000 for JPEG2000 packing, 41 or 40010 for PNG packing")
+
+(options, args) = parser.parse_args()
+
+if not options.ipack:
+    print 'must specify a packing scheme with -p or --packing_scheme'
+    sys.exit(1)
+
+ipack = int(options.ipack)
+if ipack not in [0,2,31,32,40,41,40000,40010]:
+    raise ValueError, 'packing scheme must be one of 0,2,31,32,40,41,40000,40010'
+
+# open grib file
+try:
+    filein = args[0]
+    fileout = args[1]
+except:
+    print 'need to specify input and output grib2 filenames'
+    sys.exit(1)
+print 'input grib file:',filein
+grbs = pygrib.open(filein)
+
+# open the file for output.
+print 'output grib file:',fileout
+f=open(fileout,'wb')
+
+for grb in enumerate(grbs):
+    grb.expand_reduced = False
+    data = grb['values']
+    grb['dataRepresentationTemplateNumber'] = ipack
+    grb['values']=data
+    msg = grb.tostring()
+    f.write(msg)
+
+f.close()
+grbs.close()
