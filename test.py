@@ -47,8 +47,12 @@ lons.min(),lons.max()
 grb = grbs.message(2)
 print grb
 print 'valid date',grb['validityDate']
+print 'min/max',grb['minimum'],grb['maximum']
 # change the forecast time
 grb['forecastTime'] = 240  
+grb['parameterNumber'] = 2 # change to pressure tendency
+data = grb['values']
+grb['values']=data/86400. # put in units of Pa/S
 # open an output file for writing
 grbout = open('test.grb','w')
 # get coded binary string for modified message
@@ -62,4 +66,5 @@ grbs = pygrib.open('test.grb')
 grb = grbs.next()
 print grb
 print 'valid date',grb['validityDate']
+print 'min/max',grb['minimum'],grb['maximum']
 grbs.close()
