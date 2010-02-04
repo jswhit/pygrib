@@ -66,10 +66,7 @@ for grb in grbs:
         continue
     if grb['dataRepresentationTemplateNumber'] == ipack:
 	print 'no repacking required, skipping ..'
-    grb.expand_reduced = False
-    data = grb['values']
     grb['dataRepresentationTemplateNumber'] = ipack
-    grb['values']=data
     msg = grb.tostring()
     f.write(msg)
 

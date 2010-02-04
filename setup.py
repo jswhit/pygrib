@@ -44,7 +44,7 @@ setup(name = "pygrib",
       author_email      = "jeffrey.s.whitaker@noaa.gov",
       url               = "http://code.google.com/p/pygrib",
       download_url      = "http://code.google.com/p/pygrib/downloads/list",
-      scripts = ['utils/grib_list'],
+      scripts = ['utils/grib_list','utils/grib_repack'],
       ext_modules = [Extension(
         "pygrib",
         ["pygrib.c"],
