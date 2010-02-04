@@ -315,7 +315,7 @@ cdef class gribmessage(object):
     the grid.  Created when the L{latlons} method is invoked.
 
     @ivar expand_reduced:  If True (default), reduced lat/lon and gaussian grids
-    will be expaned to regular grids when data is accessed via "values" key. If
+    will be expanded to regular grids when data is accessed via "values" key. If
     False, data is kept on unstructured reduced grid, and is returned in a 1-d
     array.
 
