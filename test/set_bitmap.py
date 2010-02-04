@@ -11,7 +11,6 @@ data = grb['values']
 nx = grb['Ni']; ny = grb['Nj']
 data[3*ny/8:5*ny/8,3*nx/8:5*nx/8]=grb['missingValue']
 grb['values']=data
-grb['values']=data
 msg = grb.tostring()
 f = open(outfile,'wb')
 f.write(msg)
