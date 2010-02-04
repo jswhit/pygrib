@@ -60,8 +60,8 @@ f=open(fileout,'wb')
 #  "grid_second_order"                 = { dataRepresentationTemplateNumber = 0;     }
 #  "grid_second_order_different_width" = { dataRepresentationTemplateNumber = 0;  }
 
-for grb in enumerate(grbs):
-    if grb.editionNumber != 2:
+for grb in grbs:
+    if grb['editionNumber'] != 2:
         print 'not a GRIB2 message, skipping ..'
         continue
     if grb['dataRepresentationTemplateNumber'] == ipack:
