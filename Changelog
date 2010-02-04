@@ -1,7 +1,7 @@
 version 1.0b1 - svn revision 91
 ===============================
 * basic write support through __setitem__ (to modify an existing grib
-  message) and tostring (to get the encoded binary string for that can
+  message) and tostring (to get the encoded binary string that can
   be written to a file).  This allows modifications to an existing grib
   message, but not the creation of a new grib message from scratch.
 
