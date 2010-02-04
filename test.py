@@ -44,17 +44,9 @@ print 'min/max of %d lons on %s grid' % (grb['Ni'], grb['typeOfGrid']),\
 lons.min(),lons.max()
 
 # get grib message
-grb = grbs.message(1)
+grb = grbs.message(2)
 print grb
 print 'valid date',grb['validityDate']
-# get the data.
-data = grb['values']
-# enable bitmap
-#grb['bitmapPresent']=1 # bitmap is not build correctly!?
-# put a hole in the data.
-nx = grb['Ni']; ny = grb['Nj']
-data[ny/4:ny/2,nx/4:nx/2]=grb['missingValue']
-grb['values']=data
 # change the forecast time
 grb['forecastTime'] = 240  
 # open an output file for writing
@@ -65,24 +57,9 @@ msg = grb.tostring()
 grbout.write(msg)
 grbout.close()
 
-# reopen file and plot
+# reopen file.
 grbs = pygrib.open('test.grb')
 grb = grbs.next()
 print grb
 print 'valid date',grb['validityDate']
-import matplotlib.pyplot as plt
-from mpl_toolkits.basemap import Basemap
-lats, lons = grb.latlons()
-data = grb['values']
-llcrnrlon = lons[0,0]
-llcrnrlat = lats[0,0]
-urcrnrlon = lons[-1,-1]
-urcrnrlat = lats[-1,-1]
-m = Basemap(llcrnrlon=llcrnrlon,llcrnrlat=llcrnrlat,
-            urcrnrlon=urcrnrlon,urcrnrlat=urcrnrlat,
-            resolution='c',projection='cyl')
-x,y = m(lons,lats)
-m.drawcoastlines()
-m.contourf(x,y,data,15)
-plt.title('Modifed Grib Data')
-plt.show()
+grbs.close()

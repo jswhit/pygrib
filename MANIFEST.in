@@ -7,5 +7,6 @@ include README
 include utils/grib_list
 recursive-include docs *
 include sampledata/*.grb
+include sampledata/*.grib*
 include test/README
 include test/*py
