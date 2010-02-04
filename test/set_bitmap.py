@@ -1,21 +1,27 @@
 import pygrib
 
 print 'grib_api version =',pygrib.api_version()
-infile = '../sampledata/regular_latlon_surface.grib1'
+grib1 = False
+if grib1:
+    infile = '../sampledata/regular_latlon_surface.grib1'
+else:
+    infile = '../sampledata/regular_latlon_surface.grib2'
 outfile = 'out.grib'
 grbs = pygrib.open(infile)
 print 'number of messages in file =',grbs.messages
 grb = grbs.next()
-grb['bitmapPresent']=1
 data = grb['values']
+grb['missingValue']=9999.
+grb['bitmapPresent']=1
 nx = grb['Ni']; ny = grb['Nj']
 data[3*ny/8:5*ny/8,3*nx/8:5*nx/8]=grb['missingValue']
 grb['values']=data
 msg = grb.tostring()
+grbs.close()
 f = open(outfile,'wb')
 f.write(msg)
 f.close()
-
+ 
 grbs = pygrib.open('out.grib')
 grb = grbs.next()
 data = grb['values']
