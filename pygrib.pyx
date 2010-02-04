@@ -644,8 +644,11 @@ cdef class gribmessage(object):
         cdef double missval
         if datarr.ndim > 2:
             raise ValueError('array must be 1d or 2d')
-        nx = self['Ni']
-        ny = self['Nj']
+        if self.has_key('Ni') and self.has_key('Nj'):
+            nx = self['Ni']
+            ny = self['Nj']
+        else: # probably spectral data.
+            return datarr
         if ny != GRIB_MISSING_LONG and nx != GRIB_MISSING_LONG:
             datarr.shape = (ny,nx)
         if self.has_key('typeOfGrid') and self['typeOfGrid'].startswith('reduced'):
