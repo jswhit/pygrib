@@ -908,6 +908,18 @@ cdef class gribmessage(object):
             y = llcrnry+dy*np.arange(ny)
             x, y = np.meshgrid(x, y)
             lons, lats = pj(x, y, inverse=True)
+        elif self['typeOfGrid'] == 'rotated_ll':
+            rot_angle = self['angleOfRotationInDegrees']
+            if rot_angle != 0.:
+                msg='angleOfRotation != 0 not supported for %s grid' %\
+                self['typeOfGrid']
+                raise ValueError(msg)
+            pole_lat = self['latitudeOfSouthernPoleInDegrees']
+            pole_lon = self['longitudeOfSouthernPoleInDegrees']
+            rotatedlats = self['distinctLatitudes']
+            rotatedlons = self['distinctLongitudes']
+            lonsr, latsr = np.meshgrid(rotatedlons, rotatedlats)
+            lons, lats = _rot2ll(lonsr,latsr,pole_lon,pole_lat)
         else:
             raise ValueError('unsupported grid %s' % self['typeOfGrid'])
         self.projparams = projparams
