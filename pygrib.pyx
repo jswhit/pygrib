@@ -334,7 +334,8 @@ cdef class gribmessage(object):
         self.missingvalue_int = GRIB_MISSING_LONG
         self.missingvalue_float = GRIB_MISSING_DOUBLE
         self.expand_reduced = True
-        self._ro_keys, self._all_keys = self._read_only_keys()
+        self._all_keys = self.keys()
+        self._ro_keys  = self._read_only_keys()
     def __repr__(self):
         """prints a short inventory of the grib message"""
         inventory = []
@@ -378,6 +379,7 @@ cdef class gribmessage(object):
         cdef grib_keys_iterator* gi
         cdef int err, type
         cdef char *name
+        if self._all_keys is not None: return self._all_keys
         gi = grib_keys_iterator_new(self._gh,\
                 GRIB_KEYS_ITERATOR_ALL_KEYS, NULL)
         keys = []
@@ -392,7 +394,7 @@ cdef class gribmessage(object):
             err = grib_get_native_type(self._gh, name, &type)
             if err:
                 raise RuntimeError(grib_get_error_message(err))
-            # just skip unsupported types for now.
+            # keys with this type are just ignored.
             if type not in\
             [GRIB_TYPE_SECTION,GRIB_TYPE_BYTES,GRIB_TYPE_LABEL,GRIB_TYPE_MISSING]:
                 keys.append(key)
@@ -409,7 +411,8 @@ cdef class gribmessage(object):
         cdef grib_keys_iterator* gi
         cdef int err, type
         cdef char *name
-
+        if self._all_keys is None:
+            self._all_keys = self.keys()
         gi = grib_keys_iterator_new(self._gh,\
                 GRIB_KEYS_ITERATOR_SKIP_READ_ONLY, NULL)
         keys_noro = []
@@ -420,23 +423,11 @@ cdef class gribmessage(object):
         err = grib_keys_iterator_delete(gi)
         if err:
             raise RuntimeError(grib_get_error_message(err))
-
-        gi = grib_keys_iterator_new(self._gh,\
-                GRIB_KEYS_ITERATOR_ALL_KEYS, NULL)
-        allkeys = []
-        while grib_keys_iterator_next(gi):
-            name = grib_keys_iterator_get_name(gi)
-            key = PyString_AsString(name)
-            allkeys.append(key)
-        err = grib_keys_iterator_delete(gi)
-        if err:
-            raise RuntimeError(grib_get_error_message(err))
-
-        keys = []
-        for key in allkeys:
+        keys_ro = []
+        for key in self._all_keys:
             if key not in keys_noro:
-                keys.append(key)
-        return keys, allkeys
+                keys_ro.append(key)
+        return keys_ro
     def __setitem__(self, key, value):
         """
         change values associated with existing grib keys.
