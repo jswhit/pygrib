@@ -398,7 +398,7 @@ cdef class gribmessage(object):
                 raise RuntimeError(grib_get_error_message(err))
             # keys with these types are gnored.
             if type not in\
-            [GRIB_TYPE_SECTION,GRIB_TYPE_BYTES,GRIB_TYPE_LABEL,GRIB_TYPE_MISSING]:
+            [GRIB_TYPE_UNDEFINED,GRIB_TYPE_SECTION,GRIB_TYPE_BYTES,GRIB_TYPE_LABEL,GRIB_TYPE_MISSING]:
                 keys.append(key)
         err = grib_keys_iterator_delete(gi)
         if err:
@@ -450,8 +450,6 @@ cdef class gribmessage(object):
         err = grib_get_native_type(self._gh, name, &type)
         if err:
             raise RuntimeError(grib_get_error_message(err))
-        if type == GRIB_TYPE_UNDEFINED:
-            pass
         elif type == GRIB_TYPE_LONG:
             # is value an array or a scalar?
             datarr = np.asarray(value, np.int)
@@ -500,7 +498,6 @@ cdef class gribmessage(object):
                 raise RuntimeError(grib_get_error_message(err))
         else:
             raise ValueError("unrecognized grib type % d" % type)
-            pass
     def __getitem__(self, key):
         """
         access values associated with grib keys.
