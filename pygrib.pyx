@@ -99,7 +99,9 @@ Documentation
 Changelog
 =========
 
- - B{1.0}: fixed docs, formatting in gribmessage __repr__.
+ - B{1.0}: fixed docs, formatting in gribmessage __repr__. Include
+   command line utilites for listing (C{grib_list}) and repacking 
+   (C{grib_repack}) GRIB files.
  - B{1.0b1}: added ability to modify existing grib messages with
    __setitem__, get coded binary string with tostring method.
  - B{1.0a1}: initial release. Read-only support nearly
