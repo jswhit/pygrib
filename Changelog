@@ -1,3 +1,7 @@
+version 1.0 - not yet released
+==============================
+* fix formatting of analysis time in gribmessage __repr__.
+
 version 1.0b1 - svn revision 91
 ===============================
 * basic write support through __setitem__ (to modify an existing grib
