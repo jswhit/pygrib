@@ -1,6 +1,7 @@
-version 1.0 - not yet released
+version 1.0 - svn revision 106
 ==============================
 * fix formatting of analysis time in gribmessage __repr__.
+* add command line utilites grib_list and grib_repack.
 
 version 1.0b1 - svn revision 91
 ===============================
