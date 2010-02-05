@@ -99,6 +99,7 @@ Documentation
 Changelog
 =========
 
+ - B{1.0}: fixed docs, formatting in gribmessage __repr__.
  - B{1.0b1}: added ability to modify existing grib messages with
    __setitem__, get coded binary string with tostring method.
  - B{1.0a1}: initial release. Read-only support nearly
@@ -108,7 +109,7 @@ Changelog
 
 @contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
 
-@version: 1.0b1
+@version: 1.0
 
 @copyright: copyright 2010 by Jeffrey Whitaker.
 
@@ -126,7 +127,7 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE."""
 __test__ = None
 del __test__ # hack so epydoc doesn't show __test__
-__version__ = '1.0b1'
+__version__ = '1.0'
 
 import numpy as np
 from numpy import ma
