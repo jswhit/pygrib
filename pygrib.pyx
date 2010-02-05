@@ -909,7 +909,7 @@ cdef class gribmessage(object):
             x, y = np.meshgrid(x, y)
             lons, lats = pj(x, y, inverse=True)
         else:
-            raise ValueError('unsupported grid')
+            raise ValueError('unsupported grid %s' % self['typeOfGrid'])
         self.projparams = projparams
         return lats, lons
 
@@ -957,3 +957,22 @@ cdef _redtoreg(int nlons, ndarray lonsperlat, ndarray redgrid, double missval):
             n = n + 1
         indx = indx + ilons
     return reggrid
+
+def _rot2ll(lonin,latin,lonpole,latpole):
+    # works for rot_angle == 0
+    # convert to xyz coordinates 
+    dtr = np.pi/180.
+    x = np.cos(latin * dtr) * np.cos(lonin * dtr)
+    y = np.cos(latin * dtr) * np.sin(lonin * dtr)
+    z = np.sin(latin * dtr)
+    # rotate around y axis 
+    rotang = - (latpole + 90) * dtr
+    sinrot = np.sin(rotang)
+    cosrot = np.cos(rotang)
+    ry = y
+    rx = x * cosrot + z * sinrot
+    rz = -x * sinrot + z * cosrot
+    # convert back to lat/lon 
+    tlat = np.arcsin(rz) / dtr
+    tlon = lonpole + np.arctan2(ry,rx) / dtr
+    return tlon, tlat
