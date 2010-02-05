@@ -525,8 +525,6 @@ cdef class gribmessage(object):
         err = grib_get_native_type(self._gh, name, &type)
         if err:
             raise RuntimeError(grib_get_error_message(err))
-        if type == GRIB_TYPE_UNDEFINED:
-            return None
         elif type == GRIB_TYPE_LONG:
             if size == 1: # scalar
                 err = grib_get_long(self._gh, name, &longval)
