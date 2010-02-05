@@ -101,7 +101,8 @@ Changelog
 
  - B{1.0}: fixed docs, formatting in gribmessage __repr__. Include
    command line utilites for listing (C{grib_list}) and repacking 
-   (C{grib_repack}) GRIB files.
+   (C{grib_repack}) GRIB files. Added support for C{rotated_ll}
+   and C{rotated_gg} in latlons method.
  - B{1.0b1}: added ability to modify existing grib messages with
    __setitem__, get coded binary string with tostring method.
  - B{1.0a1}: initial release. Read-only support nearly
@@ -908,10 +909,10 @@ cdef class gribmessage(object):
             y = llcrnry+dy*np.arange(ny)
             x, y = np.meshgrid(x, y)
             lons, lats = pj(x, y, inverse=True)
-        elif self['typeOfGrid'] == 'rotated_ll':
+        elif self['typeOfGrid'] in ['rotated_ll','rotated_gg']:
             rot_angle = self['angleOfRotationInDegrees']
             if rot_angle != 0.:
-                msg='angleOfRotation != 0 not supported for %s grid' %\
+                msg='nonzero angleOfRotation not supported for %s grid' %\
                 self['typeOfGrid']
                 raise ValueError(msg)
             pole_lat = self['latitudeOfSouthernPoleInDegrees']

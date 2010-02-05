@@ -1,4 +1,5 @@
 pygrib	pygrib-module.html
+pygrib._rot2ll	pygrib-module.html#_rot2ll
 pygrib.__version__	pygrib-module.html#__version__
 pygrib.api_version	pygrib-module.html#api_version
 pygrib.gribmessage	pygrib.gribmessage-class.html
