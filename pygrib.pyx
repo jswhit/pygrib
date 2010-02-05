@@ -519,9 +519,6 @@ cdef class gribmessage(object):
         err = grib_get_size(self._gh, name, &size)
         if err:
             raise RuntimeError(grib_get_error_message(err))
-        #if key.startswith('grib 2 Section'):
-        #    sectnum = key.split()[3]
-        #    size = int(self['section'+sectnum+'Length'])
         err = grib_get_native_type(self._gh, name, &type)
         if err:
             raise RuntimeError(grib_get_error_message(err))
