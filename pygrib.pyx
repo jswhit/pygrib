@@ -360,7 +360,7 @@ cdef class gribmessage(object):
             ftime = repr(self['forecastTime'])
             inventory.append(':fcst time '+ftime)
         inventory.append(
-        ':from '+repr(self['dataDate'])+repr(self['dataTime']))
+        ':from '+repr(self['dataDate'])+'%04i' % self['dataTime'])
         #if self.has_key('validityDate'):
         #    inventory.append(
         #    ':valid '+repr(self['validityDate'])+repr(self['validityTime']))
