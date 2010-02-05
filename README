@@ -7,6 +7,7 @@ Provides a python interface for the ECWMF GRIB_API C library, and
 command line utilities for listing (grib_list) and repacking (grib_repack)
 GRIB files.
 
-For installation instructions and API documentation, see docs/index.html.
+For installation instructions and API documentation, see docs/index.html or
+http://pygrib.googlecode.com/svn/trunk/docs/index.html.
 
 Questions or comments - contact Jeff Whitaker <jeffrey.s.whitaker@noaa.gov>
