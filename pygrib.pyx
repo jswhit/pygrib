@@ -379,14 +379,16 @@ cdef class gribmessage(object):
         cdef grib_keys_iterator* gi
         cdef int err, type
         cdef char *name
+        # use cached keys if they exist.
         if self._all_keys is not None: return self._all_keys
+        # if not, get keys from grib file.
         gi = grib_keys_iterator_new(self._gh,\
                 GRIB_KEYS_ITERATOR_ALL_KEYS, NULL)
         keys = []
         while grib_keys_iterator_next(gi):
             name = grib_keys_iterator_get_name(gi)
             key = PyString_AsString(name)
-            # skip these apparently bogus keys (grib_api 1.8.0)
+            # ignore these keys.
             if key in\
             ['zero','one','eight','eleven','false','thousand','file','localDir','7777',
              'oneThousand']:
@@ -394,7 +396,7 @@ cdef class gribmessage(object):
             err = grib_get_native_type(self._gh, name, &type)
             if err:
                 raise RuntimeError(grib_get_error_message(err))
-            # keys with this type are just ignored.
+            # keys with these types are gnored.
             if type not in\
             [GRIB_TYPE_SECTION,GRIB_TYPE_BYTES,GRIB_TYPE_LABEL,GRIB_TYPE_MISSING]:
                 keys.append(key)
