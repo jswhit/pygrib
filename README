@@ -1,4 +1,4 @@
-Python module for reading GRIB files (edition 1 and edition 2).
+Python module for reading and writing GRIB files (edition 1 and edition 2).
 
 GRIB is the World Meteorological Organization (WMO) standard
 file format for the exchange of weather data.
