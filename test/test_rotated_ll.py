@@ -12,5 +12,7 @@ m = Basemap(projection='stere',lon_0=5,lat_0=60,width=4000.e3,height=3000.e3,res
 x,y = m(lons,lats)
 m.drawcoastlines()
 m.contourf(x,y,data,15)
+m.drawmeridians(np.arange(-60,61,5))
+m.drawparallels(np.arange(20,80,5))
 plt.title(grb['name'])
 plt.show()
