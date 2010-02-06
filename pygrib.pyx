@@ -912,16 +912,23 @@ cdef class gribmessage(object):
             lons, lats = pj(x, y, inverse=True)
         elif self['typeOfGrid'] in ['rotated_ll','rotated_gg']:
             rot_angle = self['angleOfRotationInDegrees']
-            if rot_angle != 0.:
-                msg='nonzero angleOfRotation not supported for %s grid' %\
-                self['typeOfGrid']
-                raise ValueError(msg)
+            #if rot_angle != 0.:
+            #    msg='nonzero angleOfRotation not supported for %s grid' %\
+            #    self['typeOfGrid']
+            #    raise ValueError(msg)
             pole_lat = self['latitudeOfSouthernPoleInDegrees']
             pole_lon = self['longitudeOfSouthernPoleInDegrees']
             rotatedlats = self['distinctLatitudes']
             rotatedlons = self['distinctLongitudes']
-            lonsr, latsr = np.meshgrid(rotatedlons, rotatedlats)
-            lons, lats = _rot2ll(lonsr,latsr,pole_lon,pole_lat)
+            d2r = np.pi/180.
+            lonsr, latsr = np.meshgrid(rotatedlons*d2r, rotatedlats*d2r)
+            projparams['o_proj']='longlat'
+            projparams['proj']='ob_tran'
+            projparams['o_lat_p']=-pole_lat
+            projparams['o_lon_p']=rot_angle
+            projparams['lon_0']=pole_lon
+            pj = pyproj.Proj(projparams)
+            lons,lats = pj(lonsr,latsr,inverse=True)
         else:
             raise ValueError('unsupported grid %s' % self['typeOfGrid'])
         self.projparams = projparams
@@ -972,21 +979,21 @@ cdef _redtoreg(int nlons, ndarray lonsperlat, ndarray redgrid, double missval):
         indx = indx + ilons
     return reggrid
 
-def _rot2ll(lonin,latin,lonpole,latpole):
-    # works for rot_angle == 0
-    # convert to xyz coordinates 
-    dtr = np.pi/180.
-    x = np.cos(latin * dtr) * np.cos(lonin * dtr)
-    y = np.cos(latin * dtr) * np.sin(lonin * dtr)
-    z = np.sin(latin * dtr)
-    # rotate around y axis 
-    rotang = - (latpole + 90) * dtr
-    sinrot = np.sin(rotang)
-    cosrot = np.cos(rotang)
-    ry = y
-    rx = x * cosrot + z * sinrot
-    rz = -x * sinrot + z * cosrot
-    # convert back to lat/lon 
-    tlat = np.arcsin(rz) / dtr
-    tlon = lonpole + np.arctan2(ry,rx) / dtr
-    return tlon, tlat
+#def _rot2ll(lonin,latin,lonpole,latpole):
+#    # works for rot_angle == 0
+#    # convert to xyz coordinates 
+#    dtr = np.pi/180.
+#    x = np.cos(latin * dtr) * np.cos(lonin * dtr)
+#    y = np.cos(latin * dtr) * np.sin(lonin * dtr)
+#    z = np.sin(latin * dtr)
+#    # rotate around y axis 
+#    rotang = - (latpole + 90) * dtr
+#    sinrot = np.sin(rotang)
+#    cosrot = np.cos(rotang)
+#    ry = y
+#    rx = x * cosrot + z * sinrot
+#    rz = -x * sinrot + z * cosrot
+#    # convert back to lat/lon 
+#    tlat = np.arcsin(rz) / dtr
+#    tlon = lonpole + np.arctan2(ry,rx) / dtr
+#    return tlon, tlat
