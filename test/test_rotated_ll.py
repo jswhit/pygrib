@@ -1,7 +1,6 @@
 import pygrib
 import numpy as np
 import matplotlib.pyplot as plt
-import pyproj
 from mpl_toolkits.basemap import Basemap
 grbs = pygrib.open('../sampledata/rotated_ll.grib1')
 grb = grbs.next()
