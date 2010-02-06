@@ -912,10 +912,10 @@ cdef class gribmessage(object):
             lons, lats = pj(x, y, inverse=True)
         elif self['typeOfGrid'] in ['rotated_ll','rotated_gg']:
             rot_angle = self['angleOfRotationInDegrees']
-            #if rot_angle != 0.:
-            #    msg='nonzero angleOfRotation not supported for %s grid' %\
-            #    self['typeOfGrid']
-            #    raise ValueError(msg)
+            if rot_angle != 0.:
+                msg='nonzero angleOfRotation not supported for %s grid' %\
+                self['typeOfGrid']
+                raise ValueError(msg)
             pole_lat = self['latitudeOfSouthernPoleInDegrees']
             pole_lon = self['longitudeOfSouthernPoleInDegrees']
             rotatedlats = self['distinctLatitudes']
@@ -925,7 +925,7 @@ cdef class gribmessage(object):
             projparams['o_proj']='longlat'
             projparams['proj']='ob_tran'
             projparams['o_lat_p']=-pole_lat
-            projparams['o_lon_p']=rot_angle
+            #projparams['o_lon_p']=rot_angle
             projparams['lon_0']=pole_lon
             pj = pyproj.Proj(projparams)
             lons,lats = pj(lonsr,latsr,inverse=True)
