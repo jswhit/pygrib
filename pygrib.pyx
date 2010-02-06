@@ -675,7 +675,7 @@ cdef class gribmessage(object):
         Currently handles reg. lat/lon, global gaussian, mercator, stereographic,
         lambert conformal, albers equal-area, space-view, azimuthal 
         equidistant, reduced gaussian, reduced lat/lon,
-        lambert azimuthal equal-area, rotated lat/lon and rotated gaussion grids.
+        lambert azimuthal equal-area, rotated lat/lon and rotated gaussian grids.
 
         @return: C{B{lats},B{lons}}, numpy arrays 
         containing latitudes and longitudes of grid (in degrees).
