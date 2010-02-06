@@ -102,9 +102,10 @@ Changelog
  - B{1.0}: fixed docs, formatting in gribmessage __repr__. Include
    command line utilites for listing (C{grib_list}) and repacking 
    (C{grib_repack}) GRIB files. Added support for C{rotated_ll}
-   and C{rotated_gg} in latlons method.
+   and C{rotated_gg} in L{gribmessage.latlons}.
  - B{1.0b1}: added ability to modify existing grib messages with
-   __setitem__, get coded binary string with tostring method.
+   L{gribmessage.__setitem__}, get coded binary string with
+   L{gribmessage.tostring}.
  - B{1.0a1}: initial release. Read-only support nearly
    complete, but no support for writing.
 
