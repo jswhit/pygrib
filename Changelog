@@ -1,4 +1,4 @@
-version 1.0 - svn revision 123
+version 1.0 - svn revision 124
 ==============================
 * fix formatting of analysis time in gribmessage __repr__.
 * add command line utilites grib_list and grib_repack.
@@ -15,4 +15,3 @@ version 1.0a1 - svn revision 55
 ===============================
 * initial release.  Support for reading GRIB1 and GRIB2 is nearly complete.
   No support for writing yet.
-
