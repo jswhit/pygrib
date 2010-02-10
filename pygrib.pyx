@@ -220,9 +220,11 @@ cdef extern from "grib_api.h":
 
 
 cpdef api_version():
-    cdef long api_version
-    api_version = grib_get_api_version()
-    return api_version
+    """return an integer representing the GRIB_API library version
+    GRIB_API_VERSION=GRIB_API_MAJOR_VERSION*10000+GRIB_API_MINOR_VERSION*100+GRIB_API_REVISION_VERSION"""
+    cdef int grib_api_version
+    grib_api_version = grib_get_api_version()
+    return grib_api_version
 
 cdef class open(object):
     """ 
