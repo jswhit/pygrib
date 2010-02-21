@@ -18,11 +18,13 @@ if grib_api_dir:
     libdirs.append(os.path.join(grib_api_dir,'lib64'))
 if openjpeg_dir: 
     incdirs.append(os.path.join(openjpeg_dir,'include'))
+    incdirs.append(os.path.join(openjpeg_dir,'include/openjpeg'))
     libdirs.append(os.path.join(openjpeg_dir,'lib'))
     libdirs.append(os.path.join(openjpeg_dir,'lib64'))
     libraries.append("openjpeg")
 if jasper_dir: 
     incdirs.append(os.path.join(jasper_dir,'include'))
+    incdirs.append(os.path.join(jasper_dir,'include/jasper'))
     libdirs.append(os.path.join(jasper_dir,'lib'))
     libdirs.append(os.path.join(jasper_dir,'lib64'))
     libraries.append("jasper")
