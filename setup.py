@@ -14,29 +14,29 @@ libraries=['grib_api']
 
 if grib_api_dir: 
     incdirs.append(os.path.join(grib_api_dir,'include'))
-    libdirs.append(os.path.join(grib_api_dir,'lib'))
     libdirs.append(os.path.join(grib_api_dir,'lib64'))
+    libdirs.append(os.path.join(grib_api_dir,'lib'))
 if openjpeg_dir: 
-    incdirs.append(os.path.join(openjpeg_dir,'include'))
     incdirs.append(os.path.join(openjpeg_dir,'include/openjpeg'))
-    libdirs.append(os.path.join(openjpeg_dir,'lib'))
+    incdirs.append(os.path.join(openjpeg_dir,'include'))
     libdirs.append(os.path.join(openjpeg_dir,'lib64'))
+    libdirs.append(os.path.join(openjpeg_dir,'lib'))
     libraries.append("openjpeg")
 if jasper_dir: 
-    incdirs.append(os.path.join(jasper_dir,'include'))
     incdirs.append(os.path.join(jasper_dir,'include/jasper'))
-    libdirs.append(os.path.join(jasper_dir,'lib'))
+    incdirs.append(os.path.join(jasper_dir,'include'))
     libdirs.append(os.path.join(jasper_dir,'lib64'))
+    libdirs.append(os.path.join(jasper_dir,'lib'))
     libraries.append("jasper")
 if png_dir: 
     incdirs.append(os.path.join(png_dir,'include'))
-    libdirs.append(os.path.join(png_dir,'lib'))
     libdirs.append(os.path.join(png_dir,'lib64'))
+    libdirs.append(os.path.join(png_dir,'lib'))
     libraries.append("png")
 if zlib_dir: 
     incdirs.append(os.path.join(zlib_dir,'include'))
-    libdirs.append(os.path.join(zlib_dir,'lib'))
     libdirs.append(os.path.join(zlib_dir,'lib64'))
+    libdirs.append(os.path.join(zlib_dir,'lib'))
     libraries.append("z")
 
 setup(name = "pygrib",
