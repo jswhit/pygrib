@@ -15,7 +15,6 @@ def test():
 
     position iterator at beginning again.
     >>> grbs.rewind() 
-
     >>> for grb in grbs: print grb
     1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120:from 200402291200
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
@@ -45,7 +44,6 @@ def test():
     >>> for grb in grbs:
     ...     if grb['name'] == 'Maximum temperature': break
     ...
-
     >>> print grb
     3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
 
@@ -84,14 +82,11 @@ def test():
 
     write to file and close.
     >>> grbout.write(msg)
-
     >>> grbout.close()
 
-    reopen file.
+    reopen file, check contents.
     >>> grbs = pygrib.open('test.grb')
-
     >>> grb = grbs.next()
-
     >>> print grb
     1:Pressure tendency:Pa s**-1 (instant):regular_gg:surface:level 0:fcst time 240:from 200402291200
     >>> print 'valid date',grb['validityDate']
