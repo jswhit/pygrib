@@ -685,6 +685,9 @@ cdef class gribmessage(object):
 
         @return: C{B{lats},B{lons}}, numpy arrays 
         containing latitudes and longitudes of grid (in degrees).
+
+        sets the C{projparams} instance variable to a dictionary containing 
+        proj4 key/value pairs describing the grid.
         """
         projparams = {}
 
