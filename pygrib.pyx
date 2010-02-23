@@ -35,7 +35,8 @@ Installation
  C{$PNG_DIR} and C{$ZLIB_DIR} so that the include files and libraries for
  GRIB API, Jasper, OpenJPEG, PNG and zlib will be found.  
  For example, the include files for 
- jasper should be found in C{$JASPER_DIR/include}, and the jasper
+ jasper should be found in C{$JASPER_DIR/include} or
+ C{$JASPER_DIR/include/jasper}, and the jasper
  library should be found in C{$JASPER_DIR/lib} or C{$JASPER_DIR/lib64}. If any of
  those environment  variables are not set, then the default search paths will be used.  
  If the GRIB API library was compiled without JASPER, PNG or OpenJPEG support, then the 
