@@ -24,6 +24,4 @@ else:
                 print k,'= MISSING'
             else:
                 print k,'=',grb[k]
-        data = grb['values']
-        print 'min/max of data = ',data.min(),data.max()
 grbs.close()
