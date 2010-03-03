@@ -298,6 +298,9 @@ cdef class open(object):
         self._gh = grib_handle_new_from_file(NULL, self._fd, &err)
         self.messagenumber = self.messagenumber + 1
         if self._gh == NULL and not err:
+            # at end, set to last message
+            # (otherwise segfaults result when grib message is accessed)
+            grb = self.message(self.messages)
             raise StopIteration
         if err:
             raise RuntimeError(grib_get_error_message(err))

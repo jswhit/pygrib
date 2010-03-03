@@ -13,6 +13,10 @@ def test():
     3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
     4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
 
+    iterator now positioned at last message
+    >>> print grb
+    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+
     position iterator at beginning again.
     >>> grbs.rewind() 
     >>> for grb in grbs: print grb
