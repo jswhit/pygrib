@@ -292,18 +292,17 @@ cdef class open(object):
     def __next__(self):
         cdef grib_handle* gh 
         cdef int err
-        err = grib_handle_delete(self._gh)
+        gh = grib_handle_new_from_file(NULL, self._fd, &err)
         if err:
             raise RuntimeError(grib_get_error_message(err))
-        self._gh = grib_handle_new_from_file(NULL, self._fd, &err)
-        self.messagenumber = self.messagenumber + 1
-        if self._gh == NULL and not err:
-            # at end, set to last message
-            # (otherwise segfaults result when grib message is accessed)
-            grb = self.message(self.messages)
+        if gh == NULL:
             raise StopIteration
-        if err:
-            raise RuntimeError(grib_get_error_message(err))
+        else:
+            err = grib_handle_delete(self._gh)
+            if err:
+                raise RuntimeError(grib_get_error_message(err))
+            self._gh = gh
+            self.messagenumber = self.messagenumber + 1
         return gribmessage(self)
     def close(self):
         """
