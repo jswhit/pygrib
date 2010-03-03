@@ -1,5 +1,6 @@
 version 1.1 - (not yet released)
 ================================
+* fix __repr__ so level information is correctly printed for GRIB1 files.
 * fix setup.py to find openjpeg and jasper headers on Ubuntu.
 * use doctest in test.py.
 
