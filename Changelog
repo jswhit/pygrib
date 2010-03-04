@@ -1,4 +1,4 @@
-version 1.1 - svn revision 143
+version 1.1 - svn revision 146
 ==============================
 * fix segfault that occured when iterator hit end of file and grib message was
   accessed.
