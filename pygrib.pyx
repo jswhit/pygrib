@@ -100,21 +100,13 @@ Documentation
 Changelog
 =========
 
- - B{1.0}: fixed docs, formatting in gribmessage __repr__. Include
-   command line utilites for listing (C{grib_list}) and repacking 
-   (C{grib_repack}) GRIB files. Added support for C{rotated_ll}
-   and C{rotated_gg} in L{gribmessage.latlons}.
- - B{1.0b1}: added ability to modify existing grib messages with
-   L{gribmessage.__setitem__}, get coded binary string with
-   L{gribmessage.tostring}.
- - B{1.0a1}: initial release. Read-only support nearly
-   complete, but no support for writing.
+ - see U{Changelog<http://pygrib.googlecode.com/svn/trunk/Changelog>} file.
 
 @author: Jeffrey Whitaker.
 
 @contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
 
-@version: 1.0
+@version: 1.1
 
 @copyright: copyright 2010 by Jeffrey Whitaker.
 

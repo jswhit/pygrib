@@ -1,5 +1,5 @@
-version 1.1 - (not yet released)
-================================
+version 1.1 - svn revision 141
+==============================
 * fix segfault that occured when iterator hit end of file and grib message was
   accessed.
 * fix __repr__ so level information is correctly printed for GRIB1 files.
