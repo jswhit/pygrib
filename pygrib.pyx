@@ -373,8 +373,16 @@ cdef class gribmessage(object):
         #    inventory.append(
         #    ':valid '+repr(self['validityDate'])+repr(self['validityTime']))
         if self.has_key('perturbationNumber'):
-            inventory.append(":ens mem %d of %d" %\
-            (self['perturbationNumber'],self['numberOfForecastsInEnsemble']))
+            ens_type = self['typeOfEnsembleForecast']
+            pert_num = self['perturbationNumber']
+            if ens_type == 0:
+               inventory.append(":lo res cntl fcst")
+            elif ens_type == 1:
+               inventory.append(":hi res cntl fcst")
+            elif ens_type == 2:
+               inventory.append(":neg ens pert %d" %  pert_num)
+            elif ens_type == 3:
+               inventory.append(":pos ens pert %d" % pert_num)
         return ''.join(inventory)
     def keys(self):
         """
