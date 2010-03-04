@@ -24,7 +24,6 @@ pygrib.gribmessage.missingvalue_float	pygrib.gribmessage-class.html#missingvalue
 pygrib.gribmessage._reshape_mask	pygrib.gribmessage-class.html#_reshape_mask
 pygrib.open	pygrib.open-class.html
 pygrib.open.__new__	pygrib.open-class.html#__new__
-pygrib.open.messagesr	pygrib.open-class.html#messagesr
 pygrib.open.__next__	pygrib.open-class.html#__next__
 pygrib.open.messages	pygrib.open-class.html#messages
 pygrib.open.filename	pygrib.open-class.html#filename
