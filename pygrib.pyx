@@ -229,7 +229,7 @@ cdef class open(object):
     returns iterator object given GRIB filename. When iterated, returns
     instances of the L{gribmessage} class.
      
-    @ivar messagesr: The total number of grib messages in the file.
+    @ivar messages: The total number of grib messages in the file.
 
     @ivar messagenumber: The grib message number that the iterator currently
     points to.
