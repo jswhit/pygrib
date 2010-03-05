@@ -19,7 +19,7 @@ Required
   N-dimensional array object for python. Version 1.2.1 or higher.
 - U{pyproj<http://code.google.com/p/pyproj/>} Python interface to 
   U{PROJ.4<http://trac.osgeo.org/proj>} library for cartographic transformations.
-- U{GRIB API<http://www.ecmwf.int/products/data/software/grib_api.html.>} C library
+- U{GRIB API<http://www.ecmwf.int/products/data/software/grib_api.html>} C library
   for encoding and decoding GRIB messages (edition 1 and edition 2).
   Version 1.8.0 or higher required.
   To be fully functional, the GRIB API library requires
