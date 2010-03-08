@@ -410,7 +410,7 @@ cdef class gribmessage(object):
             err = grib_get_native_type(self._gh, name, &type)
             if err:
                 raise RuntimeError(grib_get_error_message(err))
-            # keys with these types are gnored.
+            # keys with these types are ignored.
             if type not in\
             [GRIB_TYPE_UNDEFINED,GRIB_TYPE_SECTION,GRIB_TYPE_BYTES,GRIB_TYPE_LABEL,GRIB_TYPE_MISSING]:
                 keys.append(key)
