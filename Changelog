@@ -1,3 +1,9 @@
+version 1.3 - svn revision 153
+==============================
+* make sure gribmessage instances are created from clones
+  of grib handle, so information is retained when state of parent
+  grib iterator is modified.
+
 version 1.2 - svn revision 152
 ==============================
 * fix issue 2 - segault when iterating over certain grib files 

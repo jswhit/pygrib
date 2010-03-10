@@ -106,7 +106,7 @@ Changelog
 
 @contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
 
-@version: 1.2
+@version: 1.3
 
 @copyright: copyright 2010 by Jeffrey Whitaker.
 
@@ -124,7 +124,7 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE."""
 __test__ = None
 del __test__ # hack so epydoc doesn't show __test__
-__version__ = '1.2'
+__version__ = '1.3'
 
 import numpy as np
 from numpy import ma
@@ -210,6 +210,7 @@ cdef extern from "grib_api.h":
     int grib_get_message_copy(grib_handle* h ,  void* message,size_t *message_length)
     long grib_get_api_version()
     int grib_count_in_file(grib_context* c, FILE* f,int* n)
+    grib_handle* grib_handle_clone(grib_handle* h)
 
 
 cpdef api_version():
@@ -336,7 +337,7 @@ cdef class gribmessage(object):
     cdef public messagenumber, projparams, missingvalue_int,\
     missingvalue_float, expand_reduced, _ro_keys, _all_keys
     def __new__(self, open grb):
-        self._gh = grb._gh
+        self._gh = grib_handle_clone(grb._gh)
         self.messagenumber = grb.messagenumber
         self.missingvalue_int = GRIB_MISSING_LONG
         self.missingvalue_float = GRIB_MISSING_DOUBLE
