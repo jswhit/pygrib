@@ -1,3 +1,8 @@
+version 1.2 - svn revision 152
+==============================
+* fix issue 2 - segault when iterating over certain grib files 
+  (those at ftp://ftp.ssec.wisc.edu/pub/eosdb/dbcras, for example).
+
 version 1.1 - svn revision 147
 ==============================
 * fix segfault that occured when iterator hit end of file and grib message was
