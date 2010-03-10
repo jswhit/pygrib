@@ -5,10 +5,14 @@ def test():
     open a grib file, create an iterator.
     >>> import pygrib
     >>> grbs = pygrib.open('sampledata/flux.grb')
+    >>> grb1 = grbs.next()
 
-    iterate over all grib messages.
-    >>> for grb in grbs: print grb
+    first grib message
+    >>> print grb1
     1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120:from 200402291200
+
+    iterate over rest of grib messages.
+    >>> for grb in grbs: print grb
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
     3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
     4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
@@ -16,6 +20,10 @@ def test():
     iterator now positioned at last message
     >>> print grb
     4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+
+    grb1 is still first grib message
+    >>> print grb1
+    1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120:from 200402291200
 
     position iterator at beginning again.
     >>> grbs.rewind() 
