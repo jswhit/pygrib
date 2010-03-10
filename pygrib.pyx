@@ -284,15 +284,18 @@ cdef class open(object):
     def __next__(self):
         cdef grib_handle* gh 
         cdef int err
+        if self.messagenumber == self.messages:
+            raise StopIteration
+        if self._gh is not NULL:
+            err = grib_handle_delete(self._gh)
+            if err:
+                raise RuntimeError(grib_get_error_message(err))
         gh = grib_handle_new_from_file(NULL, self._fd, &err)
         if err:
             raise RuntimeError(grib_get_error_message(err))
         if gh == NULL:
             raise StopIteration
         else:
-            err = grib_handle_delete(self._gh)
-            if err:
-                raise RuntimeError(grib_get_error_message(err))
             self._gh = gh
             self.messagenumber = self.messagenumber + 1
         return gribmessage(self)
