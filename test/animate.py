@@ -31,29 +31,21 @@ m.drawmeridians(np.arange(-80,81,20),labels=[0,0,0,1])
 txt = plt.title(grb,fontsize=8)
 
 manager = plt.get_current_fig_manager()
+# callback function to update image.
 def updatefig(*args):
-    global cnt, loop, delay
+    global cnt, delay
     grb = btemps[cnt]
     im.set_data(grb['values'])
     txt.set_text(repr(grb))
     manager.canvas.draw()
-    if cnt==0: time.sleep(delay)
+    if cnt==0 or cnt==1: time.sleep(delay)
     cnt = cnt+1
-    if cnt==len(btemps):
-        loop = loop + 1
-        print 'done loop = ',loop
-        if loop == loops:
-            print 'all done - close plot window to exit'
-            return False
-        else:
-            cnt = 0
-            return True
-    else:
-        return True
+    if cnt==len(btemps): cnt=0
+    return True
 
 cnt = 0 # image counter
-delay = 5 # delay between loops
-loops = 4 # number of times to loop animation
-loop = 0 # loop counter
+delay = 1 # delay at beginning and end of loop
 gobject.idle_add(updatefig)
+print 'close window to exit ...'
 plt.show()
+print 'done'
