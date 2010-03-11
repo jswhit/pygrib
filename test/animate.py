@@ -20,8 +20,8 @@ Basemap(projection=projd['proj'],lat_ts=projd['lat_ts'],lon_0=projd['lon_0'],\
         lat_0=projd['lat_0'],rsphere=(projd['a'],projd['b']),\
         llcrnrlat=lats[0,0],urcrnrlat=lats[-1,-1],\
         llcrnrlon=lons[0,0],urcrnrlon=lons[-1,-1],resolution='i')
-plt.figure(figsize=(8,7))
 plt.ion() # set interactive mode on
+plt.figure(figsize=(8,7))
 m.drawcoastlines()
 m.drawcountries()
 grb = btemps[0]
@@ -36,6 +36,7 @@ plt.draw()
 for loop in range(4):
    time.sleep(5)
    for grb in btemps:
+       print grb
        im.set_data(grb['values'])
        plt.title(grb,fontsize=8)
        plt.draw()
