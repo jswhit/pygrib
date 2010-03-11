@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use('GTKAgg')
 import pygrib
 import matplotlib.pyplot as plt
 import numpy as np
