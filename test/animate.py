@@ -51,9 +51,9 @@ def updatefig(*args):
     else:
         return True
 
-cnt = 0
-delay = 5
-loops = 4
-loop = 0
+cnt = 0 # image counter
+delay = 5 # delay between loops
+loops = 4 # number of times to loop animation
+loop = 0 # loop counter
 gobject.idle_add(updatefig)
 plt.show()
