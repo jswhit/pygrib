@@ -345,6 +345,7 @@ cdef class gribmessage(object):
         self._all_keys = self.keys()
         self._ro_keys  = self._read_only_keys()
     def __dealloc__(self):
+        cdef int err
         err = grib_handle_delete(self._gh)
     def __repr__(self):
         """prints a short inventory of the grib message"""
