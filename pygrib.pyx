@@ -106,7 +106,7 @@ Changelog
 
 @contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
 
-@version: 1.3
+@version: 1.4
 
 @copyright: copyright 2010 by Jeffrey Whitaker.
 
@@ -124,7 +124,7 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE."""
 __test__ = None
 del __test__ # hack so epydoc doesn't show __test__
-__version__ = '1.3'
+__version__ = '1.4'
 
 import numpy as np
 from numpy import ma
@@ -344,6 +344,8 @@ cdef class gribmessage(object):
         self.expand_reduced = True
         self._all_keys = self.keys()
         self._ro_keys  = self._read_only_keys()
+    def __dealloc__(self):
+        err = grib_handle_delete(self._gh)
     def __repr__(self):
         """prints a short inventory of the grib message"""
         inventory = []
