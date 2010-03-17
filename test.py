@@ -80,8 +80,14 @@ def test():
     >>> print 'min/max %5.1f %5.1f' % (grb['minimum'],grb['maximum'])
     min/max 49650.0 109330.0
 
-    change the forecast time
-    >>> grb['forecastTime'] = 240  
+    change the forecast time.
+    gribmessage keys can be accessed either via attributes or key/value pairs.
+    >>> grb['forecastTime'] = 168  
+    >>> print grb['forecastTime']
+    168
+    >>> grb.forecastTime = 240
+    >>> print grb.forecastTime
+    240
     >>> grb['parameterNumber'] = 2 # change to pressure tendency
     >>> data = grb['values']
     >>> grb['values']=data/86400. # put in units of Pa/S

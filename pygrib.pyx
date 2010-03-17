@@ -70,6 +70,11 @@ Example usage
     >>> maxt = grb['values']
     >>> print maxt.shape, maxt.min(), maxt.max()
     (94, 192) 223.7 319.9
+ - instead of treating the gribmessage instance as a dictionary to access
+   key/value pairs, you can access the keys as attributes::
+    >>> maxt = grb.values
+    >>> print maxt.shape, maxt.min(), maxt.max()
+    (94, 192) 223.7 319.9
  - get the latitudes and longitudes of the grid::
     >>> lats, lons = grb.latlons()
     >>> print lats.shape, lats.min(), lats.max(), lons.shape, lons.min(), lons.max()
@@ -78,9 +83,10 @@ Example usage
     >>> grb = grbs.message(2)
     >>> print grb
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
- - modify the values associated with existing keys::
+ - modify the values associated with existing keys (either via attribute or
+   dictionary access)::
     >>> grb['forecast_time'] = 240
-    >>> grb['dataDate'] = 20100101
+    >>> grb.dataDate = 20100101
  - get the binary string associated with the coded message::
     >>> msg = grb.tostring()
  - write the modified message to a new GRIB file::
@@ -312,6 +318,8 @@ cdef class open(object):
             if err:
                 raise RuntimeError(grib_get_error_message(err))
 
+_private_atts =\
+['_gh','expand_reduced','projparams','missingvalue_int','missingvalue_float','messagenumber','_all_keys','_ro_keys']
 cdef class gribmessage(object):
     """
     Grib message returned by GRIB file iterator.
@@ -354,6 +362,14 @@ cdef class gribmessage(object):
             return self.__getitem__(item)
         except KeyError:
             raise AttributeError(item)
+    def __setattr__(self, name, value):
+        # allow gribmessage keys to be set like attributes.
+        if name not in _private_atts:
+            # these are python attributes.
+            self[name] = value
+        else:
+            # these are grib message keys
+            self.__dict__[name]=value
     def __repr__(self):
         """prints a short inventory of the grib message"""
         inventory = []
