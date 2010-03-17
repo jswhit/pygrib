@@ -345,8 +345,15 @@ cdef class gribmessage(object):
         self._all_keys = self.keys()
         self._ro_keys  = self._read_only_keys()
     def __dealloc__(self):
+        # allow garbage collector to free memory.
         cdef int err
         err = grib_handle_delete(self._gh)
+    def __getattr__(self, item):
+        # allow gribmessage keys to accessed like attributes.
+        try:
+            return self.__getitem__(item)
+        except KeyError:
+            raise AttributeError(item)
     def __repr__(self):
         """prints a short inventory of the grib message"""
         inventory = []
