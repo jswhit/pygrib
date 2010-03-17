@@ -1,4 +1,4 @@
-version 1.4 - svn revision 165
+version 1.4 - svn revision 166
 ==============================
 * added __dealloc__ method to gribmessage to allow for garbage collection.
   Prevents out of memory errors when iterating over large numbers of grib
