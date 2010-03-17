@@ -1,4 +1,4 @@
-version 1.4 - svn revision 171
+version 1.4 - svn revision 172
 ==============================
 * allow gribmessage keys to be set or accessed like attributes.
 * added __dealloc__ method to gribmessage to allow for garbage collection.

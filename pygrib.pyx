@@ -318,8 +318,11 @@ cdef class open(object):
             if err:
                 raise RuntimeError(grib_get_error_message(err))
 
+# keep track of python gribmessage attributes so they can be
+# distinguished from grib keys.
 _private_atts =\
 ['_gh','expand_reduced','projparams','missingvalue_int','missingvalue_float','messagenumber','_all_keys','_ro_keys']
+
 cdef class gribmessage(object):
     """
     Grib message returned by GRIB file iterator.
