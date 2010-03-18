@@ -1,3 +1,8 @@
+version 1.5 - svn head
+==============================
+* use __cinit__ to initialize C level objects, __init__ for
+  python level objects (instead of doing everything in __new__).
+
 version 1.4 - svn revision 172
 ==============================
 * allow gribmessage keys to be set or accessed like attributes.

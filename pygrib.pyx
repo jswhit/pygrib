@@ -112,7 +112,7 @@ Changelog
 
 @contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
 
-@version: 1.4
+@version: 1.5
 
 @copyright: copyright 2010 by Jeffrey Whitaker.
 
@@ -130,7 +130,7 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE."""
 __test__ = None
 del __test__ # hack so epydoc doesn't show __test__
-__version__ = '1.4'
+__version__ = '1.5'
 
 import numpy as np
 from numpy import ma
@@ -245,22 +245,26 @@ cdef class open(object):
     cdef FILE *_fd
     cdef grib_handle *_gh
     cdef public object filename, messagenumber, messages
-    def __new__(self, filename):
+    def __cinit__(self, filename, *args, **kwargs):
+        # initialize C level objects.
+        # use *args, **kwargs so a Python subclass can accept extra args.
         cdef grib_handle *gh
         cdef FILE *_fd
         cdef int err,nmsgs
-        self.filename = filename
         self._fd = fopen(filename, "rb") 
         if self._fd == NULL:
             raise IOError("could not open %s", filename)
         self._gh = NULL
-        self.messagenumber = 0
         # turn on support for multi-field grib messages.
         grib_multi_support_on(NULL)
         err = grib_count_in_file(NULL, self._fd, &nmsgs)
         if err:
             raise RuntimeError(grib_get_error_message(err))
         self.messages = nmsgs 
+    def __init__(self, filename):
+        # initalize Python level objects
+        self.filename = filename
+        self.messagenumber = 0
     def __iter__(self):
         return self
     def rewind(self):
@@ -347,8 +351,12 @@ cdef class gribmessage(object):
     cdef grib_handle *_gh
     cdef public messagenumber, projparams, missingvalue_int,\
     missingvalue_float, expand_reduced, _ro_keys, _all_keys
-    def __new__(self, open grb):
+    def __cinit__(self, open grb, *args, **kwargs):
+        # initialize C level objects (self._gh).
+        # use *args, **kwargs so a Python subclass can accept extra args.
         self._gh = grib_handle_clone(grb._gh)
+    def __init__(self, open grb):
+        # initialize python objects.
         self.messagenumber = grb.messagenumber
         self.missingvalue_int = GRIB_MISSING_LONG
         self.missingvalue_float = GRIB_MISSING_DOUBLE
@@ -356,11 +364,12 @@ cdef class gribmessage(object):
         self._all_keys = self.keys()
         self._ro_keys  = self._read_only_keys()
     def __dealloc__(self):
-        # allow garbage collector to free memory.
+        # finalization (inverse of __cinit__): needed to allow garbage collector to free memory.
         cdef int err
         err = grib_handle_delete(self._gh)
     def __getattr__(self, item):
         # allow gribmessage keys to accessed like attributes.
+        # this is tried after looking for item in self.__dict__.keys().
         try:
             return self.__getitem__(item)
         except KeyError:
