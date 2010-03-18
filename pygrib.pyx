@@ -315,6 +315,8 @@ cdef class open(object):
         close()
 
         close GRIB file, deallocate C structures associated with class instance"""
+        # doesn't have __dealloc__, user must explicitly call close.
+        # having both causes segfaults.
         cdef int err
         fclose(self._fd)
         if self._gh != NULL:
