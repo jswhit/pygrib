@@ -368,10 +368,10 @@ cdef class gribmessage(object):
     def __setattr__(self, name, value):
         # allow gribmessage keys to be set like attributes.
         if name not in _private_atts:
-            # these are python attributes.
+            # these are grib message keys
             self[name] = value
         else:
-            # these are grib message keys
+            # these are python attributes.
             self.__dict__[name]=value
     def __repr__(self):
         """prints a short inventory of the grib message"""
