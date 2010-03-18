@@ -657,7 +657,7 @@ cdef class gribmessage(object):
         msg = PyString_FromStringAndSize(<char *>message, size)
         return msg
     def _unshape_mask(self, datarr):
-        """private method for reshaping and removing mask to "values" array"""
+        """private method for reshaping and removing mask from "values" array"""
         if datarr.ndim > 2:
             raise ValueError('array must be 1d or 2d')
         # if array is masked, put in masked values and convert to plain numpy array.
