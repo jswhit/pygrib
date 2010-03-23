@@ -915,8 +915,7 @@ cdef class gribmessage(object):
                     raise ValueError('unsupported grid - earth not a perfect sphere')
                 projparams['proj'] = 'nsper'
             scale = float(self['grib2divider'])
-            projparams['h'] = projparams['a'] *\
-            self['altitudeOfTheCameraFromTheEarthSCenterMeasuredInUnitsOfTheEarth']/scale
+            projparams['h'] = projparams['a'] * self['Nr']/scale
             # latitude of horizon on central meridian
             lonmax =\
             90.-(180./np.pi)*np.arcsin(projparams['a']/projparams['h'])
