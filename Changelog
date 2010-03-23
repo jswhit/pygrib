@@ -1,5 +1,7 @@
 version 1.5 - svn head
 ==============================
+* compatibility fixes for version 1.8.0.1 of grib_api definitions
+  (the names of several keys changed from version 1.8.0).
 * use __cinit__ to initialize C level objects, __init__ for
   python level objects (instead of doing everything in __new__).
 

@@ -664,7 +664,7 @@ cdef class gribmessage(object):
         if hasattr(datarr,'mask'):
             datarr = datarr.filled()
         # raise error is expanded reduced grid array is supplied.
-        if self.has_key('typeOfGrid') and self['typeOfGrid'].startswith('reduced'):
+        if self['typeOfGrid'].startswith('reduced'):
             if datarr.ndim != 1:
                 raise ValueError("reduced grid data array must be 1d")
         if datarr.ndim == 2:
@@ -688,20 +688,30 @@ cdef class gribmessage(object):
         cdef double missval
         if datarr.ndim > 2:
             raise ValueError('array must be 1d or 2d')
-        if self.has_key('Ni') and self.has_key('Nj'):
-            nx = self['Ni']
-            ny = self['Nj']
-        else: # probably spectral data.
-            return datarr
-        if ny != GRIB_MISSING_LONG and nx != GRIB_MISSING_LONG:
-            datarr.shape = (ny,nx)
-        if self.has_key('typeOfGrid') and self['typeOfGrid'].startswith('reduced'):
+        # reduced grid.
+        if self['typeOfGrid'].startswith('reduced'):
+            try:
+                ny = self['Nj']
+            except:
+                ny = self['Ny']
             if self.has_key('missingValue'):
                 missval = self['missingValue']
             else:
                 missval = 1.e30
             if self.expand_reduced:
+                nx = 2*ny
                 datarr = _redtoreg(2*ny, self['pl'], datarr, missval)
+        elif self.has_key('Ni') and self.has_key('Nj'):
+            nx = self['Ni']
+            ny = self['Nj']
+        # key renamed from Ni to Nx in grib_api 1.8.0.1
+        elif self.has_key('Nx') and self.has_key('Ny'):
+            nx = self['Nx']
+            ny = self['Ny']
+        else: # probably spectral data.
+            return datarr
+        if ny != GRIB_MISSING_LONG and nx != GRIB_MISSING_LONG:
+            datarr.shape = (ny,nx)
         # check scan modes for rect grids.
         if datarr.ndim == 2:
            # rows scan in the -x direction (so flip)
@@ -806,8 +816,14 @@ cdef class gribmessage(object):
         elif self['typeOfGrid'] == 'polar_stereographic':
             lat1 = self['latitudeOfFirstGridPointInDegrees']
             lon1 = self['longitudeOfFirstGridPointInDegrees']
-            nx = self['Ni']
-            ny = self['Nj']
+            try:
+               nx = self['Ni']
+               ny = self['Nj']
+            except:
+               nx = self['Nx']
+               ny = self['Ny']
+            # key renamed from xDirectionGridLengthInMetres to
+            # DxInMetres grib_api 1.8.0.1.
             try:
                 dx = self['xDirectionGridLengthInMetres']
             except:
@@ -832,8 +848,12 @@ cdef class gribmessage(object):
         elif self['typeOfGrid'] == 'lambert':
             lat1 = self['latitudeOfFirstGridPointInDegrees']
             lon1 = self['longitudeOfFirstGridPointInDegrees']
-            nx = self['Ni']
-            ny = self['Nj']
+            try:
+               nx = self['Ni']
+               ny = self['Nj']
+            except:
+               nx = self['Nx']
+               ny = self['Ny']
             dx = self['DxInMetres']
             dy = self['DyInMetres']
             projparams['proj']='lcc'
@@ -850,8 +870,12 @@ cdef class gribmessage(object):
         elif self['typeOfGrid'] =='albers':
             lat1 = self['latitudeOfFirstGridPointInDegrees']
             lon1 = self['longitudeOfFirstGridPointInDegrees']
-            nx = self['Ni']
-            ny = self['Nj']
+            try:
+               nx = self['Ni']
+               ny = self['Nj']
+            except:
+               nx = self['Nx']
+               ny = self['Ny']
             dx = self['Dx']/1000.
             dy = self['Dy']/1000.
             projparams['proj']='aea'
@@ -875,8 +899,12 @@ cdef class gribmessage(object):
             x, y = np.meshgrid(x, y)
             lons, lats = pj(x, y, inverse=True)
         elif self['typeOfGrid'] == 'space_view':
-            nx = self['Ni']
-            ny = self['Nj']
+            try:
+               nx = self['Ni']
+               ny = self['Nj']
+            except:
+               nx = self['Nx']
+               ny = self['Ny']
             projparams['lon_0']=self['longitudeOfSubSatellitePointInDegrees']
             projparams['lat_0']=self['latitudeOfSubSatellitePointInDegrees']
             if projparams['lat_0'] == 0.: # if lat_0 is equator, it's a
@@ -965,8 +993,12 @@ cdef class gribmessage(object):
             pj = pyproj.Proj(projparams)
             llcrnrx, llcrnry = pj(lon1,lat1)
             urcrnrx, urcrnry = pj(lon2,lat2)
-            nx = self['Ni']
-            ny = self['Nj']
+            try:
+               nx = self['Ni']
+               ny = self['Nj']
+            except:
+               nx = self['Nx']
+               ny = self['Ny']
             dx = (urcrnrx-llcrnrx)/(nx-1)
             dy = (urcrnry-llcrnry)/(ny-1)
             x = llcrnrx+dx*np.arange(nx)
