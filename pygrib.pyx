@@ -808,8 +808,14 @@ cdef class gribmessage(object):
             lon1 = self['longitudeOfFirstGridPointInDegrees']
             nx = self['Ni']
             ny = self['Nj']
-            dx = self['xDirectionGridLengthInMetres']
-            dy = self['yDirectionGridLengthInMetres']
+            try:
+                dx = self['xDirectionGridLengthInMetres']
+            except:
+                dx = self['DxInMetres']
+            try:
+                dy = self['yDirectionGridLengthInMetres']
+            except:
+                dy = self['DyInMetres']
             projparams['proj']='stere'
             projparams['lat_ts']=self['latitudeWhereDxAndDyAreSpecifiedInDegrees']
             if self['projectionCentreFlag'] == 0:
