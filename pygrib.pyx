@@ -936,10 +936,10 @@ cdef class gribmessage(object):
             width/self['apparentDiameterOfEarthInGridLengthsInXDirection']
             dy =\
             height/self['apparentDiameterOfEarthInGridLengthsInYDirection']
-            x = dx*np.indices((ny,nx),'f')[1,:,:]
-            x = x - 0.5*x.max()
-            y = dy*np.indices((ny,nx),'f')[0,:,:]
-            y = y - 0.5*y.max()
+            xmax = dx*(nx-1); ymax = dy*(ny-1)
+            x = np.linspace(-0.5*xmax,0.5*xmax,nx)
+            y = np.linspace(-0.5*ymax,0.5*ymax,ny)
+            x, y = np.meshgrid(x, y)
             lons, lats = pj(x,y,inverse=True)
             # set lons,lats to 1.e30 where undefined
             abslons = np.fabs(lons); abslats = np.fabs(lats)
