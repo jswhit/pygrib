@@ -917,11 +917,12 @@ cdef class gribmessage(object):
             scale = float(self['grib2divider'])
             projparams['h'] = projparams['a'] * self['Nr']/scale
             # latitude of horizon on central meridian
+            lon_0=projparams['lon_0']; lat_0=projparams['lat_0']
             lonmax =\
-            90.-(180./np.pi)*np.arcsin(projparams['a']/projparams['h'])
+            lon_0+90.-(180./np.pi)*np.arcsin(projparams['a']/projparams['h'])
             # longitude of horizon on equator
             latmax =\
-            90.-(180./np.pi)*np.arcsin(projparams['b']/projparams['h'])
+            lat_0+90.-(180./np.pi)*np.arcsin(projparams['b']/projparams['h'])
             # h is measured from surface of earth at equator.
             projparams['h'] = projparams['h']-projparams['a']
             # truncate to nearest thousandth of a degree (to make sure
@@ -929,7 +930,7 @@ cdef class gribmessage(object):
             latmax = int(1000*latmax)/1000.
             lonmax = int(1000*lonmax)/1000.
             pj = pyproj.Proj(projparams)
-            x1,y1 = pj(0.,latmax); x2,y2 = pj(lonmax,0.)
+            x1,y1 = pj(lon_0,latmax); x2,y2 = pj(lonmax,lat_0)
             width = 2*x2; height = 2*y1
             dx =\
             width/self['apparentDiameterOfEarthInGridLengthsInXDirection']
