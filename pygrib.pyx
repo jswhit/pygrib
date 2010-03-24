@@ -691,9 +691,9 @@ cdef class gribmessage(object):
         # reduced grid.
         if self['typeOfGrid'].startswith('reduced'):
             try:
-                ny = self['Nj']
-            except:
                 ny = self['Ny']
+            except:
+                ny = self['Nj']
             if self.has_key('missingValue'):
                 missval = self['missingValue']
             else:
@@ -701,13 +701,13 @@ cdef class gribmessage(object):
             if self.expand_reduced:
                 nx = 2*ny
                 datarr = _redtoreg(2*ny, self['pl'], datarr, missval)
-        elif self.has_key('Ni') and self.has_key('Nj'):
-            nx = self['Ni']
-            ny = self['Nj']
-        # key renamed from Ni to Nx in grib_api 1.8.0.1
         elif self.has_key('Nx') and self.has_key('Ny'):
             nx = self['Nx']
             ny = self['Ny']
+        # key renamed from Ni to Nx in grib_api 1.8.0.1
+        elif self.has_key('Ni') and self.has_key('Nj'):
+            nx = self['Ni']
+            ny = self['Nj']
         else: # probably spectral data.
             return datarr
         if ny != GRIB_MISSING_LONG and nx != GRIB_MISSING_LONG:
@@ -817,21 +817,21 @@ cdef class gribmessage(object):
             lat1 = self['latitudeOfFirstGridPointInDegrees']
             lon1 = self['longitudeOfFirstGridPointInDegrees']
             try:
-               nx = self['Ni']
-               ny = self['Nj']
-            except:
                nx = self['Nx']
                ny = self['Ny']
+            except:
+               nx = self['Ni']
+               ny = self['Nj']
             # key renamed from xDirectionGridLengthInMetres to
             # DxInMetres grib_api 1.8.0.1.
             try:
-                dx = self['xDirectionGridLengthInMetres']
-            except:
                 dx = self['DxInMetres']
-            try:
-                dy = self['yDirectionGridLengthInMetres']
             except:
+                dx = self['xDirectionGridLengthInMetres']
+            try:
                 dy = self['DyInMetres']
+            except:
+                dy = self['yDirectionGridLengthInMetres']
             projparams['proj']='stere'
             projparams['lat_ts']=self['latitudeWhereDxAndDyAreSpecifiedInDegrees']
             if self['projectionCentreFlag'] == 0:
@@ -849,11 +849,11 @@ cdef class gribmessage(object):
             lat1 = self['latitudeOfFirstGridPointInDegrees']
             lon1 = self['longitudeOfFirstGridPointInDegrees']
             try:
-               nx = self['Ni']
-               ny = self['Nj']
-            except:
                nx = self['Nx']
                ny = self['Ny']
+            except:
+               nx = self['Ni']
+               ny = self['Nj']
             dx = self['DxInMetres']
             dy = self['DyInMetres']
             projparams['proj']='lcc'
@@ -871,11 +871,11 @@ cdef class gribmessage(object):
             lat1 = self['latitudeOfFirstGridPointInDegrees']
             lon1 = self['longitudeOfFirstGridPointInDegrees']
             try:
-               nx = self['Ni']
-               ny = self['Nj']
-            except:
                nx = self['Nx']
                ny = self['Ny']
+            except:
+               nx = self['Ni']
+               ny = self['Nj']
             dx = self['Dx']/1000.
             dy = self['Dy']/1000.
             projparams['proj']='aea'
@@ -900,11 +900,11 @@ cdef class gribmessage(object):
             lons, lats = pj(x, y, inverse=True)
         elif self['typeOfGrid'] == 'space_view':
             try:
-               nx = self['Ni']
-               ny = self['Nj']
-            except:
                nx = self['Nx']
                ny = self['Ny']
+            except:
+               nx = self['Ni']
+               ny = self['Nj']
             projparams['lon_0']=self['longitudeOfSubSatellitePointInDegrees']
             projparams['lat_0']=self['latitudeOfSubSatellitePointInDegrees']
             if projparams['lat_0'] == 0.: # if lat_0 is equator, it's a
@@ -993,11 +993,11 @@ cdef class gribmessage(object):
             llcrnrx, llcrnry = pj(lon1,lat1)
             urcrnrx, urcrnry = pj(lon2,lat2)
             try:
-               nx = self['Ni']
-               ny = self['Nj']
-            except:
                nx = self['Nx']
                ny = self['Ny']
+            except:
+               nx = self['Ni']
+               ny = self['Nj']
             dx = (urcrnrx-llcrnrx)/(nx-1)
             dy = (urcrnry-llcrnry)/(ny-1)
             x = llcrnrx+dx*np.arange(nx)
