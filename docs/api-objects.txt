@@ -1,4 +1,5 @@
 pygrib	pygrib-module.html
+pygrib.__package__	pygrib-module.html#__package__
 pygrib._private_atts	pygrib-module.html#_private_atts
 pygrib.__version__	pygrib-module.html#__version__
 pygrib.api_version	pygrib-module.html#api_version
@@ -8,6 +9,7 @@ pygrib.gribmessage.latlons	pygrib.gribmessage-class.html#latlons
 pygrib.gribmessage.__getattribute__	pygrib.gribmessage-class.html#__getattribute__
 pygrib.gribmessage.has_key	pygrib.gribmessage-class.html#has_key
 pygrib.gribmessage._all_keys	pygrib.gribmessage-class.html#_all_keys
+pygrib.gribmessage.__init__	pygrib.gribmessage-class.html#__init__
 pygrib.gribmessage.__setattr__	pygrib.gribmessage-class.html#__setattr__
 pygrib.gribmessage.__new__	pygrib.gribmessage-class.html#__new__
 pygrib.gribmessage._read_only_keys	pygrib.gribmessage-class.html#_read_only_keys
@@ -37,3 +39,4 @@ pygrib.open.rewind	pygrib.open-class.html#rewind
 pygrib.open.close	pygrib.open-class.html#close
 pygrib.open.message	pygrib.open-class.html#message
 pygrib.open.messagenumber	pygrib.open-class.html#messagenumber
+pygrib.open.__init__	pygrib.open-class.html#__init__

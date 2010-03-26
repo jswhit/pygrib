@@ -1,5 +1,5 @@
-version 1.5 - svn head
-==============================
+version 1.5 - svn revsion 187
+=============================
 * fix bug in latlons method for space_view grids not centered
   on the equator at Greenwich.
 * compatibility fixes for version 1.8.0.1 of grib_api definitions
