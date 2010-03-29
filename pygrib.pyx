@@ -250,21 +250,22 @@ cdef class open(object):
         # use *args, **kwargs so a Python subclass can accept extra args.
         cdef grib_handle *gh
         cdef FILE *_fd
-        cdef int err,nmsgs
         self._fd = fopen(filename, "rb") 
         if self._fd == NULL:
             raise IOError("could not open %s", filename)
         self._gh = NULL
+    def __init__(self, filename):
+        cdef int err,nmsgs
+        # initalize Python level objects
+        self.filename = filename
+        self.messagenumber = 0
         # turn on support for multi-field grib messages.
         grib_multi_support_on(NULL)
+        # count number of messages in file.
         err = grib_count_in_file(NULL, self._fd, &nmsgs)
         if err:
             raise RuntimeError(grib_get_error_message(err))
         self.messages = nmsgs 
-    def __init__(self, filename):
-        # initalize Python level objects
-        self.filename = filename
-        self.messagenumber = 0
     def __iter__(self):
         return self
     def rewind(self):
