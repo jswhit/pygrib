@@ -112,7 +112,7 @@ Changelog
 
 @contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
 
-@version: 1.5
+@version: 1.6
 
 @copyright: copyright 2010 by Jeffrey Whitaker.
 
@@ -130,7 +130,7 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE."""
 __test__ = None
 del __test__ # hack so epydoc doesn't show __test__
-__version__ = '1.5'
+__version__ = '1.6'
 
 import numpy as np
 from numpy import ma
@@ -281,6 +281,8 @@ cdef class open(object):
         
         retrieve N'th message in iterator"""
         cdef int err
+        if N < 1:
+            raise IOError('grb message numbers start at 1')
         self.rewind()
         for n in range(N):
             err = grib_handle_delete(self._gh)
