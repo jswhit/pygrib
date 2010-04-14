@@ -2,6 +2,8 @@ version 1.6 - not yet released
 ==============================
 * raise IOError when grib message number < 1 is accessed with message method
   (instead of segfaulting, which is rude).  Fixes issue 4.
+* indexing open instance (iterator) with an integer key now is the same as
+  calling the message method (grbs.message(2) == grbs[2]).
 
 version 1.5 - svn revsion 187
 =============================

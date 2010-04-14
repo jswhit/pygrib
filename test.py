@@ -35,8 +35,13 @@ def test():
 
     get a specific grib message from the iterator.
     iterator will be positioned at this message.
-    >>> grb = grbs.message(2) 
-    >>> print grb # 2nd message
+    >>> grb = grbs.message(3) 
+    >>> print grb # 3rd message
+    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+
+    indexing iterator with an integer key has the same result
+    >>> grb = grbs[2] # 2nd message
+    >>> print grb
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
 
     position iterator at next grib message.

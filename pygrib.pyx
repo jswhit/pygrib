@@ -79,8 +79,12 @@ Example usage
     >>> lats, lons = grb.latlons()
     >>> print lats.shape, lats.min(), lats.max(), lons.shape, lons.min(), lons.max()
     (94, 192) -88.5419501373 88.5419501373  0.0 358.125
- - get the second grib message::
-    >>> grb = grbs.message(2)
+ - get the third grib message::
+    >>> grb = grbs.message(3)
+    >>> print grb
+    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+ - indexing with integer key is the same as calling the message method::
+    >>> grb = grbs[2]
     >>> print grb
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
  - modify the values associated with existing keys (either via attribute or
@@ -275,6 +279,10 @@ cdef class open(object):
         rewind(self._fd)
         self._gh = NULL
         self.messagenumber = 0
+    def __getitem__(self, key):
+        if type(key) != int and type(key) != long:
+            raise KeyError('key must be an integer message number')
+        return self.message(key)
     def message(self, N):
         """
         message(N)
