@@ -4,6 +4,8 @@ version 1.6 - not yet released
   (instead of segfaulting, which is rude).  Fixes issue 4.
 * indexing open instance (iterator) with an integer key now is the same as
   calling the message method (grbs.message(2) == grbs[2]).
+* slicing iterator now also works (grbs[::2] returns every other grib message
+  in a list).
 
 version 1.5 - svn revsion 187
 =============================

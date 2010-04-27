@@ -280,9 +280,18 @@ cdef class open(object):
         self._gh = NULL
         self.messagenumber = 0
     def __getitem__(self, key):
-        if type(key) != int and type(key) != long:
-            raise KeyError('key must be an integer message number')
-        return self.message(key)
+        if type(key) == slice:
+            # for a slice, return a list of grib messages.
+            beg, end, inc = key.indices(self.messages)
+            grbs = []
+            for n in xrange(beg,end,inc):
+                grbs.append(self.message(n+1))
+            return grbs
+        elif type(key) == int or type(key) == long:
+            # for an integer, return a single grib message.
+            return self.message(key)
+        else:
+            raise KeyError('key must be an integer message number or a slice')
     def message(self, N):
         """
         message(N)
