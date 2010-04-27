@@ -283,9 +283,7 @@ cdef class open(object):
         if type(key) == slice:
             # for a slice, return a list of grib messages.
             beg, end, inc = key.indices(self.messages)
-            grbs = []
-            for n in xrange(beg,end,inc):
-                grbs.append(self.message(n+1))
+            grbs = [self.message(n+1) for n in xrange(beg,end,inc)]
             return grbs
         elif type(key) == int or type(key) == long:
             # for an integer, return a single grib message.
