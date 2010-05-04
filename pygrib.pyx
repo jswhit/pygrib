@@ -271,6 +271,37 @@ cdef class index(object):
         # initalize Python level objects
         self.filename = filename
         self.keys = args
+    def select(self, **kwargs):
+        cdef grib_handle *gh
+        cdef char *key
+        cdef int err
+        cdef long longval
+        cdef double doubval
+        cdef char *strval
+        for k,v in kwargs.iteritems:
+            if k not in self.keys:
+                raise KeyError('key not part of grib index')
+            key = PyString_AsString(k)
+            if type(v) == int or type(v) == long:
+                longval = v
+                err = grib_index_select_long(self._gi, key, longval)
+                if err:
+                    raise RuntimeError(grib_get_error_message(err))
+            elif type(v) == float:
+                doubval = v
+                err = grib_index_select_double(self._gi, key, doubval)
+                if err:
+                    raise RuntimeError(grib_get_error_message(err))
+            elif type(v) == str:
+                strval = PyString_AsString(v)
+                err = grib_index_select_string(self._gi, key, strval)
+                if err:
+                    raise RuntimeError(grib_get_error_message(err))
+            else:
+                raise TypeError('value must be float, int or string')
+        gh =  grib_handle_new_from_index(self._gi, &err)
+        if err:
+            raise RuntimeError(grib_get_error_message(err))
     def __dealloc__(self):
         grib_index_delete(self._gi)
 
