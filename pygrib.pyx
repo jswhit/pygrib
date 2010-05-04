@@ -328,6 +328,23 @@ cdef class open(object):
             self._gh = gh
             self.messagenumber = self.messagenumber + 1
         return gribmessage(self)
+    def select(self, **kwargs):
+        """
+select(**kwargs)
+
+return a list of grib messages from iterator filtered by kwargs.
+
+Example usage:
+
+>>> import pygrib
+>>> grbs = pygrib.open('sampledata/gfs.grb')
+>>> selected_grbs=grbs.select(shortName='gh',typeOfLevel='isobaricInhPa',level=10)
+>>> for grb in selected_grbs:
+>>>     print grb
+26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10:fcst time 72:from 200412091200:lo res cntl fcst
+"""
+        self.rewind()
+        return [grb for grb in self if _find(grb, **kwargs)]
     def close(self):
         """
         close()
@@ -1087,3 +1104,11 @@ cdef _redtoreg(int nlons, ndarray lonsperlat, ndarray redgrid, double missval):
             n = n + 1
         indx = indx + ilons
     return reggrid
+
+def _find(grb, **kwargs):
+    for k,v in kwargs.iteritems():
+        if grb.has_key(k) and grb[k]==v:
+            continue
+        else:
+            return False
+    return True

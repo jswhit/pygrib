@@ -6,6 +6,8 @@ version 1.6 - not yet released
   calling the message method (grbs.message(2) == grbs[2]).
 * slicing iterator now also works (grbs[::2] returns every other grib message
   in a list).
+* added 'select' method to open instance for selecting grib messages based
+  on key/value pairs.
 
 version 1.5 - svn revsion 187
 =============================
