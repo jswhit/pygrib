@@ -53,6 +53,12 @@ def test():
     >>> for grb in grbs: print grb # only last message printed.
     4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
 
+    use select method to choose grib messages based upon specified key/value pairs.
+    >>> selected_grbs = grbs.select(level=2,typeOfLevel='heightAboveGround') # get all 2-m level fields
+    >>> for grb in selected_grbs: print grb
+    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+
     rewind again
     >>> grbs.rewind()
 
