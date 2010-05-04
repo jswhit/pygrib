@@ -179,6 +179,7 @@ cdef extern from "numpy/arrayobject.h":
 
 cdef extern from "grib_api.h":
     ctypedef struct grib_handle
+    ctypedef struct grib_index
     ctypedef struct grib_keys_iterator
     ctypedef struct grib_context
     cdef enum:
@@ -226,6 +227,20 @@ cdef extern from "grib_api.h":
     long grib_get_api_version()
     int grib_count_in_file(grib_context* c, FILE* f,int* n)
     grib_handle* grib_handle_clone(grib_handle* h)
+    grib_index* grib_index_new_from_file(grib_context* c,\
+                            char* filename,char* keys,int *err)
+    int grib_index_get_size(grib_index* index,char* key,size_t* size)
+    int grib_index_get_long(grib_index* index,char* key,\
+                        long* values,size_t *size)
+    int grib_index_get_double(grib_index* index,char* key,\
+                              double* values,size_t *size)
+    int grib_index_get_string(grib_index* index,char* key,\
+                          char** values,size_t *size)
+    int grib_index_select_long(grib_index* index,char* key,long value)
+    int grib_index_select_double(grib_index* index,char* key,double value)
+    int grib_index_select_string(grib_index* index,char* key,char* value)
+    grib_handle* grib_handle_new_from_index(grib_index* index,int *err)
+    void grib_index_delete(grib_index* index)
 
 
 cpdef api_version():
@@ -237,6 +252,28 @@ cpdef api_version():
     cdef int grib_api_version
     grib_api_version = grib_get_api_version()
     return grib_api_version
+
+cdef class index(object):
+    cdef grib_index *_gi
+    cdef public object filename, keys
+    def __cinit__(self, filename, *args):
+        # initialize C level objects.
+        cdef grib_index *gi
+        cdef int err
+        cdef char *filenamec, *keys
+        filenamec = PyString_AsString(filename)
+        keys = PyString_AsString(','.join(args))
+        self._gi = grib_index_new_from_file (NULL, filenamec, keys, &err)
+        if err:
+            raise RuntimeError(grib_get_error_message(err))
+    def __init__(self, filename, *args):
+        cdef int err
+        # initalize Python level objects
+        self.filename = filename
+        self.keys = args
+    def __dealloc__(self):
+        grib_index_delete(self._gi)
+
 
 cdef class open(object):
     """ 
