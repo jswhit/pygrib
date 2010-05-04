@@ -79,6 +79,11 @@ Example usage
     >>> lats, lons = grb.latlons()
     >>> print lats.shape, lats.min(), lats.max(), lons.shape, lons.min(), lons.max()
     (94, 192) -88.5419501373 88.5419501373  0.0 358.125
+ - use select method to choose grib messages based upon specified key/value pairs::
+    >>> selected_grbs = grbs.select(level=2,typeOfLevel='heightAboveGround') # get all 2-m level fields
+    >>> for grb in selected_grbs: print grb
+    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
  - get the third grib message::
     >>> grb = grbs.message(3)
     >>> print grb
