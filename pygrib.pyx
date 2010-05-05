@@ -1108,7 +1108,7 @@ Example usage:
 >>> grbindx.close()
 """
     cdef grib_index *_gi
-    cdef public object keys, filename, messagenumber
+    cdef public object keys, filename
     def __cinit__(self, filename, *args):
         # initialize C level objects.
         cdef grib_index *gi
@@ -1124,7 +1124,6 @@ Example usage:
         # initalize Python level objects
         self.filename = filename
         self.keys = args
-        self.messagenumber = 0
     def __call__(self, **kwargs):
         """same as L{select}"""
         return self.select(**kwargs)
@@ -1177,14 +1176,14 @@ Example usage:
                     raise RuntimeError(grib_get_error_message(err))
             else:
                 raise TypeError('value must be float, int or string')
-        self.messagenumber = 0; grbs = []
+        messagenumber = 0; grbs = []
         while 1:
             gh = grib_handle_new_from_index(self._gi, &err)
             if err or gh == NULL:
                 break
             else:
-                self.messagenumber = self.messagenumber + 1
-            grbs.append(_create_gribmessage(gh, self.messagenumber))
+                messagenumber = messagenumber + 1
+            grbs.append(_create_gribmessage(gh, messagenumber))
             err = grib_handle_delete(gh)
             if err:
                 raise RuntimeError(grib_get_error_message(err))
