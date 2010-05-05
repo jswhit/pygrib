@@ -317,8 +317,9 @@ cdef class open(object):
         cdef int err
         if N < 1:
             raise IOError('grb message numbers start at 1')
-        self.rewind()
-        for n in range(N):
+        if self.messagenumber >= N:
+            self.rewind()
+        for n in range(self.messagenumber,N):
             err = grib_handle_delete(self._gh)
             if err:
                 raise RuntimeError(grib_get_error_message(err))

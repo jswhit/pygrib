@@ -5,7 +5,7 @@ version 1.6 - not yet released
 * indexing open instance (iterator) with an integer key now is the same as
   calling the message method (grbs.message(2) == grbs[2]).
 * slicing iterator now also works (grbs[::2] returns every other grib message
-  in a list) - but this is *very* slow!.
+  in a list).
 * added 'select' method to open instance for selecting grib messages based
   on key/value pairs.
 * added 'index' class which can be used for fast subsettting of grib files 
