@@ -61,28 +61,20 @@ def test():
 
     or create grib index instance for faster searching
     >>> grbindx = pygrib.index('sampledata/flux.grb','name','typeOfLevel','level')
-    >>> selgrbs = grbindx(name='Maximum temperature',level=2,typeOfLevel='heightAboveGround')
-    >>> for grb in selgrbs: print grb
-    1:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
     >>> selgrbs = grbindx(name='Minimum temperature',level=2,typeOfLevel='heightAboveGround')
     >>> for grb in selgrbs: print grb
     1:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+    >>> selgrbs = grbindx(name='Maximum temperature',level=2,typeOfLevel='heightAboveGround')
+    >>> for grb in selgrbs: print grb
+    1:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+    >>> grbindx.close()
 
-    rewind again
-    >>> grbs.rewind()
-
-    iterate over all messages until
-    'Maximum temperature' is found.
-    >>> for grb in grbs:
-    ...     if grb['name'] == 'Maximum temperature': break
-    ...
+    >>> grb = selgrbs[0]
     >>> print grb
-    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+    1:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
 
     get the data and the lat/lon values of the Max temp grid 
     >>> data = grb['values'] # 'values' returns the data
-    >>> print '-- data values, grid info for msg number %d --' % grb.messagenumber
-    -- data values, grid info for msg number 3 --
     >>> print 'shape/min/max data %s %6.2f %6.2f'%(str(data.shape),data.min(),data.max())
     shape/min/max data (94, 192) 223.70 319.90
     >>> lats, lons = grb.latlons() # returns lat/lon values on grid.
@@ -91,7 +83,7 @@ def test():
     >>> print 'min/max of %d lons on %s grid %4.2f %4.2f' % (grb['Ni'], grb['typeOfGrid'],lons.min(),lons.max())
     min/max of 192 lons on regular_gg grid 0.00 358.12
 
-    get 2nd grib message
+    get 2nd grib message from the iterator
     >>> grb = grbs.message(2)
     >>> print grb
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
