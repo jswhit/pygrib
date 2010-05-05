@@ -269,9 +269,8 @@ cdef class open(object):
     cdef FILE *_fd
     cdef grib_handle *_gh
     cdef public object filename, messagenumber, messages
-    def __cinit__(self, filename, *args, **kwargs):
+    def __cinit__(self, filename):
         # initialize C level objects.
-        # use *args, **kwargs so a Python subclass can accept extra args.
         cdef grib_handle *gh
         cdef FILE *_fd
         self._fd = fopen(filename, "rb") 
@@ -329,7 +328,7 @@ cdef class open(object):
             if self._gh == NULL:
                 raise IOError('not that many messages in file')
             self.messagenumber = self.messagenumber + 1
-        return gribmessage(self)
+        return _create_gribmessage(self._gh, self.messagenumber)
     def __next__(self):
         cdef grib_handle* gh 
         cdef int err
@@ -347,7 +346,7 @@ cdef class open(object):
         else:
             self._gh = gh
             self.messagenumber = self.messagenumber + 1
-        return gribmessage(self)
+        return _create_gribmessage(self._gh, self.messagenumber)
     def select(self, **kwargs):
         """
 select(**kwargs)
@@ -384,6 +383,18 @@ Example usage:
 _private_atts =\
 ['_gh','expand_reduced','projparams','missingvalue_int','missingvalue_float','messagenumber','_all_keys','_ro_keys']
 
+cdef _create_gribmessage(grib_handle *gh, object messagenumber):
+    """factory function for creating gribmessage instances"""
+    cdef gribmessage grb  = gribmessage.__new__(gribmessage)
+    grb.messagenumber = messagenumber
+    grb.missingvalue_int = GRIB_MISSING_LONG
+    grb.missingvalue_float = GRIB_MISSING_DOUBLE
+    grb.expand_reduced = True
+    grb._gh = grib_handle_clone(gh)
+    grb._all_keys = grb.keys()
+    grb._ro_keys  = grb._read_only_keys()
+    return grb
+
 cdef class gribmessage(object):
     """
     Grib message returned by GRIB file iterator.
@@ -408,18 +419,9 @@ cdef class gribmessage(object):
     cdef grib_handle *_gh
     cdef public messagenumber, projparams, missingvalue_int,\
     missingvalue_float, expand_reduced, _ro_keys, _all_keys
-    def __cinit__(self, open grb, *args, **kwargs):
-        # initialize C level objects (self._gh).
-        # use *args, **kwargs so a Python subclass can accept extra args.
-        self._gh = grib_handle_clone(grb._gh)
-    def __init__(self, open grb):
-        # initialize python objects.
-        self.messagenumber = grb.messagenumber
-        self.missingvalue_int = GRIB_MISSING_LONG
-        self.missingvalue_float = GRIB_MISSING_DOUBLE
-        self.expand_reduced = True
-        self._all_keys = self.keys()
-        self._ro_keys  = self._read_only_keys()
+    def __init__(self):
+        # calling "__new__()" will not call "__init__()" !
+        raise TypeError("This class cannot be instantiated from Python")
     def __dealloc__(self):
         # finalization (inverse of __cinit__): needed to allow garbage collector to free memory.
         cdef int err
@@ -490,7 +492,7 @@ cdef class gribmessage(object):
         return keys associated with a grib message (a dictionary-like object)
         """
         cdef grib_keys_iterator* gi
-        cdef int err, type
+        cdef int err, typ
         cdef char *name
         # use cached keys if they exist.
         if self._all_keys is not None: return self._all_keys
@@ -506,11 +508,11 @@ cdef class gribmessage(object):
             ['zero','one','eight','eleven','false','thousand','file','localDir','7777',
              'oneThousand']:
                 continue
-            err = grib_get_native_type(self._gh, name, &type)
+            err = grib_get_native_type(self._gh, name, &typ)
             if err:
                 raise RuntimeError(grib_get_error_message(err))
             # keys with these types are ignored.
-            if type not in\
+            if typ not in\
             [GRIB_TYPE_UNDEFINED,GRIB_TYPE_SECTION,GRIB_TYPE_BYTES,GRIB_TYPE_LABEL,GRIB_TYPE_MISSING]:
                 keys.append(key)
         err = grib_keys_iterator_delete(gi)
@@ -524,7 +526,7 @@ cdef class gribmessage(object):
         return read-only keys associated with a grib message (a dictionary-like object)
         """
         cdef grib_keys_iterator* gi
-        cdef int err, type
+        cdef int err, typ
         cdef char *name
         if self._all_keys is None:
             self._all_keys = self.keys()
@@ -547,7 +549,7 @@ cdef class gribmessage(object):
         """
         change values associated with existing grib keys.
         """
-        cdef int err, type
+        cdef int err, typ
         cdef size_t size
         cdef char *name
         cdef long longval
@@ -560,10 +562,10 @@ cdef class gribmessage(object):
             raise KeyError('can only modify existing grib keys (key "%s" not found)'
                     % key )
         name = PyString_AsString(key)
-        err = grib_get_native_type(self._gh, name, &type)
+        err = grib_get_native_type(self._gh, name, &typ)
         if err:
             raise RuntimeError(grib_get_error_message(err))
-        elif type == GRIB_TYPE_LONG:
+        elif typ == GRIB_TYPE_LONG:
             # is value an array or a scalar?
             datarr = np.asarray(value, np.int)
             is_array == False
@@ -583,7 +585,7 @@ cdef class gribmessage(object):
                 err = grib_set_long_array(self._gh, name, <long *>datarr.data, size)
                 if err:
                     raise RuntimeError(grib_get_error_message(err))
-        elif type == GRIB_TYPE_DOUBLE:
+        elif typ == GRIB_TYPE_DOUBLE:
             # is value an array or a scalar?
             datarr = np.asarray(value, np.float)
             is_array == False
@@ -603,14 +605,14 @@ cdef class gribmessage(object):
                 err = grib_set_double_array(self._gh, name, <double *>datarr.data, size)
                 if err:
                     raise RuntimeError(grib_get_error_message(err))
-        elif type == GRIB_TYPE_STRING:
+        elif typ == GRIB_TYPE_STRING:
             size=len(value)
             strdata = PyString_AsString(value)
             err = grib_set_string(self._gh, name, strdata, &size)
             if err:
                 raise RuntimeError(grib_get_error_message(err))
         else:
-            raise ValueError("unrecognized grib type % d" % type)
+            raise ValueError("unrecognized grib type % d" % typ)
     def __getitem__(self, key):
         """
         access values associated with grib keys.
@@ -621,7 +623,7 @@ cdef class gribmessage(object):
         data is automatically expanded to a regular grid using linear
         interpolation (nearest neighbor if an adjacent grid point is a missing
         value)."""
-        cdef int err, type
+        cdef int err, typ
         cdef size_t size
         cdef char *name
         cdef long longval
@@ -632,10 +634,10 @@ cdef class gribmessage(object):
         err = grib_get_size(self._gh, name, &size)
         if err:
             raise RuntimeError(grib_get_error_message(err))
-        err = grib_get_native_type(self._gh, name, &type)
+        err = grib_get_native_type(self._gh, name, &typ)
         if err:
             raise RuntimeError(grib_get_error_message(err))
-        elif type == GRIB_TYPE_LONG:
+        elif typ == GRIB_TYPE_LONG:
             if size == 1: # scalar
                 err = grib_get_long(self._gh, name, &longval)
                 if err:
@@ -655,7 +657,7 @@ cdef class gribmessage(object):
                     return self._reshape_mask(datarr)
                 else:
                     return datarr
-        elif type == GRIB_TYPE_DOUBLE:
+        elif typ == GRIB_TYPE_DOUBLE:
             if size == 1: # scalar
                 err = grib_get_double(self._gh, name, &doubleval)
                 if err:
@@ -675,7 +677,7 @@ cdef class gribmessage(object):
                     return self._reshape_mask(datarr)
                 else:
                     return datarr
-        elif type == GRIB_TYPE_STRING:
+        elif typ == GRIB_TYPE_STRING:
             size=1024 # grib_get_size returns 1 ?
             err = grib_get_string(self._gh, name, strdata, &size)
             if err:
@@ -683,7 +685,7 @@ cdef class gribmessage(object):
             msg = PyString_FromString(strdata)
             return msg.rstrip()
         else:
-            raise ValueError("unrecognized grib type % d" % type)
+            raise ValueError("unrecognized grib type % d" % typ)
     def has_key(self,key):
         """
         has_key(key)
@@ -1081,8 +1083,30 @@ cdef class gribmessage(object):
         return lats, lons
 
 cdef class index(object):
+    """ 
+index(filename, *args)
+    
+returns grib index object given GRIB filename indexed by keys given in
+*args.  The L{select} or L{__call__} method can then be used to selected grib messages
+based on specified values of indexed keys.
+
+Example usage:
+
+>>> import pygrib
+>>> grbindx =\
+>>> pygrib.index('sampledata/gfs.grb','shortName','typeOfLevel','level')
+>>> selected_grbs=grbindx.select(shortName='gh',typeOfLevel='isobaricInhPa',level=500)
+>>> for grb in selected_grbs:
+>>>     print grb
+1:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 500:fcst time 72:from 200412091200:lo res cntl fcst
+>>> # __call__ method does same thing as select
+>>> selected_grbs=grbindx(shortName='u',typeOfLevel='isobaricInhPa',level=250)
+>>> for grb in selected_grbs:
+>>>     print grb
+1:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 250:fcst time 72:from 200412091200:lo res cntl fcst
+>>> grbindx.close()
+"""
     cdef grib_index *_gi
-    cdef grib_handle *_gh
     cdef public object keys, filename, messagenumber
     def __cinit__(self, filename, *args):
         # initialize C level objects.
@@ -1094,20 +1118,43 @@ cdef class index(object):
         self._gi = grib_index_new_from_file (NULL, filenamec, keys, &err)
         if err:
             raise RuntimeError(grib_get_error_message(err))
-        self._gh = NULL
     def __init__(self, filename, *args):
         cdef int err
         # initalize Python level objects
         self.filename = filename
         self.keys = args
         self.messagenumber = 0
+    def __call__(self, **kwargs):
+        """same as L{select}"""
+        return self.select(**kwargs)
     def select(self, **kwargs):
+        """
+select(**kwargs)
+
+return a list of grib messages from grib index object corresponding to specific
+values of indexed keys (given by kwargs).
+
+Example usage:
+
+>>> import pygrib
+>>> grbindx =\
+>>> pygrib.index('sampledata/gfs.grb','shortName','typeOfLevel','level')
+>>> selected_grbs=grbindx.select(shortName='gh',typeOfLevel='isobaricInhPa',level=500)
+>>> for grb in selected_grbs:
+>>>     print grb
+1:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 500:fcst time 72:from 200412091200:lo res cntl fcst
+>>> # __call__ method does same thing as select
+>>> selected_grbs=grbindx(shortName='u',typeOfLevel='isobaricInhPa',level=250)
+>>> for grb in selected_grbs:
+>>>     print grb
+1:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 250:fcst time 72:from 200412091200:lo res cntl fcst
+>>> grbindx.close()
+"""
         cdef grib_handle *gh
-        cdef char *key
-        cdef int err
+        cdef int err, typ
         cdef long longval
         cdef double doubval
-        cdef char *strval
+        cdef char *strval, *key
         for k,v in kwargs.iteritems():
             if k not in self.keys:
                 raise KeyError('key not part of grib index')
@@ -1129,25 +1176,18 @@ cdef class index(object):
                     raise RuntimeError(grib_get_error_message(err))
             else:
                 raise TypeError('value must be float, int or string')
-    def __iter__(self):
-        return self
-    def __next__(self):
-        cdef grib_handle* gh 
-        cdef int err
-        if self._gh is not NULL:
-            err = grib_handle_delete(self._gh)
+        self.messagenumber = 0; grbs = []
+        while 1:
+            gh = grib_handle_new_from_index(self._gi, &err)
+            if err or gh == NULL:
+                break
+            else:
+                self.messagenumber = self.messagenumber + 1
+            grbs.append(_create_gribmessage(gh, self.messagenumber))
+            err = grib_handle_delete(gh)
             if err:
                 raise RuntimeError(grib_get_error_message(err))
-        gh = grib_handle_new_from_index(self._gi, &err)
-        if err:
-            raise StopIteration
-            #raise RuntimeError(grib_get_error_message(err))
-        if gh == NULL:
-            raise StopIteration
-        else:
-            self._gh = gh
-            self.messagenumber = self.messagenumber + 1
-        return gribmessage(self)
+        return grbs
     def close(self):
         grib_index_delete(self._gi)
 

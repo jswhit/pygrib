@@ -28,6 +28,15 @@ pygrib.gribmessage.__delitem__	pygrib.gribmessage-class.html#__delitem__
 pygrib.gribmessage.__delattr__	pygrib.gribmessage-class.html#__delattr__
 pygrib.gribmessage.__repr__	pygrib.gribmessage-class.html#__repr__
 pygrib.gribmessage.expand_reduced	pygrib.gribmessage-class.html#expand_reduced
+pygrib.index	pygrib.index-class.html
+pygrib.index.__new__	pygrib.index-class.html#__new__
+pygrib.index.keys	pygrib.index-class.html#keys
+pygrib.index.filename	pygrib.index-class.html#filename
+pygrib.index.select	pygrib.index-class.html#select
+pygrib.index.__call__	pygrib.index-class.html#__call__
+pygrib.index.close	pygrib.index-class.html#close
+pygrib.index.messagenumber	pygrib.index-class.html#messagenumber
+pygrib.index.__init__	pygrib.index-class.html#__init__
 pygrib.open	pygrib.open-class.html
 pygrib.open.close	pygrib.open-class.html#close
 pygrib.open.message	pygrib.open-class.html#message
