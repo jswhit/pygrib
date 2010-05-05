@@ -253,59 +253,6 @@ cpdef api_version():
     grib_api_version = grib_get_api_version()
     return grib_api_version
 
-cdef class index(object):
-    cdef grib_index *_gi
-    cdef public object filename, keys
-    def __cinit__(self, filename, *args):
-        # initialize C level objects.
-        cdef grib_index *gi
-        cdef int err
-        cdef char *filenamec, *keys
-        filenamec = PyString_AsString(filename)
-        keys = PyString_AsString(','.join(args))
-        self._gi = grib_index_new_from_file (NULL, filenamec, keys, &err)
-        if err:
-            raise RuntimeError(grib_get_error_message(err))
-    def __init__(self, filename, *args):
-        cdef int err
-        # initalize Python level objects
-        self.filename = filename
-        self.keys = args
-    def select(self, **kwargs):
-        cdef grib_handle *gh
-        cdef char *key
-        cdef int err
-        cdef long longval
-        cdef double doubval
-        cdef char *strval
-        for k,v in kwargs.iteritems:
-            if k not in self.keys:
-                raise KeyError('key not part of grib index')
-            key = PyString_AsString(k)
-            if type(v) == int or type(v) == long:
-                longval = v
-                err = grib_index_select_long(self._gi, key, longval)
-                if err:
-                    raise RuntimeError(grib_get_error_message(err))
-            elif type(v) == float:
-                doubval = v
-                err = grib_index_select_double(self._gi, key, doubval)
-                if err:
-                    raise RuntimeError(grib_get_error_message(err))
-            elif type(v) == str:
-                strval = PyString_AsString(v)
-                err = grib_index_select_string(self._gi, key, strval)
-                if err:
-                    raise RuntimeError(grib_get_error_message(err))
-            else:
-                raise TypeError('value must be float, int or string')
-        gh =  grib_handle_new_from_index(self._gi, &err)
-        if err:
-            raise RuntimeError(grib_get_error_message(err))
-    def __dealloc__(self):
-        grib_index_delete(self._gi)
-
-
 cdef class open(object):
     """ 
     open(filename)
@@ -1132,6 +1079,77 @@ cdef class gribmessage(object):
             raise ValueError('unsupported grid %s' % self['typeOfGrid'])
         self.projparams = projparams
         return lats, lons
+
+cdef class index(object):
+    cdef grib_index *_gi
+    cdef grib_handle *_gh
+    cdef public object keys, filename, messagenumber
+    def __cinit__(self, filename, *args):
+        # initialize C level objects.
+        cdef grib_index *gi
+        cdef int err
+        cdef char *filenamec, *keys
+        filenamec = PyString_AsString(filename)
+        keys = PyString_AsString(','.join(args))
+        self._gi = grib_index_new_from_file (NULL, filenamec, keys, &err)
+        if err:
+            raise RuntimeError(grib_get_error_message(err))
+        self._gh = NULL
+    def __init__(self, filename, *args):
+        cdef int err
+        # initalize Python level objects
+        self.filename = filename
+        self.keys = args
+        self.messagenumber = 0
+    def select(self, **kwargs):
+        cdef grib_handle *gh
+        cdef char *key
+        cdef int err
+        cdef long longval
+        cdef double doubval
+        cdef char *strval
+        for k,v in kwargs.iteritems():
+            if k not in self.keys:
+                raise KeyError('key not part of grib index')
+            key = PyString_AsString(k)
+            if type(v) == int or type(v) == long:
+                longval = v
+                err = grib_index_select_long(self._gi, key, longval)
+                if err:
+                    raise RuntimeError(grib_get_error_message(err))
+            elif type(v) == float:
+                doubval = v
+                err = grib_index_select_double(self._gi, key, doubval)
+                if err:
+                    raise RuntimeError(grib_get_error_message(err))
+            elif type(v) == str:
+                strval = PyString_AsString(v)
+                err = grib_index_select_string(self._gi, key, strval)
+                if err:
+                    raise RuntimeError(grib_get_error_message(err))
+            else:
+                raise TypeError('value must be float, int or string')
+    def __iter__(self):
+        return self
+    def __next__(self):
+        cdef grib_handle* gh 
+        cdef int err
+        if self._gh is not NULL:
+            err = grib_handle_delete(self._gh)
+            if err:
+                raise RuntimeError(grib_get_error_message(err))
+        gh = grib_handle_new_from_index(self._gi, &err)
+        if err:
+            raise StopIteration
+            #raise RuntimeError(grib_get_error_message(err))
+        if gh == NULL:
+            raise StopIteration
+        else:
+            self._gh = gh
+            self.messagenumber = self.messagenumber + 1
+        return gribmessage(self)
+    def close(self):
+        grib_index_delete(self._gi)
 
 cdef _redtoreg(int nlons, ndarray lonsperlat, ndarray redgrid, double missval):
 # convert data on global reduced gaussian to global
