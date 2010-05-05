@@ -1120,7 +1120,6 @@ Example usage:
         if err:
             raise RuntimeError(grib_get_error_message(err))
     def __init__(self, filename, *args):
-        cdef int err
         # initalize Python level objects
         self.filename = filename
         self.keys = args
@@ -1151,7 +1150,7 @@ Example usage:
 >>> grbindx.close()
 """
         cdef grib_handle *gh
-        cdef int err, typ
+        cdef int err
         cdef long longval
         cdef double doubval
         cdef char *strval, *key
