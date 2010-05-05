@@ -35,7 +35,6 @@ pygrib.index.filename	pygrib.index-class.html#filename
 pygrib.index.select	pygrib.index-class.html#select
 pygrib.index.__call__	pygrib.index-class.html#__call__
 pygrib.index.close	pygrib.index-class.html#close
-pygrib.index.messagenumber	pygrib.index-class.html#messagenumber
 pygrib.index.__init__	pygrib.index-class.html#__init__
 pygrib.open	pygrib.open-class.html
 pygrib.open.close	pygrib.open-class.html#close

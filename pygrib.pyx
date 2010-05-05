@@ -1154,6 +1154,7 @@ Example usage:
         cdef long longval
         cdef double doubval
         cdef char *strval, *key
+        # set index selection.
         for k,v in kwargs.iteritems():
             if k not in self.keys:
                 raise KeyError('key not part of grib index')
@@ -1175,6 +1176,7 @@ Example usage:
                     raise RuntimeError(grib_get_error_message(err))
             else:
                 raise TypeError('value must be float, int or string')
+        # create a list of grib messages corresponding to selection.
         messagenumber = 0; grbs = []
         while 1:
             gh = grib_handle_new_from_index(self._gi, &err)
@@ -1186,8 +1188,13 @@ Example usage:
             err = grib_handle_delete(gh)
             if err:
                 raise RuntimeError(grib_get_error_message(err))
+        # return the list of grib messages.
         return grbs
     def close(self):
+        """
+        close()
+
+        deallocate C structures associated with class instance"""
         grib_index_delete(self._gi)
 
 cdef _redtoreg(int nlons, ndarray lonsperlat, ndarray redgrid, double missval):
