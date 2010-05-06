@@ -352,7 +352,7 @@ cdef class open(object):
         """
 select(**kwargs)
 
-return a list of grib messages from iterator filtered by kwargs.
+return a list of L{gribmessage} instances from iterator filtered by kwargs.
 
 Example usage:
 
@@ -398,9 +398,7 @@ cdef _create_gribmessage(grib_handle *gh, object messagenumber):
 
 cdef class gribmessage(object):
     """
-    Grib message returned by GRIB file iterator.
-    Grib file iterators are instances of class L{open}.
-    Grib messages are dictionary-like objects.
+    Grib message object.
 
     @ivar messagenumber: The grib message number in the file.
 
@@ -1129,7 +1127,7 @@ Example usage:
         """
 select(**kwargs)
 
-return a list of grib messages from grib index object corresponding to specific
+return a list of L{gribmessage} instances from grib index object corresponding to specific
 values of indexed keys (given by kwargs).
 
 Example usage:
