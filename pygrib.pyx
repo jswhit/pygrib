@@ -1105,7 +1105,7 @@ Example usage:
 >>> grbindx.close()
 """
     cdef grib_index *_gi
-    cdef public object keys, filename
+    cdef public object keys, types, filename
     def __cinit__(self, filename, *args):
         # initialize C level objects.
         cdef grib_index *gi
@@ -1119,7 +1119,17 @@ Example usage:
     def __init__(self, filename, *args):
         # initalize Python level objects
         self.filename = filename
-        self.keys = args
+        # is type is specified, strip it off.
+        keys = [arg.split(':')[0] for arg in args]
+        types = []
+        for arg in args:
+            try: 
+                type = arg.split(':')[1]
+            except:
+                type = None
+            types.append(type)
+        self.keys = keys
+        self.types = types
     def __call__(self, **kwargs):
         """same as L{select}"""
         return self.select(**kwargs)
@@ -1154,19 +1164,20 @@ Example usage:
         for k,v in kwargs.iteritems():
             if k not in self.keys:
                 raise KeyError('key not part of grib index')
+            typ = self.types[self.keys.index(k)]
             key = PyString_AsString(k)
-            if type(v) == int or type(v) == long:
-                longval = v
+            if typ == 'l' or (type(v) == int or type(v) == long):
+                longval = long(v)
                 err = grib_index_select_long(self._gi, key, longval)
                 if err:
                     raise RuntimeError(grib_get_error_message(err))
-            elif type(v) == float:
-                doubval = v
+            elif typ == 'd' or type(v) == float:
+                doubval = float(v)
                 err = grib_index_select_double(self._gi, key, doubval)
                 if err:
                     raise RuntimeError(grib_get_error_message(err))
-            elif type(v) == str:
-                strval = PyString_AsString(v)
+            elif typ == 's' or type(v) == str:
+                strval = PyString_AsString(str(v))
                 err = grib_index_select_string(self._gi, key, strval)
                 if err:
                     raise RuntimeError(grib_get_error_message(err))
