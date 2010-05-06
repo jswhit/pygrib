@@ -1251,10 +1251,23 @@ cdef _redtoreg(int nlons, ndarray lonsperlat, ndarray redgrid, double missval):
         indx = indx + ilons
     return reggrid
 
+def _isiter(v):
+    """returns True is v is iterable but not a string"""
+    if type(v) == str: return False
+    try:
+        iter(v)
+    except TypeError:
+        return False
+    return True
+
 def _find(grb, **kwargs):
     for k,v in kwargs.iteritems():
-        if grb.has_key(k) and grb[k]==v:
-            continue
+        isiter = _isiter(v)
+        if grb.has_key(k):
+            if not isiter and grb[k]==v:
+                continue
+            if isiter and grb[k] in v:
+                continue
         else:
             return False
     return True
