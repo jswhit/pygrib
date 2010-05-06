@@ -363,6 +363,7 @@ Example usage:
 26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10:fcst time 72:from 200412091200:lo res cntl fcst
 >>> # to select multiple key values, use sequences
 >>> selected_grbs=grbs.select(shortName=['u','v'],typeOfLevel='isobaricInhPa',level=[10,50])
+>>> for grb in selected_grbs: print grb
 193:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50:fcst time 72:from 200412091200:lo res cntl fcst
 194:v-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50:fcst time 72:from 200412091200:lo res cntl fcst
 199:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 10:fcst time 72:from 200412091200:lo res cntl fcst
