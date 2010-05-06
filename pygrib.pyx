@@ -1094,8 +1094,7 @@ based on specified values of indexed keys.
 Example usage:
 
 >>> import pygrib
->>> grbindx =\
->>> pygrib.index('sampledata/gfs.grb','shortName','typeOfLevel','level')
+>>> grbindx=pygrib.index('sampledata/gfs.grb','shortName','typeOfLevel','level')
 >>> selected_grbs=grbindx.select(shortName='gh',typeOfLevel='isobaricInhPa',level=500)
 >>> for grb in selected_grbs:
 >>>     print grb
@@ -1136,8 +1135,7 @@ values of indexed keys (given by kwargs).
 Example usage:
 
 >>> import pygrib
->>> grbindx =\
->>> pygrib.index('sampledata/gfs.grb','shortName','typeOfLevel','level')
+>>> grbindx=pygrib.index('sampledata/gfs.grb','shortName','typeOfLevel','level')
 >>> selected_grbs=grbindx.select(shortName='gh',typeOfLevel='isobaricInhPa',level=500)
 >>> for grb in selected_grbs:
 >>>     print grb
