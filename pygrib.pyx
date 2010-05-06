@@ -1121,11 +1121,12 @@ Example usage:
         self.filename = filename
         # is type is specified, strip it off.
         keys = [arg.split(':')[0] for arg in args]
+        # if type is declared, save it (None if not declared)
         types = []
         for arg in args:
             try: 
                 type = arg.split(':')[1]
-            except:
+            except IndexError:
                 type = None
             types.append(type)
         self.keys = keys
@@ -1161,6 +1162,7 @@ Example usage:
         cdef double doubval
         cdef char *strval, *key
         # set index selection.
+        # used declared type if available, other infer from type of value.
         for k,v in kwargs.iteritems():
             if k not in self.keys:
                 raise KeyError('key not part of grib index')
