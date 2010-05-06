@@ -1262,12 +1262,12 @@ def _isiter(v):
 
 def _find(grb, **kwargs):
     for k,v in kwargs.iteritems():
+        if not grb.has_key(k): return False
         isiter = _isiter(v)
-        if grb.has_key(k):
-            if not isiter and grb[k]==v:
-                continue
-            if isiter and grb[k] in v:
-                continue
+        if not isiter and grb[k]==v:
+            continue
+        elif isiter and grb[k] in v:
+            continue
         else:
             return False
     return True
