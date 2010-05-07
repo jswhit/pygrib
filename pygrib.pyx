@@ -241,6 +241,11 @@ cdef extern from "grib_api.h":
     int grib_index_select_string(grib_index* index,char* key,char* value)
     grib_handle* grib_handle_new_from_index(grib_index* index,int *err)
     void grib_index_delete(grib_index* index)
+    # new in 1.9.0
+    #grib_index* grib_index_new(grib_context* c, char* keys,int *err)
+    #int grib_index_add_file(grib_index *index, const char *filename)
+    #int grib_index_write(grib_index *index, char *filename)
+    #grib_index* grib_index_read(grib_context* c, char* filename,int *err)
 
 
 cpdef api_version():
@@ -838,8 +843,12 @@ cdef class gribmessage(object):
             projparams['a']=self['radius']
             projparams['b']=self['radius']
         elif self['shapeOfTheEarth'] in [3,7]:
-            projparams['a']=self['scaledValueOfMajorAxisOfOblateSpheroidEarth']*scalea
-            projparams['b']=self['scaledValueOfMinorAxisOfOblateSpheroidEarth']*scaleb
+            if api_version() < 10900:
+                projparams['a']=self['scaledValueOfMajorAxisOfOblateSpheroidEarth']*scalea
+                projparams['b']=self['scaledValueOfMinorAxisOfOblateSpheroidEarth']*scaleb
+            else:
+                projparams['a']=self['scaledValueOfEarthMajorAxis']*scalea
+                projparams['b']=self['scaledValueOfEarthMinorAxis']*scaleb
         elif self['shapeOfTheEarth'] == 2:
             projparams['a']=6378160.0
             projparams['b']=6356775.0 
@@ -1002,10 +1011,12 @@ cdef class gribmessage(object):
             pj = pyproj.Proj(projparams)
             x1,y1 = pj(lon_0,latmax); x2,y2 = pj(lonmax,lat_0)
             width = 2*x2; height = 2*y1
-            dx =\
-            width/self['apparentDiameterOfEarthInGridLengthsInXDirection']
-            dy =\
-            height/self['apparentDiameterOfEarthInGridLengthsInYDirection']
+            #dx =\
+            #width/self['apparentDiameterOfEarthInGridLengthsInXDirection']
+            #dy =\
+            #height/self['apparentDiameterOfEarthInGridLengthsInYDirection']
+            dx = width/self['dx']
+            dy = height/self['dy']
             xmax = dx*(nx-1); ymax = dy*(ny-1)
             x = np.linspace(-0.5*xmax,0.5*xmax,nx)
             y = np.linspace(-0.5*ymax,0.5*ymax,ny)
@@ -1057,7 +1068,8 @@ cdef class gribmessage(object):
             lon2 = self['longitudeOfLastGridPoint']/scale
             if self['truncateDegrees']:
                 lon2 = int(lon2)
-            projparams['lat_ts']=self['latitudeSAtWhichTheMercatorProjectionIntersectsTheEarth']/scale
+            #projparams['lat_ts']=self['latitudeSAtWhichTheMercatorProjectionIntersectsTheEarth']/scale
+            projparams['lat_ts']=self['LaD']/scale
             projparams['lon_0']=0.5*(lon1+lon2)
             projparams['proj']='merc'
             pj = pyproj.Proj(projparams)

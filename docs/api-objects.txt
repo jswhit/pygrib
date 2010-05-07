@@ -1,4 +1,5 @@
 pygrib	pygrib-module.html
+pygrib.__package__	pygrib-module.html#__package__
 pygrib._isiter	pygrib-module.html#_isiter
 pygrib._find	pygrib-module.html#_find
 pygrib._private_atts	pygrib-module.html#_private_atts
