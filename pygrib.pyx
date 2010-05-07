@@ -1208,7 +1208,7 @@ Example usage:
                 err = grib_index_select_double(self._gi, key, doubval)
                 if err:
                     raise RuntimeError(grib_get_error_message(err))
-            elif typ == 's' or type(v) == str:
+            elif typ == 's' or isinstance(v,basestring):
                 strval = PyString_AsString(str(v))
                 err = grib_index_select_string(self._gi, key, strval)
                 if err:
@@ -1283,7 +1283,7 @@ cdef _redtoreg(int nlons, ndarray lonsperlat, ndarray redgrid, double missval):
 
 def _isiter(v):
     """returns True is v is iterable but not a string"""
-    if type(v) == str: return False
+    if isinstance(v,basestring): return False
     try:
         iter(v)
     except TypeError:
@@ -1291,12 +1291,14 @@ def _isiter(v):
     return True
 
 def _find(grb, **kwargs):
+    """search for key/value matches in grib message.
+    If value is given as a sequence, search for matches to any element."""
     for k,v in kwargs.iteritems():
         if not grb.has_key(k): return False
-        isiter = _isiter(v)
-        if not isiter and grb[k]==v:
+        isiter = _isiter(v) # True if v is iterable but not a string
+        if not isiter and grb[k]==v: # v not a sequence.
             continue
-        elif isiter and grb[k] in v:
+        elif isiter and grb[k] in v: # v a sequence.
             continue
         else:
             return False
