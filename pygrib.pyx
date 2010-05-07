@@ -348,6 +348,9 @@ cdef class open(object):
             self._gh = gh
             self.messagenumber = self.messagenumber + 1
         return _create_gribmessage(self._gh, self.messagenumber)
+    def __call__(self, **kwargs):
+        """same as L{select}"""
+        return self.select(**kwargs)
     def select(self, **kwargs):
         """
 select(**kwargs)
