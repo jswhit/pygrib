@@ -1102,6 +1102,8 @@ index(filename, *args)
 returns grib index object given GRIB filename indexed by keys given in
 *args.  The L{select} or L{__call__} method can then be used to selected grib messages
 based on specified values of indexed keys.
+Unlike L{open.select}, sequences cannot be used to select multiple key values.
+However, using L{index.select} is much faster than L{open.select}.
 
 Example usage:
 
