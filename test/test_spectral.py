@@ -13,6 +13,7 @@ fld = g.values
 
 print fld.min(), fld.max(), fld.mean(), fld.shape
 # ECMWF normalizes the spherical harmonic coeffs differently than NCEP.
+# (m=0,n=0 is global mean, instead of sqrt(2)/2 times global mean)
 fld = 2.*fld/np.sqrt(2.)
 fldr = fld[0::2]
 fldi = fld[1::2]
