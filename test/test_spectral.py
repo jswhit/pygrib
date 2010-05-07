@@ -7,14 +7,13 @@ try:
 except:
     raise ImportError("requires pyspharm (python spherical harmonic module) from http://code.google.com/p/pyspharm")
 
-grbs = pygrib.open('../sampledata/spectral.grb')
-for g in grbs:
-    if g['name'] == 'Temperature' and\
-    g['scaledValueOfFirstFixedSurface']==99598:
-        fld = g['values']
-        break
+grbs = pygrib.open('../sampledata/spherical_pressure_level.grib2')
+g = grbs[1]
+fld = g.values
 
-print fld.min(), fld.max(), fld.shape
+print fld.min(), fld.max(), fld.mean(), fld.shape
+# ECMWF normalizes the spherical harmonic coeffs differently than NCEP.
+fld = 2.*fld/np.sqrt(2.)
 fldr = fld[0::2]
 fldi = fld[1::2]
 fld = np.zeros(fldr.shape,'F')
@@ -25,7 +24,7 @@ s = spharm.Spharmt(nlons,nlats)
 print fld.real[0:10]
 print fld.imag[0:10]
 data = s.spectogrd(fld)
-print data.min(),data.max()
+print data.min(),data.max(),data.mean()
 lons = (360./nlons)*np.arange(nlons)
 lats = 90.-(180./(nlats-1))*np.arange(nlats)
 lons, lats = np.meshgrid(lons, lats)
@@ -54,5 +53,5 @@ m.drawparallels(circles,labels=[1,0,0,0])
 delon = 60.
 meridians = np.arange(-180,180,delon)
 m.drawmeridians(meridians,labels=[0,0,0,1])
-plt.title(g['name']+' from Spherical Harmonic Coeffs')
+plt.title(repr(g['level'])+' '+g['typeOfLevel']+' '+g['name']+' from Spherical Harmonic Coeffs')
 plt.show()
