@@ -1,4 +1,4 @@
-version 1.6 - svn revision 218
+version 1.6 - svn revision 219
 ==============================
 * raise IOError when grib message number < 1 is accessed with message method
   (instead of segfaulting, which is rude).  Fixes issue 4.
@@ -11,6 +11,7 @@ version 1.6 - svn revision 218
 * added 'index' class which can be used for fast subsettting of grib files 
   based on specified key/value pairs (a faster alternative to 'select' method
   of open instance).
+* fixes for grib_api version 1.9.0 (the names of some keys changed).
 
 version 1.5 - svn revsion 187
 =============================
