@@ -48,8 +48,8 @@
     </td>
   </tr>
 </table>
-<!-- ==================== TYPE DESCRIPTION ==================== -->
-<h1 class="epydoc">type open</h1><p class="nomargin-top"></p>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class open</h1><p class="nomargin-top"></p>
 <pre class="base-tree">
 object --+
          |
@@ -70,6 +70,24 @@ object --+
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Instance Methods</span></td>
 </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__call__"></a><span class="summary-sig-name">__call__</span>(<span class="summary-sig-arg">...</span>)</span><br />
+      same as <a href="pygrib.open-class.html#select" 
+      class="link">select</a></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
@@ -228,7 +246,9 @@ object --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pygrib.open-class.html#select" class="summary-sig-name">select</a>(<span class="summary-sig-arg">**kwargs</span>)</span><br />
-      return a list of grib messages from iterator filtered by kwargs.</td>
+      return a list of <a href="pygrib.gribmessage-class.html" 
+      class="link">gribmessage</a> instances from iterator filtered by 
+      kwargs.</td>
           <td align="right" valign="top">
             
             
@@ -236,6 +256,20 @@ object --+
         </tr>
       </table>
       
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
+      <code>__getattribute__</code>,
+      <code>__hash__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__repr__</code>,
+      <code>__setattr__</code>,
+      <code>__str__</code>
+      </p>
     </td>
   </tr>
 </table>
@@ -269,6 +303,22 @@ object --+
     </td><td class="summary">
         <a name="messages"></a><span class="summary-name">messages</span><br />
       The total number of grib messages in the file.
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Properties</span></td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
     </td>
   </tr>
 </table>
@@ -344,15 +394,27 @@ object --+
     </td>
   </tr></table>
   
-  <p>return a list of grib messages from iterator filtered by kwargs.</p>
+  <p>return a list of <a href="pygrib.gribmessage-class.html" 
+  class="link">gribmessage</a> instances from iterator filtered by kwargs. 
+  Sequences can be used to select multiple key values.</p>
   <p>Example usage:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">import</span> pygrib
 <span class="py-prompt">&gt;&gt;&gt; </span>grbs = pygrib.open(<span class="py-string">'sampledata/gfs.grb'</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span>selected_grbs=grbs.select(shortName=<span class="py-string">'gh'</span>,typeOfLevel=<span class="py-string">'isobaricInhPa'</span>,level=10)
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> grb <span class="py-keyword">in</span> selected_grbs:
-<span class="py-prompt">&gt;&gt;&gt; </span>    <span class="py-keyword">print</span> grb
-<span class="py-output">26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10:fcst time 72:from 200412091200:lo res cntl fcst</span></pre>
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> grb <span class="py-keyword">in</span> selected_grbs: <span class="py-keyword">print</span> grb
+<span class="py-output">26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10:fcst time 72:from 200412091200:lo res cntl fcst</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># the __call__ method does the same thing</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>selected_grbs=grbs(shortName=<span class="py-string">'gh'</span>,typeOfLevel=<span class="py-string">'isobaricInhPa'</span>,level=10)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> grb <span class="py-keyword">in</span> selected_grbs: <span class="py-keyword">print</span> grb
+<span class="py-output">26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10:fcst time 72:from 200412091200:lo res cntl fcst</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># to select multiple key values, use sequences</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>selected_grbs=grbs(shortName=[<span class="py-string">'u'</span>,<span class="py-string">'v'</span>],typeOfLevel=<span class="py-string">'isobaricInhPa'</span>,level=[10,50])
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> grb <span class="py-keyword">in</span> selected_grbs: <span class="py-keyword">print</span> grb
+<span class="py-output">193:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50:fcst time 72:from 200412091200:lo res cntl fcst</span>
+<span class="py-output">194:v-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50:fcst time 72:from 200412091200:lo res cntl fcst</span>
+<span class="py-output">199:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 10:fcst time 72:from 200412091200:lo res cntl fcst</span>
+<span class="py-output">200:v-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 10:fcst time 72:from 200412091200:lo res cntl fcst</span></pre>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -384,8 +446,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1
-    on Wed May  5 20:00:57 2010
+    Generated by Epydoc 3.0.1 on Fri May  7 09:21:01 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

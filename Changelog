@@ -1,4 +1,4 @@
-version 1.6 - not yet released
+version 1.6 - svn revision 216
 ==============================
 * raise IOError when grib message number < 1 is accessed with message method
   (instead of segfaulting, which is rude).  Fixes issue 4.

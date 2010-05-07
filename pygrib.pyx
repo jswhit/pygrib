@@ -79,7 +79,7 @@ Example usage
     >>> lats, lons = grb.latlons()
     >>> print lats.shape, lats.min(), lats.max(), lons.shape, lons.min(), lons.max()
     (94, 192) -88.5419501373 88.5419501373  0.0 358.125
- - use select method to choose grib messages based upon specified key/value pairs::
+ - use L{open.select} to choose grib messages based upon specified key/value pairs::
     >>> selected_grbs = grbs.select(level=2,typeOfLevel='heightAboveGround') # get all 2-m level fields
     >>> for grb in selected_grbs: print grb
     3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
@@ -356,6 +356,7 @@ cdef class open(object):
 select(**kwargs)
 
 return a list of L{gribmessage} instances from iterator filtered by kwargs.
+Sequences can be used to select multiple key values.
 
 Example usage:
 
@@ -364,8 +365,12 @@ Example usage:
 >>> selected_grbs=grbs.select(shortName='gh',typeOfLevel='isobaricInhPa',level=10)
 >>> for grb in selected_grbs: print grb
 26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10:fcst time 72:from 200412091200:lo res cntl fcst
+>>> # the __call__ method does the same thing
+>>> selected_grbs=grbs(shortName='gh',typeOfLevel='isobaricInhPa',level=10)
+>>> for grb in selected_grbs: print grb
+26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10:fcst time 72:from 200412091200:lo res cntl fcst
 >>> # to select multiple key values, use sequences
->>> selected_grbs=grbs.select(shortName=['u','v'],typeOfLevel='isobaricInhPa',level=[10,50])
+>>> selected_grbs=grbs(shortName=['u','v'],typeOfLevel='isobaricInhPa',level=[10,50])
 >>> for grb in selected_grbs: print grb
 193:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50:fcst time 72:from 200412091200:lo res cntl fcst
 194:v-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50:fcst time 72:from 200412091200:lo res cntl fcst
@@ -1149,6 +1154,8 @@ select(**kwargs)
 
 return a list of L{gribmessage} instances from grib index object corresponding to specific
 values of indexed keys (given by kwargs).
+Unlike L{open.select}, sequences cannot be used to select multiple key values.
+However, using L{index.select} is much faster than L{open.select}.
 
 Example usage:
 
