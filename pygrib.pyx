@@ -479,7 +479,7 @@ cdef class gribmessage(object):
                 inventory.append(':levels '+repr(self['topLevel'])+\
                 '-'+repr(self['bottomLevel']))
         elif self.has_key('level'):
-            inventory.append(':level'+repr(self['level']))
+            inventory.append(':level '+repr(self['level']))
         if self.has_key('stepRange'):
             ftime = self['stepRange']
             inventory.append(':fcst time '+ftime)

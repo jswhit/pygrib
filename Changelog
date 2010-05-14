@@ -1,4 +1,4 @@
-version 1.6.1 - svn revision 226
+version 1.6.1 - svn revision 227
 ================================
 * only print ensemble info in __repr__ (which is called when 'print grb' is
   done) when both both 'perturbationNumber' and 'typeOfEnsembleForecast' keys are
