@@ -470,7 +470,7 @@ cdef class gribmessage(object):
         inventory.append(':'+self['typeOfGrid'])
         if self.has_key('typeOfLevel'):
             inventory.append(':'+self['typeOfLevel'])
-        if self.has_key('topLevel'):
+        if self.has_key('topLevel') and self.has_key('bottomLevel'):
             toplev = self['topLevel']
             botlev = self['bottomLevel']
             if toplev == botlev:
@@ -486,9 +486,10 @@ cdef class gribmessage(object):
         elif self.has_key('forecastTime'):
             ftime = repr(self['forecastTime'])
             inventory.append(':fcst time '+ftime)
-        inventory.append(
-        ':from '+repr(self['dataDate'])+'%04i' % self['dataTime'])
-        #if self.has_key('validityDate'):
+        if self.has_key('dataDate') and self.has_key('dataTime'):
+            inventory.append(
+            ':from '+repr(self['dataDate'])+'%04i' % self['dataTime'])
+        #if self.has_key('validityDate') and self.has_key('validityTime'):
         #    inventory.append(
         #    ':valid '+repr(self['validityDate'])+repr(self['validityTime']))
         if self.has_key('perturbationNumber') and\
