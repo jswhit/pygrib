@@ -1,8 +1,8 @@
-version 1.6.1 - svn revision 224
+version 1.6.1 - svn revision 225
 ================================
 * only print ensemble info in __repr__ (which is called when 'print grb' is
-done) when both both 'perturbationNumber' 'typeOfEnsembleForecast' keys are
-present. Fixes error on 'print grb' for ERA-interim grib files.
+  done) when both both 'perturbationNumber' and 'typeOfEnsembleForecast' keys are
+  present. Fixes error on 'print grb' for ERA-interim grib files.
 
 version 1.6 - svn revision 223
 ==============================
