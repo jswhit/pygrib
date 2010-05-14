@@ -462,12 +462,14 @@ cdef class gribmessage(object):
     def __repr__(self):
         """prints a short inventory of the grib message"""
         inventory = []
-        inventory.append(
-        #repr(self.messagenumber)+':center '+self['centre']+':'+self['name']+':'+self['units'])
-        repr(self.messagenumber)+':'+self['name']+':'+self['units'])
+        if self.has_key('name'):
+            inventory.append(repr(self.messagenumber)+':'+self['name'])
+        if self.has_key('units'):
+            inventory.append(':'+self['units'])
         if self.has_key('stepType'):
             inventory.append(' ('+self['stepType']+')')
-        inventory.append(':'+self['typeOfGrid'])
+        if self.has_key('typeOfGrid'):
+            inventory.append(':'+self['typeOfGrid'])
         if self.has_key('typeOfLevel'):
             inventory.append(':'+self['typeOfLevel'])
         if self.has_key('topLevel') and self.has_key('bottomLevel'):
