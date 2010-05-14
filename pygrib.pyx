@@ -121,7 +121,7 @@ Changelog
 
 @contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
 
-@version: 1.6
+@version: 1.6.1
 
 @copyright: copyright 2010 by Jeffrey Whitaker.
 
@@ -139,7 +139,7 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE."""
 __test__ = None
 del __test__ # hack so epydoc doesn't show __test__
-__version__ = '1.6'
+__version__ = '1.6.1'
 
 import numpy as np
 from numpy import ma
@@ -491,7 +491,8 @@ cdef class gribmessage(object):
         #if self.has_key('validityDate'):
         #    inventory.append(
         #    ':valid '+repr(self['validityDate'])+repr(self['validityTime']))
-        if self.has_key('perturbationNumber'):
+        if self.has_key('perturbationNumber') and\
+           self.has_key('typeOfEnsembleForecast'):
             ens_type = self['typeOfEnsembleForecast']
             pert_num = self['perturbationNumber']
             if ens_type == 0:
