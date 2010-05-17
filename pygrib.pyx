@@ -746,7 +746,7 @@ cdef class gribmessage(object):
         if hasattr(datarr,'mask'):
             datarr = datarr.filled()
         # raise error is expanded reduced grid array is supplied.
-        if self['typeOfGrid'].startswith('reduced'):
+        if self['gridType'].startswith('reduced'):
             if datarr.ndim != 1:
                 raise ValueError("reduced grid data array must be 1d")
         if datarr.ndim == 2:
@@ -771,7 +771,7 @@ cdef class gribmessage(object):
         if datarr.ndim > 2:
             raise ValueError('array must be 1d or 2d')
         # reduced grid.
-        if self['typeOfGrid'].startswith('reduced'):
+        if self['gridType'].startswith('reduced'):
             try:
                 ny = self['Ny']
             except:
@@ -874,12 +874,12 @@ cdef class gribmessage(object):
         else:
             raise ValueError('unknown shape of the earth flag')
 
-        if self['typeOfGrid'] in ['regular_gg','regular_ll']: # regular lat/lon grid
+        if self['gridType'] in ['regular_gg','regular_ll']: # regular lat/lon grid
             lons = self['distinctLongitudes']
             lats = self['distinctLatitudes']
             lons,lats = np.meshgrid(lons,lats) 
             projparams['proj']='cyl'
-        elif self['typeOfGrid'] == 'reduced_gg': # reduced global gaussian grid
+        elif self['gridType'] == 'reduced_gg': # reduced global gaussian grid
             lats = self['distinctLatitudes']
             ny = self['Nj']
             nx = 2*ny
@@ -888,7 +888,7 @@ cdef class gribmessage(object):
             lons = np.linspace(lon1,lon2,nx)
             lons,lats = np.meshgrid(lons,lats) 
             projparams['proj']='cyl'
-        elif self['typeOfGrid'] == 'reduced_ll': # reduced lat/lon grid
+        elif self['gridType'] == 'reduced_ll': # reduced lat/lon grid
             ny = self['Nj']
             nx = 2*ny
             lat1 = self['latitudeOfFirstGridPointInDegrees']
@@ -899,7 +899,7 @@ cdef class gribmessage(object):
             lats = np.linspace(lat1,lat2,ny)
             lons,lats = np.meshgrid(lons,lats) 
             projparams['proj']='cyl'
-        elif self['typeOfGrid'] == 'polar_stereographic':
+        elif self['gridType'] == 'polar_stereographic':
             lat1 = self['latitudeOfFirstGridPointInDegrees']
             lon1 = self['longitudeOfFirstGridPointInDegrees']
             try:
@@ -931,7 +931,7 @@ cdef class gribmessage(object):
             y = llcrnry+dy*np.arange(ny)
             x, y = np.meshgrid(x, y)
             lons, lats = pj(x, y, inverse=True)
-        elif self['typeOfGrid'] == 'lambert':
+        elif self['gridType'] == 'lambert':
             lat1 = self['latitudeOfFirstGridPointInDegrees']
             lon1 = self['longitudeOfFirstGridPointInDegrees']
             try:
@@ -953,7 +953,7 @@ cdef class gribmessage(object):
             y = llcrnry+dy*np.arange(ny)
             x, y = np.meshgrid(x, y)
             lons, lats = pj(x, y, inverse=True)
-        elif self['typeOfGrid'] =='albers':
+        elif self['gridType'] =='albers':
             lat1 = self['latitudeOfFirstGridPointInDegrees']
             lon1 = self['longitudeOfFirstGridPointInDegrees']
             try:
@@ -984,7 +984,7 @@ cdef class gribmessage(object):
             y = llcrnry+dy*np.arange(ny)
             x, y = np.meshgrid(x, y)
             lons, lats = pj(x, y, inverse=True)
-        elif self['typeOfGrid'] == 'space_view':
+        elif self['gridType'] == 'space_view':
             try:
                nx = self['Nx']
                ny = self['Ny']
@@ -1033,7 +1033,7 @@ cdef class gribmessage(object):
             abslons = np.fabs(lons); abslats = np.fabs(lats)
             lons = np.where(abslons < 1.e20, lons, 1.e30)
             lats = np.where(abslats < 1.e20, lats, 1.e30)
-        elif self['typeOfGrid'] == "equatorial_azimuthal_equidistant":
+        elif self['gridType'] == "equatorial_azimuthal_equidistant":
             projparams['lat_0'] = self['standardParallel']/1.e6
             projparams['lon_0'] = self['centralLongitude']/1.e6
             dx = self['Dx']/1.e3
@@ -1047,7 +1047,7 @@ cdef class gribmessage(object):
             y = llcrnry+dy*np.arange(ny)
             x, y = np.meshgrid(x, y)
             lons, lats = pj(x, y, inverse=True)
-        elif self['typeOfGrid'] == "lambert_azimuthal_equal_area":
+        elif self['gridType'] == "lambert_azimuthal_equal_area":
             projparams['lat_0'] = self['standardParallel']/1.e6
             projparams['lon_0'] = self['centralLongitude']/1.e6
             dx = self['Dx']/1.e3
@@ -1061,7 +1061,7 @@ cdef class gribmessage(object):
             y = llcrnry+dy*np.arange(ny)
             x, y = np.meshgrid(x, y)
             lons, lats = pj(x, y, inverse=True)
-        elif self['typeOfGrid'] == 'mercator':
+        elif self['gridType'] == 'mercator':
             scale = float(self['grib2divider'])
             lat1 = self['latitudeOfFirstGridPoint']/scale
             if self['truncateDegrees']:
@@ -1094,7 +1094,7 @@ cdef class gribmessage(object):
             y = llcrnry+dy*np.arange(ny)
             x, y = np.meshgrid(x, y)
             lons, lats = pj(x, y, inverse=True)
-        elif self['typeOfGrid'] in ['rotated_ll','rotated_gg']:
+        elif self['gridType'] in ['rotated_ll','rotated_gg']:
             rot_angle = self['angleOfRotationInDegrees']
             pole_lat = self['latitudeOfSouthernPoleInDegrees']
             pole_lon = self['longitudeOfSouthernPoleInDegrees']
@@ -1110,7 +1110,7 @@ cdef class gribmessage(object):
             pj = pyproj.Proj(projparams)
             lons,lats = pj(lonsr,latsr,inverse=True)
         else:
-            raise ValueError('unsupported grid %s' % self['typeOfGrid'])
+            raise ValueError('unsupported grid %s' % self['gridType'])
         self.projparams = projparams
         return lats, lons
 
