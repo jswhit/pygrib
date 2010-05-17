@@ -468,8 +468,11 @@ cdef class gribmessage(object):
             inventory.append(':'+self['units'])
         if self.has_key('stepType'):
             inventory.append(' ('+self['stepType']+')')
-        if self.has_key('typeOfGrid'):
-            inventory.append(':'+self['typeOfGrid'])
+        if self.has_key('typeOfGrid') or self.has_key('gridType'):
+            if self.has_key('typeOfGrid'):
+               inventory.append(':'+self['typeOfGrid'])
+            else:
+               inventory.append(':'+self['gridType'])
         if self.has_key('typeOfLevel'):
             inventory.append(':'+self['typeOfLevel'])
         if self.has_key('topLevel') and self.has_key('bottomLevel'):
