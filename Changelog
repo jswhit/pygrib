@@ -1,3 +1,5 @@
+version 1.7 - not yet released
+==============================
 * add missingvalue_int and missingvalue_float instance variables to open and
   index.
 * raise error if no keys are specified when creating index instance.
