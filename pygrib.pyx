@@ -1140,14 +1140,19 @@ Example usage:
 >>> grbindx.close()
 """
     cdef grib_index *_gi
-    cdef public object keys, types, filename
+    cdef public object keys, types, filename, missingvalue_int, \
+    missingvalue_float
     def __cinit__(self, filename, *args):
         # initialize C level objects.
         cdef grib_index *gi
         cdef int err
         cdef char *filenamec, *keys
         filenamec = PyString_AsString(filename)
+        if args == ():
+            raise ValueError('no keys specified for index')
         keys = PyString_AsString(','.join(args))
+        self.missingvalue_int = GRIB_MISSING_LONG
+        self.missingvalue_float = GRIB_MISSING_DOUBLE
         self._gi = grib_index_new_from_file (NULL, filenamec, keys, &err)
         if err:
             raise RuntimeError(grib_get_error_message(err))
