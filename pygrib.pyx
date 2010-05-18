@@ -273,12 +273,15 @@ cdef class open(object):
     @ivar filename: The GRIB file which the instance represents."""
     cdef FILE *_fd
     cdef grib_handle *_gh
-    cdef public object filename, messagenumber, messages
+    cdef public object filename, messagenumber, messages,  missingvalue_int,\
+    missingvalue_float
     def __cinit__(self, filename):
         # initialize C level objects.
         cdef grib_handle *gh
         cdef FILE *_fd
         self._fd = fopen(filename, "rb") 
+        self.missingvalue_int = GRIB_MISSING_LONG
+        self.missingvalue_float = GRIB_MISSING_DOUBLE
         if self._fd == NULL:
             raise IOError("could not open %s", filename)
         self._gh = NULL
