@@ -1,3 +1,7 @@
+* add missingvalue_int and missingvalue_float instance variables to open and
+  index.
+* raise error if no keys are specified when creating index instance.
+
 version 1.6.1 - svn revision 227
 ================================
 * only print ensemble info in __repr__ (which is called when 'print grb' is
