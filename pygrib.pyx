@@ -270,6 +270,12 @@ cdef class open(object):
     @ivar messagenumber: The grib message number that the iterator currently
     points to.
 
+    @ivar missingvalue_int:  Value given to an integer grib key whose data is
+    missing.
+
+    @ivar missingvalue_float:  Value given to an float grib key whose data is
+    missing.
+
     @ivar filename: The GRIB file which the instance represents."""
     cdef FILE *_fd
     cdef grib_handle *_gh
@@ -1141,6 +1147,18 @@ Example usage:
 >>>     print grb
 1:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 250:fcst time 72:from 200412091200:lo res cntl fcst
 >>> grbindx.close()
+
+@ivar keys: list of strings containing keys used in the index.
+
+@ivar types: if keys are typed, this list contains the type declarations
+(C{l}, C{s} or C{d}). Type declarations are specified by appending to the key
+name (i.e. C{level:l} will search for values of C{level} that are longs).
+
+@ivar missingvalue_int:  Value given to an integer grib key whose data is
+missing.
+
+@ivar missingvalue_float:  Value given to an float grib key whose data is
+missing.
 """
     cdef grib_index *_gi
     cdef public object keys, types, filename, missingvalue_int, \
