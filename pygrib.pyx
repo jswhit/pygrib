@@ -929,7 +929,13 @@ cdef class gribmessage(object):
                 dy = self['yDirectionGridLengthInMetres']
             projparams['proj']='stere'
             projparams['lat_ts']=self['latitudeWhereDxAndDyAreSpecifiedInDegrees']
-            if self['projectionCentreFlag'] == 0:
+            if self.has_key('projectionCentreFlag'):
+                projcenterflag = self['projectionCentreFlag']
+            elif self.has_key('projectionCenterFlag'):
+                projcenterflag = self['projectionCenterFlag']
+            else:
+                raise KeyError('cannot find projection center flag')
+            if projcenterflag == 0:
                 projparams['lat_0']=90.
             else:
                 projparams['lat_0']=-90.
