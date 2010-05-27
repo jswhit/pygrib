@@ -1,5 +1,6 @@
 version 1.7 - not yet released
 ==============================
+* fix bug in handling of scale factor for radius of the earth.
 * some grids use the key "projectionCentreFlag",
   while some use "projectionCenterFlag". Account for 
   both possibilities (added to test_stere.py).

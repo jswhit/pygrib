@@ -841,24 +841,24 @@ cdef class gribmessage(object):
         """
         projparams = {}
 
-        if self.has_key('scaleFactorOfMajorAxisOfOblateSpheroidEarth'):
-            scalea = self['scaleFactorOfMajorAxisOfOblateSpheroidEarth']
-            scaleb = self['scaleFactorOfMinorAxisOfOblateSpheroidEarth']
-            if scalea and scalea is not self.missingvalue_int:
-                scalea = 1000.*np.power(10.0,-scalea)
-            else:
-                scalea = 1
-            if scaleb and scaleb is not self.missingvalue_int:
-                scaleb = 1000.*np.power(10.0,-scaleb)
-            else:
-                scaleb = 1.
-        else:
-            scalea = 1.
-            scaleb = 1.
         if self['shapeOfTheEarth'] == 6:
             projparams['a']=self['radius']
             projparams['b']=self['radius']
         elif self['shapeOfTheEarth'] in [3,7]:
+            if self.has_key('scaleFactorOfMajorAxisOfOblateSpheroidEarth'):
+                scalea = self['scaleFactorOfMajorAxisOfOblateSpheroidEarth']
+                scaleb = self['scaleFactorOfMinorAxisOfOblateSpheroidEarth']
+                if scalea and scalea is not self.missingvalue_int:
+                    scalea = 1000.*np.power(10.0,-scalea)
+                else:
+                    scalea = 1
+                if scaleb and scaleb is not self.missingvalue_int:
+                    scaleb = 1000.*np.power(10.0,-scaleb)
+                else:
+                    scaleb = 1.
+            else:
+                scalea = 1.
+                scaleb = 1.
             if api_version() < 10900:
                 projparams['a']=self['scaledValueOfMajorAxisOfOblateSpheroidEarth']*scalea
                 projparams['b']=self['scaledValueOfMinorAxisOfOblateSpheroidEarth']*scaleb
@@ -869,6 +869,16 @@ cdef class gribmessage(object):
             projparams['a']=6378160.0
             projparams['b']=6356775.0 
         elif self['shapeOfTheEarth'] == 1:
+            if self.has_key('scaleFactorOfRadiusOfSphericalEarth'):
+                scalea = self['scaleFactorOfRadiusOfSphericalEarth']
+                if scalea and scalea is not self.missingvalue_int:
+                    scalea = np.power(10.0,-scalea)
+                else:
+                    scalea = 1
+                scaleb = scalea
+            else:
+                scalea = 1.
+                scaleb = 1.
             projparams['a']=self['scaledValueOfRadiusOfSphericalEarth']*scalea
             projparams['b']=self['scaledValueOfRadiusOfSphericalEarth']*scaleb
         elif self['shapeOfTheEarth'] == 0:
