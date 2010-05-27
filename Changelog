@@ -1,5 +1,7 @@
 version 1.7 - not yet released
 ==============================
+* assume earth radius must be O(10**6) meters, include fix if scale
+  factor in grib file is wrong (as it is in sampledata/safrica.grib2).
 * fix bug in handling of scale factor for radius of the earth.
 * some grids use the key "projectionCentreFlag",
   while some use "projectionCenterFlag". Account for 

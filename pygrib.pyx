@@ -865,6 +865,18 @@ cdef class gribmessage(object):
             else:
                 projparams['a']=self['scaledValueOfEarthMajorAxis']*scalea
                 projparams['b']=self['scaledValueOfEarthMinorAxis']*scaleb
+            # check to make sure scale factor wasn't screwed up
+            # (assume earth radius should be O(10**6) meters)
+            dec_scale = int(np.log10(projparams['a']))
+            if dec_scale != 6:
+                dec_scale = 6-dec_scale
+                rescale = np.power(10.0,dec_scale)
+                projparams['a'] = rescale*projparams['a']
+            dec_scale = int(np.log10(projparams['b']))
+            if dec_scale != 6:
+                dec_scale = 6-dec_scale
+                rescale = np.power(10.0,dec_scale)
+                projparams['a'] = rescale*projparams['b']
         elif self['shapeOfTheEarth'] == 2:
             projparams['a']=6378160.0
             projparams['b']=6356775.0 
@@ -881,6 +893,14 @@ cdef class gribmessage(object):
                 scaleb = 1.
             projparams['a']=self['scaledValueOfRadiusOfSphericalEarth']*scalea
             projparams['b']=self['scaledValueOfRadiusOfSphericalEarth']*scaleb
+            # check to make sure scale factor wasn't screwed up
+            # (assume earth radius should be O(10**6) meters)
+            dec_scale = int(np.log10(projparams['a']))
+            if dec_scale != 6:
+                dec_scale = 6-dec_scale
+                rescale = np.power(10.0,dec_scale)
+                projparams['a'] = rescale*projparams['a']
+                projparams['b'] = rescale*projparams['b']
         elif self['shapeOfTheEarth'] == 0:
             projparams['a']=6367470.0
             projparams['b']=6367470.0
