@@ -842,18 +842,22 @@ cdef class gribmessage(object):
         projparams = {}
 
         if self['shapeOfTheEarth'] == 6:
-            projparams['a']=self['radius']
-            projparams['b']=self['radius']
+            projparams['a']=6371229.0
+            projparams['b']=6371229.0
         elif self['shapeOfTheEarth'] in [3,7]:
             if self.has_key('scaleFactorOfMajorAxisOfOblateSpheroidEarth'):
                 scalea = self['scaleFactorOfMajorAxisOfOblateSpheroidEarth']
                 scaleb = self['scaleFactorOfMinorAxisOfOblateSpheroidEarth']
                 if scalea and scalea is not self.missingvalue_int:
-                    scalea = 1000.*np.power(10.0,-scalea)
+                    scalea = np.power(10.0,-scalea)
+                    if self['shapeOfTheEarth'] == 3: # radius in km
+                        scalea = 1000.*scalea
                 else:
                     scalea = 1
                 if scaleb and scaleb is not self.missingvalue_int:
-                    scaleb = 1000.*np.power(10.0,-scaleb)
+                    scaleb = np.power(10.0,-scaleb)
+                    if self['shapeOfTheEarth'] == 3: # radius in km
+                        scaleb = 1000.*scaleb
                 else:
                     scaleb = 1.
             else:
