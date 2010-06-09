@@ -38,9 +38,12 @@ Installation
  jasper should be found in C{$JASPER_DIR/include} or
  C{$JASPER_DIR/include/jasper}, and the jasper
  library should be found in C{$JASPER_DIR/lib} or C{$JASPER_DIR/lib64}. If any of
- those environment  variables are not set, then the default search paths will be used.  
+ those environment variables are not set, then the default search paths will be used.  
  If the GRIB API library was compiled without JASPER, PNG or OpenJPEG support, then the 
- corresponding environment variable need not be set.
+ corresponding environment variable need not be set. If the libraries and
+ include files are installed in separate locations, the environment variables
+ C{$GRIBAPI_INCDIR} and C{$GRIBAPI_LIBDIR} can be used to define the locations
+ separately (same goes for C{JASPER}, C{OPENJPEG}, C{PNG} and C{ZLIB}).
  - Run 'python setup.py install', as root if necessary.
  - Run 'python test.py' to test your installation.
 
@@ -871,16 +874,16 @@ cdef class gribmessage(object):
                 projparams['b']=self['scaledValueOfEarthMinorAxis']*scaleb
             # check to make sure scale factor wasn't screwed up
             # (assume earth radius should be O(10**6) meters)
-            dec_scale = int(np.log10(projparams['a']))
-            if dec_scale != 6:
-                dec_scale = 6-dec_scale
-                rescale = np.power(10.0,dec_scale)
-                projparams['a'] = rescale*projparams['a']
-            dec_scale = int(np.log10(projparams['b']))
-            if dec_scale != 6:
-                dec_scale = 6-dec_scale
-                rescale = np.power(10.0,dec_scale)
-                projparams['a'] = rescale*projparams['b']
+            #dec_scale = int(np.log10(projparams['a']))
+            #if dec_scale != 6:
+            #    dec_scale = 6-dec_scale
+            #    rescale = np.power(10.0,dec_scale)
+            #    projparams['a'] = rescale*projparams['a']
+            #dec_scale = int(np.log10(projparams['b']))
+            #if dec_scale != 6:
+            #    dec_scale = 6-dec_scale
+            #    rescale = np.power(10.0,dec_scale)
+            #    projparams['b'] = rescale*projparams['b']
         elif self['shapeOfTheEarth'] == 2:
             projparams['a']=6378160.0
             projparams['b']=6356775.0 
@@ -899,12 +902,12 @@ cdef class gribmessage(object):
             projparams['b']=self['scaledValueOfRadiusOfSphericalEarth']*scaleb
             # check to make sure scale factor wasn't screwed up
             # (assume earth radius should be O(10**6) meters)
-            dec_scale = int(np.log10(projparams['a']))
-            if dec_scale != 6:
-                dec_scale = 6-dec_scale
-                rescale = np.power(10.0,dec_scale)
-                projparams['a'] = rescale*projparams['a']
-                projparams['b'] = rescale*projparams['b']
+            #dec_scale = int(np.log10(projparams['a']))
+            #if dec_scale != 6:
+            #    dec_scale = 6-dec_scale
+            #    rescale = np.power(10.0,dec_scale)
+            #    projparams['a'] = rescale*projparams['a']
+            #    projparams['b'] = rescale*projparams['b']
         elif self['shapeOfTheEarth'] == 0:
             projparams['a']=6367470.0
             projparams['b']=6367470.0
