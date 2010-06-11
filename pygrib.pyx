@@ -251,18 +251,9 @@ cdef extern from "grib_api.h":
     #grib_index* grib_index_read(grib_context* c, char* filename,int *err)
 
 
-cpdef api_version():
-    """
-    api_version()
-
-    return an integer representing the GRIB_API library version.
-    GRIB_API_VERSION=GRIB_API_MAJOR_VERSION*10000+GRIB_API_MINOR_VERSION*100+GRIB_API_REVISION_VERSION"""
-    cdef int grib_api_version
-    grib_api_version = grib_get_api_version()
-    return grib_api_version
-
 missingvalue_int = GRIB_MISSING_LONG
 missingvalue_float = GRIB_MISSING_DOUBLE
+grib_api_version = grib_get_api_version()
 
 cdef class open(object):
     """ 
@@ -852,7 +843,7 @@ cdef class gribmessage(object):
             else:
                 scalea = 1.
                 scaleb = 1.
-            if api_version() < 10900:
+            if grib_api_version < 10900:
                 projparams['a']=self['scaledValueOfMajorAxisOfOblateSpheroidEarth']*scalea
                 projparams['b']=self['scaledValueOfMinorAxisOfOblateSpheroidEarth']*scaleb
             else:

@@ -1,5 +1,6 @@
-version 1.7 - svn revision 246
+version 1.7 - svn revision 248
 ==============================
+* grib_api_version module variable contains version info for grib_api lib.
 * added *_LIBDIR and *_INCDIR env vars to setup.py for more flexible
   specification of library and include dir locations.
 * fix bugs in handling of scale factor for radius of the earth.
