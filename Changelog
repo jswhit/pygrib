@@ -6,8 +6,8 @@ version 1.7 - svn revision 246
 * some grids use the key "projectionCentreFlag",
   while some use "projectionCenterFlag". Account for 
   both possibilities (added to test_stere.py).
-* add missingvalue_int and missingvalue_float instance variables to open and
-  index.
+* missingvalue_int and missingvalue_float are now module variables
+  (not instance variables).
 * raise error if no keys are specified when creating index instance.
 
 version 1.6.1 - svn revision 227

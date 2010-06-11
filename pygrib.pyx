@@ -261,6 +261,9 @@ cpdef api_version():
     grib_api_version = grib_get_api_version()
     return grib_api_version
 
+missingvalue_int = GRIB_MISSING_LONG
+missingvalue_float = GRIB_MISSING_DOUBLE
+
 cdef class open(object):
     """ 
     open(filename)
@@ -273,24 +276,15 @@ cdef class open(object):
     @ivar messagenumber: The grib message number that the iterator currently
     points to.
 
-    @ivar missingvalue_int:  Value given to an integer grib key whose data is
-    missing.
-
-    @ivar missingvalue_float:  Value given to an float grib key whose data is
-    missing.
-
     @ivar filename: The GRIB file which the instance represents."""
     cdef FILE *_fd
     cdef grib_handle *_gh
-    cdef public object filename, messagenumber, messages,  missingvalue_int,\
-    missingvalue_float
+    cdef public object filename, messagenumber, messages
     def __cinit__(self, filename):
         # initialize C level objects.
         cdef grib_handle *gh
         cdef FILE *_fd
         self._fd = fopen(filename, "rb") 
-        self.missingvalue_int = GRIB_MISSING_LONG
-        self.missingvalue_float = GRIB_MISSING_DOUBLE
         if self._fd == NULL:
             raise IOError("could not open %s", filename)
         self._gh = NULL
@@ -413,14 +407,12 @@ Example usage:
 # keep track of python gribmessage attributes so they can be
 # distinguished from grib keys.
 _private_atts =\
-['_gh','expand_reduced','projparams','missingvalue_int','missingvalue_float','messagenumber','_all_keys','_ro_keys']
+['_gh','expand_reduced','projparams','messagenumber','_all_keys','_ro_keys']
 
 cdef _create_gribmessage(grib_handle *gh, object messagenumber):
     """factory function for creating gribmessage instances"""
     cdef gribmessage grb  = gribmessage.__new__(gribmessage)
     grb.messagenumber = messagenumber
-    grb.missingvalue_int = GRIB_MISSING_LONG
-    grb.missingvalue_float = GRIB_MISSING_DOUBLE
     grb.expand_reduced = True
     grb._gh = grib_handle_clone(gh)
     grb._all_keys = grb.keys()
@@ -439,16 +431,10 @@ cdef class gribmessage(object):
     @ivar expand_reduced:  If True (default), reduced lat/lon and gaussian grids
     will be expanded to regular grids when data is accessed via "values" key. If
     False, data is kept on unstructured reduced grid, and is returned in a 1-d
-    array.
-
-    @ivar missingvalue_int:  Value given to an integer grib key whose data is
-    missing.
-
-    @ivar missingvalue_float:  Value given to an float grib key whose data is
-    missing."""
+    array."""
     cdef grib_handle *_gh
-    cdef public messagenumber, projparams, missingvalue_int,\
-    missingvalue_float, expand_reduced, _ro_keys, _all_keys
+    cdef public messagenumber, projparams,\
+    expand_reduced, _ro_keys, _all_keys
     def __init__(self):
         # calling "__new__()" will not call "__init__()" !
         raise TypeError("This class cannot be instantiated from Python")
@@ -851,13 +837,13 @@ cdef class gribmessage(object):
             if self.has_key('scaleFactorOfMajorAxisOfOblateSpheroidEarth'):
                 scalea = self['scaleFactorOfMajorAxisOfOblateSpheroidEarth']
                 scaleb = self['scaleFactorOfMinorAxisOfOblateSpheroidEarth']
-                if scalea and scalea is not self.missingvalue_int:
+                if scalea and scalea is not missingvalue_int:
                     scalea = np.power(10.0,-scalea)
                     if self['shapeOfTheEarth'] == 3: # radius in km
                         scalea = 1000.*scalea
                 else:
                     scalea = 1
-                if scaleb and scaleb is not self.missingvalue_int:
+                if scaleb and scaleb is not missingvalue_int:
                     scaleb = np.power(10.0,-scaleb)
                     if self['shapeOfTheEarth'] == 3: # radius in km
                         scaleb = 1000.*scaleb
@@ -890,7 +876,7 @@ cdef class gribmessage(object):
         elif self['shapeOfTheEarth'] == 1:
             if self.has_key('scaleFactorOfRadiusOfSphericalEarth'):
                 scalea = self['scaleFactorOfRadiusOfSphericalEarth']
-                if scalea and scalea is not self.missingvalue_int:
+                if scalea and scalea is not missingvalue_int:
                     scalea = np.power(10.0,-scalea)
                 else:
                     scalea = 1
@@ -1196,16 +1182,9 @@ Example usage:
 @ivar types: if keys are typed, this list contains the type declarations
 (C{l}, C{s} or C{d}). Type declarations are specified by appending to the key
 name (i.e. C{level:l} will search for values of C{level} that are longs).
-
-@ivar missingvalue_int:  Value given to an integer grib key whose data is
-missing.
-
-@ivar missingvalue_float:  Value given to an float grib key whose data is
-missing.
 """
     cdef grib_index *_gi
-    cdef public object keys, types, filename, missingvalue_int, \
-    missingvalue_float
+    cdef public object keys, types, filename
     def __cinit__(self, filename, *args):
         # initialize C level objects.
         cdef grib_index *gi
@@ -1215,8 +1194,6 @@ missing.
         if args == ():
             raise ValueError('no keys specified for index')
         keys = PyString_AsString(','.join(args))
-        self.missingvalue_int = GRIB_MISSING_LONG
-        self.missingvalue_float = GRIB_MISSING_DOUBLE
         self._gi = grib_index_new_from_file (NULL, filenamec, keys, &err)
         if err:
             raise RuntimeError(grib_get_error_message(err))
