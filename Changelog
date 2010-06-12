@@ -1,5 +1,7 @@
-version 1.7 - svn revision 248
+version 1.7 - svn revision 249
 ==============================
+* added is_missing grib message method (to check if the value associated
+  with a key is set to the grib missing value constant).
 * grib_api_version module variable contains version info for grib_api lib.
 * added *_LIBDIR and *_INCDIR env vars to setup.py for more flexible
   specification of library and include dir locations.

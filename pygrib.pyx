@@ -244,6 +244,7 @@ cdef extern from "grib_api.h":
     int grib_index_select_string(grib_index* index,char* key,char* value)
     grib_handle* grib_handle_new_from_index(grib_index* index,int *err)
     void grib_index_delete(grib_index* index)
+    int grib_is_missing(grib_handle* h, char* key, int* err)
     # new in 1.9.0
     #grib_index* grib_index_new(grib_context* c, char* keys,int *err)
     #int grib_index_add_file(grib_index *index, const char *filename)
@@ -252,7 +253,9 @@ cdef extern from "grib_api.h":
 
 
 missingvalue_int = GRIB_MISSING_LONG
-missingvalue_float = GRIB_MISSING_DOUBLE
+#this doesn't work, since defined constants are assumed to be integers
+#missingvalue_float = GRIB_MISSING_DOUBLE
+missingvalue_float = -1.e100 # value given in grib_api.h for 1.90
 grib_api_version = grib_get_api_version()
 
 cdef class open(object):
@@ -499,6 +502,22 @@ cdef class gribmessage(object):
             elif ens_type == 3:
                inventory.append(":pos ens pert %d" % pert_num)
         return ''.join(inventory)
+    def is_missing(self,key):
+        """
+        is_missing(key)
+
+        returns True is value associated with key is equal
+        to grib missing value flag (False otherwise)"""
+        cdef int err,miss
+        cdef char *name
+        name = PyString_AsString(key)
+        miss = grib_is_missing(self._gh, name, &err)
+        if err:
+            raise RuntimeError(grib_get_error_message(err))
+        if miss:
+            return True
+        else:
+            return False
     def keys(self):
         """
         keys()
