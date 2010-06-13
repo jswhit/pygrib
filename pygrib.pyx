@@ -255,7 +255,7 @@ cdef extern from "grib_api.h":
 missingvalue_int = GRIB_MISSING_LONG
 #this doesn't work, since defined constants are assumed to be integers
 #missingvalue_float = GRIB_MISSING_DOUBLE
-missingvalue_float = -1.e100 # value given in grib_api.h for 1.90
+missingvalue_float = -1.e100 # value given in grib_api.h version 1.90
 grib_api_version = grib_get_api_version()
 
 cdef class open(object):
@@ -506,7 +506,7 @@ cdef class gribmessage(object):
         """
         is_missing(key)
 
-        returns True is value associated with key is equal
+        returns True if value associated with key is equal
         to grib missing value flag (False otherwise)"""
         cdef int err,miss
         cdef char *name
