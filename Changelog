@@ -1,4 +1,4 @@
-version 1.7 - svn revision 249
+version 1.7 - svn revision 251
 ==============================
 * added is_missing grib message method (to check if the value associated
   with a key is set to the grib missing value constant).
