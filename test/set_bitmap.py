@@ -1,6 +1,6 @@
 import pygrib
 
-print 'grib_api version =',pygrib.api_version()
+print 'grib_api version =',pygrib.grib_api_version
 grib1 = False
 if grib1:
     infile = '../sampledata/regular_latlon_surface.grib1'
