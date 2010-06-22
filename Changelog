@@ -1,3 +1,5 @@
+* fix setup.py to reference zlib as "-lz", not "-lzlib" (issue 9).
+
 version 1.7 - svn revision 251
 ==============================
 * added is_missing grib message method (to check if the value associated

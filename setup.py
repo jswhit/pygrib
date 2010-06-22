@@ -54,7 +54,7 @@ if png_incdir is None and png_dir is not None:
     incdirs.append(os.path.join(png_dir,'include'))
 
 if zlib_dir is not None or zlib_libdir is not None:
-    libraries.append("zlib")
+    libraries.append("z")
 if zlib_libdir is None and zlib_dir is not None: 
     libdirs.append(os.path.join(zlib_dir,'lib'))
     libdirs.append(os.path.join(zlib_dir,'lib64'))
