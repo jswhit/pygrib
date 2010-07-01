@@ -1,5 +1,7 @@
-version 1.7.1 - svn revision 254
+version 1.7.1 - svn revision 255
 ================================
+* made grib_list more robust (prints "NOT FOUND" when there is an error
+  reading the value for a key).
 * fix setup.py to reference zlib as "-lz", not "-lzlib" (issue 9).
 
 version 1.7 - svn revision 251

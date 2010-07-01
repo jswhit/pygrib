@@ -21,5 +21,9 @@ else:
             if grb.is_missing(k):
                 print k,'= MISSING'
             else:
-                print k,'=',grb[k]
+                try:
+                    grb[k]
+                    print k,'=',grb[k]
+                except:
+                    print k,'= NOT FOUND'
 grbs.close()
