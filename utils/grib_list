@@ -22,8 +22,8 @@ else:
                 print k,'= MISSING'
             else:
                 try:
-                    grb[k]
-                    print k,'=',grb[k]
+                    v = grb[k]
+                    print k,'=',v
                 except:
                     print k,'= NOT FOUND'
 grbs.close()
