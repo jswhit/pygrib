@@ -17,7 +17,7 @@ else:
         print '------message %d------' %grb.messagenumber
         for k in grb.keys():
             if k.startswith('mars'): continue
-            if k == 'values' or k == 'codedValues': continue
+            if k in ['values','codedValues','packedValues','unpackedValues']: continue
             if grb.is_missing(k):
                 print k,'= MISSING'
             else:
