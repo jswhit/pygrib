@@ -124,7 +124,7 @@ Changelog
 
 @contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
 
-@version: 1.7
+@version: 1.7.1
 
 @copyright: copyright 2010 by Jeffrey Whitaker.
 
@@ -142,7 +142,7 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE."""
 __test__ = None
 del __test__ # hack so epydoc doesn't show __test__
-__version__ = '1.7'
+__version__ = '1.7.1'
 
 import numpy as np
 from numpy import ma
