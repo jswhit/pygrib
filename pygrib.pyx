@@ -14,7 +14,7 @@ from the European Centre for Medium-Range Weather Forecasts
 Required
 ========
 
-- U{Python<http://python.org>} 2.4 or higher.  
+- U{Python<http://python.org>} 2.5 or higher.  
 - U{numpy<http://sourceforge.net/project/showfiles.php?group_id=1369>}
   N-dimensional array object for python. Version 1.2.1 or higher.
 - U{pyproj<http://code.google.com/p/pyproj/>} Python interface to 
