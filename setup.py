@@ -63,7 +63,7 @@ if zlib_incdir is None and zlib_dir is not None:
 
 setup(name = "pygrib",
       version = "1.7.1",
-      description       = "Python module for reading GRIB files",
+      description       = "Python module for reading/writing GRIB files",
       author            = "Jeff Whitaker",
       author_email      = "jeffrey.s.whitaker@noaa.gov",
       url               = "http://code.google.com/p/pygrib",

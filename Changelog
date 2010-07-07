@@ -1,4 +1,4 @@
-version 1.7.1 - svn revision 256
+version 1.7.1 - svn revision 261
 ================================
 * reduced verbosity of grib_list.
 * made grib_list more robust (prints "NOT FOUND" when there is an error
