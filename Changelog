@@ -1,8 +1,11 @@
-version 1.7.1 - svn revision 261
+version 1.7.1 - svn revision 262
 ================================
 * reduced verbosity of grib_list.
 * made grib_list more robust (prints "NOT FOUND" when there is an error
   reading the value for a key).
+* allow for specifying header and library directories separately
+  (e.g. GRIBAPI_INCDIR and GRIBAPI_LIBDIR env vars, instead of just
+  GRIBAPI_DIR)
 * fix setup.py to reference zlib as "-lz", not "-lzlib" (issue 9).
 
 version 1.7 - svn revision 251
