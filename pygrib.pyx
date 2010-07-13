@@ -18,7 +18,10 @@ Required
 - U{numpy<http://sourceforge.net/project/showfiles.php?group_id=1369>}
   N-dimensional array object for python. Version 1.2.1 or higher.
 - U{pyproj<http://code.google.com/p/pyproj/>} Python interface to 
-  U{PROJ.4<http://trac.osgeo.org/proj>} library for cartographic transformations.
+  U{PROJ.4<http://trac.osgeo.org/proj>} library for cartographic
+  transformations B{or} U{matplotlib<http://matplotlib.sf.net>} and
+  the U{basemap<http://matplotlib.sf.net/basemap/doc/html>} toolkit.
+  
 - U{GRIB API<http://www.ecmwf.int/products/data/software/grib_api.html>} C library
   for encoding and decoding GRIB messages (edition 1 and edition 2).
   Version 1.8.0 or higher required.
@@ -146,7 +149,13 @@ __version__ = '1.7.1'
 
 import numpy as np
 from numpy import ma
-import pyproj
+try:
+    import pyproj
+except ImportError:
+    try:
+        from mpl_toolkits.basemap import pyproj
+    except:
+        raise ImportError("either pyproj or basemap required")
 import_array()
 
 cdef extern from "stdlib.h":

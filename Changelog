@@ -1,5 +1,7 @@
-version 1.7.1 - svn revision 262
+version 1.7.1 - svn revision 263
 ================================
+* try to import pyproj, and if that fails try to import pyproj
+  from mpl_toolkits.basemap.
 * reduced verbosity of grib_list.
 * made grib_list more robust (prints "NOT FOUND" when there is an error
   reading the value for a key).
