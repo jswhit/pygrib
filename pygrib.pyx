@@ -481,25 +481,31 @@ cdef class gribmessage(object):
             levunits = 'unknown'
             if self.has_key('unitsOfFirstFixedSurface'):
                 levunits = self['unitsOfFirstFixedSurface']
-            if self['typeOfFirstFixedSurface'] != 255:
+            if self.has_key('typeOfFirstFixedSurface') and self['typeOfFirstFixedSurface'] != 255:
                 toplev = self['topLevel']
                 if self.has_key('scaledValueOfFirstFixedSurface') and\
                    self.has_key('scaleFactorOfFirstFixedSurface'):     
-                   toplev = self['scaledValueOfFirstFixedSurface']/\
-                            np.power(10.0,self['scaleFactorOfFirstFixedSurface'])
-            if self['typeOfSecondFixedSurface'] != 255:
+                   if self['scaleFactorOfFirstFixedSurface']:
+                       toplev = self['scaledValueOfFirstFixedSurface']/\
+                                np.power(10.0,self['scaleFactorOfFirstFixedSurface'])
+                   else:
+                       toplev = self['scaledValueOfFirstFixedSurface']
+            if self.has_key('typeOfSecondFixedSurface') and self['typeOfSecondFixedSurface'] != 255:
                 botlev = self['bottomLevel']
                 if self.has_key('scaledValueOfSecondFixedSurface') and\
                    self.has_key('scaleFactorOfSecondFixedSurface'):     
-                   botlev = self['scaledValueOfSecondFixedSurface']/\
-                            np.power(10.0,self['scaleFactorOfSecondFixedSurface'])
+                   if self['scaleFactorOfSecondFixedSurface']:
+                       botlev = self['scaledValueOfSecondFixedSurface']/\
+                                np.power(10.0,self['scaleFactorOfSecondFixedSurface'])
+                   else:
+                       botlev = self['scaledValueOfSecondFixedSurface']
+            levstring = None
             if botlev is None or toplev == botlev:
                 levstring = ':level %s' % toplev
             else:
                 levstring = ':levels %s-%s' % (toplev,botlev)
-            if levunits != 'unknown':
+            if levunits != 'unknown' and type(levunits) != int:
                 levstring = levstring+' %s' % levunits
-            inventory.append(levstring)
         elif self.has_key('level'):
             inventory.append(':level %s' % toplev)
         if self.has_key('stepRange'):
@@ -750,7 +756,10 @@ cdef class gribmessage(object):
 
         tests whether a grib message object has a specified key.
         """
-        return key in self._all_keys
+        ret =  key in self._all_keys
+        # if key exists, but value is missing, return False.
+        if ret and self.is_missing(key): ret = False
+        return ret
     def tostring(self):
         """
         tostring()
