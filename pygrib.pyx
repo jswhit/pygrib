@@ -504,8 +504,10 @@ cdef class gribmessage(object):
                 levstring = ':level %s' % toplev
             else:
                 levstring = ':levels %s-%s' % (toplev,botlev)
-            if levunits != 'unknown' and type(levunits) != int:
+            if levunits != 'unknown':
                 levstring = levstring+' %s' % levunits
+            if levstring is not None:
+                inventory.append(levstring)
         elif self.has_key('level'):
             inventory.append(':level %s' % toplev)
         if self.has_key('stepRange'):
