@@ -509,7 +509,7 @@ cdef class gribmessage(object):
             if levstring is not None:
                 inventory.append(levstring)
         elif self.has_key('level'):
-            inventory.append(':level %s' % toplev)
+            inventory.append(':level %s' % self['level'])
         if self.has_key('stepRange'):
             ftime = self['stepRange']
             inventory.append(':fcst time '+ftime)
