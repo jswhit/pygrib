@@ -1,3 +1,6 @@
+* gribmessage __repr__ provides more useful level information (including
+  units).
+
 version 1.7.1 - svn revision 263
 ================================
 * try to import pyproj, and if that fails try to import pyproj

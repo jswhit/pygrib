@@ -477,15 +477,31 @@ cdef class gribmessage(object):
         if self.has_key('typeOfLevel'):
             inventory.append(':'+self['typeOfLevel'])
         if self.has_key('topLevel') and self.has_key('bottomLevel'):
-            toplev = self['topLevel']
-            botlev = self['bottomLevel']
-            if toplev == botlev:
-                inventory.append(':level '+repr(toplev))
+            toplev = None; botlev = None
+            levunits = 'unknown'
+            if self.has_key('unitsOfFirstFixedSurface'):
+                levunits = self['unitsOfFirstFixedSurface']
+            if self['typeOfFirstFixedSurface'] != 255:
+                toplev = self['topLevel']
+                if self.has_key('scaledValueOfFirstFixedSurface') and\
+                   self.has_key('scaleFactorOfFirstFixedSurface'):     
+                   toplev = self['scaledValueOfFirstFixedSurface']/\
+                            np.power(10.0,self['scaleFactorOfFirstFixedSurface'])
+            if self['typeOfSecondFixedSurface'] != 255:
+                botlev = self['bottomLevel']
+                if self.has_key('scaledValueOfSecondFixedSurface') and\
+                   self.has_key('scaleFactorOfSecondFixedSurface'):     
+                   botlev = self['scaledValueOfSecondFixedSurface']/\
+                            np.power(10.0,self['scaleFactorOfSecondFixedSurface'])
+            if botlev is None or toplev == botlev:
+                levstring = ':level %s' % toplev
             else:
-                inventory.append(':levels '+repr(self['topLevel'])+\
-                '-'+repr(self['bottomLevel']))
+                levstring = ':levels %s-%s' % (toplev,botlev)
+            if levunits != 'unknown':
+                levstring = levstring+' %s' % levunits
+            inventory.append(levstring)
         elif self.has_key('level'):
-            inventory.append(':level '+repr(self['level']))
+            inventory.append(':level %s' % toplev)
         if self.has_key('stepRange'):
             ftime = self['stepRange']
             inventory.append(':fcst time '+ftime)
