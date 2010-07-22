@@ -14,12 +14,12 @@ def test():
     iterate over rest of grib messages.
     >>> for grb in grbs: print grb
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
-    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
-    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
+    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
 
     iterator now positioned at last message
     >>> print grb
-    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
 
     grb1 is still first grib message
     >>> print grb1
@@ -30,14 +30,14 @@ def test():
     >>> for grb in grbs: print grb
     1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120:from 200402291200
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
-    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
-    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
+    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
 
     get a specific grib message from the iterator.
     iterator will be positioned at this message.
     >>> grb = grbs.message(3) 
     >>> print grb # 3rd message
-    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
 
     indexing iterator with an integer key has the same result
     >>> grb = grbs[2] # 2nd message
@@ -47,31 +47,31 @@ def test():
     position iterator at next grib message.
     >>> grb = grbs.next() 
     >>> print grb # 3rd message
-    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
 
     now the iterator should be positioned at the last (4th) message.
     >>> for grb in grbs: print grb # only last message printed.
-    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
 
     use select method to choose grib messages based upon specified key/value pairs.
     >>> selected_grbs = grbs.select(level=2,typeOfLevel='heightAboveGround') # get all 2-m level fields
     >>> for grb in selected_grbs: print grb
-    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
-    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
+    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
 
     or create grib index instance for faster searching
     >>> grbindx = pygrib.index('sampledata/flux.grb','name','typeOfLevel','level')
     >>> selgrbs = grbindx(name='Minimum temperature',level=2,typeOfLevel='heightAboveGround')
     >>> for grb in selgrbs: print grb
-    1:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+    1:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
     >>> selgrbs = grbindx(name='Maximum temperature',level=2,typeOfLevel='heightAboveGround')
     >>> for grb in selgrbs: print grb
-    1:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+    1:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
     >>> grbindx.close()
 
     >>> grb = selgrbs[0]
     >>> print grb
-    1:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+    1:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
 
     get the data and the lat/lon values of the Max temp grid 
     >>> data = grb['values'] # 'values' returns the data
