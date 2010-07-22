@@ -62,7 +62,7 @@ if zlib_incdir is None and zlib_dir is not None:
     incdirs.append(os.path.join(zlib_dir,'include'))
 
 setup(name = "pygrib",
-      version = "1.7.1",
+      version = "1.7.2",
       description       = "Python module for reading/writing GRIB files",
       author            = "Jeff Whitaker",
       author_email      = "jeffrey.s.whitaker@noaa.gov",
