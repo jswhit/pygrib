@@ -63,8 +63,8 @@ Example usage
     >>>     print grb 
     1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120:from 200402291200
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
-    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
-    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
+    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
  - find the first grib message with a matching name::
     >>> for grb in grbs:
     >>>     if grb['name'] == 'Maximum temperature': break
@@ -88,12 +88,12 @@ Example usage
  - use L{open.select} to choose grib messages based upon specified key/value pairs::
     >>> selected_grbs = grbs.select(level=2,typeOfLevel='heightAboveGround') # get all 2-m level fields
     >>> for grb in selected_grbs: print grb
-    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
-    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
+    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
  - get the third grib message::
     >>> grb = grbs.message(3)
     >>> print grb
-    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2:fcst time 108-120:from 200402291200
+    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
  - indexing with integer key is the same as calling the message method::
     >>> grb = grbs[2]
     >>> print grb
@@ -1252,12 +1252,12 @@ Example usage:
 >>> selected_grbs=grbindx.select(shortName='gh',typeOfLevel='isobaricInhPa',level=500)
 >>> for grb in selected_grbs:
 >>>     print grb
-1:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 500:fcst time 72:from 200412091200:lo res cntl fcst
+1:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 500 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 >>> # __call__ method does same thing as select
 >>> selected_grbs=grbindx(shortName='u',typeOfLevel='isobaricInhPa',level=250)
 >>> for grb in selected_grbs:
 >>>     print grb
-1:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 250:fcst time 72:from 200412091200:lo res cntl fcst
+1:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 250 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 >>> grbindx.close()
 
 @ivar keys: list of strings containing keys used in the index.
@@ -1314,12 +1314,12 @@ Example usage:
 >>> selected_grbs=grbindx.select(shortName='gh',typeOfLevel='isobaricInhPa',level=500)
 >>> for grb in selected_grbs:
 >>>     print grb
-1:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 500:fcst time 72:from 200412091200:lo res cntl fcst
+1:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 500 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 >>> # __call__ method does same thing as select
 >>> selected_grbs=grbindx(shortName='u',typeOfLevel='isobaricInhPa',level=250)
 >>> for grb in selected_grbs:
 >>>     print grb
-1:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 250:fcst time 72:from 200412091200:lo res cntl fcst
+1:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 250 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 >>> grbindx.close()
 """
         cdef grib_handle *gh
