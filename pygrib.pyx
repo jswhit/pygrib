@@ -566,11 +566,11 @@ cdef class gribmessage(object):
                    upperlim = self['scaledValueOfUpperLimit']/\
                               np.power(10.0,self['scaleFactorOfUpperLimit'])
             if upperlim is not None and lowerlim is not None:
-                inventory.append("(%s-%s)" % (upperlim,lowerlim))
+                inventory.append(" (%s-%s)" % (upperlim,lowerlim))
             elif upperlim is not None:
-                inventory.append("(> %s)" % upperlim)
+                inventory.append(" (> %s)" % upperlim)
             elif lowerlim is not None:
-                inventory.append("(< %s)" % lowerlim)
+                inventory.append(" (< %s)" % lowerlim)
         return ''.join(inventory)
     def is_missing(self,key):
         """
