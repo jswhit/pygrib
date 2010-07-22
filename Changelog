@@ -1,5 +1,6 @@
 version 1.7.2 - not yet released
 ================================
+* added new tpc tropical storm wind probability example.
 * add more ensemble info, probability info to gribmessage.__repr__.
 * gribmessage __repr__ provides more useful level information (including
   units).
