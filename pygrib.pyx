@@ -484,7 +484,7 @@ cdef class gribmessage(object):
             if self.has_key('typeOfFirstFixedSurface') and self['typeOfFirstFixedSurface'] != 255:
                 toplev = self['topLevel']
                 if self.has_key('scaledValueOfFirstFixedSurface') and\
-                   self.has_key('scaleFactorOfFirstFixedSurface'):     
+                   self.has_key('scaleFactorOfFirstFixedSurface'):
                    if self['scaleFactorOfFirstFixedSurface']:
                        toplev = self['scaledValueOfFirstFixedSurface']/\
                                 np.power(10.0,self['scaleFactorOfFirstFixedSurface'])
@@ -493,7 +493,7 @@ cdef class gribmessage(object):
             if self.has_key('typeOfSecondFixedSurface') and self['typeOfSecondFixedSurface'] != 255:
                 botlev = self['bottomLevel']
                 if self.has_key('scaledValueOfSecondFixedSurface') and\
-                   self.has_key('scaleFactorOfSecondFixedSurface'):     
+                   self.has_key('scaleFactorOfSecondFixedSurface'):
                    if self['scaleFactorOfSecondFixedSurface']:
                        botlev = self['scaledValueOfSecondFixedSurface']/\
                                 np.power(10.0,self['scaleFactorOfSecondFixedSurface'])
@@ -531,7 +531,7 @@ cdef class gribmessage(object):
             elif ens_type == 1:
                inventory.append(":hi res cntl fcst")
             elif ens_type == 2:
-               inventory.append(":neg ens pert %d" %  pert_num)
+               inventory.append(":neg ens pert %d" % pert_num)
             elif ens_type == 3:
                inventory.append(":pos ens pert %d" % pert_num)
         if self.has_key('derivedForecast'):
@@ -553,14 +553,14 @@ cdef class gribmessage(object):
             inventory.append(":"+self['probabilityTypeName'])
             lowerlim = None
             if self.has_key('scaledValueOfLowerLimit') and\
-               self.has_key('scaleFactorOfLowerLimit'):     
+               self.has_key('scaleFactorOfLowerLimit'):
                if self['scaledValueOfLowerLimit'] and\
                   self['scaleFactorOfLowerLimit']: 
                    lowerlim = self['scaledValueOfLowerLimit']/\
                               np.power(10.0,self['scaleFactorOfLowerLimit'])
             upperlim = None
             if self.has_key('scaledValueOfUpperLimit') and\
-               self.has_key('scaleFactorOfUpperLimit'):     
+               self.has_key('scaleFactorOfUpperLimit'):
                if self['scaledValueOfUpperLimit'] and\
                   self['scaleFactorOfUpperLimit']: 
                    upperlim = self['scaledValueOfUpperLimit']/\
