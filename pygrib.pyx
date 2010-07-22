@@ -534,6 +534,47 @@ cdef class gribmessage(object):
                inventory.append(":neg ens pert %d" %  pert_num)
             elif ens_type == 3:
                inventory.append(":pos ens pert %d" % pert_num)
+        if self.has_key('derivedForecast'):
+            if self['derivedForecast'] == 0:
+                inventory.append(":ens mean")
+            elif self['derivedForecast'] == 1:
+                inventory.append(":weighted ens mean")
+            elif self['derivedForecast'] == 2:
+                inventory.append(":ens std dev")
+            elif self['derivedForecast'] == 3:
+                inventory.append(":normalized ens std dev")
+            elif self['derivedForecast'] == 4:
+                inventory.append(":ens spread")
+            elif self['derivedForecast'] == 4:
+                inventory.append(":ens large anomaly index")
+            elif self['derivedForecast'] == 6:
+                inventory.append(":ens mean of cluster")
+        if self.has_key('probabilityTypeName'):
+            inventory.append(":"+self['probabilityTypeName'])
+            scaleFactorOfLowerLimit = 0
+            scaledValueOfLowerLimit = 0
+            scaleFactorOfUpperLimit = 3
+            scaledValueOfUpperLimit = 254
+            lowerlim = None
+            if self.has_key('scaledValueOfLowerLimit') and\
+               self.has_key('scaleFactorOfLowerLimit'):     
+               if self['scaledValueOfLowerLimit'] and\
+                  self['scaleFactorOfLowerLimit']: 
+                   lowerlim = self['scaledValueOfLowerLimit']/\
+                              np.power(10.0,self['scaleFactorOfLowerLimit'])
+            upperlim = None
+            if self.has_key('scaledValueOfUpperLimit') and\
+               self.has_key('scaleFactorOfUpperLimit'):     
+               if self['scaledValueOfUpperLimit'] and\
+                  self['scaleFactorOfUpperLimit']: 
+                   upperlim = self['scaledValueOfUpperLimit']/\
+                              np.power(10.0,self['scaleFactorOfUpperLimit'])
+            if upperlim is not None and lowerlim is not None:
+                inventory.append("(%s-%s)" % (upperlim,lowerlim))
+            elif upperlim is not None:
+                inventory.append("(> %s)" % upperlim)
+            elif lowerlim is not None:
+                inventory.append("(< %s)" % lowerlim)
         return ''.join(inventory)
     def is_missing(self,key):
         """

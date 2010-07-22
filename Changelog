@@ -1,3 +1,4 @@
+* add more ensemble info, probability info to gribmessage.__repr__.
 * gribmessage __repr__ provides more useful level information (including
   units).
 
