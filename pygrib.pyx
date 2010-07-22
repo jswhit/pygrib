@@ -378,18 +378,18 @@ Example usage:
 >>> grbs = pygrib.open('sampledata/gfs.grb')
 >>> selected_grbs=grbs.select(shortName='gh',typeOfLevel='isobaricInhPa',level=10)
 >>> for grb in selected_grbs: print grb
-26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10:fcst time 72:from 200412091200:lo res cntl fcst
+26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 >>> # the __call__ method does the same thing
 >>> selected_grbs=grbs(shortName='gh',typeOfLevel='isobaricInhPa',level=10)
 >>> for grb in selected_grbs: print grb
-26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10:fcst time 72:from 200412091200:lo res cntl fcst
+26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 >>> # to select multiple key values, use sequences
 >>> selected_grbs=grbs(shortName=['u','v'],typeOfLevel='isobaricInhPa',level=[10,50])
 >>> for grb in selected_grbs: print grb
-193:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50:fcst time 72:from 200412091200:lo res cntl fcst
-194:v-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50:fcst time 72:from 200412091200:lo res cntl fcst
-199:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 10:fcst time 72:from 200412091200:lo res cntl fcst
-200:v-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 10:fcst time 72:from 200412091200:lo res cntl fcst
+193:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+194:v-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+199:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+200:v-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 """
         self.rewind()
         return [grb for grb in self if _find(grb, **kwargs)]
