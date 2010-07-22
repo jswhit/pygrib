@@ -4,6 +4,7 @@ from mpl_toolkits.basemap import Basemap,cm
 import numpy as np
 grbs = pygrib.open('../sampledata/tpcprblty.grib2')
 grb=grbs.select(name='Wind speed',scaledValueOfUpperLimit=17491,stepRange='0-120')[0]
+print grb
 lats, lons = grb.latlons()
 data = grb.values
 map =\
@@ -11,7 +12,6 @@ Basemap(projection='lcc',lon_0=-90,lat_0=30,width=4000.e3,height=2000.e3,resolut
 map.bluemarble()
 map.drawcoastlines(color='yellow')
 x,y = map(lons,lats)
-print data.min(), data.max()
 levels = np.arange(10,101,10)
 map.contourf(x,y,data,levels,cmap=cm.GMT_haxby_r)
 upperlim = float(grb.scaledValueOfUpperLimit)/np.power(10,grb.scaleFactorOfUpperLimit)
