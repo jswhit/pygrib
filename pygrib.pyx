@@ -545,16 +545,12 @@ cdef class gribmessage(object):
                 inventory.append(":normalized ens std dev")
             elif self['derivedForecast'] == 4:
                 inventory.append(":ens spread")
-            elif self['derivedForecast'] == 4:
+            elif self['derivedForecast'] == 5:
                 inventory.append(":ens large anomaly index")
             elif self['derivedForecast'] == 6:
                 inventory.append(":ens mean of cluster")
         if self.has_key('probabilityTypeName'):
             inventory.append(":"+self['probabilityTypeName'])
-            scaleFactorOfLowerLimit = 0
-            scaledValueOfLowerLimit = 0
-            scaleFactorOfUpperLimit = 3
-            scaledValueOfUpperLimit = 254
             lowerlim = None
             if self.has_key('scaledValueOfLowerLimit') and\
                self.has_key('scaleFactorOfLowerLimit'):     
