@@ -463,37 +463,37 @@ cdef class gribmessage(object):
     def __repr__(self):
         """prints a short inventory of the grib message"""
         inventory = []
-        if self.has_key('name'):
+        if self.valid_key('name'):
             inventory.append(repr(self.messagenumber)+':'+self['name'])
-        if self.has_key('units'):
+        if self.valid_key('units'):
             inventory.append(':'+self['units'])
-        if self.has_key('stepType'):
+        if self.valid_key('stepType'):
             inventory.append(' ('+self['stepType']+')')
-        if self.has_key('typeOfGrid') or self.has_key('gridType'):
-            if self.has_key('typeOfGrid'):
+        if self.valid_key('typeOfGrid') or self.valid_key('gridType'):
+            if self.valid_key('typeOfGrid'):
                inventory.append(':'+self['typeOfGrid'])
             else:
                inventory.append(':'+self['gridType'])
-        if self.has_key('typeOfLevel'):
+        if self.valid_key('typeOfLevel'):
             inventory.append(':'+self['typeOfLevel'])
-        if self.has_key('topLevel') and self.has_key('bottomLevel'):
+        if self.valid_key('topLevel') and self.valid_key('bottomLevel'):
             toplev = None; botlev = None
             levunits = 'unknown'
-            if self.has_key('unitsOfFirstFixedSurface'):
+            if self.valid_key('unitsOfFirstFixedSurface'):
                 levunits = self['unitsOfFirstFixedSurface']
-            if self.has_key('typeOfFirstFixedSurface') and self['typeOfFirstFixedSurface'] != 255:
+            if self.valid_key('typeOfFirstFixedSurface') and self['typeOfFirstFixedSurface'] != 255:
                 toplev = self['topLevel']
-                if self.has_key('scaledValueOfFirstFixedSurface') and\
-                   self.has_key('scaleFactorOfFirstFixedSurface'):
+                if self.valid_key('scaledValueOfFirstFixedSurface') and\
+                   self.valid_key('scaleFactorOfFirstFixedSurface'):
                    if self['scaleFactorOfFirstFixedSurface']:
                        toplev = self['scaledValueOfFirstFixedSurface']/\
                                 np.power(10.0,self['scaleFactorOfFirstFixedSurface'])
                    else:
                        toplev = self['scaledValueOfFirstFixedSurface']
-            if self.has_key('typeOfSecondFixedSurface') and self['typeOfSecondFixedSurface'] != 255:
+            if self.valid_key('typeOfSecondFixedSurface') and self['typeOfSecondFixedSurface'] != 255:
                 botlev = self['bottomLevel']
-                if self.has_key('scaledValueOfSecondFixedSurface') and\
-                   self.has_key('scaleFactorOfSecondFixedSurface'):
+                if self.valid_key('scaledValueOfSecondFixedSurface') and\
+                   self.valid_key('scaleFactorOfSecondFixedSurface'):
                    if self['scaleFactorOfSecondFixedSurface']:
                        botlev = self['scaledValueOfSecondFixedSurface']/\
                                 np.power(10.0,self['scaleFactorOfSecondFixedSurface'])
@@ -508,22 +508,22 @@ cdef class gribmessage(object):
                 levstring = levstring+' %s' % levunits
             if levstring is not None:
                 inventory.append(levstring)
-        elif self.has_key('level'):
+        elif self.valid_key('level'):
             inventory.append(':level %s' % self['level'])
-        if self.has_key('stepRange'):
+        if self.valid_key('stepRange'):
             ftime = self['stepRange']
             inventory.append(':fcst time '+ftime)
-        elif self.has_key('forecastTime'):
+        elif self.valid_key('forecastTime'):
             ftime = repr(self['forecastTime'])
             inventory.append(':fcst time '+ftime)
-        if self.has_key('dataDate') and self.has_key('dataTime'):
+        if self.valid_key('dataDate') and self.valid_key('dataTime'):
             inventory.append(
             ':from '+repr(self['dataDate'])+'%04i' % self['dataTime'])
-        #if self.has_key('validityDate') and self.has_key('validityTime'):
+        #if self.valid_key('validityDate') and self.valid_key('validityTime'):
         #    inventory.append(
         #    ':valid '+repr(self['validityDate'])+repr(self['validityTime']))
-        if self.has_key('perturbationNumber') and\
-           self.has_key('typeOfEnsembleForecast'):
+        if self.valid_key('perturbationNumber') and\
+           self.valid_key('typeOfEnsembleForecast'):
             ens_type = self['typeOfEnsembleForecast']
             pert_num = self['perturbationNumber']
             if ens_type == 0:
@@ -534,7 +534,7 @@ cdef class gribmessage(object):
                inventory.append(":neg ens pert %d" % pert_num)
             elif ens_type == 3:
                inventory.append(":pos ens pert %d" % pert_num)
-        if self.has_key('derivedForecast'):
+        if self.valid_key('derivedForecast'):
             if self['derivedForecast'] == 0:
                 inventory.append(":ens mean")
             elif self['derivedForecast'] == 1:
@@ -549,18 +549,18 @@ cdef class gribmessage(object):
                 inventory.append(":ens large anomaly index")
             elif self['derivedForecast'] == 6:
                 inventory.append(":ens mean of cluster")
-        if self.has_key('probabilityTypeName'):
+        if self.valid_key('probabilityTypeName'):
             inventory.append(":"+self['probabilityTypeName'])
             lowerlim = None
-            if self.has_key('scaledValueOfLowerLimit') and\
-               self.has_key('scaleFactorOfLowerLimit'):
+            if self.valid_key('scaledValueOfLowerLimit') and\
+               self.valid_key('scaleFactorOfLowerLimit'):
                if self['scaledValueOfLowerLimit'] and\
                   self['scaleFactorOfLowerLimit']: 
                    lowerlim = self['scaledValueOfLowerLimit']/\
                               np.power(10.0,self['scaleFactorOfLowerLimit'])
             upperlim = None
-            if self.has_key('scaledValueOfUpperLimit') and\
-               self.has_key('scaleFactorOfUpperLimit'):
+            if self.valid_key('scaledValueOfUpperLimit') and\
+               self.valid_key('scaleFactorOfUpperLimit'):
                if self['scaledValueOfUpperLimit'] and\
                   self['scaleFactorOfUpperLimit']: 
                    upperlim = self['scaledValueOfUpperLimit']/\
@@ -795,9 +795,22 @@ cdef class gribmessage(object):
 
         tests whether a grib message object has a specified key.
         """
+        return key in self._all_keys
+    def valid_key(self,key):
+        """
+        valid_key(key)
+
+        tests whether a grib message object has a specified key,
+        it is not missing and it has a value that can be read.
+        """
         ret =  key in self._all_keys
         # if key exists, but value is missing, return False.
         if ret and self.is_missing(key): ret = False
+        if ret:
+            try:
+                self[key]
+            except:
+                ret = False
         return ret
     def tostring(self):
         """
