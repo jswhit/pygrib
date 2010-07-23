@@ -1,5 +1,8 @@
 version 1.7.2 - not yet released
 ================================
+* valid_key method added, tests to see if message has a key,
+  it's value is not missing and can be read.  Now used in 
+  gribmessage.__repr__, so it should never fail on a bad key.
 * added new tpc tropical storm wind probability example.
 * add more ensemble info, probability info to gribmessage.__repr__.
 * gribmessage __repr__ provides more useful level information (including
