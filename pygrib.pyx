@@ -605,10 +605,10 @@ cdef class gribmessage(object):
         keys = []
         while grib_keys_iterator_next(gi):
             name = grib_keys_iterator_get_name(gi)
-            key = PyString_AsString(name)
+            key = PyString_FromString(name)
             # ignore these keys.
-            if key in [b"zero",b"one",b"eight",b"eleven",b"false",b"thousand",b"file",
-                       b"localDir",b"7777",b"oneThousand"]:
+            if key in ["zero","one","eight","eleven","false","thousand","file",
+                       "localDir","7777","oneThousand"]:
                 continue
             err = grib_get_native_type(self._gh, name, &typ)
             if err:
