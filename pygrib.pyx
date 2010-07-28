@@ -637,7 +637,7 @@ cdef class gribmessage(object):
         keys_noro = []
         while grib_keys_iterator_next(gi):
             name = grib_keys_iterator_get_name(gi)
-            key = PyString_AsString(name)
+            key = PyString_FromString(name)
             keys_noro.append(key)
         err = grib_keys_iterator_delete(gi)
         if err:
