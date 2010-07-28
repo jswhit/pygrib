@@ -1,5 +1,8 @@
 version 1.7.2 - not yet released
 ================================
+* fix a couple of instances where PyString_AsString was used
+  incorrectly, replaced with PyString_FromString. Exposed by
+  cython 0.13, but should have no user-visible effects.
 * valid_key method added, tests to see if message has a key,
   it's value is not missing and can be read.  Now used in 
   gribmessage.__repr__, so it should never fail on a bad key.
