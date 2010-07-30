@@ -1,5 +1,9 @@
 version 1.7.2 - not yet released
 ================================
+* select method of open instance can now use functions to 
+  filter keys based on conditional expressions. For example,
+  sel_grbs = grbs.select(shortName='gh',level=lambda l: l < 500 and l > 300)
+  returns geoptential height levels between 500 and 300.
 * fix a couple of instances where PyString_AsString was used
   incorrectly, replaced with PyString_FromString. Exposed by
   cython 0.13, but should have no user-visible effects.

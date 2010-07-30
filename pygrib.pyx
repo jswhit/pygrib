@@ -370,7 +370,7 @@ cdef class open(object):
 select(**kwargs)
 
 return a list of L{gribmessage} instances from iterator filtered by kwargs.
-Sequences can be used to select multiple key values.
+Sequences or functions can be used to select multiple key values.
 
 Example usage:
 
@@ -383,13 +383,20 @@ Example usage:
 >>> selected_grbs=grbs(shortName='gh',typeOfLevel='isobaricInhPa',level=10)
 >>> for grb in selected_grbs: print grb
 26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst
->>> # to select multiple key values, use sequences
+>>> # to select multiple specific key values, use sequences
 >>> selected_grbs=grbs(shortName=['u','v'],typeOfLevel='isobaricInhPa',level=[10,50])
 >>> for grb in selected_grbs: print grb
 193:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 194:v-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 199:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 200:v-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+>>> # to select key values based on a conditional expression, use a function
+>>> selected_grbs=grbs(shortName='gh',level=lambda l: l < 500 and l >= 300)
+>>> for grb in selected_grbs: print grb
+14:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 45000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+15:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 40000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+16:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 35000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+17:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 30000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 """
         self.rewind()
         return [grb for grb in self if _find(grb, **kwargs)]
@@ -1440,13 +1447,18 @@ def _isiter(v):
 
 def _find(grb, **kwargs):
     """search for key/value matches in grib message.
-    If value is given as a sequence, search for matches to any element."""
+    If value is given as a sequence, search for matches to any element.
+    If value is a function, call that function with key value to determine
+    whether it is a match."""
     for k,v in kwargs.iteritems():
         if not grb.has_key(k): return False
         isiter = _isiter(v) # True if v is iterable but not a string
+        iscallable = hasattr(v, '__call__')
         if not isiter and grb[k]==v: # v not a sequence.
             continue
         elif isiter and grb[k] in v: # v a sequence.
+            continue
+        elif iscallable and v(grb[k]):  # v a function
             continue
         else:
             return False
