@@ -1454,7 +1454,8 @@ def _find(grb, **kwargs):
         if not grb.has_key(k): return False
         isiter = _isiter(v) # True if v is iterable but not a string
         iscallable = hasattr(v, '__call__')
-        if not isiter and grb[k]==v: # v not a sequence.
+        # v not a sequence or a function.
+        if not isiter and not iscallable and grb[k]==v:
             continue
         elif isiter and grb[k] in v: # v a sequence.
             continue
