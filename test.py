@@ -127,20 +127,20 @@ def test():
 
     test open.select with scalars, sequences and functions.
     >>> grbs = pygrib.open('sampledata/gfs.grb')
-    >>> sel_grbs = grbs.select(shortName='gh',level=500)
+    >>> sel_grbs = grbs.select(shortName='t',level=500)
     >>> for grb in sel_grbs: print grb
-    13:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 50000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
-    >>> sel_grbs = grbs.select(shortName='gh',level=(850,700,500))
+    39:Temperature:K (instant):regular_ll:isobaricInhPa:level 50000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+    >>> sel_grbs = grbs.select(shortName='t',level=(850,700,500))
     >>> for grb in sel_grbs: print grb
-    6:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 85000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
-    9:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 70000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
-    13:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 50000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
-    >>> sel_grbs = grbs.select(shortName='gh',level=lambda l: l < 500 and l >= 300)
+    32:Temperature:K (instant):regular_ll:isobaricInhPa:level 85000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+    35:Temperature:K (instant):regular_ll:isobaricInhPa:level 70000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+    39:Temperature:K (instant):regular_ll:isobaricInhPa:level 50000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+    >>> sel_grbs = grbs.select(shortName='t',level=lambda l: l < 500 and l >= 300)
     >>> for grb in sel_grbs: print grb
-    14:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 45000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
-    15:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 40000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
-    16:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 35000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
-    17:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 30000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+    40:Temperature:K (instant):regular_ll:isobaricInhPa:level 45000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+    41:Temperature:K (instant):regular_ll:isobaricInhPa:level 40000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+    42:Temperature:K (instant):regular_ll:isobaricInhPa:level 35000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+    43:Temperature:K (instant):regular_ll:isobaricInhPa:level 30000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
     >>> grbs.close()
     """
 
