@@ -1436,15 +1436,6 @@ cdef _redtoreg(int nlons, ndarray lonsperlat, ndarray redgrid, double missval):
         indx = indx + ilons
     return reggrid
 
-def _isiter(v):
-    """returns True is v is iterable but not a string"""
-    if isinstance(v,basestring): return False
-    try:
-        iter(v)
-    except TypeError:
-        return False
-    return True
-
 def _find(grb, **kwargs):
     """search for key/value matches in grib message.
     If value is given as a sequence, search for matches to any element.
@@ -1452,14 +1443,16 @@ def _find(grb, **kwargs):
     whether it is a match."""
     for k,v in kwargs.iteritems():
         if not grb.has_key(k): return False
-        isiter = _isiter(v) # True if v is iterable but not a string
+        # is v iterable but not a string?
+        isiter = hasattr(v,'__iter__') and not isinstance(v,basestring)
+        # is v callable ?
         iscallable = hasattr(v, '__call__')
         # v not a sequence or a function.
         if not isiter and not iscallable and grb[k]==v:
             continue
         elif isiter and grb[k] in v: # v a sequence.
             continue
-        elif iscallable and v(grb[k]):  # v a function
+        elif iscallable and v(grb[k]): # v a function
             continue
         else:
             return False
