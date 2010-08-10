@@ -1436,6 +1436,17 @@ cdef _redtoreg(int nlons, ndarray lonsperlat, ndarray redgrid, double missval):
         indx = indx + ilons
     return reggrid
 
+def _is_seqlike(a):
+    try:
+       1 in a
+       a[0:1]
+    except:
+       return False
+    if type(a) is not type(basestring): 
+       return True
+    else:
+       return False
+
 def _find(grb, **kwargs):
     """search for key/value matches in grib message.
     If value is given as a sequence, search for matches to any element.
@@ -1443,15 +1454,15 @@ def _find(grb, **kwargs):
     whether it is a match."""
     for k,v in kwargs.iteritems():
         if not grb.has_key(k): return False
-        # is v iterable but not a string?
-        isiter = hasattr(v,'__iter__') and not isinstance(v,basestring)
+        # is v a "sequence-like" non-string container object?
+        isseq = _is_seqlike(v)
         # is v callable?
         iscallable = hasattr(v, '__call__')
-        # if v is callable and iterable, treat it as an iterable.
+        # if v is callable and sequence-like, treat it as a sequence.
         # v not a sequence or a function.
-        if not isiter and not iscallable and grb[k]==v:
+        if not isseq and not iscallable and grb[k]==v:
             continue
-        elif isiter and grb[k] in v: # v a sequence.
+        elif isseq and grb[k] in v: # v a sequence.
             continue
         elif iscallable and v(grb[k]): # v a function
             continue
