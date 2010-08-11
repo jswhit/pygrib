@@ -370,7 +370,13 @@ cdef class open(object):
 select(**kwargs)
 
 return a list of L{gribmessage} instances from iterator filtered by kwargs.
-Sequences or functions can be used to select multiple key values.
+If keyword is a sequence-like container object, each grib message
+in the iterator is searched for membership in the container.
+If keyword is a callable (has a _call__ method), each grib
+message in the iterator is tested using the callable (which should
+return a boolean).
+If keyword is not a sequence-like object or a callable, each 
+grib message in the iterator is tested for equality.
 
 Example usage:
 
@@ -1321,9 +1327,10 @@ name (i.e. C{level:l} will search for values of C{level} that are longs).
         """
 select(**kwargs)
 
-return a list of L{gribmessage} instances from grib index object corresponding to specific
-values of indexed keys (given by kwargs).
-Unlike L{open.select}, sequences cannot be used to select multiple key values.
+return a list of L{gribmessage} instances from grib index object 
+corresponding to specific values of indexed keys (given by kwargs).
+Unlike L{open.select}, sequences or callables cannot be used to 
+select multiple key values.
 However, using L{index.select} is much faster than L{open.select}.
 
 Example usage:
@@ -1437,21 +1444,21 @@ cdef _redtoreg(int nlons, ndarray lonsperlat, ndarray redgrid, double missval):
     return reggrid
 
 def _is_seqlike(a):
+    # is object sequence-like?  (slicable, can test for
+    # membership with "is in", but not a string)
     try:
        1 in a
        a[0:1]
     except:
        return False
-    if type(a) is not type(basestring): 
-       return True
-    else:
-       return False
+    if type(a) == type(basestring): return False
+    return True
 
 def _find(grb, **kwargs):
-    """search for key/value matches in grib message.
-    If value is given as a sequence, search for matches to any element.
-    If value is a function, call that function with key value to determine
-    whether it is a match."""
+    # search for key/value matches in grib message.
+    # If value is given as a sequence, search for matches to any element.
+    # If value is a function, call that function with key value to determine
+    # whether it is a match.
     for k,v in kwargs.iteritems():
         if not grb.has_key(k): return False
         # is v a "sequence-like" non-string container object?
