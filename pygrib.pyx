@@ -370,12 +370,12 @@ cdef class open(object):
 select(**kwargs)
 
 return a list of L{gribmessage} instances from iterator filtered by kwargs.
-If keyword is a sequence-like container object, each grib message
+If keyword is a container object, each grib message
 in the iterator is searched for membership in the container.
 If keyword is a callable (has a _call__ method), each grib
 message in the iterator is tested using the callable (which should
 return a boolean).
-If keyword is not a sequence-like object or a callable, each 
+If keyword is not a container object or a callable, each 
 grib message in the iterator is tested for equality.
 
 Example usage:
@@ -389,7 +389,7 @@ Example usage:
 >>> selected_grbs=grbs(shortName='gh',typeOfLevel='isobaricInhPa',level=10)
 >>> for grb in selected_grbs: print grb
 26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst
->>> # to select multiple specific key values, use sequences
+>>> # to select multiple specific key values, use containers (e.g. sequences)
 >>> selected_grbs=grbs(shortName=['u','v'],typeOfLevel='isobaricInhPa',level=[10,50])
 >>> for grb in selected_grbs: print grb
 193:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50 Pa:fcst time 72:from 200412091200:lo res cntl fcst
@@ -1267,7 +1267,8 @@ index(filename, *args)
 returns grib index object given GRIB filename indexed by keys given in
 *args.  The L{select} or L{__call__} method can then be used to selected grib messages
 based on specified values of indexed keys.
-Unlike L{open.select}, sequences cannot be used to select multiple key values.
+Unlike L{open.select}, containers or callables cannot be used to 
+select multiple key values.
 However, using L{index.select} is much faster than L{open.select}.
 
 Example usage:
@@ -1329,7 +1330,7 @@ select(**kwargs)
 
 return a list of L{gribmessage} instances from grib index object 
 corresponding to specific values of indexed keys (given by kwargs).
-Unlike L{open.select}, sequences or callables cannot be used to 
+Unlike L{open.select}, containers or callables cannot be used to 
 select multiple key values.
 However, using L{index.select} is much faster than L{open.select}.
 
@@ -1443,12 +1444,11 @@ cdef _redtoreg(int nlons, ndarray lonsperlat, ndarray redgrid, double missval):
         indx = indx + ilons
     return reggrid
 
-def _is_seqlike(a):
-    # is object sequence-like?  (slicable, can test for
+def _is_container(a):
+    # is object container-like?  (can test for
     # membership with "is in", but not a string)
     try:
        1 in a
-       a[0:1]
     except:
        return False
     if type(a) == type(basestring): return False
@@ -1456,20 +1456,20 @@ def _is_seqlike(a):
 
 def _find(grb, **kwargs):
     # search for key/value matches in grib message.
-    # If value is given as a sequence, search for matches to any element.
+    # If value is a container-like object, search for matches to any element.
     # If value is a function, call that function with key value to determine
     # whether it is a match.
     for k,v in kwargs.iteritems():
         if not grb.has_key(k): return False
-        # is v a "sequence-like" non-string container object?
-        isseq = _is_seqlike(v)
+        # is v a "container-like" non-string object?
+        iscontainer = _is_container(v)
         # is v callable?
         iscallable = hasattr(v, '__call__')
-        # if v is callable and sequence-like, treat it as a sequence.
-        # v not a sequence or a function.
-        if not isseq and not iscallable and grb[k]==v:
+        # if v is callable and container-like, treat it as a container.
+        # v not a container or a function.
+        if not iscontainer and not iscallable and grb[k]==v:
             continue
-        elif isseq and grb[k] in v: # v a sequence.
+        elif iscontainer and grb[k] in v: # v a container.
             continue
         elif iscallable and v(grb[k]): # v a function
             continue
