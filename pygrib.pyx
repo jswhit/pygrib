@@ -1447,10 +1447,8 @@ cdef _redtoreg(int nlons, ndarray lonsperlat, ndarray redgrid, double missval):
 def _is_container(a):
     # is object container-like?  (can test for
     # membership with "is in", but not a string)
-    try:
-       1 in a
-    except:
-       return False
+    try: 1 in a
+    except: return False
     if type(a) == type(basestring): return False
     return True
 
