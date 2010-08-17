@@ -48,8 +48,8 @@
     </td>
   </tr>
 </table>
-<!-- ==================== TYPE DESCRIPTION ==================== -->
-<h1 class="epydoc">type open</h1><p class="nomargin-top"></p>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class open</h1><p class="nomargin-top"></p>
 <pre class="base-tree">
 object --+
          |
@@ -76,9 +76,9 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="__call__"></a><span class="summary-sig-name">__call__</span>(<span class="summary-sig-arg">...</span>)</span><br />
-      same as <a href="pygrib.open-class.html#select" 
-      class="link">select</a></td>
+          <td><span class="summary-sig"><a name="__call__"></a><span class="summary-sig-name">__call__</span>(<span class="summary-sig-arg">x</span>,
+        <span class="summary-sig-arg">...</span>)</span><br />
+      x(...)</td>
           <td align="right" valign="top">
             
             
@@ -94,7 +94,9 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="__getitem__"></a><span class="summary-sig-name">__getitem__</span>(<span class="summary-sig-arg">...</span>)</span></td>
+          <td><span class="summary-sig"><a name="__getitem__"></a><span class="summary-sig-name">__getitem__</span>(<span class="summary-sig-arg">x</span>,
+        <span class="summary-sig-arg">y</span>)</span><br />
+      x[y]</td>
           <td align="right" valign="top">
             
             
@@ -127,7 +129,8 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="__iter__"></a><span class="summary-sig-name">__iter__</span>(<span class="summary-sig-arg">...</span>)</span></td>
+          <td><span class="summary-sig"><a name="__iter__"></a><span class="summary-sig-name">__iter__</span>(<span class="summary-sig-arg">x</span>)</span><br />
+      iter(x)</td>
           <td align="right" valign="top">
             
             
@@ -258,6 +261,23 @@ object --+
       
     </td>
   </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
+      <code>__format__</code>,
+      <code>__getattribute__</code>,
+      <code>__hash__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__repr__</code>,
+      <code>__setattr__</code>,
+      <code>__sizeof__</code>,
+      <code>__str__</code>,
+      <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
 </table>
 <!-- ==================== INSTANCE VARIABLES ==================== -->
 <a name="section-InstanceVariables"></a>
@@ -289,6 +309,22 @@ object --+
     </td><td class="summary">
         <a name="messages"></a><span class="summary-name">messages</span><br />
       The total number of grib messages in the file.
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Properties</span></td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
     </td>
   </tr>
 </table>
@@ -366,7 +402,12 @@ object --+
   
   <p>return a list of <a href="pygrib.gribmessage-class.html" 
   class="link">gribmessage</a> instances from iterator filtered by kwargs. 
-  Sequences can be used to select multiple key values.</p>
+  If keyword is a container object, each grib message in the iterator is 
+  searched for membership in the container. If keyword is a callable (has a
+  _call__ method), each grib message in the iterator is tested using the 
+  callable (which should return a boolean). If keyword is not a container 
+  object or a callable, each grib message in the iterator is tested for 
+  equality.</p>
   <p>Example usage:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">import</span> pygrib
@@ -378,13 +419,20 @@ object --+
 <span class="py-prompt">&gt;&gt;&gt; </span>selected_grbs=grbs(shortName=<span class="py-string">'gh'</span>,typeOfLevel=<span class="py-string">'isobaricInhPa'</span>,level=10)
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> grb <span class="py-keyword">in</span> selected_grbs: <span class="py-keyword">print</span> grb
 <span class="py-output">26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst</span>
-<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># to select multiple key values, use sequences</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># to select multiple specific key values, use containers (e.g. sequences)</span>
 <span class="py-prompt">&gt;&gt;&gt; </span>selected_grbs=grbs(shortName=[<span class="py-string">'u'</span>,<span class="py-string">'v'</span>],typeOfLevel=<span class="py-string">'isobaricInhPa'</span>,level=[10,50])
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> grb <span class="py-keyword">in</span> selected_grbs: <span class="py-keyword">print</span> grb
 <span class="py-output">193:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50 Pa:fcst time 72:from 200412091200:lo res cntl fcst</span>
 <span class="py-output">194:v-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50 Pa:fcst time 72:from 200412091200:lo res cntl fcst</span>
 <span class="py-output">199:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst</span>
-<span class="py-output">200:v-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst</span></pre>
+<span class="py-output">200:v-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># to select key values based on a conditional expression, use a function</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>selected_grbs=grbs(shortName=<span class="py-string">'gh'</span>,level=<span class="py-keyword">lambda</span> l: l &lt; 500 <span class="py-keyword">and</span> l &gt;= 300)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> grb <span class="py-keyword">in</span> selected_grbs: <span class="py-keyword">print</span> grb
+<span class="py-output">14:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 45000 Pa:fcst time 72:from 200412091200:lo res cntl fcst</span>
+<span class="py-output">15:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 40000 Pa:fcst time 72:from 200412091200:lo res cntl fcst</span>
+<span class="py-output">16:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 35000 Pa:fcst time 72:from 200412091200:lo res cntl fcst</span>
+<span class="py-output">17:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 30000 Pa:fcst time 72:from 200412091200:lo res cntl fcst</span></pre>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -416,8 +464,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1
-    on Thu Jul 22 07:52:30 2010
+    Generated by Epydoc 3.0.1 on Tue Aug 17 11:22:31 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
