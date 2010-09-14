@@ -127,7 +127,7 @@ Changelog
 
 @contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
 
-@version: 1.7.2
+@version: 1.7.3
 
 @copyright: copyright 2010 by Jeffrey Whitaker.
 
@@ -145,7 +145,7 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE."""
 __test__ = None
 del __test__ # hack so epydoc doesn't show __test__
-__version__ = '1.7.1'
+__version__ = '1.7.3'
 
 import numpy as np
 from numpy import ma
@@ -764,7 +764,7 @@ cdef class gribmessage(object):
                     storageorder='F'
                 else:
                     storageorder='C'
-                datarr = np.empty(size, np.int, order=storageorder)
+                datarr = np.zeros(size, np.int, order=storageorder)
                 err = grib_get_long_array(self._gh, name, <long *>datarr.data, &size)
                 if err:
                     raise RuntimeError(grib_get_error_message(err))
@@ -784,7 +784,7 @@ cdef class gribmessage(object):
                     storageorder='F'
                 else:
                     storageorder='C'
-                datarr = np.empty(size, np.double, order=storageorder)
+                datarr = np.zeros(size, np.double, order=storageorder)
                 err = grib_get_double_array(self._gh, name, <double *>datarr.data, &size)
                 if err:
                     raise RuntimeError(grib_get_error_message(err))
