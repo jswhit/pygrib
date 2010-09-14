@@ -747,6 +747,10 @@ cdef class gribmessage(object):
         cdef char strdata[1024]
         name = PyString_AsString(key)
         err = grib_get_size(self._gh, name, &size)
+        # force 'paramId' to be size 1 (it returns a size of 7,
+        # which is a relic from earlier versions of grib_api in which
+        # paramId was a string and not an integer)
+        if key=='paramId': size=1
         if err:
             raise RuntimeError(grib_get_error_message(err))
         err = grib_get_native_type(self._gh, name, &typ)

@@ -1,5 +1,6 @@
 version 1.7.3 - not yet released
 ================================
+* force 'paramId' to be a scalar integer, not an integer array.
 * arrays initialized to zero (use np.zeros instead of np.empty).  Now
   values returned in "paramId" are repeatable, don't contain random garbage
   in undefined elements.
