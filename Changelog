@@ -7,6 +7,7 @@ version 1.7.3 - not yet released
 * arrays initialized to zero (use np.zeros instead of np.empty).  Now
   values returned in "paramId" are repeatable, don't contain random garbage
   in undefined elements.
+
 version 1.7.2 - svn revision 303
 ================================
 * select method of open instance can now use functions to 
