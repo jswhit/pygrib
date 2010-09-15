@@ -39,19 +39,16 @@ def test():
     >>> print grb # 3rd message
     3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
 
-    indexing iterator with an integer key has the same result
+    indexing iterator with an integer key has the same result,
+    except that the iterator is automatically rewound.
     >>> grb = grbs[2] # 2nd message
     >>> print grb
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
 
     position iterator at next grib message.
     >>> grb = grbs.next() 
-    >>> print grb # 3rd message
-    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
-
-    now the iterator should be positioned at the last (4th) message.
-    >>> for grb in grbs: print grb # only last message printed.
-    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
+    >>> print grb # back to the 1st message
+    1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120:from 200402291200
 
     use select method to choose grib messages based upon specified key/value pairs.
     >>> selected_grbs = grbs.select(level=2,typeOfLevel='heightAboveGround') # get all 2-m level fields

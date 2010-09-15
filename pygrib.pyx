@@ -90,14 +90,21 @@ Example usage
     >>> for grb in selected_grbs: print grb
     3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
     4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
- - get the third grib message::
-    >>> grb = grbs.message(3)
+ - get the third grib message, leave iterator positioned there::
+    >>> grb = grbs.message(3) # iterator is left positioned at message 3
     >>> print grb
     3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
- - indexing with integer key is the same as calling the message method::
-    >>> grb = grbs[2]
+    >>> grb = grbs.next() # get next item in iterator
+    >>> print grb # which is the fourth grib message
+    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
+ - indexing with integer key is the same as calling the message method, except
+   that iterator is then automatically rewound (positioned at the beginning)::
+    >>> grb = grbs[2] # iterator is automatically rewound!
     >>> print grb
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
+    >>> grb = grbs.next() # get next item in iterator
+    >>> print grb # which is the first grib message since iterator was 'rewound'
+    1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120:from 200402291200
  - modify the values associated with existing keys (either via attribute or
    dictionary access)::
     >>> grb['forecast_time'] = 240
@@ -317,10 +324,13 @@ cdef class open(object):
             # for a slice, return a list of grib messages.
             beg, end, inc = key.indices(self.messages)
             grbs = [self.message(n+1) for n in xrange(beg,end,inc)]
+            grbs.rewind() # rewind iterator
             return grbs
         elif type(key) == int or type(key) == long:
             # for an integer, return a single grib message.
-            return self.message(key)
+            grb = self.message(key)
+            self.rewind() # rewind iterator.
+            return grb
         else:
             raise KeyError('key must be an integer message number or a slice')
     def message(self, N):
@@ -747,13 +757,13 @@ cdef class gribmessage(object):
         cdef char strdata[1024]
         name = PyString_AsString(key)
         err = grib_get_size(self._gh, name, &size)
-        # force 'paramId' to be size 1 (it returns a size of 7,
-        # which is a relic from earlier versions of grib_api in which
-        # paramId was a string and not an integer)
-        if key=='paramId': size=1
         if err:
             raise RuntimeError(grib_get_error_message(err))
         err = grib_get_native_type(self._gh, name, &typ)
+        # force 'paramId' to be size 1 (it returns a size of 7,
+        # which is a relic from earlier versions of grib_api in which
+        # paramId was a string and not an integer)
+        if key=='paramId' and typ == GRIB_TYPE_LONG: size=1
         if err:
             raise RuntimeError(grib_get_error_message(err))
         elif typ == GRIB_TYPE_LONG:

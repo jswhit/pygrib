@@ -1,5 +1,8 @@
 version 1.7.3 - not yet released
 ================================
+* slicing the iterator using __getitem__ now automatically rewinds the
+  iterator (using the 'message' method still leaves the iterator positioned
+  at the requested message).
 * force 'paramId' to be a scalar integer, not an integer array.
 * arrays initialized to zero (use np.zeros instead of np.empty).  Now
   values returned in "paramId" are repeatable, don't contain random garbage
