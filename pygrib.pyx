@@ -68,16 +68,16 @@ Example usage
  - find the first grib message with a matching name::
     >>> for grb in grbs:
     >>>     if grb['name'] == 'Maximum temperature': break
- - extract the data values using the 'values' key (grb.keys() will return a
-   list of the available keys)::
+ - extract the data values using the 'values' key
+ (grb.keys() will return a list of the available keys)::
     # The data is returned as a numpy array, or if missing values or a bitmap
     # are present, a numpy masked array.  Reduced lat/lon or gaussian grid
     # data is automatically expanded to a regular grid.
     >>> maxt = grb['values']
     >>> print maxt.shape, maxt.min(), maxt.max()
     (94, 192) 223.7 319.9
- - instead of treating the gribmessage instance as a dictionary to access
-   key/value pairs, you can access the keys as attributes::
+ - instead of treating the gribmessage instance as a dictionary to 
+ access key/value pairs, you can access the keys as attributes::
     >>> maxt = grb.values
     >>> print maxt.shape, maxt.min(), maxt.max()
     (94, 192) 223.7 319.9
@@ -97,16 +97,16 @@ Example usage
     >>> grb = grbs.next() # get next item in iterator
     >>> print grb # which is the fourth grib message
     4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
- - indexing with integer key is the same as calling the message method, except
-   that iterator is then automatically rewound (positioned at the beginning)::
+ - indexing with integer key is the same as calling the message method, except 
+ that the iterator is automatically rewound (positioned at the beginning)::
     >>> grb = grbs[2] # iterator is automatically rewound!
     >>> print grb
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
     >>> grb = grbs.next() # get next item in iterator
     >>> print grb # which is the first grib message since iterator was 'rewound'
     1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120:from 200402291200
- - modify the values associated with existing keys (either via attribute or
-   dictionary access)::
+ - modify the values associated with existing keys
+ (either via attribute or dictionary access)::
     >>> grb['forecast_time'] = 240
     >>> grb.dataDate = 20100101
  - get the binary string associated with the coded message::
