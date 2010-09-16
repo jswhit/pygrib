@@ -289,7 +289,7 @@ cdef class open(object):
     @ivar filename: The GRIB file which the instance represents."""
     cdef FILE *_fd
     cdef grib_handle *_gh
-    cdef public object filename, messagenumber, messages
+    cdef public object name, messagenumber, messages
     def __cinit__(self, filename):
         # initialize C level objects.
         cdef grib_handle *gh
@@ -301,7 +301,7 @@ cdef class open(object):
     def __init__(self, filename):
         cdef int err,nmsgs
         # initalize Python level objects
-        self.filename = filename
+        self.name = filename
         self.messagenumber = 0
         # turn on support for multi-field grib messages.
         grib_multi_support_on(NULL)
@@ -312,6 +312,21 @@ cdef class open(object):
         self.messages = nmsgs 
     def __iter__(self):
         return self
+    def tell(self):
+        """returns position of iterator (grib message number, 0 means iterator
+        is positioned at beginning of file)."""
+        return self.messagnumber
+    def seek(self, msg):
+        """
+        seek(N)
+        
+        position iterator at N'th grib message (0 to go back to beginning of grib file)"""
+        if msg == 0:
+           self.rewind()
+        elif msg > 0 and msg <= self.messages:
+            self.message(msg)
+        else:
+            raise ValueError('message number out of rang')
     def rewind(self):
         """rewind iterator"""
         cdef grib_handle* gh 
@@ -1307,7 +1322,7 @@ Example usage:
 name (i.e. C{level:l} will search for values of C{level} that are longs).
 """
     cdef grib_index *_gi
-    cdef public object keys, types, filename
+    cdef public object keys, types, name
     def __cinit__(self, filename, *args):
         # initialize C level objects.
         cdef grib_index *gi
@@ -1322,7 +1337,7 @@ name (i.e. C{level:l} will search for values of C{level} that are longs).
             raise RuntimeError(grib_get_error_message(err))
     def __init__(self, filename, *args):
         # initalize Python level objects
-        self.filename = filename
+        self.name = filename
         # is type is specified, strip it off.
         keys = [arg.split(':')[0] for arg in args]
         # if type is declared, save it (None if not declared)
