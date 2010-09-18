@@ -4,10 +4,36 @@ def test():
 
     open a grib file, create an iterator.
     >>> import pygrib
+    >>> list(pygrib.open('sampledata/flux.grb'))
+    [1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120:from 200402291200, 2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200, 3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200, 4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200]
+    >>> pygrib.open('sampledata/flux.grb').read()
+    [1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120:from 200402291200, 2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200, 3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200, 4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200]
     >>> grbs = pygrib.open('sampledata/flux.grb')
-    >>> grb1 = grbs.next()
+
+    acts like a file object
+    >>> grbs.tell()
+    0
+    >>> grbs.read(1)
+    [1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120:from 200402291200]
+    >>> grbs.tell()
+    1
+    >>> grbs.read(2)
+    [2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200, 3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200]
+    >>> grbs.read()
+    [4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200]
+    >>> grbs.seek(1)
+    >>> grbs.next()
+    2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
+    >>> grbs.seek(-3,2)
+    >>> grbs.next()
+    2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
+    >>> grbs.seek(1,1)
+    >>> grbs.next()
+    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
+    >>> grbs.seek(0)
 
     first grib message
+    >>> grb1 = grbs.next()
     >>> print grb1
     1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120:from 200402291200
 
