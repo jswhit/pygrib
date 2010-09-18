@@ -278,15 +278,17 @@ cdef class open(object):
     """ 
     open(filename)
     
-    returns iterator object given GRIB filename. When iterated, returns
-    instances of the L{gribmessage} class.
+    returns GRIB file iterator object given GRIB filename. When iterated, returns
+    instances of the L{gribmessage} class. Behaves much like a python file
+    object, with L{seek}, L{tell}, L{read} and L{close} methods, 
+    except that offsets are measured in grib messages instead of bytes.
      
     @ivar messages: The total number of grib messages in the file.
 
     @ivar messagenumber: The grib message number that the iterator currently
-    points to.
+    points to (the value returned by L{tell}).
 
-    @ivar filename: The GRIB file which the instance represents."""
+    @ivar name: The GRIB file which the instance represents."""
     cdef FILE *_fd
     cdef grib_handle *_gh
     cdef public object name, messagenumber, messages
@@ -318,9 +320,11 @@ cdef class open(object):
         return self.messagenumber
     def seek(self, msg, from_what=0):
         """
-        seek(N)
+        seek(N,from_what=0)
         
-        position iterator at end of N'th grib message (0 to go back to beginning of grib file)"""
+        advance iterator N grib messages from beginning of file 
+        (if from_what=0), from current position (if from_what=1)
+        or backward from end of file (if from_what=2)."""
         if from_what not in [0,1,2]:
             raise ValueError('from_what keyword arg to seek must be 0,1 or 2')
         if msg == 0:
@@ -340,7 +344,9 @@ cdef class open(object):
         else:
             raise ValueError('message number out of range')
     def _advance(self,nmsgs,return_msgs=False):
-        """advance iterator nmsgs messages from current position)"""
+        """advance iterator n messages from current position.
+        if return_msgs==True, grib message instances are returned
+        in a list"""
         if return_msgs: grbs=[]
         for n in range(self.messagenumber,self.messagenumber+nmsgs):
             err = grib_handle_delete(self._gh)
@@ -355,6 +361,12 @@ cdef class open(object):
             if return_msgs: grbs.append(_create_gribmessage(self._gh, self.messagenumber))
         if return_msgs: return grbs
     def read(self,msgs=None):
+        """
+        read(N=None)
+        
+        read N from current position, return grib messages instances in a
+        list.  If N=None, all the messages to the end of the file are read.
+        """
         if msgs is None:
             return self._advance(self.messages-self.messagenumber,return_msgs=True)
         elif msgs == 1:
@@ -388,7 +400,8 @@ cdef class open(object):
         """
         message(N)
         
-        retrieve N'th message in iterator"""
+        retrieve N'th message in iterator.
+        same as seek(N-1) followed by read(1)."""
         cdef int err
         if N < 1:
             raise IOError('grb message numbers start at 1')
