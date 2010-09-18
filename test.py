@@ -40,7 +40,8 @@ def test():
     3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
 
     indexing iterator with an integer key has the same result,
-    except that the iterator is automatically rewound.
+    except that the position of iterator does not change.
+    >>> grbs.seek(0) # position iterator at beginning (same as grbs.rewind())
     >>> grb = grbs[2] # 2nd message
     >>> print grb
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200

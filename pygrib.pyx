@@ -315,20 +315,54 @@ cdef class open(object):
     def tell(self):
         """returns position of iterator (grib message number, 0 means iterator
         is positioned at beginning of file)."""
-        return self.messagnumber
-    def seek(self, msg):
+        return self.messagenumber
+    def seek(self, msg, from_what=0):
         """
         seek(N)
         
-        position iterator at N'th grib message (0 to go back to beginning of grib file)"""
+        position iterator at end of N'th grib message (0 to go back to beginning of grib file)"""
+        if from_what not in [0,1,2]:
+            raise ValueError('from_what keyword arg to seek must be 0,1 or 2')
         if msg == 0:
-           self.rewind()
+            if from_what == 0:
+                self.rewind()
+            elif from_what == 1:
+                return
+            elif from_what == 2:
+                self.message(self.messages)
         elif msg > 0 and msg <= self.messages:
-            self.message(msg)
+            if from_what == 0:
+                self.message(msg)
+            elif from_what == 1:
+                self._advance(self.messagenumber+msg)
+            elif from_what == 2:
+                self.message(self.messages-msg)
         else:
-            raise ValueError('message number out of rang')
+            raise ValueError('message number out of range')
+    def _advance(self,nmsgs,return_msgs=False):
+        """advance iterator nmsgs messages from current position)"""
+        if return_msgs: grbs=[]
+        for n in range(self.messagenumber,self.messagenumber+nmsgs):
+            err = grib_handle_delete(self._gh)
+            if err:
+                raise RuntimeError(grib_get_error_message(err))
+            self._gh = grib_handle_new_from_file(NULL, self._fd, &err)
+            if err:
+                raise RuntimeError(grib_get_error_message(err))
+            if self._gh == NULL:
+                raise IOError('not that many messages in file')
+            self.messagenumber = self.messagenumber + 1
+            if return_msgs: grbs.append(_create_gribmessage(self._gh, self.messagenumber))
+        if return_msgs: return grbs
+    def read(self,msgs=None):
+        if msgs is None:
+            return self._advance(self.messages-self.messagenumber,return_msgs=True)
+        elif msgs == 1:
+            return self.next()
+        else:
+            return self._advance(msgs,return_msgs=True)
     def rewind(self):
-        """rewind iterator"""
+        """rewind iterator (same as seek(0))"""
         cdef grib_handle* gh 
         cdef int err
         rewind(self._fd)
@@ -338,13 +372,15 @@ cdef class open(object):
         if type(key) == slice:
             # for a slice, return a list of grib messages.
             beg, end, inc = key.indices(self.messages)
+            msg = self.tell()
             grbs = [self.message(n+1) for n in xrange(beg,end,inc)]
-            grbs.rewind() # rewind iterator
+            self.seek(msg) # put iterator back in original position
             return grbs
         elif type(key) == int or type(key) == long:
             # for an integer, return a single grib message.
+            msg = self.tell()
             grb = self.message(key)
-            self.rewind() # rewind iterator.
+            self.seek(msg) # put iterator back in original position
             return grb
         else:
             raise KeyError('key must be an integer message number or a slice')
@@ -358,16 +394,8 @@ cdef class open(object):
             raise IOError('grb message numbers start at 1')
         if self.messagenumber >= N:
             self.rewind()
-        for n in range(self.messagenumber,N):
-            err = grib_handle_delete(self._gh)
-            if err:
-                raise RuntimeError(grib_get_error_message(err))
-            self._gh = grib_handle_new_from_file(NULL, self._fd, &err)
-            if err:
-                raise RuntimeError(grib_get_error_message(err))
-            if self._gh == NULL:
-                raise IOError('not that many messages in file')
-            self.messagenumber = self.messagenumber + 1
+        # advance iterator by N messages.
+        self._advance(N)
         return _create_gribmessage(self._gh, self.messagenumber)
     def __next__(self):
         cdef grib_handle* gh 
