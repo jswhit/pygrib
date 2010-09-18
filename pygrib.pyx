@@ -396,8 +396,6 @@ cdef class open(object):
         """
         if msgs is None:
             grbs = self._advance(self.messages-self.messagenumber,return_msgs=True)
-        elif msgs == 1:
-            grbs = [self.next()]
         else:
             grbs = self._advance(msgs,return_msgs=True)
         #if len(grbs) == 1: grbs = grbs[0]
