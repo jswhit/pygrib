@@ -25,7 +25,7 @@ def test():
     >>> grbs.next()
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
     >>> grbs.seek(-3,2)
-    >>> grbs.next()
+    >>> grbs.readline()
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
     >>> grbs.seek(1,1)
     >>> grbs.next()
@@ -33,7 +33,7 @@ def test():
     >>> grbs.seek(0)
 
     first grib message
-    >>> grb1 = grbs.next()
+    >>> grb1 = grbs.readline()
     >>> print grb1
     1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120:from 200402291200
 

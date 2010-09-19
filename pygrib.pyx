@@ -62,7 +62,7 @@ Example usage
  - open a GRIB file, create a grib message iterator::
     >>> grbs = pygrib.open('sampledata/flux.grb')  
  - pygrib open instances behave like regular python file objects, with
- C{seek}, C{tell}, C{read} and C{close} methods, except that offsets
+ C{seek}, C{tell}, C{read}, C{readline} and C{close} methods, except that offsets
  are measured in grib messages instead of bytes::
     >>> grbs.seek(2)
     >>> grbs.tell()
@@ -109,7 +109,7 @@ Example usage
     >>> grbout = open('test.grb','wb')
     >>> grbout.write(msg)
     >>> grbout.close()
-    >>> print pygrib.open('test.grb').readmsg() # readmsg is like readline.
+    >>> print pygrib.open('test.grb').readline() 
     1:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 240:from 201001011200
 
 Documentation
@@ -377,13 +377,17 @@ cdef class open(object):
                 self._advance(msg)
             elif from_what == 2:
                 self.message(self.messages+msg)
-    def readmsg(self):
+    def readline(self):
         """
-        readmsg()
+        readline()
 
-        read one entire grib message from the file
-        (analagous to C{readline} file object method)."""
-        return self.next()
+        read one entire grib message from the file.
+        If EOF is encountered, None is returned."""
+        try:
+            grb = self.next()
+        except StopIteration:
+            grb = None
+        return grb
     def read(self,msgs=None):
         """
         read(N=None)
