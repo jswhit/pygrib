@@ -58,7 +58,19 @@ Example usage
     >>> import pygrib
  - open a GRIB file, create a grib message iterator::
     >>> grbs = pygrib.open('sampledata/flux.grb')  
+ - pygrib open instances behave like regular python file objects, with
+ C{seek}, C{tell}, C{read} and C{close} methods, except that offsets
+ are measured in grib messages instead of bytes::
+    >>> grbs.seek(2)
+    >>> grbs.tell()
+    2
+    >>> grb = grbs.read(1)[0] # read returns a list with the next N (N=1 in this case) messages.
+    >>> print grb # the __repr__ method of a grib message object prints summary info
+    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
+    >>> grbs.tell()
+    3
  - print an inventory of the file::
+    >>> grbs.seek(0)
     >>> for grb in grbs:
     >>>     print grb 
     1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120:from 200402291200
@@ -66,58 +78,35 @@ Example usage
     3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
     4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
  - find the first grib message with a matching name::
-    >>> for grb in grbs:
-    >>>     if grb['name'] == 'Maximum temperature': break
+    >>> grb = grbs.select(name='Maximum temperature')[0]
  - extract the data values using the 'values' key
  (grb.keys() will return a list of the available keys)::
     # The data is returned as a numpy array, or if missing values or a bitmap
     # are present, a numpy masked array.  Reduced lat/lon or gaussian grid
     # data is automatically expanded to a regular grid.
-    >>> maxt = grb['values']
-    >>> print maxt.shape, maxt.min(), maxt.max()
-    (94, 192) 223.7 319.9
- - instead of treating the gribmessage instance as a dictionary to 
- access key/value pairs, you can access the keys as attributes::
-    >>> maxt = grb.values
+    >>> maxt = grb.values # same as grb['values']
     >>> print maxt.shape, maxt.min(), maxt.max()
     (94, 192) 223.7 319.9
  - get the latitudes and longitudes of the grid::
     >>> lats, lons = grb.latlons()
     >>> print lats.shape, lats.min(), lats.max(), lons.shape, lons.min(), lons.max()
     (94, 192) -88.5419501373 88.5419501373  0.0 358.125
- - use L{open.select} to choose grib messages based upon specified key/value pairs::
-    >>> selected_grbs = grbs.select(level=2,typeOfLevel='heightAboveGround') # get all 2-m level fields
-    >>> for grb in selected_grbs: print grb
-    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
-    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
- - get the third grib message, leave iterator positioned there::
-    >>> grb = grbs.message(3) # iterator is left positioned at message 3
-    >>> print grb
-    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
-    >>> grb = grbs.next() # get next item in iterator
-    >>> print grb # which is the fourth grib message
-    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
- - indexing with integer key is the same as calling the message method, except 
- that the iterator is automatically rewound (positioned at the beginning)::
-    >>> grb = grbs[2] # iterator is automatically rewound!
+ - get the second grib message::
+    >>> grb = grbs.message(2) # same as grbs.seek(1); grb=grbs.read(1)[0], or grb=grbs[2]
     >>> print grb
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
-    >>> grb = grbs.next() # get next item in iterator
-    >>> print grb # which is the first grib message since iterator was 'rewound'
-    1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120:from 200402291200
- - modify the values associated with existing keys
- (either via attribute or dictionary access)::
-    >>> grb['forecast_time'] = 240
+ - modify the values associated with existing keys (either via attribute or
+ dictionary access)::
+    >>> grb['forecastTime'] = 240
     >>> grb.dataDate = 20100101
  - get the binary string associated with the coded message::
     >>> msg = grb.tostring()
+    >>> grbs.close() # close the grib file.
  - write the modified message to a new GRIB file::
     >>> grbout = open('test.grb','wb')
     >>> grbout.write(msg)
     >>> grbout.close()
-    >>> grbs = pygrib.open('test.grb')
-    >>> grbs.next()
-    >>> print grb
+    >>> print pygrib.open('test.grb').next()
     1:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 240:from 201001011200
 
 Documentation
@@ -134,7 +123,7 @@ Changelog
 
 @contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
 
-@version: 1.7.3
+@version: 1.8.0
 
 @copyright: copyright 2010 by Jeffrey Whitaker.
 
@@ -366,8 +355,8 @@ cdef class open(object):
         seek(N,from_what=0)
         
         advance iterator N grib messages from beginning of file 
-        (if from_what=0), from current position (if from_what=1)
-        or from the end of file (if from_what=2)."""
+        (if C{from_what=0}), from current position (if C{from_what=1})
+        or from the end of file (if C{from_what=2})."""
         if from_what not in [0,1,2]:
             raise ValueError('from_what keyword arg to seek must be 0,1 or 2')
         if msg == 0:
@@ -388,7 +377,7 @@ cdef class open(object):
         """
         read(N=None)
         
-        read N from current position, return grib messages instances in a
+        read N messages from current position, returning grib messages instances in a
         list.  If N=None, all the messages to the end of the file are read.
         C{pygrib.open(f).read()} is equivalent to C{list(pygrib.open(f))},
         both return a list containing L{gribmessage} instances for all the
@@ -398,7 +387,6 @@ cdef class open(object):
             grbs = self._advance(self.messages-self.messagenumber,return_msgs=True)
         else:
             grbs = self._advance(msgs,return_msgs=True)
-        #if len(grbs) == 1: grbs = grbs[0]
         return grbs
     def close(self):
         """
@@ -475,7 +463,6 @@ Example usage:
 """
         self.rewind()
         grbs = [grb for grb in self if _find(grb, **kwargs)]
-        #if len(grbs) == 1: grbs = grbs[0]
         return grbs
     def _advance(self,nmsgs,return_msgs=False):
         """advance iterator n messages from current position.
@@ -1470,7 +1457,6 @@ Example usage:
             if err:
                 raise RuntimeError(grib_get_error_message(err))
         # return the list of grib messages.
-        #if len(grbs) == 1: grbs = grbs[0]
         return grbs
     def close(self):
         """
