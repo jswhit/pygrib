@@ -1,6 +1,7 @@
 version 1.8.0 - not yet released
 ================================
-* now works with Python 2.4.
+* added readmsg method, close attribute to pygrib.open.
+* now verified to work with Python 2.4.
 * make pygrib.open objects behave more like regular python file objects.
   Added seek,tell,read methods.  'filename' attribute change to 'name'.
 * slicing the iterator using __getitem__ does not change position of

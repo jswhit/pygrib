@@ -109,7 +109,7 @@ Example usage
     >>> grbout = open('test.grb','wb')
     >>> grbout.write(msg)
     >>> grbout.close()
-    >>> print pygrib.open('test.grb').next()
+    >>> print pygrib.open('test.grb').readmsg() # readmsg is like readline.
     1:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 240:from 201001011200
 
 Documentation
@@ -289,7 +289,7 @@ cdef class open(object):
     @ivar name: The GRIB file which the instance represents."""
     cdef FILE *_fd
     cdef grib_handle *_gh
-    cdef public object name, messagenumber, messages
+    cdef public object name, messagenumber, messages, closed
     def __cinit__(self, filename):
         # initialize C level objects.
         cdef grib_handle *gh
@@ -302,6 +302,7 @@ cdef class open(object):
         cdef int err,nmsgs
         # initalize Python level objects
         self.name = filename
+        self.closed = False
         self.messagenumber = 0
         # turn on support for multi-field grib messages.
         grib_multi_support_on(NULL)
@@ -376,6 +377,13 @@ cdef class open(object):
                 self._advance(msg)
             elif from_what == 2:
                 self.message(self.messages+msg)
+    def readmsg(self):
+        """
+        readmsg()
+
+        read one entire grib message from the file
+        (analagous to C{readline} file object method)."""
+        return self.next()
     def read(self,msgs=None):
         """
         read(N=None)
@@ -404,6 +412,7 @@ cdef class open(object):
             err = grib_handle_delete(self._gh)
             if err:
                 raise RuntimeError(grib_get_error_message(err))
+        self.closed = True
     def rewind(self):
         """rewind iterator (same as seek(0))"""
         cdef grib_handle* gh 
