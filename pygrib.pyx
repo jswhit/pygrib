@@ -49,6 +49,9 @@ Installation
  separately (same goes for C{JASPER}, C{OPENJPEG}, C{PNG} and C{ZLIB}).
  - Run 'python setup.py install', as root if necessary.
  - Run 'python test.py' to test your installation.
+ - Look at examples in C{test} directory (most require 
+ U{matplotlib<http://matplotlib.sf.net>} and
+ U{basemap<http://matplotlib.sourceforge.net/basemap/doc/html/>}).
 
 
 Example usage
@@ -65,7 +68,7 @@ Example usage
     >>> grbs.tell()
     2
     >>> grb = grbs.read(1)[0] # read returns a list with the next N (N=1 in this case) messages.
-    >>> print grb # the __repr__ method of a grib message object prints summary info
+    >>> print grb # printing a grib message object displays summary info
     3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
     >>> grbs.tell()
     3
