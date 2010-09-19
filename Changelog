@@ -1,5 +1,6 @@
 version 1.8.0 - not yet released
 ================================
+* now works with Python 2.4.
 * make pygrib.open objects behave more like regular python file objects.
   Added seek,tell,read methods.  'filename' attribute change to 'name'.
 * slicing the iterator using __getitem__ does not change position of
