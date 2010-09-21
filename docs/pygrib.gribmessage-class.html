@@ -108,6 +108,22 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a name="__getattr__"></a><span class="summary-sig-name">__getattr__</span>(<span class="summary-sig-arg">...</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pygrib.gribmessage-class.html#__getattribute__" class="summary-sig-name">__getattribute__</a>(<span class="summary-sig-arg">...</span>)</span><br />
       x.__getattribute__('name') &lt;==&gt; x.name</td>
           <td align="right" valign="top">
@@ -125,9 +141,8 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="__getitem__"></a><span class="summary-sig-name">__getitem__</span>(<span class="summary-sig-arg">x</span>,
-        <span class="summary-sig-arg">y</span>)</span><br />
-      x[y]</td>
+          <td><span class="summary-sig"><a href="pygrib.gribmessage-class.html#__getitem__" class="summary-sig-name">__getitem__</a>(<span class="summary-sig-arg">...</span>)</span><br />
+      access values associated with grib keys.</td>
           <td align="right" valign="top">
             
             
@@ -178,8 +193,8 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pygrib.gribmessage-class.html#__repr__" class="summary-sig-name">__repr__</a>(<span class="summary-sig-arg">x</span>)</span><br />
-      repr(x)</td>
+          <td><span class="summary-sig"><a href="pygrib.gribmessage-class.html#__repr__" class="summary-sig-name">__repr__</a>(<span class="summary-sig-arg">...</span>)</span><br />
+      prints a short inventory of the grib message</td>
           <td align="right" valign="top">
             
             
@@ -212,10 +227,8 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="__setitem__"></a><span class="summary-sig-name">__setitem__</span>(<span class="summary-sig-arg">x</span>,
-        <span class="summary-sig-arg">i</span>,
-        <span class="summary-sig-arg">y</span>)</span><br />
-      x[i]=y</td>
+          <td><span class="summary-sig"><a name="__setitem__"></a><span class="summary-sig-name">__setitem__</span>(<span class="summary-sig-arg">...</span>)</span><br />
+      change values associated with existing grib keys.</td>
           <td align="right" valign="top">
             
             
@@ -447,6 +460,32 @@ object --+
   </dl>
 </td></tr></table>
 </div>
+<a name="__getitem__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__getitem__</span>(<span class="sig-arg">...</span>)</span>
+    <br /><em class="fname">(Indexing operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>access values associated with grib keys.</p>
+  <p>The key &quot;values&quot; will return the data associated with the 
+  grib message. The data is returned as a numpy array, or if missing values
+  or a bitmap are present, a numpy masked array.  Reduced lat/lon or 
+  gaussian grid data is automatically expanded to a regular grid using 
+  linear interpolation (nearest neighbor if an adjacent grid point is a 
+  missing value).</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
 <a name="__init__"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -503,7 +542,7 @@ object --+
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">__repr__</span>(<span class="sig-arg">x</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__repr__</span>(<span class="sig-arg">...</span>)</span>
     <br /><em class="fname">(Representation operator)</em>
   </h3>
   </td><td align="right" valign="top"
@@ -511,7 +550,7 @@ object --+
     </td>
   </tr></table>
   
-  <p>repr(x)</p>
+  <p>prints a short inventory of the grib message</p>
   <dl class="fields">
     <dt>Overrides:
         object.__repr__
@@ -634,7 +673,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Aug 17 11:22:31 2010
+    Generated by Epydoc 3.0.1 on Tue Sep 21 08:40:32 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

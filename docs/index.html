@@ -62,7 +62,7 @@
   <h1 class="heading">Required</h1>
     <ul>
       <li>
-        <a href="http://python.org" target="_top">Python</a> 2.5 or higher.
+        <a href="http://python.org" target="_top">Python</a> 2.4 or higher.
       </li>
       <li>
         <a 
@@ -118,10 +118,17 @@
         <code>ZLIB</code>).
       </li>
       <li>
-        Run 'python setup.py install', as root if necessary.
+        Run 'python setup.py build' and then 'python setup.py install', as 
+        root if necessary.
       </li>
       <li>
         Run 'python test.py' to test your installation.
+      </li>
+      <li>
+        Look at examples in <code>test</code> directory (most require <a 
+        href="http://matplotlib.sf.net" target="_top">matplotlib</a> and <a
+        href="http://matplotlib.sourceforge.net/basemap/doc/html/" 
+        target="_top">basemap</a>).
       </li>
     </ul>
   <h1 class="heading">Example usage</h1>
@@ -139,8 +146,25 @@
 </pre>
       </li>
       <li>
+        pygrib open instances behave like regular python file objects, with
+        <code>seek</code>, <code>tell</code>, <code>read</code>, 
+        <code>readline</code> and <code>close</code> methods, except that 
+        offsets are measured in grib messages instead of bytes:
+<pre class="literalblock">
+  &gt;&gt;&gt; grbs.seek(2)
+  &gt;&gt;&gt; grbs.tell()
+  2
+  &gt;&gt;&gt; grb = grbs.read(1)[0] # read returns a list with the next N (N=1 in this case) messages.
+  &gt;&gt;&gt; print grb # printing a grib message object displays summary info
+  3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
+  &gt;&gt;&gt; grbs.tell()
+  3
+</pre>
+      </li>
+      <li>
         print an inventory of the file:
 <pre class="literalblock">
+  &gt;&gt;&gt; grbs.seek(0)
   &gt;&gt;&gt; for grb in grbs:
   &gt;&gt;&gt;     print grb 
   1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120:from 200402291200
@@ -152,29 +176,19 @@
       <li>
         find the first grib message with a matching name:
 <pre class="literalblock">
-  &gt;&gt;&gt; for grb in grbs:
-  &gt;&gt;&gt;     if grb['name'] == 'Maximum temperature': break
+  &gt;&gt;&gt; grb = grbs.select(name='Maximum temperature')[0]
 </pre>
       </li>
       <li>
         extract the data values using the 'values' key (grb.keys() will 
         return a list of the available keys):
 <pre class="literalblock">
-# The data is returned as a numpy array, or if missing values or a bitmap
-# are present, a numpy masked array.  Reduced lat/lon or gaussian grid
-# data is automatically expanded to a regular grid.
-&gt;&gt;&gt; maxt = grb['values']
-&gt;&gt;&gt; print maxt.shape, maxt.min(), maxt.max()
-(94, 192) 223.7 319.9
-</pre>
-      </li>
-      <li>
-        instead of treating the gribmessage instance as a dictionary to 
-        access key/value pairs, you can access the keys as attributes:
-<pre class="literalblock">
-&gt;&gt;&gt; maxt = grb.values
-&gt;&gt;&gt; print maxt.shape, maxt.min(), maxt.max()
-(94, 192) 223.7 319.9
+  # The data is returned as a numpy array, or if missing values or a bitmap
+  # are present, a numpy masked array.  Reduced lat/lon or gaussian grid
+  # data is automatically expanded to a regular grid.
+  &gt;&gt;&gt; maxt = grb.values # same as grb['values']
+  &gt;&gt;&gt; print maxt.shape, maxt.min(), maxt.max()
+  (94, 192) 223.7 319.9
 </pre>
       </li>
       <li>
@@ -186,29 +200,9 @@
 </pre>
       </li>
       <li>
-        use <a href="pygrib.open-class.html#select" 
-        class="link">open.select</a> to choose grib messages based upon 
-        specified key/value pairs:
+        get the second grib message:
 <pre class="literalblock">
-  &gt;&gt;&gt; selected_grbs = grbs.select(level=2,typeOfLevel='heightAboveGround') # get all 2-m level fields
-  &gt;&gt;&gt; for grb in selected_grbs: print grb
-  3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
-  4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
-</pre>
-      </li>
-      <li>
-        get the third grib message:
-<pre class="literalblock">
-  &gt;&gt;&gt; grb = grbs.message(3)
-  &gt;&gt;&gt; print grb
-  3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
-</pre>
-      </li>
-      <li>
-        indexing with integer key is the same as calling the message 
-        method:
-<pre class="literalblock">
-  &gt;&gt;&gt; grb = grbs[2]
+  &gt;&gt;&gt; grb = grbs.message(2) # same as grbs.seek(1); grb=grbs.read(1)[0], or grb=grbs[2]
   &gt;&gt;&gt; print grb
   2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
 </pre>
@@ -217,14 +211,15 @@
         modify the values associated with existing keys (either via 
         attribute or dictionary access):
 <pre class="literalblock">
-&gt;&gt;&gt; grb['forecast_time'] = 240
-&gt;&gt;&gt; grb.dataDate = 20100101
+  &gt;&gt;&gt; grb['forecastTime'] = 240
+  &gt;&gt;&gt; grb.dataDate = 20100101
 </pre>
       </li>
       <li>
         get the binary string associated with the coded message:
 <pre class="literalblock">
   &gt;&gt;&gt; msg = grb.tostring()
+  &gt;&gt;&gt; grbs.close() # close the grib file.
 </pre>
       </li>
       <li>
@@ -233,9 +228,7 @@
   &gt;&gt;&gt; grbout = open('test.grb','wb')
   &gt;&gt;&gt; grbout.write(msg)
   &gt;&gt;&gt; grbout.close()
-  &gt;&gt;&gt; grbs = pygrib.open('test.grb')
-  &gt;&gt;&gt; grbs.next()
-  &gt;&gt;&gt; print grb
+  &gt;&gt;&gt; print pygrib.open('test.grb').readline() 
   1:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 240:from 201001011200
 </pre>
       </li>
@@ -263,7 +256,7 @@
         Whitaker</a>
       </p>
       <p><strong>Version:</strong>
-        1.7.2
+        1.8.0
       </p>
       <p><strong>Copyright:</strong>
         copyright 2010 by Jeffrey Whitaker.
@@ -334,14 +327,14 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="__version__"></a><span class="summary-name">__version__</span> = <code title="'1.7.1'"><code class="variable-quote">'</code><code class="variable-string">1.7.1</code><code class="variable-quote">'</code></code>
+        <a name="__version__"></a><span class="summary-name">__version__</span> = <code title="'1.8.0'"><code class="variable-quote">'</code><code class="variable-string">1.8.0</code><code class="variable-quote">'</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="grib_api_version"></a><span class="summary-name">grib_api_version</span> = <code title="10800">10800</code>
+        <a name="grib_api_version"></a><span class="summary-name">grib_api_version</span> = <code title="10900">10900</code>
     </td>
   </tr>
 <tr>
@@ -385,7 +378,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Aug 17 11:22:31 2010
+    Generated by Epydoc 3.0.1 on Tue Sep 21 08:40:32 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

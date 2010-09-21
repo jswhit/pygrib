@@ -58,9 +58,26 @@ object --+
 
 <hr />
 <p>open(filename)</p>
-  <p>returns iterator object given GRIB filename. When iterated, returns 
-  instances of the <a href="pygrib.gribmessage-class.html" 
-  class="link">gribmessage</a> class.</p>
+  <p>returns GRIB file iterator object given GRIB filename. When iterated, 
+  returns instances of the <a href="pygrib.gribmessage-class.html" 
+  class="link">gribmessage</a> class. Behaves much like a python file 
+  object, with <a href="pygrib.open-class.html#seek" class="link">seek</a>,
+  <a href="pygrib.open-class.html#tell" class="link">tell</a>, <a 
+  href="pygrib.open-class.html#read" class="link">read</a> and <a 
+  href="pygrib.open-class.html#close" class="link">close</a> methods, 
+  except that offsets are measured in grib messages instead of bytes. 
+  Additional methods include <a href="pygrib.open-class.html#rewind" 
+  class="link">rewind</a> (like <code>seek(0)</code>), <a 
+  href="pygrib.open-class.html#message" class="link">message</a> (like 
+  <code>seek(N-1)</code>; followed by <code>read(1)</code>), and <a 
+  href="pygrib.open-class.html#select" class="link">select</a> (filters 
+  messages based on specified conditions).  The <code>__call__</code> 
+  method forwards to <a href="pygrib.open-class.html#select" 
+  class="link">select</a>, and instances can be sliced with 
+  <code>__getitem__</code> (returning lists of <a 
+  href="pygrib.gribmessage-class.html" class="link">gribmessage</a> 
+  instances).  The position of the iterator is not altered by slicing with 
+  <code>__getitem__</code>.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -76,9 +93,9 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="__call__"></a><span class="summary-sig-name">__call__</span>(<span class="summary-sig-arg">x</span>,
-        <span class="summary-sig-arg">...</span>)</span><br />
-      x(...)</td>
+          <td><span class="summary-sig"><a name="__call__"></a><span class="summary-sig-name">__call__</span>(<span class="summary-sig-arg">...</span>)</span><br />
+      same as <a href="pygrib.open-class.html#select" 
+      class="link">select</a></td>
           <td align="right" valign="top">
             
             
@@ -198,8 +215,8 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="message"></a><span class="summary-sig-name">message</span>(<span class="summary-sig-arg">N</span>)</span><br />
-      retrieve N'th message in iterator</td>
+          <td><span class="summary-sig"><a href="pygrib.open-class.html#message" class="summary-sig-name">message</a>(<span class="summary-sig-arg">N</span>)</span><br />
+      retrieve N'th message in iterator.</td>
           <td align="right" valign="top">
             
             
@@ -231,8 +248,64 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pygrib.open-class.html#read" class="summary-sig-name">read</a>(<span class="summary-sig-arg">N</span>=<span class="summary-sig-default">None</span>)</span><br />
+      read N messages from current position, returning grib messages 
+      instances in a list.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pygrib.open-class.html#readline" class="summary-sig-name">readline</a>()</span><br />
+      read one entire grib message from the file.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a name="rewind"></a><span class="summary-sig-name">rewind</span>(<span class="summary-sig-arg">...</span>)</span><br />
-      rewind iterator</td>
+      rewind iterator (same as seek(0))</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="seek"></a><span class="summary-sig-name">seek</span>(<span class="summary-sig-arg">N</span>,
+        <span class="summary-sig-arg">from_what</span>=<span class="summary-sig-default">0</span>)</span><br />
+      advance iterator N grib messages from beginning of file (if 
+      <code>from_what=0</code>), from current position (if 
+      <code>from_what=1</code>) or from the end of file (if 
+      <code>from_what=2</code>).</td>
           <td align="right" valign="top">
             
             
@@ -252,6 +325,24 @@ object --+
       return a list of <a href="pygrib.gribmessage-class.html" 
       class="link">gribmessage</a> instances from iterator filtered by 
       kwargs.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="tell"></a><span class="summary-sig-name">tell</span>(<span class="summary-sig-arg">...</span>)</span><br />
+      returns position of iterator (grib message number, 0 means iterator 
+      is positioned at beginning of file).</td>
           <td align="right" valign="top">
             
             
@@ -291,16 +382,10 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="filename"></a><span class="summary-name">filename</span><br />
-      The GRIB file which the instance represents.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
         <a name="messagenumber"></a><span class="summary-name">messagenumber</span><br />
-      The grib message number that the iterator currently points to.
+      The grib message number that the iterator currently points to (the 
+      value returned by <a href="pygrib.open-class.html#tell" 
+      class="link">tell</a>).
     </td>
   </tr>
 <tr>
@@ -309,6 +394,14 @@ object --+
     </td><td class="summary">
         <a name="messages"></a><span class="summary-name">messages</span><br />
       The total number of grib messages in the file.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="name"></a><span class="summary-name">name</span><br />
+      The GRIB file which the instance represents.
     </td>
   </tr>
 </table>
@@ -320,6 +413,13 @@ object --+
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Properties</span></td>
 </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="closed"></a><span class="summary-name">closed</span>
+    </td>
+  </tr>
   <tr>
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
@@ -383,6 +483,70 @@ object --+
     <dt>Overrides:
         object.__new__
     </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="message"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">message</span>(<span class="sig-arg">N</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>retrieve N'th message in iterator. same as seek(N-1) followed by 
+  read(1).</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="read"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">read</span>(<span class="sig-arg">N</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>read N messages from current position, returning grib messages 
+  instances in a list.  If N=None, all the messages to the end of the file 
+  are read. <code>pygrib.open(f).read()</code> is equivalent to 
+  <code>list(pygrib.open(f))</code>, both return a list containing <a 
+  href="pygrib.gribmessage-class.html" class="link">gribmessage</a> 
+  instances for all the grib messages in the file <code>f</code>.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="readline"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">readline</span>()</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>read one entire grib message from the file. If EOF is encountered, 
+  None is returned.</p>
+  <dl class="fields">
   </dl>
 </td></tr></table>
 </div>
@@ -464,7 +628,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Aug 17 11:22:31 2010
+    Generated by Epydoc 3.0.1 on Tue Sep 21 08:40:32 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
