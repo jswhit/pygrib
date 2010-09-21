@@ -1,7 +1,7 @@
-version 1.8.0 - not yet released
+version 1.8.0 - svn revision 377
 ================================
 * make pygrib.open objects behave more like regular python file objects.
-  Added seek,tell,read,readline methods.  'filename' attribute change to
+  Added seek,tell,read,readline methods.  'filename' attribute changed to
   'name', 'closed' attribute added.
 * slicing the iterator using __getitem__ does not change position of
   iterator.
