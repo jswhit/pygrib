@@ -1,15 +1,15 @@
 version 1.8.0 - not yet released
 ================================
-* added readline method, closed attribute to pygrib.open.
-* now verified to work with Python 2.4.
 * make pygrib.open objects behave more like regular python file objects.
-  Added seek,tell,read methods.  'filename' attribute change to 'name'.
+  Added seek,tell,read,readline methods.  'filename' attribute change to
+  'name', 'closed' attribute added.
 * slicing the iterator using __getitem__ does not change position of
   iterator.
 * force 'paramId' to be a scalar integer, not an integer array.
 * arrays initialized to zero (use np.zeros instead of np.empty).  Now
   values returned in "paramId" are repeatable, don't contain random garbage
   in undefined elements.
+* now verified to work with Python 2.4.
 
 version 1.7.2 - svn revision 303
 ================================
