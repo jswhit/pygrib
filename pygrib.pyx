@@ -47,7 +47,7 @@ Installation
  include files are installed in separate locations, the environment variables
  C{$GRIBAPI_INCDIR} and C{$GRIBAPI_LIBDIR} can be used to define the locations
  separately (same goes for C{JASPER}, C{OPENJPEG}, C{PNG} and C{ZLIB}).
- - Run 'python setup.py install', as root if necessary.
+ - Run 'python setup.py build' and then 'python setup.py install', as root if necessary.
  - Run 'python test.py' to test your installation.
  - Look at examples in C{test} directory (most require 
  U{matplotlib<http://matplotlib.sf.net>} and
