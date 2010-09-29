@@ -1,3 +1,6 @@
+* readline() returns None if EOF encountered (instead of raising an
+  exception).
+* added grib1to2 and grib2to1 utilites.
 version 1.8.0 - svn revision 377
 ================================
 * make pygrib.open objects behave more like regular python file objects.
