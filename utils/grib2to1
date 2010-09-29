@@ -1,0 +1,21 @@
+import pygrib, sys
+
+if len(sys.argv) < 3:
+   print """
+   grib2to1 <grib2 filename> <grib1 filename>
+   """
+   raise SystemExit
+   
+grbs = pygrib.open(sys.argv[1])
+f = open(sys.argv[2],'wb')
+
+for grb in grbs:
+    try:
+        grb.editionNumber=1 
+    except:
+        print 'cannot convert message %s' % grb.messagenumber
+        continue
+    f.write(grb.tostring())
+
+grbs.close()
+f.close()
