@@ -382,7 +382,7 @@ cdef class open(object):
         readline()
 
         read one entire grib message from the file.
-        If EOF is encountered, None is returned."""
+        Returns a L{gribmessage} instance, or None if an EOF is encountered."""
         try:
             grb = self.next()
         except StopIteration:
