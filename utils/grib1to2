@@ -18,6 +18,8 @@ if len(sys.argv) > 3:
 else:
    grb2packing = 'grid_jpeg' # default is jpeg2000 
 
+print 'converting %s from grib1 to grib2 (%s) with %s packing ...' % (sys.argv[1],sys.argv[2],grb2packing)
+
 for grb in grbs:
     try:
         grb.editionNumber=2 

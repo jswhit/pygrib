@@ -10,6 +10,8 @@ if len(sys.argv) < 3:
 grbs = pygrib.open(sys.argv[1])
 f = open(sys.argv[2],'wb')
 
+print 'converting %s from grib2 to grib1 (%s) ...' % (sys.argv[1],sys.argv[2])
+
 for grb in grbs:
     try:
         grb.editionNumber=1 
