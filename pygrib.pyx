@@ -86,7 +86,9 @@ Example usage
  (grb.keys() will return a list of the available keys)::
     # The data is returned as a numpy array, or if missing values or a bitmap
     # are present, a numpy masked array.  Reduced lat/lon or gaussian grid
-    # data is automatically expanded to a regular grid.
+    # data is automatically expanded to a regular grid. Details of the internal
+    # representation of the grib data (such as the scanning mode) are handled
+    # automatically.
     >>> maxt = grb.values # same as grb['values']
     >>> print maxt.shape, maxt.min(), maxt.max()
     (94, 192) 223.7 319.9
