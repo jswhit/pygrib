@@ -171,3 +171,5 @@ def test():
 if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
+    import pygrib
+    print 'using GRIB API version',pygrib.grib_api_version
