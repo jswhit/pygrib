@@ -1,7 +1,8 @@
 version 1.8.1 - not yet released
 ================================
-* readline() returns None if EOF encountered (instead of raising an
-  exception).
+* regenerated C source with Cython 0.14.
+* print grib api version after running tests with test.py.
+* readline() returns None if EOF encountered (instead of raising an exception).
 * added grib1to2 and grib2to1 utilites.
 
 version 1.8.0 - svn revision 377
