@@ -255,6 +255,8 @@ cdef extern from "grib_api.h":
     grib_handle* grib_handle_new_from_index(grib_index* index,int *err)
     void grib_index_delete(grib_index* index)
     int grib_is_missing(grib_handle* h, char* key, int* err)
+    grib_handle* grib_handle_new_from_message(grib_context * c, void * data,\
+                             size_t data_len)
     # new in 1.9.0
     #grib_index* grib_index_new(grib_context* c, char* keys,int *err)
     #int grib_index_add_file(grib_index *index, const char *filename)
@@ -514,6 +516,19 @@ cdef _create_gribmessage(grib_handle *gh, object messagenumber):
     grb._all_keys = grb.keys()
     grb._ro_keys  = grb._read_only_keys()
     return grb
+
+def fromstring(gribstring):
+    """
+
+    fromstring(string)
+
+    Create a gribmessage instance from a python string 
+    representing a grib message (the reverse of L{gribmessage.tostring}).
+    """
+    cdef char* gribstr
+    gribstr = PyString_AsString(gribstring)
+    gh = grib_handle_new_from_message(NULL, <void *>gribstr, len(gribstring))
+    return _create_gribmessage(gh, 1)
 
 cdef class gribmessage(object):
     """
