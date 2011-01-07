@@ -525,9 +525,17 @@ def fromstring(gribstring):
     representing a binary grib message (the reverse of L{gribmessage.tostring}).
     """
     cdef char* gribstr
+    cdef grib_handle * gh
+    cdef gribmessage grb
     gribstr = PyString_AsString(gribstring)
     gh = grib_handle_new_from_message(NULL, <void *>gribstr, len(gribstring))
-    return _create_gribmessage(gh, 1)
+    grb  = gribmessage.__new__(gribmessage)
+    grb.messagenumber = 1
+    grb.expand_reduced = True
+    grb._gh = gh
+    grb._all_keys = grb.keys()
+    grb._ro_keys  = grb._read_only_keys()
+    return grb
 
 cdef class gribmessage(object):
     """
