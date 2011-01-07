@@ -165,6 +165,10 @@ def test():
     41:Temperature:K (instant):regular_ll:isobaricInhPa:level 40000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
     42:Temperature:K (instant):regular_ll:isobaricInhPa:level 35000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
     43:Temperature:K (instant):regular_ll:isobaricInhPa:level 30000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+    >>> grbstr = grb.tostring()
+    >>> grb2 = pygrib.fromstring(grbstr)
+    >>> print grb2
+    1:Temperature:K (instant):regular_ll:isobaricInhPa:level 30000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
     >>> grbs.close()
     """
 

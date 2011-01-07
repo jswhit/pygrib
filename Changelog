@@ -1,6 +1,7 @@
 version 1.8.1 - not yet released
 ================================
-* regenerated C source with Cython 0.14.
+* added "fromstring" function (reverse of gribmessage.tostring).
+* regenerated C source with Cython 0.14.1
 * print grib api version after running tests with test.py.
 * readline() returns None if EOF encountered (instead of raising an exception).
 * added grib1to2 and grib2to1 utilites.

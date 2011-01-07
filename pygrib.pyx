@@ -519,11 +519,10 @@ cdef _create_gribmessage(grib_handle *gh, object messagenumber):
 
 def fromstring(gribstring):
     """
-
     fromstring(string)
 
     Create a gribmessage instance from a python string 
-    representing a grib message (the reverse of L{gribmessage.tostring}).
+    representing a binary grib message (the reverse of L{gribmessage.tostring}).
     """
     cdef char* gribstr
     gribstr = PyString_AsString(gribstring)
