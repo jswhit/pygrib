@@ -257,6 +257,8 @@ cdef extern from "grib_api.h":
     int grib_is_missing(grib_handle* h, char* key, int* err)
     grib_handle* grib_handle_new_from_message(grib_context * c, void * data,\
                              size_t data_len)
+    grib_handle* grib_handle_new_from_message_copy(grib_context * c, void * data,\
+                             size_t data_len)
     # new in 1.9.0
     #grib_index* grib_index_new(grib_context* c, char* keys,int *err)
     #int grib_index_add_file(grib_index *index, const char *filename)
@@ -528,7 +530,7 @@ def fromstring(gribstring):
     cdef grib_handle * gh
     cdef gribmessage grb
     gribstr = PyString_AsString(gribstring)
-    gh = grib_handle_new_from_message(NULL, <void *>gribstr, len(gribstring))
+    gh = grib_handle_new_from_message_copy(NULL, <void *>gribstr, len(gribstring))
     grb  = gribmessage.__new__(gribmessage)
     grb.messagenumber = 1
     grb.expand_reduced = True
