@@ -149,6 +149,7 @@ del __test__ # hack so epydoc doesn't show __test__
 __version__ = '1.8.1'
 
 import numpy as np
+from datetime import datetime
 from numpy import ma
 try:
     import pyproj
@@ -259,11 +260,8 @@ cdef extern from "grib_api.h":
                              size_t data_len)
     grib_handle* grib_handle_new_from_message_copy(grib_context * c, void * data,\
                              size_t data_len)
-    # new in 1.9.0
-    #grib_index* grib_index_new(grib_context* c, char* keys,int *err)
-    #int grib_index_add_file(grib_index *index, const char *filename)
-    #int grib_index_write(grib_index *index, char *filename)
-    #grib_index* grib_index_read(grib_context* c, char* filename,int *err)
+    int grib_julian_to_datetime(double jd, long *year, long *month, long *day, long *hour, long *minute, long *second)
+    int grib_datetime_to_julian(long year, long month, long day, long hour, long minute, long second, double *jd)
 
 
 missingvalue_int = GRIB_MISSING_LONG
@@ -518,6 +516,25 @@ cdef _create_gribmessage(grib_handle *gh, object messagenumber):
     grb._all_keys = grb.keys()
     grb._ro_keys  = grb._read_only_keys()
     return grb
+
+def julian_to_datetime(object jd):
+    """convert Julian day number to python datetime instance"""
+    cdef double julday
+    cdef long year, month, day, hour, minute, second
+    cdef int ierr
+    julday = jd
+    ierr = grib_julian_to_datetime(julday, &year, &month, &day, &hour, &minute, &second)
+    return datetime(year, month, day, hour, minute, second)
+
+def datetime_to_julian(object d):
+    """convert python datetime instance to Julian day number"""
+    cdef double julday
+    cdef int err
+    cdef long year, month, day, hour, minute, second
+    year = d.year; month = d.month; day = d.day; hour = d.hour
+    minute = d.minute; second = d.second
+    err = grib_datetime_to_julian(year,month,day,hour,minute,second,&julday)
+    return julday
 
 def fromstring(gribstring):
     """

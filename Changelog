@@ -1,5 +1,6 @@
 version 1.8.1 - not yet released
 ================================
+* added julian_to_datetime and datetime_to_julian functions.
 * added "fromstring" function (reverse of gribmessage.tostring).
 * regenerated C source with Cython 0.14.1
 * print grib api version after running tests with test.py.
