@@ -178,6 +178,11 @@ def test():
     >>> print grb2.validDate
     2004-12-12 12:00:00
     >>> grbs.close()
+    >>> grbs = pygrib.open('sampledata/gfs.t12z.pgrbf120.2p5deg.grib2')
+    >>> # see if multi-part grib messages are counted properly
+    >>> print grbs.messages
+    343
+    >>> grbs.close()
     """
 
 if __name__ == "__main__":
