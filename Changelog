@@ -1,5 +1,9 @@
 version 1.8.1 - not yet released
 ================================
+* in grib_api 1.9.5, grib_count_in_file does not count
+  individual messages inside multi-part messages (as it did in previous
+  versions).  So, instead of calling that routine pygrib now counts them
+  internally.
 * open.select now puts iterator back in original position.
 * fix bug in open.message (message(N) was advancing N messages, not
   going to message number N).

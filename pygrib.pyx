@@ -269,6 +269,8 @@ missingvalue_int = GRIB_MISSING_LONG
 #missingvalue_float = GRIB_MISSING_DOUBLE
 missingvalue_float = -1.e100 # value given in grib_api.h version 1.90
 grib_api_version = grib_get_api_version()
+# turn on support for multi-field grib messages.
+grib_multi_support_on(NULL)
 
 cdef class open(object):
     """ 
@@ -304,16 +306,24 @@ cdef class open(object):
         self._gh = NULL
     def __init__(self, filename):
         cdef int err,nmsgs
+        cdef grib_handle *gh
         # initalize Python level objects
         self.name = filename
         self.closed = False
         self.messagenumber = 0
-        # turn on support for multi-field grib messages.
-        grib_multi_support_on(NULL)
         # count number of messages in file.
-        err = grib_count_in_file(NULL, self._fd, &nmsgs)
-        if err:
-            raise RuntimeError(grib_get_error_message(err))
+        #err = grib_count_in_file(NULL, self._fd, &nmsgs)
+        #if err:
+        #    raise RuntimeError(grib_get_error_message(err))
+        # in 1.9.5, grib_count_in_file does not count multiple messages
+        # so, do it internally here.
+        nmsgs = 0
+        while 1:
+            gh = grib_handle_new_from_file(NULL, self._fd, &err)
+            err = grib_handle_delete(gh)
+            if gh == NULL: break
+            nmsgs = nmsgs + 1
+        rewind(self._fd)
         self.messages = nmsgs 
     def __iter__(self):
         return self
