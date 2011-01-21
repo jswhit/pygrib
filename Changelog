@@ -1,5 +1,7 @@
 version 1.8.1 - not yet released
 ================================
+* use julian_to_datetime to automatically create gribmessage analDate
+  and validDate attributes.
 * added julian_to_datetime and datetime_to_julian functions.
 * added "fromstring" function (reverse of gribmessage.tostring).
 * regenerated C source with Cython 0.14.1

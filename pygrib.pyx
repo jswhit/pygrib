@@ -507,18 +507,14 @@ Example usage:
 _private_atts =\
 ['_gh','expand_reduced','projparams','messagenumber','_all_keys','_ro_keys']
 
-cdef _create_gribmessage(grib_handle *gh, object messagenumber):
-    """factory function for creating gribmessage instances"""
-    cdef gribmessage grb  = gribmessage.__new__(gribmessage)
-    grb.messagenumber = messagenumber
-    grb.expand_reduced = True
-    grb._gh = grib_handle_clone(gh)
-    grb._all_keys = grb.keys()
-    grb._ro_keys  = grb._read_only_keys()
-    return grb
-
 def julian_to_datetime(object jd):
-    """convert Julian day number to python datetime instance"""
+    """
+    julian_to_datetime(julday)
+    
+    convert Julian day number to python datetime instance.
+
+    Used to create validDate and analDate attributes from
+    julianDay and forecastTime keys."""
     cdef double julday
     cdef long year, month, day, hour, minute, second
     cdef int ierr
@@ -527,7 +523,10 @@ def julian_to_datetime(object jd):
     return datetime(year, month, day, hour, minute, second)
 
 def datetime_to_julian(object d):
-    """convert python datetime instance to Julian day number"""
+    """
+    datetime_to_julian(date)
+    
+    convert python datetime instance to Julian day number."""
     cdef double julday
     cdef int err
     cdef long year, month, day, hour, minute, second
@@ -535,6 +534,21 @@ def datetime_to_julian(object d):
     minute = d.minute; second = d.second
     err = grib_datetime_to_julian(year,month,day,hour,minute,second,&julday)
     return julday
+
+cdef _create_gribmessage(grib_handle *gh, object messagenumber):
+    """factory function for creating gribmessage instances"""
+    cdef gribmessage grb  = gribmessage.__new__(gribmessage)
+    grb.messagenumber = messagenumber
+    grb.expand_reduced = True
+    grb._gh = grib_handle_clone(gh)
+    grb._all_keys = grb.keys()
+    grb._ro_keys  = grb._read_only_keys()
+    if grb.has_key('forecastTime') and grb.has_key('julianDay'):
+        grb.analDate =\
+        julian_to_datetime(grb.julianDay)
+        grb.validDate =\
+        julian_to_datetime(grb.julianDay+grb.forecastTime/24.)
+    return grb
 
 def fromstring(gribstring):
     """
@@ -554,6 +568,11 @@ def fromstring(gribstring):
     grb._gh = gh
     grb._all_keys = grb.keys()
     grb._ro_keys  = grb._read_only_keys()
+    if grb.has_key('forecastTime') and grb.has_key('julianDay'):
+        grb.analDate =\
+        julian_to_datetime(grb.julianDay)
+        grb.validDate =\
+        julian_to_datetime(grb.julianDay+grb.forecastTime/24.)
     return grb
 
 cdef class gribmessage(object):
@@ -568,9 +587,17 @@ cdef class gribmessage(object):
     @ivar expand_reduced:  If True (default), reduced lat/lon and gaussian grids
     will be expanded to regular grids when data is accessed via "values" key. If
     False, data is kept on unstructured reduced grid, and is returned in a 1-d
-    array."""
+    array.
+
+    @ivar analDate:  A python datetime instance describing the analysis date
+    and time for the forecast. Only set if forecastTime and julianDay keys
+    exist.
+
+    @ivar validDate:  A python datetime instanace describing the valid date
+    and time for the forecast. Only set if forecastTime and julianDay keys
+    exist."""
     cdef grib_handle *_gh
-    cdef public messagenumber, projparams,\
+    cdef public messagenumber, projparams, validDate, analDate,\
     expand_reduced, _ro_keys, _all_keys
     def __init__(self):
         # calling "__new__()" will not call "__init__()" !

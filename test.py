@@ -145,6 +145,10 @@ def test():
     1:Pressure tendency:Pa s**-1 (instant):regular_gg:surface:level 0:fcst time 240:from 200402291200
     >>> print 'valid date',grb['validityDate']
     valid date 20040310
+    >>> print grb.analDate
+    2004-02-29 12:00:00
+    >>> print grb.validDate
+    2004-03-10 12:00:00
     >>> print 'min/max %4.2f %4.2f' % (grb['minimum'],grb['maximum'])
     min/max 0.57 1.27
     >>> grbs.close()
@@ -169,6 +173,10 @@ def test():
     >>> grb2 = pygrib.fromstring(grbstr)
     >>> print grb2
     1:Temperature:K (instant):regular_ll:isobaricInhPa:level 30000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+    >>> print grb2.analDate
+    2004-12-09 12:00:00
+    >>> print grb2.validDate
+    2004-12-12 12:00:00
     >>> grbs.close()
     """
 
