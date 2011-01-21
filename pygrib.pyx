@@ -315,8 +315,8 @@ cdef class open(object):
         #err = grib_count_in_file(NULL, self._fd, &nmsgs)
         #if err:
         #    raise RuntimeError(grib_get_error_message(err))
-        # in 1.9.5, grib_count_in_file does not count multiple messages
-        # so, do it internally here.
+        # in 1.9.5, grib_count_in_file does not count multi-field message
+        # components, so do it internally here.
         nmsgs = 0
         while 1:
             gh = grib_handle_new_from_file(NULL, self._fd, &err)
