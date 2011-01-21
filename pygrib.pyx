@@ -437,10 +437,11 @@ cdef class open(object):
         cdef int err
         if N < 1:
             raise IOError('grb message numbers start at 1')
+        # if iterator positioned past message N, reposition at beginning.
         if self.messagenumber >= N:
             self.rewind()
-        # advance iterator by N messages.
-        self._advance(N)
+        # move iterator forward to message N.
+        self._advance(N-self.messagenumber)
         return _create_gribmessage(self._gh, self.messagenumber)
     def select(self, **kwargs):
         """
