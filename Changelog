@@ -1,4 +1,4 @@
-version 1.8.1 - not yet released
+version 1.8.1 - svn revision 393
 ================================
 * in grib_api 1.9.5, grib_count_in_file does not count
   individual messages inside multi-part messages (as it did in previous
