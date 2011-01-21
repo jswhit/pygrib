@@ -1,5 +1,8 @@
 version 1.8.1 - not yet released
 ================================
+* open.select now puts iterator back in original position.
+* fix bug in open.message (message(N) was advancing N messages, not
+  going to message number N).
 * use julian_to_datetime to automatically create gribmessage analDate
   and validDate attributes.
 * added julian_to_datetime and datetime_to_julian functions.

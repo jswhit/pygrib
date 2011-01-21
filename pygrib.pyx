@@ -482,8 +482,9 @@ Example usage:
 16:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 35000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 17:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 30000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 """
-        self.rewind()
+        msgnum = self.tell()
         grbs = [grb for grb in self if _find(grb, **kwargs)]
+        self.seek(msgnum) # leave iterator in original position.
         return grbs
     def _advance(self,nmsgs,return_msgs=False):
         """advance iterator n messages from current position.
