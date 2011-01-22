@@ -189,6 +189,4 @@ if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)
     import pygrib
-    gribapi_version = str(pygrib.grib_api_version)
-    gribapi_version=gribapi_version[0]+'.'+gribapi_version[2]+'.'+gribapi_version[4]
-    print 'using GRIB API version',gribapi_version
+    print 'using GRIB API version',pygrib.grib_api_version

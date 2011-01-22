@@ -1,3 +1,7 @@
+changes since version 1.8.1
+===========================
+* grib_api_version module var changed from int to string (10905 --> '1.9.5').
+
 version 1.8.1 - svn revision 393
 ================================
 * in grib_api 1.9.5, grib_count_in_file does not count

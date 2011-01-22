@@ -267,7 +267,15 @@ missingvalue_int = GRIB_MISSING_LONG
 #this doesn't work, since defined constants are assumed to be integers
 #missingvalue_float = GRIB_MISSING_DOUBLE
 missingvalue_float = -1.e100 # value given in grib_api.h version 1.90
-grib_api_version = grib_get_api_version()
+def _get_grib_api_version():
+    div = lambda v,d: (v/d,v%d)
+    v = grib_get_api_version()
+    v,revision = div(v,100)
+    v,minor = div(v,100)
+    major = v
+    return "%d.%d.%d" % (major,minor,revision)
+grib_api_version = _get_grib_api_version()
+
 # turn on support for multi-field grib messages.
 grib_multi_support_on(NULL)
 

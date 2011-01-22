@@ -2,10 +2,11 @@ pygrib	pygrib-module.html
 pygrib.missingvalue_int	pygrib-module.html#missingvalue_int
 pygrib.fromstring	pygrib-module.html#fromstring
 pygrib._is_container	pygrib-module.html#_is_container
+pygrib._get_grib_api_version	pygrib-module.html#_get_grib_api_version
 pygrib.grib_api_version	pygrib-module.html#grib_api_version
+pygrib.__package__	pygrib-module.html#__package__
 pygrib.datetime_to_julian	pygrib-module.html#datetime_to_julian
 pygrib._find	pygrib-module.html#_find
-pygrib.__package__	pygrib-module.html#__package__
 pygrib._private_atts	pygrib-module.html#_private_atts
 pygrib.julian_to_datetime	pygrib-module.html#julian_to_datetime
 pygrib.missingvalue_float	pygrib-module.html#missingvalue_float
