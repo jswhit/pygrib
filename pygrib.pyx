@@ -239,7 +239,6 @@ cdef extern from "grib_api.h":
     int grib_get_message(grib_handle* h ,  void** message,size_t *message_length)
     int grib_get_message_copy(grib_handle* h ,  void* message,size_t *message_length)
     long grib_get_api_version()
-    int grib_count_in_file(grib_context* c, FILE* f,int* n)
     grib_handle* grib_handle_clone(grib_handle* h)
     grib_index* grib_index_new_from_file(grib_context* c,\
                             char* filename,char* keys,int *err)
@@ -281,7 +280,7 @@ cdef class open(object):
     object, with L{seek}, L{tell}, L{read} and L{close} methods, 
     except that offsets are measured in grib messages instead of bytes.
     Additional methods include L{rewind} (like C{seek(0)}), L{message}
-    (like C{seek(N-1)}; followed by C{read(1)}), and L{select} (filters
+    (like C{seek(N-1)}; followed by C{readline()}), and L{select} (filters
     messages based on specified conditions).  The C{__call__} method forwards
     to L{select}, and instances can be sliced with C{__getitem__} (returning
     lists of L{gribmessage} instances).  The position of the iterator is not
@@ -305,18 +304,13 @@ cdef class open(object):
             raise IOError("could not open %s", filename)
         self._gh = NULL
     def __init__(self, filename):
-        cdef int err,nmsgs
+        cdef int err
         cdef grib_handle *gh
         # initalize Python level objects
         self.name = filename
         self.closed = False
         self.messagenumber = 0
         # count number of messages in file.
-        #err = grib_count_in_file(NULL, self._fd, &nmsgs)
-        #if err:
-        #    raise RuntimeError(grib_get_error_message(err))
-        # in 1.9.5, grib_count_in_file does not count multi-field message
-        # components, so do it internally here.
         nmsgs = 0
         while 1:
             gh = grib_handle_new_from_file(NULL, self._fd, &err)
@@ -443,7 +437,7 @@ cdef class open(object):
         message(N)
         
         retrieve N'th message in iterator.
-        same as seek(N-1) followed by read(1)."""
+        same as seek(N-1) followed by readline()."""
         cdef int err
         if N < 1:
             raise IOError('grb message numbers start at 1')
