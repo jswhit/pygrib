@@ -390,7 +390,7 @@ cdef class open(object):
             if from_what == 0:
                 self.message(msg)
             elif from_what == 1:
-                self._advance(msg)
+                self.message(self.messagenumber+msg)
             elif from_what == 2:
                 self.message(self.messages+msg)
     def readline(self):
@@ -502,6 +502,8 @@ Example usage:
         """advance iterator n messages from current position.
         if return_msgs==True, grib message instances are returned
         in a list"""
+        if nmsgs < 0: 
+            raise ValueError('nmsgs must be >= 0 in _advance')
         if return_msgs: grbs=[]
         for n in range(self.messagenumber,self.messagenumber+nmsgs):
             err = grib_handle_delete(self._gh)
