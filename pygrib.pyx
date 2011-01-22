@@ -97,7 +97,7 @@ Example usage
     >>> print lats.shape, lats.min(), lats.max(), lons.shape, lons.min(), lons.max()
     (94, 192) -88.5419501373 88.5419501373  0.0 358.125
  - get the second grib message::
-    >>> grb = grbs.message(2) # same as grbs.seek(1); grb=grbs.read(1)[0], or grb=grbs[2]
+    >>> grb = grbs.message(2) # same as grbs.seek(1); grb=grbs.readline()
     >>> print grb
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
  - modify the values associated with existing keys (either via attribute or
