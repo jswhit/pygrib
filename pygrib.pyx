@@ -128,7 +128,7 @@ Changelog
 
 @contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
 
-@version: 1.8.1
+@version: 1.8.2
 
 @copyright: copyright 2010 by Jeffrey Whitaker.
 
