@@ -146,7 +146,7 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE."""
 __test__ = None
 del __test__ # hack so epydoc doesn't show __test__
-__version__ = '1.8.1'
+__version__ = '1.8.2'
 
 import numpy as np
 from datetime import datetime

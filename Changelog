@@ -1,5 +1,5 @@
-changes since version 1.8.1
-===========================
+version 1.8.2 - not yet released
+================================
 * fix open.seek so it works for negative offsets when from_what=1.
 * grib_api_version module var changed from int to string (10905 --> '1.9.5').
 
