@@ -12,13 +12,16 @@ f = open(sys.argv[2],'wb')
 
 print 'converting %s from grib2 to grib1 (%s) ...' % (sys.argv[1],sys.argv[2])
 
+nmsg = 0
 for grb in grbs:
     try:
         grb.editionNumber=1 
+        nmsg = nmsg + 1
     except:
         print 'cannot convert message %s' % grb.messagenumber
         continue
     f.write(grb.tostring())
 
+print nmsg,'messges out of',grbs.messages,'converted'
 grbs.close()
 f.close()

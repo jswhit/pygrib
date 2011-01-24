@@ -20,14 +20,17 @@ else:
 
 print 'converting %s from grib1 to grib2 (%s) with %s packing ...' % (sys.argv[1],sys.argv[2],grb2packing)
 
+nmsg = 0
 for grb in grbs:
     try:
         grb.editionNumber=2 
         grb.packingType = grb2packing
+        nmsg = nmsg + 1
     except:
         print 'cannot convert message %s' % grb.messagenumber
         continue
     f.write(grb.tostring())
 
+print nmsg,'messges out of',grbs.messages,'converted'
 grbs.close()
 f.close()
