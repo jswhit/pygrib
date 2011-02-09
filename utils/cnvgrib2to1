@@ -3,7 +3,7 @@ import pygrib, sys
 
 if len(sys.argv) < 3:
    print """
-   grib2to1 <grib2 filename> <grib1 filename>
+   cnvgrib2to1 <grib2 filename> <grib1 filename>
    """
    raise SystemExit
    

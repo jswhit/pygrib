@@ -3,7 +3,7 @@ import pygrib, sys
 
 if len(sys.argv) < 3:
    print """
-   grib1to2 <grib1 filename> <grib2 filename> <packing scheme>
+   cnvgrib1to2 <grib1 filename> <grib2 filename> <packing scheme>
    <packing_scheme> is optional - can be 'grid_simple', 'grid_complex',
    'grid_complex_spatial_differencing', 'grid_jpeg', or 'grid_png'. 
    Default is 'grid_jpeg'
