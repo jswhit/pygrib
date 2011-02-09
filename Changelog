@@ -1,5 +1,8 @@
 version 1.8.2 - not yet released
 ================================
+* changed name of grib1to2 and grib2to1 to cnvgrib1to2 and cnvgrib2to1
+  to avoild conflict with scripts installed by grib_api-1.9.5 (fixes
+  issue 22).
 * added utils grib1to2 and grib2to1 to MANIFEST (they were not included in
   1.8.1).
 * fix open.seek so it works for negative offsets when from_what=1.
