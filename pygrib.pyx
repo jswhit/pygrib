@@ -173,9 +173,10 @@ cdef extern from "stdio.h":
     void rewind (FILE *)
 
 cdef extern from "Python.h":
-    char * PyString_AsString(object)
-    object PyString_FromString(char *s)
-    object PyString_FromStringAndSize(char *s, size_t size)
+    char * PyBytes_AsString(object)
+    object PyBytes_FromString(char *s)
+    object PyBytes_FromStringAndSize(char *s, size_t size)
+default_encoding = 'ascii'
 
 cdef extern from "numpy/arrayobject.h":
     ctypedef int npy_intp 
@@ -307,7 +308,8 @@ cdef class open(object):
         # initialize C level objects.
         cdef grib_handle *gh
         cdef FILE *_fd
-        self._fd = fopen(filename, "rb") 
+        bytestr = _strencode(filename)
+        self._fd = fopen(bytestr, "rb") 
         if self._fd == NULL:
             raise IOError("could not open %s", filename)
         self._gh = NULL
@@ -570,13 +572,13 @@ def fromstring(gribstring):
     """
     fromstring(string)
 
-    Create a gribmessage instance from a python string 
+    Create a gribmessage instance from a python bytes object
     representing a binary grib message (the reverse of L{gribmessage.tostring}).
     """
     cdef char* gribstr
     cdef grib_handle * gh
     cdef gribmessage grb
-    gribstr = PyString_AsString(gribstring)
+    gribstr = gribstring
     gh = grib_handle_new_from_message_copy(NULL, <void *>gribstr, len(gribstring))
     grb  = gribmessage.__new__(gribmessage)
     grb.messagenumber = 1
@@ -757,7 +759,8 @@ cdef class gribmessage(object):
         to grib missing value flag (False otherwise)"""
         cdef int err,miss
         cdef char *name
-        name = PyString_AsString(key)
+        bytestr = _strencode(key)
+        name = bytestr
         miss = grib_is_missing(self._gh, name, &err)
         if err:
             raise RuntimeError(grib_get_error_message(err))
@@ -782,7 +785,8 @@ cdef class gribmessage(object):
         keys = []
         while grib_keys_iterator_next(gi):
             name = grib_keys_iterator_get_name(gi)
-            key = PyString_FromString(name)
+            bytestr = _strencode(name)
+            key = bytestr
             # ignore these keys.
             if key in ["zero","one","eight","eleven","false","thousand","file",
                        "localDir","7777","oneThousand"]:
@@ -814,7 +818,8 @@ cdef class gribmessage(object):
         keys_noro = []
         while grib_keys_iterator_next(gi):
             name = grib_keys_iterator_get_name(gi)
-            key = PyString_FromString(name)
+            bytestr = _strencode(name)
+            key = name
             keys_noro.append(key)
         err = grib_keys_iterator_delete(gi)
         if err:
@@ -840,7 +845,8 @@ cdef class gribmessage(object):
         if key not in self._all_keys:
             raise KeyError('can only modify existing grib keys (key "%s" not found)'
                     % key )
-        name = PyString_AsString(key)
+        bytestr = _strencode(key)
+        name = bytestr
         err = grib_get_native_type(self._gh, name, &typ)
         if err:
             raise RuntimeError(grib_get_error_message(err))
@@ -886,7 +892,8 @@ cdef class gribmessage(object):
                     raise RuntimeError(grib_get_error_message(err))
         elif typ == GRIB_TYPE_STRING:
             size=len(value)
-            strdata = PyString_AsString(value)
+            bytestr = _strencode(value)
+            strdata = bytestr
             err = grib_set_string(self._gh, name, strdata, &size)
             if err:
                 raise RuntimeError(grib_get_error_message(err))
@@ -909,7 +916,8 @@ cdef class gribmessage(object):
         cdef double doubleval
         cdef ndarray datarr
         cdef char strdata[1024]
-        name = PyString_AsString(key)
+        bytestr = _strencode(key)
+        name = bytestr
         err = grib_get_size(self._gh, name, &size)
         if err:
             raise RuntimeError(grib_get_error_message(err))
@@ -965,7 +973,7 @@ cdef class gribmessage(object):
             err = grib_get_string(self._gh, name, strdata, &size)
             if err:
                 raise RuntimeError(grib_get_error_message(err))
-            msg = PyString_FromString(strdata)
+            msg = strdata.decode(default_encoding)
             return msg.rstrip()
         else:
             raise ValueError("unrecognized grib type % d" % typ)
@@ -1003,14 +1011,15 @@ cdef class gribmessage(object):
         cdef void *message
         cdef char *name
         cdef FILE *out
-        name = PyString_AsString('values')
+        bytestr = b'values'
+        name = bytestr
         err = grib_get_size(self._gh, name, &size)
         if err:
             raise RuntimeError(grib_get_error_message(err))
         err = grib_get_message(self._gh, &message, &size)
         if err:
             raise RuntimeError(grib_get_error_message(err))
-        msg = PyString_FromStringAndSize(<char *>message, size)
+        msg = PyBytes_FromStringAndSize(<char *>message, size)
         return msg
     def _unshape_mask(self, datarr):
         """private method for reshaping and removing mask from "values" array"""
@@ -1467,10 +1476,12 @@ name (i.e. C{level:l} will search for values of C{level} that are longs).
         cdef grib_index *gi
         cdef int err
         cdef char *filenamec, *keys
-        filenamec = PyString_AsString(filename)
+        bytestr = _strencode(filename)
+        filenamec = bytestr
         if args == ():
             raise ValueError('no keys specified for index')
-        keys = PyString_AsString(','.join(args))
+        bytestr = _strencode(','.join(args))
+        keys = bytestr
         self._gi = grib_index_new_from_file (NULL, filenamec, keys, &err)
         if err:
             raise RuntimeError(grib_get_error_message(err))
@@ -1524,11 +1535,12 @@ Example usage:
         cdef char *strval, *key
         # set index selection.
         # used declared type if available, other infer from type of value.
-        for k,v in kwargs.iteritems():
+        for k,v in kwargs.items():
             if k not in self.keys:
                 raise KeyError('key not part of grib index')
             typ = self.types[self.keys.index(k)]
-            key = PyString_AsString(k)
+            bytestr = _strencode(k)
+            key = bytestr
             if typ == 'l' or (type(v) == int or type(v) == long):
                 longval = long(v)
                 err = grib_index_select_long(self._gi, key, longval)
@@ -1539,8 +1551,9 @@ Example usage:
                 err = grib_index_select_double(self._gi, key, doubval)
                 if err:
                     raise RuntimeError(grib_get_error_message(err))
-            elif typ == 's' or isinstance(v,basestring):
-                strval = PyString_AsString(str(v))
+            elif typ == 's' or isinstance(v,str) or isinstance(v,bytes):
+                bytestr = _strencode(v)
+                strval = bytestr
                 err = grib_index_select_string(self._gi, key, strval)
                 if err:
                     raise RuntimeError(grib_get_error_message(err))
@@ -1617,7 +1630,7 @@ def _is_container(a):
     # membership with "is in", but not a string)
     try: 1 in a
     except: return False
-    if type(a) == type(basestring): return False
+    if type(a) == str or type(a) == bytes: return False
     return True
 
 def _find(grb, **kwargs):
@@ -1625,7 +1638,7 @@ def _find(grb, **kwargs):
     # If value is a container-like object, search for matches to any element.
     # If value is a function, call that function with key value to determine
     # whether it is a match.
-    for k,v in kwargs.iteritems():
+    for k,v in kwargs.items():
         if not grb.has_key(k): return False
         # is v a "container-like" non-string object?
         iscontainer = _is_container(v)
@@ -1642,3 +1655,13 @@ def _find(grb, **kwargs):
         else:
             return False
     return True
+
+cdef _strencode(pystr,encoding=None):
+    # encode a string into bytes.  If already bytes, do nothing.
+    # uses default_encoding module variable for default encoding.
+    if encoding is None:
+        encoding = default_encoding
+    try:
+        return pystr.encode(encoding)
+    except AttributeError:
+        return pystr # already bytes?
