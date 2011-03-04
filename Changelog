@@ -1,6 +1,6 @@
 version 1.8.2 - not yet released
 ================================
-* Python 3 support. Python < 2.6 no longer supported.
+* Python 3 support. 
 * changed name of grib1to2 and grib2to1 to cnvgrib1to2 and cnvgrib2to1
   to avoild conflict with scripts installed by grib_api-1.9.5 (fixes
   issue 22).

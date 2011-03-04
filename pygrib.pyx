@@ -14,9 +14,10 @@ from the European Centre for Medium-Range Weather Forecasts
 Required
 ========
 
-- U{Python<http://python.org>} 2.6 or higher.
+- U{Python<http://python.org>} 2.4 or higher.
 - U{numpy<http://sourceforge.net/project/showfiles.php?group_id=1369>}
-  N-dimensional array object for python. Version 1.2.1 or higher.
+  N-dimensional array object for python. Version 1.2.1 or higher (version
+  1.5.1 required for Python 3).
 - U{pyproj<http://code.google.com/p/pyproj/>} Python interface to 
   U{PROJ.4<http://trac.osgeo.org/proj>} library for cartographic
   transformations B{or} U{matplotlib<http://matplotlib.sf.net>} and
