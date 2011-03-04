@@ -102,9 +102,9 @@ def test():
     >>> 'shape/min/max data %s %6.2f %6.2f'%(str(data.shape),data.min(),data.max())
     'shape/min/max data (94, 192) 223.70 319.90'
     >>> lats, lons = grb.latlons() # returns lat/lon values on grid.
-    >>> 'min/max of %d lats on %s grid %4.2f %4.2f' % (grb['Nj'], grb['typeOfGrid'],lats.min(),lats.max())
+    >>> str('min/max of %d lats on %s grid %4.2f %4.2f' % (grb['Nj'], grb['typeOfGrid'],lats.min(),lats.max()))
     'min/max of 94 lats on regular_gg grid -88.54 88.54'
-    >>> 'min/max of %d lons on %s grid %4.2f %4.2f' % (grb['Ni'], grb['typeOfGrid'],lons.min(),lons.max())
+    >>> str('min/max of %d lons on %s grid %4.2f %4.2f' % (grb['Ni'], grb['typeOfGrid'],lons.min(),lons.max()))
     'min/max of 192 lons on regular_gg grid 0.00 358.12'
 
     get 2nd grib message from the iterator
@@ -135,9 +135,7 @@ def test():
     >>> msg = grb.tostring()
 
     write to file and close.
-    >>> bytes = grbout.write(msg)
-    >>> bytes
-    23804
+    >>> ret = grbout.write(msg)
     >>> grbout.close()
 
     reopen file, check contents.
@@ -151,7 +149,7 @@ def test():
     datetime.datetime(2004, 2, 29, 12, 0)
     >>> grb.validDate
     datetime.datetime(2004, 3, 10, 12, 0)
-    >>> 'min/max %4.2f %4.2f' % (grb['minimum'],grb['maximum'])
+    >>> str('min/max %4.2f %4.2f' % (grb['minimum'],grb['maximum']))
     'min/max 0.57 1.27'
     >>> grbs.close()
 
