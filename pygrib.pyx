@@ -402,7 +402,10 @@ cdef class open(object):
         read one entire grib message from the file.
         Returns a L{gribmessage} instance, or None if an EOF is encountered."""
         try:
-            grb = self.next()
+            if hasattr(self,'next'):
+                grb = self.next()
+            else:
+                grb = next(self)
         except StopIteration:
             grb = None
         return grb
@@ -785,8 +788,7 @@ cdef class gribmessage(object):
         keys = []
         while grib_keys_iterator_next(gi):
             name = grib_keys_iterator_get_name(gi)
-            bytestr = _strencode(name)
-            key = bytestr
+            key = name.decode('ascii')
             # ignore these keys.
             if key in ["zero","one","eight","eleven","false","thousand","file",
                        "localDir","7777","oneThousand"]:
@@ -818,8 +820,7 @@ cdef class gribmessage(object):
         keys_noro = []
         while grib_keys_iterator_next(gi):
             name = grib_keys_iterator_get_name(gi)
-            bytestr = _strencode(name)
-            key = name
+            key = name.decode('ascii')
             keys_noro.append(key)
         err = grib_keys_iterator_delete(gi)
         if err:
