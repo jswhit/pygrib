@@ -5,13 +5,10 @@ grbs = pygrib.open('../sampledata/flux.grb')
 grb = grbs.message(2)
 lats, lons = grb.latlons()
 data = grb['values']
-print lats[:,0]
-print lons[0,:]
 llcrnrlon = lons[0,0]
 llcrnrlat = lats[0,0]
 urcrnrlon = lons[-1,-1]
 urcrnrlat = lats[-1,-1]
-print llcrnrlon,llcrnrlat,urcrnrlon,urcrnrlat
 m = Basemap(llcrnrlon=llcrnrlon,llcrnrlat=llcrnrlat,
             urcrnrlon=urcrnrlon,urcrnrlat=urcrnrlat,
             resolution='c',projection='cyl')

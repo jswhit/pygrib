@@ -11,7 +11,6 @@ grbs = pygrib.open('../sampledata/spherical_pressure_level.grib2')
 g = grbs[1]
 fld = g.values
 
-print fld.min(), fld.max(), fld.mean(), fld.shape
 # ECMWF normalizes the spherical harmonic coeffs differently than NCEP.
 # (m=0,n=0 is global mean, instead of sqrt(2)/2 times global mean)
 fld = 2.*fld/np.sqrt(2.)
@@ -22,10 +21,7 @@ fld.real = fldr
 fld.imag = fldi
 nlons = 360;  nlats = 181
 s = spharm.Spharmt(nlons,nlats)
-print fld.real[0:10]
-print fld.imag[0:10]
 data = s.spectogrd(fld)
-print data.min(),data.max(),data.mean()
 lons = (360./nlons)*np.arange(nlons)
 lats = 90.-(180./(nlats-1))*np.arange(nlats)
 lons, lats = np.meshgrid(lons, lats)

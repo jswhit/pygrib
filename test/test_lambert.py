@@ -5,16 +5,10 @@ grbs = pygrib.open('../sampledata/eta.grb')
 grb = grbs.select(parameterName='Pressure',typeOfLevel='surface')[0]
 data = grb.values
 lats, lons = grb.latlons()
-print lats.min(), lats.max()
-print lons.min(), lons.max()
-print lats[0,0],lons[0,0]
-print lats[-1,-1],lons[-1,-1]
 llcrnrlon = lons[0,0]
 llcrnrlat = lats[0,0]
 urcrnrlon = lons[-1,-1]
 urcrnrlat = lats[-1,-1]
-print data.min(), data.max()
-print grb.projparams
 rsphere = (grb.projparams['a'], grb.projparams['b'])
 lon_0 = grb.projparams['lon_0']
 lat_1 = grb.projparams['lat_1']

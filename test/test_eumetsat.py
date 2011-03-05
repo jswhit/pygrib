@@ -5,14 +5,11 @@ from mpl_toolkits.basemap import Basemap
 
 grbs = pygrib.open('../sampledata/eumetsat_precip.grb')
 grb = grbs.next()
-print grb
 fld = grb['values']
-print fld.shape
 lats, lons = grb.latlons()
 rsphere = (grb.projparams['a'], grb.projparams['b'])
 lon_0 = grb.projparams['lon_0']
 h = grb.projparams['h']
-print grb.projparams
 projection = grb.projparams['proj']
 
 plt.figure()
@@ -35,14 +32,11 @@ m.drawmapboundary()
 plt.title('EUMETSAT geostationary projection grid 1')
 
 grb = grbs.next()
-print grb
 fld = grb['values']
-print fld.shape
 lats, lons = grb.latlons()
 rsphere = (grb.projparams['a'], grb.projparams['b'])
 lon_0 = grb.projparams['lon_0']
 h = grb.projparams['h']
-print grb.projparams
 grbs.close()
 
 plt.figure()

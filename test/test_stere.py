@@ -7,10 +7,6 @@ for grb in pygrib.open('../sampledata/ngm.grb'):
         data = grb['values']
         lats,lons = grb.latlons()
         break
-print lats.min(), lats.max()
-print lons.min(), lons.max()
-print lats[0,0],lons[0,0]
-print lats[-1,-1],lons[-1,-1]
 llcrnrlon = lons[0,0]
 llcrnrlat = lats[0,0]
 urcrnrlon = lons[-1,-1]
@@ -35,10 +31,6 @@ grbs = pygrib.open('../sampledata/CMC_reg_WIND_ISBL_300_ps60km_2010052400_P012.g
 grb = grbs.next()
 data = grb['values']
 lats,lons = grb.latlons()
-print lats.min(), lats.max()
-print lons.min(), lons.max()
-print lats[0,0],lons[0,0]
-print lats[-1,-1],lons[-1,-1]
 llcrnrlon = lons[0,0]
 llcrnrlat = lats[0,0]
 urcrnrlon = lons[-1,-1]

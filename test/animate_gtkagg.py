@@ -1,6 +1,6 @@
 import matplotlib
 matplotlib.use('GTKAgg')
-import pygrib, time ,gobject
+import pygrib, time ,gobject,sys
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.basemap import Basemap
@@ -46,6 +46,6 @@ def updatefig(*args):
 cnt = 0 # image counter
 delay = 1 # delay at beginning and end of loop
 gobject.idle_add(updatefig)
-print 'close window to exit ...'
+sys.stdout.write('close window to exit ...\n')
 plt.show()
-print 'done'
+sys.stdout.write('done\n')
