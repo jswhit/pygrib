@@ -7,7 +7,7 @@ else:
     infile = '../sampledata/regular_latlon_surface.grib2'
 outfile = 'out.grib'
 grbs = pygrib.open(infile)
-grb = grbs.next()
+grb = grbs.readline()
 data = grb['values']
 grb['missingValue']=9999.
 grb['bitmapPresent']=1
@@ -21,7 +21,7 @@ f.write(msg)
 f.close()
  
 grbs = pygrib.open('out.grib')
-grb = grbs.next()
+grb = grbs.readline()
 data = grb['values']
 lats,lons = grb.latlons()
 grbs.close()

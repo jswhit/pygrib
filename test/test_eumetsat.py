@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 
 grbs = pygrib.open('../sampledata/eumetsat_precip.grb')
-grb = grbs.next()
+grb = grbs.readline()
 fld = grb['values']
 lats, lons = grb.latlons()
 rsphere = (grb.projparams['a'], grb.projparams['b'])
@@ -31,7 +31,7 @@ m.drawmeridians(np.arange(-90,90,20))
 m.drawmapboundary()
 plt.title('EUMETSAT geostationary projection grid 1')
 
-grb = grbs.next()
+grb = grbs.readline()
 fld = grb['values']
 lats, lons = grb.latlons()
 rsphere = (grb.projparams['a'], grb.projparams['b'])

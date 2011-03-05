@@ -28,7 +28,7 @@ plt.title('Stereographic Model Grid (NCEP)')
 plt.figure()
 grbs = pygrib.open('../sampledata/CMC_reg_WIND_ISBL_300_ps60km_2010052400_P012.grib')
 # this file has key "projectionCenterFlag"
-grb = grbs.next()
+grb = grbs.readline()
 data = grb['values']
 lats,lons = grb.latlons()
 llcrnrlon = lons[0,0]

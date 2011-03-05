@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 grbs = pygrib.open('../sampledata/reduced_latlon_surface.grib2')
-grb = grbs.next()
+grb = grbs.readline()
 data = grb['values']
 lats, lons = grb.latlons()
 llcrnrlon = lons[0,0]
