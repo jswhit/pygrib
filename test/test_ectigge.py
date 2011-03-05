@@ -15,6 +15,7 @@ urcrnrlat = lats[-1,-1]
 m = Basemap(llcrnrlon=llcrnrlon,llcrnrlat=llcrnrlat,
             urcrnrlon=urcrnrlon,urcrnrlat=urcrnrlat,
             resolution='l',projection='cyl')
+print lons.shape, lats.shape, fld.shape
 CS = m.contourf(lons,lats,fld,15,cmap=plt.cm.jet)
 #im = m.pcolor(lons,lats,fld,cmap=plt.cm.jet,shading='flat')
 ax = plt.gca()

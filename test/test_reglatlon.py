@@ -6,14 +6,10 @@ for g in pygrib.open('../sampledata/gfs.grb'):
         data = g['values']
         lats,lons = g.latlons()
         break
-print data.min(), data.max()
-print lats[:,0]
-print lons[0,:]
 llcrnrlon = lons[0,0]
 llcrnrlat = lats[0,0]
 urcrnrlon = lons[-1,-1]
 urcrnrlat = lats[-1,-1]
-print llcrnrlon,llcrnrlat,urcrnrlon,urcrnrlat
 m = Basemap(llcrnrlon=llcrnrlon,llcrnrlat=llcrnrlat,
             urcrnrlon=urcrnrlon,urcrnrlat=urcrnrlat,
             resolution='c',projection='cyl')

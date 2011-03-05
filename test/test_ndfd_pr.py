@@ -7,13 +7,11 @@ for grb in grbs:
     if grb['forecastTime'] == 12:
         break
 data = grb['values']
-print data.shape, data.min(), data.max()
 lats, lons = grb.latlons()
 llcrnrlon = lons[0,0]
 llcrnrlat = lats[0,0]
 urcrnrlon = lons[-1,-1]
 urcrnrlat = lats[-1,-1]
-print llcrnrlat,llcrnrlon,urcrnrlat,urcrnrlon
 rsphere = (grb.projparams['a'], grb.projparams['b'])
 lat_ts = grb.projparams['lat_ts']
 lon_0 = grb.projparams['lon_0']

@@ -1,13 +1,10 @@
-import pygrib
+import pygrib, sys
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 grbs = pygrib.open('../sampledata/ds.maxt.grb')
 g = grbs.message(1)
 lats, lons = g.latlons()
 data = g['values']
-print data.dtype
-print data.shape, lons.shape, lats.shape
-print data.min(), data.max()
 llcrnrlon = lons[0,0]
 llcrnrlat = lats[0,0]
 urcrnrlon = lons[-1,-1]
@@ -18,7 +15,7 @@ lat_2 = g.projparams['lat_2']
 lon_0 = g.projparams['lon_0']
 projection = g.projparams['proj']
 fig=plt.figure()
-print g.projparams
+sys.stdout.write(repr(g.projparams)+'\n')
 ax = fig.add_axes([0.1,0.1,0.75,0.75])
 m = Basemap(llcrnrlon=llcrnrlon,llcrnrlat=llcrnrlat,
             urcrnrlon=urcrnrlon,urcrnrlat=urcrnrlat,rsphere=rsphere,lon_0=lon_0,
