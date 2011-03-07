@@ -29,7 +29,7 @@ if not options.ipack:
 
 ipack = int(options.ipack)
 if ipack not in [0,1,2,3,4,40,41,61]:
-    raise ValueError, 'packing scheme must be one of 0,1,2,3,4,40,41,61'
+    raise ValueError('packing scheme must be one of 0,1,2,3,4,40,41,61')
 
 # open grib file
 try:
