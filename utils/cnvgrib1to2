@@ -2,12 +2,12 @@
 import pygrib, sys
 
 if len(sys.argv) < 3:
-   print """
+   sys.stdout.write("""
    cnvgrib1to2 <grib1 filename> <grib2 filename> <packing scheme>
    <packing_scheme> is optional - can be 'grid_simple', 'grid_complex',
    'grid_complex_spatial_differencing', 'grid_jpeg', or 'grid_png'. 
    Default is 'grid_jpeg'
-   """
+   """)
    raise SystemExit
    
 grbs = pygrib.open(sys.argv[1])
@@ -18,7 +18,7 @@ if len(sys.argv) > 3:
 else:
    grb2packing = 'grid_jpeg' # default is jpeg2000 
 
-print 'converting %s from grib1 to grib2 (%s) with %s packing ...' % (sys.argv[1],sys.argv[2],grb2packing)
+sys.stdout.write('converting %s from grib1 to grib2 (%s) with %s packing ...\n' % (sys.argv[1],sys.argv[2],grb2packing))
 
 nmsg = 0
 for grb in grbs:
@@ -27,10 +27,10 @@ for grb in grbs:
         grb.packingType = grb2packing
         nmsg = nmsg + 1
     except:
-        print 'cannot convert message %s' % grb.messagenumber
+        sys.stdout.write('cannot convert message %s\n' % grb.messagenumber)
         continue
     f.write(grb.tostring())
 
-print nmsg,'messges out of',grbs.messages,'converted'
+sys.stdout.write('%s messges out of %s converted\n' % (nmsg,grbs.messages))
 grbs.close()
 f.close()

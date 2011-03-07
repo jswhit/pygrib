@@ -2,15 +2,15 @@
 import pygrib, sys
 
 if len(sys.argv) < 3:
-   print """
+   sys.stdout.write("""
    cnvgrib2to1 <grib2 filename> <grib1 filename>
-   """
+   """)
    raise SystemExit
    
 grbs = pygrib.open(sys.argv[1])
 f = open(sys.argv[2],'wb')
 
-print 'converting %s from grib2 to grib1 (%s) ...' % (sys.argv[1],sys.argv[2])
+sys.stdout.write('converting %s from grib2 to grib1 (%s) ...\n' % (sys.argv[1],sys.argv[2]))
 
 nmsg = 0
 for grb in grbs:
@@ -18,10 +18,10 @@ for grb in grbs:
         grb.editionNumber=1 
         nmsg = nmsg + 1
     except:
-        print 'cannot convert message %s' % grb.messagenumber
+        sys.stdout.write('cannot convert message %s\n' % grb.messagenumber)
         continue
     f.write(grb.tostring())
 
-print nmsg,'messges out of',grbs.messages,'converted'
+sys.stdout.write('%s messages out of %s converted\n' % (nmsg,grbs.messages))
 grbs.close()
 f.close()
