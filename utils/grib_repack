@@ -24,25 +24,25 @@ parser.add_option("-p", default=False, action="store",dest="ipack",
 (options, args) = parser.parse_args()
 
 if not options.ipack:
-    print 'must specify a packing scheme with -p or --packing_scheme'
+    sys.stdout.write('must specify a packing scheme with -p or --packing_scheme\n')
     sys.exit(1)
 
 ipack = int(options.ipack)
 if ipack not in [0,1,2,3,4,40,41,61]:
-    raise ValueError, 'packing scheme must be one of 0,1,2,3,4,40,41,61'
+    raise ValueError('packing scheme must be one of 0,1,2,3,4,40,41,61')
 
 # open grib file
 try:
     filein = args[0]
     fileout = args[1]
 except:
-    print 'need to specify input and output grib2 filenames'
+    sys.stdout.write('need to specify input and output grib2 filenames\n')
     sys.exit(1)
-print 'input grib file:',filein
+sys.stdout.write('input grib file: %s\n' % filein)
 grbs = pygrib.open(filein)
 
 # open the file for output.
-print 'output grib file:',fileout
+sys.stdout.write('output grib file: %s\n' % fileout)
 f=open(fileout,'wb')
 
 #  "grid_simple"                       = { dataRepresentationTemplateNumber = 0;     }
@@ -62,10 +62,10 @@ f=open(fileout,'wb')
 
 for grb in grbs:
     if grb['editionNumber'] != 2:
-        print 'not a GRIB2 message, skipping ..'
+        sys.stdout.write('not a GRIB2 message, skipping ..\n')
         continue
     if grb['dataRepresentationTemplateNumber'] == ipack:
-	print 'no repacking required, skipping ..'
+	sys.stdout.write('no repacking required, skipping ..\n')
     grb['dataRepresentationTemplateNumber'] = ipack
     msg = grb.tostring()
     f.write(msg)

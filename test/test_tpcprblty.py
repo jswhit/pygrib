@@ -1,10 +1,10 @@
-import pygrib
+import pygrib, sys
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap,cm
 import numpy as np
 grbs = pygrib.open('../sampledata/tpcprblty.grib2')
 grb=grbs.select(parameterName='Wind speed',scaledValueOfUpperLimit=17491,stepRange='0-120')[0]
-print grb
+sys.stdout.write(repr(grb)+'\n')
 lats, lons = grb.latlons()
 data = grb.values
 map =\

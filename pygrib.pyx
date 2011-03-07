@@ -16,11 +16,13 @@ Required
 
 - U{Python<http://python.org>} 2.4 or higher.
 - U{numpy<http://sourceforge.net/project/showfiles.php?group_id=1369>}
-  N-dimensional array object for python. Version 1.2.1 or higher.
+  N-dimensional array object for python. Version 1.2.1 or higher (version
+  1.5.1 required for Python 3).
 - U{pyproj<http://code.google.com/p/pyproj/>} Python interface to 
   U{PROJ.4<http://trac.osgeo.org/proj>} library for cartographic
   transformations B{or} U{matplotlib<http://matplotlib.sf.net>} and
   the U{basemap<http://matplotlib.sf.net/basemap/doc/html>} toolkit.
+  Pyproj 1.8.9 is required for Python 3.
   
 - U{GRIB API<http://www.ecmwf.int/products/data/software/grib_api.html>} C library
   for encoding and decoding GRIB messages (edition 1 and edition 2).
@@ -68,14 +70,14 @@ Example usage
     >>> grbs.tell()
     2
     >>> grb = grbs.read(1)[0] # read returns a list with the next N (N=1 in this case) messages.
-    >>> print grb # printing a grib message object displays summary info
+    >>> grb # printing a grib message object displays summary info
     3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
     >>> grbs.tell()
     3
  - print an inventory of the file::
     >>> grbs.seek(0)
     >>> for grb in grbs:
-    >>>     print grb 
+    >>>     grb 
     1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120:from 200402291200
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
     3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
@@ -90,15 +92,15 @@ Example usage
     # representation of the grib data (such as the scanning mode) are handled
     # automatically.
     >>> maxt = grb.values # same as grb['values']
-    >>> print maxt.shape, maxt.min(), maxt.max()
+    >>> maxt.shape, maxt.min(), maxt.max()
     (94, 192) 223.7 319.9
  - get the latitudes and longitudes of the grid::
     >>> lats, lons = grb.latlons()
-    >>> print lats.shape, lats.min(), lats.max(), lons.shape, lons.min(), lons.max()
+    >>> lats.shape, lats.min(), lats.max(), lons.shape, lons.min(), lons.max()
     (94, 192) -88.5419501373 88.5419501373  0.0 358.125
  - get the second grib message::
     >>> grb = grbs.message(2) # same as grbs.seek(1); grb=grbs.readline()
-    >>> print grb
+    >>> grb
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
  - modify the values associated with existing keys (either via attribute or
  dictionary access)::
@@ -111,7 +113,7 @@ Example usage
     >>> grbout = open('test.grb','wb')
     >>> grbout.write(msg)
     >>> grbout.close()
-    >>> print pygrib.open('test.grb').readline() 
+    >>> pygrib.open('test.grb').readline() 
     1:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 240:from 201001011200
 
 Documentation
@@ -173,9 +175,8 @@ cdef extern from "stdio.h":
     void rewind (FILE *)
 
 cdef extern from "Python.h":
-    char * PyString_AsString(object)
-    object PyString_FromString(char *s)
-    object PyString_FromStringAndSize(char *s, size_t size)
+    object PyBytes_FromStringAndSize(char *s, size_t size)
+default_encoding = 'ascii'
 
 cdef extern from "numpy/arrayobject.h":
     ctypedef int npy_intp 
@@ -307,7 +308,8 @@ cdef class open(object):
         # initialize C level objects.
         cdef grib_handle *gh
         cdef FILE *_fd
-        self._fd = fopen(filename, "rb") 
+        bytestr = _strencode(filename)
+        self._fd = fopen(bytestr, "rb") 
         if self._fd == NULL:
             raise IOError("could not open %s", filename)
         self._gh = NULL
@@ -400,7 +402,10 @@ cdef class open(object):
         read one entire grib message from the file.
         Returns a L{gribmessage} instance, or None if an EOF is encountered."""
         try:
-            grb = self.next()
+            if hasattr(self,'next'):
+                grb = self.next()
+            else:
+                grb = next(self)
         except StopIteration:
             grb = None
         return grb
@@ -473,22 +478,22 @@ Example usage:
 >>> import pygrib
 >>> grbs = pygrib.open('sampledata/gfs.grb')
 >>> selected_grbs=grbs.select(shortName='gh',typeOfLevel='isobaricInhPa',level=10)
->>> for grb in selected_grbs: print grb
+>>> for grb in selected_grbs: grb
 26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 >>> # the __call__ method does the same thing
 >>> selected_grbs=grbs(shortName='gh',typeOfLevel='isobaricInhPa',level=10)
->>> for grb in selected_grbs: print grb
+>>> for grb in selected_grbs: grb
 26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 >>> # to select multiple specific key values, use containers (e.g. sequences)
 >>> selected_grbs=grbs(shortName=['u','v'],typeOfLevel='isobaricInhPa',level=[10,50])
->>> for grb in selected_grbs: print grb
+>>> for grb in selected_grbs: grb
 193:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 194:v-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 199:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 200:v-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 >>> # to select key values based on a conditional expression, use a function
 >>> selected_grbs=grbs(shortName='gh',level=lambda l: l < 500 and l >= 300)
->>> for grb in selected_grbs: print grb
+>>> for grb in selected_grbs: grb
 14:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 45000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 15:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 40000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 16:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 35000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
@@ -570,13 +575,13 @@ def fromstring(gribstring):
     """
     fromstring(string)
 
-    Create a gribmessage instance from a python string 
+    Create a gribmessage instance from a python bytes object
     representing a binary grib message (the reverse of L{gribmessage.tostring}).
     """
     cdef char* gribstr
     cdef grib_handle * gh
     cdef gribmessage grb
-    gribstr = PyString_AsString(gribstring)
+    gribstr = gribstring
     gh = grib_handle_new_from_message_copy(NULL, <void *>gribstr, len(gribstring))
     grb  = gribmessage.__new__(gribmessage)
     grb.messagenumber = 1
@@ -757,7 +762,8 @@ cdef class gribmessage(object):
         to grib missing value flag (False otherwise)"""
         cdef int err,miss
         cdef char *name
-        name = PyString_AsString(key)
+        bytestr = _strencode(key)
+        name = bytestr
         miss = grib_is_missing(self._gh, name, &err)
         if err:
             raise RuntimeError(grib_get_error_message(err))
@@ -782,7 +788,7 @@ cdef class gribmessage(object):
         keys = []
         while grib_keys_iterator_next(gi):
             name = grib_keys_iterator_get_name(gi)
-            key = PyString_FromString(name)
+            key = name.decode('ascii')
             # ignore these keys.
             if key in ["zero","one","eight","eleven","false","thousand","file",
                        "localDir","7777","oneThousand"]:
@@ -814,7 +820,7 @@ cdef class gribmessage(object):
         keys_noro = []
         while grib_keys_iterator_next(gi):
             name = grib_keys_iterator_get_name(gi)
-            key = PyString_FromString(name)
+            key = name.decode('ascii')
             keys_noro.append(key)
         err = grib_keys_iterator_delete(gi)
         if err:
@@ -840,7 +846,8 @@ cdef class gribmessage(object):
         if key not in self._all_keys:
             raise KeyError('can only modify existing grib keys (key "%s" not found)'
                     % key )
-        name = PyString_AsString(key)
+        bytestr = _strencode(key)
+        name = bytestr
         err = grib_get_native_type(self._gh, name, &typ)
         if err:
             raise RuntimeError(grib_get_error_message(err))
@@ -886,7 +893,8 @@ cdef class gribmessage(object):
                     raise RuntimeError(grib_get_error_message(err))
         elif typ == GRIB_TYPE_STRING:
             size=len(value)
-            strdata = PyString_AsString(value)
+            bytestr = _strencode(value)
+            strdata = bytestr
             err = grib_set_string(self._gh, name, strdata, &size)
             if err:
                 raise RuntimeError(grib_get_error_message(err))
@@ -909,7 +917,8 @@ cdef class gribmessage(object):
         cdef double doubleval
         cdef ndarray datarr
         cdef char strdata[1024]
-        name = PyString_AsString(key)
+        bytestr = _strencode(key)
+        name = bytestr
         err = grib_get_size(self._gh, name, &size)
         if err:
             raise RuntimeError(grib_get_error_message(err))
@@ -965,7 +974,7 @@ cdef class gribmessage(object):
             err = grib_get_string(self._gh, name, strdata, &size)
             if err:
                 raise RuntimeError(grib_get_error_message(err))
-            msg = PyString_FromString(strdata)
+            msg = strdata.decode(default_encoding)
             return msg.rstrip()
         else:
             raise ValueError("unrecognized grib type % d" % typ)
@@ -1003,14 +1012,15 @@ cdef class gribmessage(object):
         cdef void *message
         cdef char *name
         cdef FILE *out
-        name = PyString_AsString('values')
+        bytestr = b'values'
+        name = bytestr
         err = grib_get_size(self._gh, name, &size)
         if err:
             raise RuntimeError(grib_get_error_message(err))
         err = grib_get_message(self._gh, &message, &size)
         if err:
             raise RuntimeError(grib_get_error_message(err))
-        msg = PyString_FromStringAndSize(<char *>message, size)
+        msg = PyBytes_FromStringAndSize(<char *>message, size)
         return msg
     def _unshape_mask(self, datarr):
         """private method for reshaping and removing mask from "values" array"""
@@ -1445,12 +1455,12 @@ Example usage:
 >>> grbindx=pygrib.index('sampledata/gfs.grb','shortName','typeOfLevel','level')
 >>> selected_grbs=grbindx.select(shortName='gh',typeOfLevel='isobaricInhPa',level=500)
 >>> for grb in selected_grbs:
->>>     print grb
+>>>     grb
 1:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 500 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 >>> # __call__ method does same thing as select
 >>> selected_grbs=grbindx(shortName='u',typeOfLevel='isobaricInhPa',level=250)
 >>> for grb in selected_grbs:
->>>     print grb
+>>>     grb
 1:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 250 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 >>> grbindx.close()
 
@@ -1467,10 +1477,12 @@ name (i.e. C{level:l} will search for values of C{level} that are longs).
         cdef grib_index *gi
         cdef int err
         cdef char *filenamec, *keys
-        filenamec = PyString_AsString(filename)
+        bytestr = _strencode(filename)
+        filenamec = bytestr
         if args == ():
             raise ValueError('no keys specified for index')
-        keys = PyString_AsString(','.join(args))
+        bytestr = _strencode(','.join(args))
+        keys = bytestr
         self._gi = grib_index_new_from_file (NULL, filenamec, keys, &err)
         if err:
             raise RuntimeError(grib_get_error_message(err))
@@ -1508,12 +1520,12 @@ Example usage:
 >>> grbindx=pygrib.index('sampledata/gfs.grb','shortName','typeOfLevel','level')
 >>> selected_grbs=grbindx.select(shortName='gh',typeOfLevel='isobaricInhPa',level=500)
 >>> for grb in selected_grbs:
->>>     print grb
+>>>     grb
 1:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 500 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 >>> # __call__ method does same thing as select
 >>> selected_grbs=grbindx(shortName='u',typeOfLevel='isobaricInhPa',level=250)
 >>> for grb in selected_grbs:
->>>     print grb
+>>>     grb
 1:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 250 Pa:fcst time 72:from 200412091200:lo res cntl fcst
 >>> grbindx.close()
 """
@@ -1524,11 +1536,12 @@ Example usage:
         cdef char *strval, *key
         # set index selection.
         # used declared type if available, other infer from type of value.
-        for k,v in kwargs.iteritems():
+        for k,v in kwargs.items():
             if k not in self.keys:
                 raise KeyError('key not part of grib index')
             typ = self.types[self.keys.index(k)]
-            key = PyString_AsString(k)
+            bytestr = _strencode(k)
+            key = bytestr
             if typ == 'l' or (type(v) == int or type(v) == long):
                 longval = long(v)
                 err = grib_index_select_long(self._gi, key, longval)
@@ -1539,8 +1552,9 @@ Example usage:
                 err = grib_index_select_double(self._gi, key, doubval)
                 if err:
                     raise RuntimeError(grib_get_error_message(err))
-            elif typ == 's' or isinstance(v,basestring):
-                strval = PyString_AsString(str(v))
+            elif typ == 's' or isinstance(v,str) or isinstance(v,bytes):
+                bytestr = _strencode(v)
+                strval = bytestr
                 err = grib_index_select_string(self._gi, key, strval)
                 if err:
                     raise RuntimeError(grib_get_error_message(err))
@@ -1617,7 +1631,7 @@ def _is_container(a):
     # membership with "is in", but not a string)
     try: 1 in a
     except: return False
-    if type(a) == type(basestring): return False
+    if type(a) == str or type(a) == bytes: return False
     return True
 
 def _find(grb, **kwargs):
@@ -1625,7 +1639,7 @@ def _find(grb, **kwargs):
     # If value is a container-like object, search for matches to any element.
     # If value is a function, call that function with key value to determine
     # whether it is a match.
-    for k,v in kwargs.iteritems():
+    for k,v in kwargs.items():
         if not grb.has_key(k): return False
         # is v a "container-like" non-string object?
         iscontainer = _is_container(v)
@@ -1642,3 +1656,13 @@ def _find(grb, **kwargs):
         else:
             return False
     return True
+
+cdef _strencode(pystr,encoding=None):
+    # encode a string into bytes.  If already bytes, do nothing.
+    # uses default_encoding module variable for default encoding.
+    if encoding is None:
+        encoding = default_encoding
+    try:
+        return pystr.encode(encoding)
+    except AttributeError:
+        return pystr # already bytes?

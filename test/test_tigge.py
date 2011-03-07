@@ -1,13 +1,14 @@
 import numpy as np
 from mpl_toolkits.basemap import Basemap
 from numpy import ma
-import pygrib
+import pygrib, sys
 import matplotlib.pyplot as plt
 
 for grb in pygrib.open('../sampledata/tigge.grb'):
     fld = 0.01*grb['values'] # convert to hPa
     lats,lons = grb.latlons()
-    print grb['centre'], fld.shape, fld.min(), fld.max()
+    sys.stdout.write('%s %s %s %s' % \
+            (grb['centre'], fld.shape, fld.min(), fld.max()))
     fig=plt.figure(figsize=(10,5))
     fig.add_axes([0.1,0.1,0.8,0.8])
     # setup robinson world map projection.
