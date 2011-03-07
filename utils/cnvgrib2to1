@@ -2,10 +2,9 @@
 import pygrib, sys
 
 if len(sys.argv) < 3:
-   sys.stdout.write("""
-   cnvgrib2to1 <grib2 filename> <grib1 filename>
-   """)
-   raise SystemExit
+    sys.stdout.write("""
+cnvgrib2to1 <grib2 filename> <grib1 filename>\n\n""")
+    raise SystemExit
    
 grbs = pygrib.open(sys.argv[1])
 f = open(sys.argv[2],'wb')
