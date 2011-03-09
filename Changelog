@@ -1,4 +1,4 @@
-version 1.8.2 - not yet released
+version 1.8.2 - svn revision 434
 ================================
 * Python 3 support. 
 * changed name of grib1to2 and grib2to1 to cnvgrib1to2 and cnvgrib2to1
