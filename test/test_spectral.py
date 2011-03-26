@@ -7,7 +7,7 @@ try:
 except:
     raise ImportError("requires pyspharm (python spherical harmonic module) from http://code.google.com/p/pyspharm")
 
-grbs = pygrib.open('../sampledata/spherical_pressure_level.grib2')
+grbs = pygrib.open('../sampledata/spherical_pressure_level.grib1')
 g = grbs[1]
 fld = g.values
 
