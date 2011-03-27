@@ -1,3 +1,7 @@
+* repacked example grib files to prevent tests from failing.  Test failures
+  ocurred with grib_api > 1.9.8 for grib messages using second-order complex
+  packing.
+
 version 1.8.2 - svn revision 434
 ================================
 * Python 3 support. 
