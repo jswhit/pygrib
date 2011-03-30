@@ -1,3 +1,5 @@
+version 1.8.3 - svn revision 442
+================================
 * repacked example grib files to prevent tests from failing.  Test failures
   ocurred for grib messages using second-order complex
   packing, due to a bug introduced in the grib_api library in version 1.9.8.
