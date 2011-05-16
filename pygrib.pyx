@@ -604,7 +604,7 @@ cdef class gribmessage(object):
     @ivar messagenumber: The grib message number in the file.
 
     @ivar projparams: A dictionary containing proj4 key/value pairs describing 
-    the grid.  Created when the L{latlons} method is invoked.
+    the grid.  Set to C{None} for unsupported grid types.
 
     @ivar expand_reduced:  If True (default), reduced lat/lon and gaussian grids
     will be expanded to regular grids when data is accessed via "values" key. If
