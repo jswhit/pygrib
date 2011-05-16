@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 import sys
-grbs = pygrib.open('../sampledata/cl00010000_ecoclimap_rot.grib')
+grbs = pygrib.open('../sampledata/cl00010000_ecoclimap_rot.grib1')
 grb = grbs.message(7)
 lats, lons = grb.latlons()
 sys.stdout.write(repr(grb.projparams)+'\n')
