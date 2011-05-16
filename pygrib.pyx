@@ -130,7 +130,7 @@ Changelog
 
 @contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
 
-@version: 1.8.3
+@version: 1.8.4
 
 @copyright: copyright 2010 by Jeffrey Whitaker.
 
@@ -148,7 +148,7 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE."""
 __test__ = None
 del __test__ # hack so epydoc doesn't show __test__
-__version__ = '1.8.3'
+__version__ = '1.8.4'
 
 import numpy as np
 from datetime import datetime
@@ -564,6 +564,7 @@ cdef _create_gribmessage(grib_handle *gh, object messagenumber):
     grb._gh = grib_handle_clone(gh)
     grb._all_keys = grb.keys()
     grb._ro_keys  = grb._read_only_keys()
+    grb._set_projparams() # set projection parameter dict.
     if grb.has_key('forecastTime') and grb.has_key('julianDay'):
         grb.analDate =\
         julian_to_datetime(grb.julianDay)
@@ -794,8 +795,8 @@ cdef class gribmessage(object):
                        "localDir","7777","oneThousand"]:
                 continue
             err = grib_get_native_type(self._gh, name, &typ)
-            if err:
-                raise RuntimeError(grib_get_error_message(err))
+            if err: # skip unreadable keys
+                continue
             # keys with these types are ignored.
             if typ not in\
             [GRIB_TYPE_UNDEFINED,GRIB_TYPE_SECTION,GRIB_TYPE_BYTES,GRIB_TYPE_LABEL,GRIB_TYPE_MISSING]:
@@ -1098,19 +1099,9 @@ cdef class gribmessage(object):
            if self.has_key('missingValue') and self['numberOfMissing']:
                datarr = ma.masked_values(datarr, self['missingValue'])
         return datarr
-    def latlons(self):
+
+    def _set_projparams(self):
         """
-        latlons()
-
-        compute lats and lons (in degrees) of grid.
-        Currently handles reg. lat/lon, global gaussian, mercator, stereographic,
-        lambert conformal, albers equal-area, space-view, azimuthal 
-        equidistant, reduced gaussian, reduced lat/lon,
-        lambert azimuthal equal-area, rotated lat/lon and rotated gaussian grids.
-
-        @return: C{B{lats},B{lons}}, numpy arrays 
-        containing latitudes and longitudes of grid (in degrees).
-
         sets the C{projparams} instance variable to a dictionary containing 
         proj4 key/value pairs describing the grid.
         """
@@ -1144,18 +1135,6 @@ cdef class gribmessage(object):
             else:
                 projparams['a']=self['scaledValueOfEarthMajorAxis']*scalea
                 projparams['b']=self['scaledValueOfEarthMinorAxis']*scaleb
-            # check to make sure scale factor wasn't screwed up
-            # (assume earth radius should be O(10**6) meters)
-            #dec_scale = int(np.log10(projparams['a']))
-            #if dec_scale != 6:
-            #    dec_scale = 6-dec_scale
-            #    rescale = np.power(10.0,dec_scale)
-            #    projparams['a'] = rescale*projparams['a']
-            #dec_scale = int(np.log10(projparams['b']))
-            #if dec_scale != 6:
-            #    dec_scale = 6-dec_scale
-            #    rescale = np.power(10.0,dec_scale)
-            #    projparams['b'] = rescale*projparams['b']
         elif self['shapeOfTheEarth'] == 2:
             projparams['a']=6378160.0
             projparams['b']=6356775.0 
@@ -1172,14 +1151,6 @@ cdef class gribmessage(object):
                 scaleb = 1.
             projparams['a']=self['scaledValueOfRadiusOfSphericalEarth']*scalea
             projparams['b']=self['scaledValueOfRadiusOfSphericalEarth']*scaleb
-            # check to make sure scale factor wasn't screwed up
-            # (assume earth radius should be O(10**6) meters)
-            #dec_scale = int(np.log10(projparams['a']))
-            #if dec_scale != 6:
-            #    dec_scale = 6-dec_scale
-            #    rescale = np.power(10.0,dec_scale)
-            #    projparams['a'] = rescale*projparams['a']
-            #    projparams['b'] = rescale*projparams['b']
         elif self['shapeOfTheEarth'] == 0:
             projparams['a']=6367470.0
             projparams['b']=6367470.0
@@ -1192,50 +1163,9 @@ cdef class gribmessage(object):
         else:
             raise ValueError('unknown shape of the earth flag')
 
-        if self['gridType'] in ['regular_gg','regular_ll']: # regular lat/lon grid
-            lons = self['distinctLongitudes']
-            lats = self['distinctLatitudes']
-            lons,lats = np.meshgrid(lons,lats) 
-            projparams['proj']='cyl'
-        elif self['gridType'] == 'reduced_gg': # reduced global gaussian grid
-            lats = self['distinctLatitudes']
-            ny = self['Nj']
-            nx = 2*ny
-            lon1 = self['longitudeOfFirstGridPointInDegrees']
-            lon2 = self['longitudeOfLastGridPointInDegrees']
-            lons = np.linspace(lon1,lon2,nx)
-            lons,lats = np.meshgrid(lons,lats) 
-            projparams['proj']='cyl'
-        elif self['gridType'] == 'reduced_ll': # reduced lat/lon grid
-            ny = self['Nj']
-            nx = 2*ny
-            lat1 = self['latitudeOfFirstGridPointInDegrees']
-            lat2 = self['latitudeOfLastGridPointInDegrees']
-            lon1 = self['longitudeOfFirstGridPointInDegrees']
-            lon2 = self['longitudeOfLastGridPointInDegrees']
-            lons = np.linspace(lon1,lon2,nx)
-            lats = np.linspace(lat1,lat2,ny)
-            lons,lats = np.meshgrid(lons,lats) 
+        if self['gridType'] in ['reduced_gg','reduced_ll','regular_gg','regular_ll']: # regular lat/lon grid
             projparams['proj']='cyl'
         elif self['gridType'] == 'polar_stereographic':
-            lat1 = self['latitudeOfFirstGridPointInDegrees']
-            lon1 = self['longitudeOfFirstGridPointInDegrees']
-            try:
-               nx = self['Nx']
-               ny = self['Ny']
-            except:
-               nx = self['Ni']
-               ny = self['Nj']
-            # key renamed from xDirectionGridLengthInMetres to
-            # DxInMetres grib_api 1.8.0.1.
-            try:
-                dx = self['DxInMetres']
-            except:
-                dx = self['xDirectionGridLengthInMetres']
-            try:
-                dy = self['DyInMetres']
-            except:
-                dy = self['yDirectionGridLengthInMetres']
             projparams['proj']='stere'
             projparams['lat_ts']=self['latitudeWhereDxAndDyAreSpecifiedInDegrees']
             if self.has_key('projectionCentreFlag'):
@@ -1249,45 +1179,13 @@ cdef class gribmessage(object):
             else:
                 projparams['lat_0']=-90.
             projparams['lon_0']=self['orientationOfTheGridInDegrees']
-            pj = pyproj.Proj(projparams)
-            llcrnrx, llcrnry = pj(lon1,lat1)
-            x = llcrnrx+dx*np.arange(nx)
-            y = llcrnry+dy*np.arange(ny)
-            x, y = np.meshgrid(x, y)
-            lons, lats = pj(x, y, inverse=True)
         elif self['gridType'] == 'lambert':
-            lat1 = self['latitudeOfFirstGridPointInDegrees']
-            lon1 = self['longitudeOfFirstGridPointInDegrees']
-            try:
-               nx = self['Nx']
-               ny = self['Ny']
-            except:
-               nx = self['Ni']
-               ny = self['Nj']
-            dx = self['DxInMetres']
-            dy = self['DyInMetres']
             projparams['proj']='lcc'
             projparams['lon_0']=self['LoVInDegrees']
             projparams['lat_0']=self['LaDInDegrees']
             projparams['lat_1']=self['Latin1InDegrees']
             projparams['lat_2']=self['Latin2InDegrees']
-            pj = pyproj.Proj(projparams)
-            llcrnrx, llcrnry = pj(lon1,lat1)
-            x = llcrnrx+dx*np.arange(nx)
-            y = llcrnry+dy*np.arange(ny)
-            x, y = np.meshgrid(x, y)
-            lons, lats = pj(x, y, inverse=True)
         elif self['gridType'] =='albers':
-            lat1 = self['latitudeOfFirstGridPointInDegrees']
-            lon1 = self['longitudeOfFirstGridPointInDegrees']
-            try:
-               nx = self['Nx']
-               ny = self['Ny']
-            except:
-               nx = self['Ni']
-               ny = self['Nj']
-            dx = self['Dx']/1000.
-            dy = self['Dy']/1000.
             projparams['proj']='aea'
             scale = float(self['grib2divider'])
             projparams['lon_0']=self['LoV']/scale
@@ -1302,7 +1200,144 @@ cdef class gribmessage(object):
             projparams['lat_2']=self['Latin2']/scale
             if self['truncateDegrees']:
                 projparams['lat_2'] = int(projparams['lat_2'])
-            pj = pyproj.Proj(projparams)
+        elif self['gridType'] == 'space_view':
+            projparams['lon_0']=self['longitudeOfSubSatellitePointInDegrees']
+            projparams['lat_0']=self['latitudeOfSubSatellitePointInDegrees']
+            if projparams['lat_0'] == 0.: # if lat_0 is equator, it's a
+                projparams['proj'] = 'geos'
+            # general case of 'near-side perspective projection' (untested)
+            else:
+                projparams['proj'] = 'nsper'
+            scale = float(self['grib2divider'])
+            projparams['h'] = projparams['a'] * self['Nr']/scale
+            # h is measured from surface of earth at equator.
+            projparams['h'] = projparams['h']-projparams['a']
+        elif self['gridType'] == "equatorial_azimuthal_equidistant":
+            projparams['lat_0'] = self['standardParallel']/1.e6
+            projparams['lon_0'] = self['centralLongitude']/1.e6
+            projparams['proj'] = 'aeqd'
+        elif self['gridType'] == "lambert_azimuthal_equal_area":
+            projparams['lat_0'] = self['standardParallel']/1.e6
+            projparams['lon_0'] = self['centralLongitude']/1.e6
+            projparams['proj'] = 'laea'
+        elif self['gridType'] == 'mercator':
+            scale = float(self['grib2divider'])
+            lon1 = self['longitudeOfFirstGridPoint']/scale
+            if self['truncateDegrees']:
+                lon1 = int(lon1)
+            lon2 = self['longitudeOfLastGridPoint']/scale
+            if self['truncateDegrees']:
+                lon2 = int(lon2)
+            projparams['lat_ts']=self['LaD']/scale
+            projparams['lon_0']=0.5*(lon1+lon2)
+            projparams['proj']='merc'
+        elif self['gridType'] in ['rotated_ll','rotated_gg']:
+            rot_angle = self['angleOfRotationInDegrees']
+            pole_lat = self['latitudeOfSouthernPoleInDegrees']
+            pole_lon = self['longitudeOfSouthernPoleInDegrees']
+            projparams['o_proj']='longlat'
+            projparams['proj']='ob_tran'
+            projparams['o_lat_p']=-pole_lat
+            projparams['o_lon_p']=rot_angle
+            projparams['lon_0']=pole_lon
+        else: # unsupported grid type.
+            projparams = None
+        self.projparams = projparams
+
+    def latlons(self):
+        """
+        latlons()
+
+        compute lats and lons (in degrees) of grid.
+        Currently handles reg. lat/lon, global gaussian, mercator, stereographic,
+        lambert conformal, albers equal-area, space-view, azimuthal 
+        equidistant, reduced gaussian, reduced lat/lon,
+        lambert azimuthal equal-area, rotated lat/lon and rotated gaussian grids.
+
+        @return: C{B{lats},B{lons}}, numpy arrays 
+        containing latitudes and longitudes of grid (in degrees).
+        """
+
+        if self.projparams is None:
+            raise ValueError('unsupported grid %s' % self['gridType'])
+
+        if self['gridType'] in ['regular_gg','regular_ll']: # regular lat/lon grid
+            lons = self['distinctLongitudes']
+            lats = self['distinctLatitudes']
+            lons,lats = np.meshgrid(lons,lats) 
+        elif self['gridType'] == 'reduced_gg': # reduced global gaussian grid
+            lats = self['distinctLatitudes']
+            ny = self['Nj']
+            nx = 2*ny
+            lon1 = self['longitudeOfFirstGridPointInDegrees']
+            lon2 = self['longitudeOfLastGridPointInDegrees']
+            lons = np.linspace(lon1,lon2,nx)
+            lons,lats = np.meshgrid(lons,lats) 
+        elif self['gridType'] == 'reduced_ll': # reduced lat/lon grid
+            ny = self['Nj']
+            nx = 2*ny
+            lat1 = self['latitudeOfFirstGridPointInDegrees']
+            lat2 = self['latitudeOfLastGridPointInDegrees']
+            lon1 = self['longitudeOfFirstGridPointInDegrees']
+            lon2 = self['longitudeOfLastGridPointInDegrees']
+            lons = np.linspace(lon1,lon2,nx)
+            lats = np.linspace(lat1,lat2,ny)
+            lons,lats = np.meshgrid(lons,lats) 
+        elif self['gridType'] == 'polar_stereographic':
+            lat1 = self['latitudeOfFirstGridPointInDegrees']
+            lon1 = self['longitudeOfFirstGridPointInDegrees']
+            try:
+                nx = self['Nx']
+                ny = self['Ny']
+            except:
+                nx = self['Ni']
+                ny = self['Nj']
+            # key renamed from xDirectionGridLengthInMetres to
+            # DxInMetres grib_api 1.8.0.1.
+            try:
+                dx = self['DxInMetres']
+            except:
+                dx = self['xDirectionGridLengthInMetres']
+            try:
+                dy = self['DyInMetres']
+            except:
+                dy = self['yDirectionGridLengthInMetres']
+            pj = pyproj.Proj(self.projparams)
+            llcrnrx, llcrnry = pj(lon1,lat1)
+            x = llcrnrx+dx*np.arange(nx)
+            y = llcrnry+dy*np.arange(ny)
+            x, y = np.meshgrid(x, y)
+            lons, lats = pj(x, y, inverse=True)
+        elif self['gridType'] == 'lambert':
+            lat1 = self['latitudeOfFirstGridPointInDegrees']
+            lon1 = self['longitudeOfFirstGridPointInDegrees']
+            try:
+                nx = self['Nx']
+                ny = self['Ny']
+            except:
+                nx = self['Ni']
+                ny = self['Nj']
+            dx = self['DxInMetres']
+            dy = self['DyInMetres']
+            pj = pyproj.Proj(self.projparams)
+            llcrnrx, llcrnry = pj(lon1,lat1)
+            x = llcrnrx+dx*np.arange(nx)
+            y = llcrnry+dy*np.arange(ny)
+            x, y = np.meshgrid(x, y)
+            lons, lats = pj(x, y, inverse=True)
+        elif self['gridType'] =='albers':
+            lat1 = self['latitudeOfFirstGridPointInDegrees']
+            lon1 = self['longitudeOfFirstGridPointInDegrees']
+            try:
+                nx = self['Nx']
+                ny = self['Ny']
+            except:
+                nx = self['Ni']
+                ny = self['Nj']
+            dx = self['Dx']/1000.
+            dy = self['Dy']/1000.
+            scale = float(self['grib2divider'])
+            pj = pyproj.Proj(self.projparams)
             llcrnrx, llcrnry = pj(lon1,lat1)
             x = llcrnrx+dx*np.arange(nx)
             y = llcrnry+dy*np.arange(ny)
@@ -1310,42 +1345,30 @@ cdef class gribmessage(object):
             lons, lats = pj(x, y, inverse=True)
         elif self['gridType'] == 'space_view':
             try:
-               nx = self['Nx']
-               ny = self['Ny']
+                nx = self['Nx']
+                ny = self['Ny']
             except:
-               nx = self['Ni']
-               ny = self['Nj']
-            projparams['lon_0']=self['longitudeOfSubSatellitePointInDegrees']
-            projparams['lat_0']=self['latitudeOfSubSatellitePointInDegrees']
-            if projparams['lat_0'] == 0.: # if lat_0 is equator, it's a
-                projparams['proj'] = 'geos'
+                nx = self['Ni']
+                ny = self['Nj']
             # general case of 'near-side perspective projection' (untested)
-            else:
-                if projparams['a'] != projparams['b']:
-                    raise ValueError('unsupported grid - earth not a perfect sphere')
-                projparams['proj'] = 'nsper'
+            if self.projparams['proj'] == 'nsper' and \
+               self.projparams['a'] != self.projparams['b']:
+                raise ValueError('unsupported grid - earth not a perfect sphere')
             scale = float(self['grib2divider'])
-            projparams['h'] = projparams['a'] * self['Nr']/scale
             # latitude of horizon on central meridian
-            lon_0=projparams['lon_0']; lat_0=projparams['lat_0']
+            lon_0=self.projparams['lon_0']; lat_0=self.projparams['lat_0']
             lonmax =\
-            lon_0+90.-(180./np.pi)*np.arcsin(projparams['a']/projparams['h'])
+            lon_0+90.-(180./np.pi)*np.arcsin(scale/self['Nr'])
             # longitude of horizon on equator
             latmax =\
-            lat_0+90.-(180./np.pi)*np.arcsin(projparams['b']/projparams['h'])
-            # h is measured from surface of earth at equator.
-            projparams['h'] = projparams['h']-projparams['a']
+            lat_0+90.-(180./np.pi)*np.arcsin(scale/self['Nr'])
             # truncate to nearest thousandth of a degree (to make sure
             # they aren't slightly over the horizon)
             latmax = int(1000*latmax)/1000.
             lonmax = int(1000*lonmax)/1000.
-            pj = pyproj.Proj(projparams)
+            pj = pyproj.Proj(self.projparams)
             x1,y1 = pj(lon_0,latmax); x2,y2 = pj(lonmax,lat_0)
             width = 2*x2; height = 2*y1
-            #dx =\
-            #width/self['apparentDiameterOfEarthInGridLengthsInXDirection']
-            #dy =\
-            #height/self['apparentDiameterOfEarthInGridLengthsInYDirection']
             dx = width/self['dx']
             dy = height/self['dy']
             xmax = dx*(nx-1); ymax = dy*(ny-1)
@@ -1358,28 +1381,22 @@ cdef class gribmessage(object):
             lons = np.where(abslons < 1.e20, lons, 1.e30)
             lats = np.where(abslats < 1.e20, lats, 1.e30)
         elif self['gridType'] == "equatorial_azimuthal_equidistant":
-            projparams['lat_0'] = self['standardParallel']/1.e6
-            projparams['lon_0'] = self['centralLongitude']/1.e6
             dx = self['Dx']/1.e3
             dy = self['Dy']/1.e3
-            projparams['proj'] = 'aeqd'
             lat1 = self['latitudeOfFirstGridPointInDegrees']
             lon1 = self['longitudeOfFirstGridPointInDegrees']
-            pj = pyproj.Proj(projparams)
+            pj = pyproj.Proj(self.projparams)
             llcrnrx, llcrnry = pj(lon1,lat1)
             x = llcrnrx+dx*np.arange(nx)
             y = llcrnry+dy*np.arange(ny)
             x, y = np.meshgrid(x, y)
             lons, lats = pj(x, y, inverse=True)
         elif self['gridType'] == "lambert_azimuthal_equal_area":
-            projparams['lat_0'] = self['standardParallel']/1.e6
-            projparams['lon_0'] = self['centralLongitude']/1.e6
             dx = self['Dx']/1.e3
             dy = self['Dy']/1.e3
-            projparams['proj'] = 'laea'
             lat1 = self['latitudeOfFirstGridPointInDegrees']
             lon1 = self['longitudeOfFirstGridPointInDegrees']
-            pj = pyproj.Proj(projparams)
+            pj = pyproj.Proj(self.projparams)
             llcrnrx, llcrnry = pj(lon1,lat1)
             x = llcrnrx+dx*np.arange(nx)
             y = llcrnry+dy*np.arange(ny)
@@ -1399,19 +1416,15 @@ cdef class gribmessage(object):
             lon2 = self['longitudeOfLastGridPoint']/scale
             if self['truncateDegrees']:
                 lon2 = int(lon2)
-            #projparams['lat_ts']=self['latitudeSAtWhichTheMercatorProjectionIntersectsTheEarth']/scale
-            projparams['lat_ts']=self['LaD']/scale
-            projparams['lon_0']=0.5*(lon1+lon2)
-            projparams['proj']='merc'
-            pj = pyproj.Proj(projparams)
+            pj = pyproj.Proj(self.projparams)
             llcrnrx, llcrnry = pj(lon1,lat1)
             urcrnrx, urcrnry = pj(lon2,lat2)
             try:
-               nx = self['Nx']
-               ny = self['Ny']
+                nx = self['Nx']
+                ny = self['Ny']
             except:
-               nx = self['Ni']
-               ny = self['Nj']
+                nx = self['Ni']
+                ny = self['Nj']
             dx = (urcrnrx-llcrnrx)/(nx-1)
             dy = (urcrnry-llcrnry)/(ny-1)
             x = llcrnrx+dx*np.arange(nx)
@@ -1419,23 +1432,14 @@ cdef class gribmessage(object):
             x, y = np.meshgrid(x, y)
             lons, lats = pj(x, y, inverse=True)
         elif self['gridType'] in ['rotated_ll','rotated_gg']:
-            rot_angle = self['angleOfRotationInDegrees']
-            pole_lat = self['latitudeOfSouthernPoleInDegrees']
-            pole_lon = self['longitudeOfSouthernPoleInDegrees']
             rotatedlats = self['distinctLatitudes']
             rotatedlons = self['distinctLongitudes']
             d2r = np.pi/180.
             lonsr, latsr = np.meshgrid(rotatedlons*d2r, rotatedlats*d2r)
-            projparams['o_proj']='longlat'
-            projparams['proj']='ob_tran'
-            projparams['o_lat_p']=-pole_lat
-            projparams['o_lon_p']=rot_angle
-            projparams['lon_0']=pole_lon
-            pj = pyproj.Proj(projparams)
+            pj = pyproj.Proj(self.projparams)
             lons,lats = pj(lonsr,latsr,inverse=True)
         else:
             raise ValueError('unsupported grid %s' % self['gridType'])
-        self.projparams = projparams
         return lats, lons
 
 cdef class index(object):

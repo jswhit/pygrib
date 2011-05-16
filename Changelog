@@ -1,3 +1,8 @@
+version 1.8.4 - not yet released
+================================
+* set projparams instance variable when grib message is created, instead of
+  when latlons method called (issue 27).
+
 version 1.8.3 - svn revision 442
 ================================
 * repacked example grib files to prevent tests from failing.  Test failures
