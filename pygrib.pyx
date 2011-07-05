@@ -368,6 +368,10 @@ cdef class open(object):
     def __call__(self, **kwargs):
         """same as L{select}"""
         return self.select(**kwargs)
+    def __enter__(self):
+        return self
+    def __exit__(self,atype,value,traceback):
+        self.close()
     def tell(self):
         """returns position of iterator (grib message number, 0 means iterator
         is positioned at beginning of file)."""
