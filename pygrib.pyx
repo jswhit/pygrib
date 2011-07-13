@@ -594,6 +594,7 @@ def fromstring(gribstring):
     grb._gh = gh
     grb._all_keys = grb.keys()
     grb._ro_keys  = grb._read_only_keys()
+    grb._set_projparams() # set projection parameter dict.
     if grb.has_key('forecastTime') and grb.has_key('julianDay'):
         grb.analDate =\
         julian_to_datetime(grb.julianDay)
