@@ -1,10 +1,7 @@
-since version 1.8.4
-===================
-* make sure _set_projparams is called by fromstring (issue 33).
-* add __enter__ and __exit__ methods so you can do "with pygrib.open(filename) as f:"
-
 version 1.8.4 - not yet released
 ================================
+* make sure _set_projparams is called by fromstring (issue 33).
+* add __enter__ and __exit__ methods so you can do "with pygrib.open(filename) as f:"
 * set projparams instance variable when grib message is created, instead of
   when latlons method called (issue 27).
 
