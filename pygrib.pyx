@@ -860,7 +860,7 @@ cdef class gribmessage(object):
         elif typ == GRIB_TYPE_LONG:
             # is value an array or a scalar?
             datarr = np.asarray(value, np.int)
-            is_array == False
+            is_array = False
             if datarr.shape:
                 is_array = True
             if not is_array: # scalar
@@ -880,7 +880,7 @@ cdef class gribmessage(object):
         elif typ == GRIB_TYPE_DOUBLE:
             # is value an array or a scalar?
             datarr = np.asarray(value, np.float)
-            is_array == False
+            is_array = False
             if datarr.shape:
                 is_array = True
             if not is_array: # scalar
@@ -1392,6 +1392,12 @@ cdef class gribmessage(object):
             lon1 = self['longitudeOfFirstGridPointInDegrees']
             pj = pyproj.Proj(self.projparams)
             llcrnrx, llcrnry = pj(lon1,lat1)
+            try:
+                nx = self['Nx']
+                ny = self['Ny']
+            except:
+                nx = self['Ni']
+                ny = self['Nj']
             x = llcrnrx+dx*np.arange(nx)
             y = llcrnry+dy*np.arange(ny)
             x, y = np.meshgrid(x, y)
@@ -1403,6 +1409,12 @@ cdef class gribmessage(object):
             lon1 = self['longitudeOfFirstGridPointInDegrees']
             pj = pyproj.Proj(self.projparams)
             llcrnrx, llcrnry = pj(lon1,lat1)
+            try:
+                nx = self['Nx']
+                ny = self['Ny']
+            except:
+                nx = self['Ni']
+                ny = self['Nj']
             x = llcrnrx+dx*np.arange(nx)
             y = llcrnry+dy*np.arange(ny)
             x, y = np.meshgrid(x, y)
