@@ -652,9 +652,15 @@ cdef class gribmessage(object):
         """prints a short inventory of the grib message"""
         inventory = []
         if self.valid_key('name'):
-            inventory.append(repr(self.messagenumber)+':'+self['name'])
+            if self['name'] != 'unknown':
+                inventory.append(repr(self.messagenumber)+':'+self['name'])
+            elif self.valid_key('parameterName'):
+                inventory.append(repr(self.messagenumber)+':'+self['parameterName'])
         if self.valid_key('units'):
-            inventory.append(':'+self['units'])
+            if self['units'] != 'unknown':
+                inventory.append(':'+self['units'])
+            elif self.valid_key('parameterUnits'):
+                inventory.append(':'+self['parameterUnits'])
         if self.valid_key('stepType'):
             inventory.append(' ('+self['stepType']+')')
         if self.valid_key('typeOfGrid') or self.valid_key('gridType'):
