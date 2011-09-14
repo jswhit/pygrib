@@ -1,8 +1,7 @@
-since version 1.8.4
+version 1.9.0 (not yet released)
 ================================
 * grb.__repr__ returns parameterName and parameterUnits, if name and units
   keys don't exist (issue 36).
-
 * regenerate with Cython 0.15, fix a couple of latent bugs found by new Cython
   compiler.
 
