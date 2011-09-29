@@ -188,6 +188,7 @@ import string
 import math
 import warnings
 from datetime import datetime
+from StringIO import StringIO
 
 import numpy as N
 from numpy import ma
@@ -781,6 +782,15 @@ lat/lon values returned by grid method may be incorrect."""
             if drtmpl[6] == 2:
                 self.missing_value2 = _getieeeint(drtmpl[8]) 
 
+    def __repr__(self):
+        strings = []
+        keys = self.__dict__.keys()
+        keys.sort()
+        for k in keys:
+            if not k.startswith('_'):
+                strings.append('%s = %s\n'%(k,self.__dict__[k]))
+        return ''.join(strings)
+
     def data(self,fill_value=1.e30,masked_array=True,expand=True,order=None):
         """
  returns an unpacked data grid.
@@ -816,7 +826,10 @@ lat/lon values returned by grid method may be incorrect."""
                 order = 0
             else:
                 order = 1
-        f = open(self._grib_filename,'rb')
+        try:
+            f = open(self._grib_filename,'rb')
+        except TypeError:
+            f = StringIO(self._grib_filename)
         f.seek(self._grib_message_byteoffset)
         gribmsg = f.read(self._grib_message_length)
         f.close()
@@ -986,7 +999,7 @@ lat/lon values returned by grid method may be incorrect."""
             raise ValueError('unsupported grid')
         return lats.astype('f'), lons.astype('f')
 
-def Grib2Decode(filename):
+def Grib2Decode(filename,gribmsg=False):
     """
  Read the contents of a GRIB2 file.
 
@@ -1000,7 +1013,10 @@ def Grib2Decode(filename):
  can be read using L{Grib2Message.data}, and the lat/lon values of the grid
  can be accesses using L{Grib2Message.grid}.
     """
-    f = open(filename,'rb')
+    if gribmsg:
+        f = StringIO(filename)
+    else:
+        f = open(filename,'rb')
     nmsg = 0
     # loop over grib messages, read section 0, get entire grib message.
     disciplines = []
@@ -1256,7 +1272,10 @@ def dump(filename, grbs):
     """
     gribfile = open(filename,'wb')
     for grb in grbs:
-        f = open(grb._grib_filename,'rb')
+        try:
+            f = open(grb._grib_filename,'rb')
+        except TypeError:
+            f = StringIO(grb._grib_filename)
         f.seek(grb._grib_message_byteoffset)
         gribmsg = f.read(grb._grib_message_length)
         f.close()
