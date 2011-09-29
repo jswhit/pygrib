@@ -1261,7 +1261,10 @@ def Grib2Decode(filename,gribmsg=False):
             kwargs['has_local_use_section'] = False
         gribs.append(Grib2Message(**kwargs))
     f.close()
-    return gribs 
+    if len(gribs) == 1:
+        return gribs[0]
+    else:
+        return gribs 
 
 def dump(filename, grbs):
     """

@@ -15,9 +15,9 @@ cdef extern from "Python.h":
   # To access doubles
   object PyFloat_FromDouble(double)
   # To access strings
-  char *PyString_AsString(object string)
-  object PyString_FromString(char *)
-  object PyString_FromStringAndSize(char *, int)
+  char * PyBytes_AsString(object string)
+  object PyBytes_FromString(char *s)
+  object PyBytes_FromStringAndSize(char *s, size_t size)
   int PyObject_AsWriteBuffer(object, void **rbuf, Py_ssize_t *len)
   int PyObject_AsReadBuffer(object, void **rbuf, Py_ssize_t *len)
   int PyObject_CheckReadBuffer(object)
@@ -165,7 +165,7 @@ def unpack1(gribmsg, ipos, object zeros):
     cdef unsigned char *cgrib
     cdef g2int i, iofst, ierr, idslen
     cdef g2int *ids
-    cgrib = <unsigned char *>PyString_AsString(gribmsg)
+    cgrib = <unsigned char *>PyBytes_AsString(gribmsg)
     iofst = <g2int>PyInt_AsLong(ipos*8)
     ierr = g2_unpack1(cgrib, &iofst, &ids, &idslen)
     if ierr != 0:
@@ -224,7 +224,7 @@ def unpack3(gribmsg, ipos, object zeros):
     cdef unsigned char *cgrib
     cdef g2int *igds, *igdstmpl, *ideflist
     cdef g2int mapgridlen, iofst, idefnum, ierr
-    cgrib = <unsigned char *>PyString_AsString(gribmsg)
+    cgrib = <unsigned char *>PyBytes_AsString(gribmsg)
     iofst = <g2int>PyInt_AsLong(ipos*8)
     ierr=g2_unpack3(cgrib,&iofst,&igds,&igdstmpl,&mapgridlen,&ideflist,&idefnum)
     if ierr != 0:
@@ -275,7 +275,7 @@ def unpack4(gribmsg,ipos,object zeros):
     cdef g2int *ipdstmpl
     cdef g2float *icoordlist
     cdef g2int mappdslen, iofst, ipdsnum, ierr, numcoord
-    cgrib = <unsigned char *>PyString_AsString(gribmsg)
+    cgrib = <unsigned char *>PyBytes_AsString(gribmsg)
     iofst = <g2int>PyInt_AsLong(ipos*8)
     ierr=g2_unpack4(cgrib,&iofst,&ipdsnum,&ipdstmpl,&mappdslen,&icoordlist,&numcoord)
     if ierr != 0:
@@ -321,7 +321,7 @@ def unpack5(gribmsg,ipos,object zeros):
     cdef unsigned char *cgrib
     cdef g2int *idrstmpl
     cdef g2int iofst, ierr, ndpts, idrsnum, mapdrslen
-    cgrib = <unsigned char *>PyString_AsString(gribmsg)
+    cgrib = <unsigned char *>PyBytes_AsString(gribmsg)
     iofst = <g2int>PyInt_AsLong(ipos*8)
     ierr=g2_unpack5(cgrib,&iofst,&ndpts,&idrsnum,&idrstmpl,&mapdrslen)
     if ierr != 0:
@@ -363,7 +363,7 @@ def unpack6(gribmsg,ndpts,ipos,object zeros):
     cdef unsigned char *cgrib
     cdef g2int iofst, ierr, ngpts, ibmap
     cdef g2int *bmap
-    cgrib = <unsigned char *>PyString_AsString(gribmsg)
+    cgrib = <unsigned char *>PyBytes_AsString(gribmsg)
     iofst = <g2int>PyInt_AsLong(ipos*8)
     ngpts = <g2int>PyInt_AsLong(ndpts)
     ierr=g2_unpack6(cgrib,&iofst,ngpts,&ibmap,&bmap)
@@ -425,7 +425,7 @@ def unpack7(gribmsg,gdtnum,object gdtmpl,drtnum,object drtmpl,ndpts,ipos,object 
     cdef float rmin, rmax
     cdef int n
     cdef Py_ssize_t buflen
-    cgrib = <unsigned char *>PyString_AsString(gribmsg)
+    cgrib = <unsigned char *>PyBytes_AsString(gribmsg)
     iofst = <g2int>PyInt_AsLong(ipos*8)
     ngpts = <g2int>PyInt_AsLong(ndpts)
     idrsnum = <g2int>PyInt_AsLong(drtnum)
@@ -508,7 +508,7 @@ def grib2_create(object listsec0, object listsec1):
     # cgrib needs to be big enough to hold sec0 and sec1.
     lgrib = 4*(len(listsec0)+len(listsec1))
     gribmsg = lgrib*" "
-    cgrib = <unsigned char *>PyString_AsString(gribmsg)
+    cgrib = <unsigned char *>PyBytes_AsString(gribmsg)
     PyObject_AsReadBuffer(listsec0, &listsec0dat, &buflen) 
     PyObject_AsReadBuffer(listsec1, &listsec1dat, &buflen) 
     isec0 = <g2int *>listsec0dat
@@ -517,7 +517,7 @@ def grib2_create(object listsec0, object listsec1):
     if ierr < 0:
        msg = "Error in grib2_create, error code = %i" % ierr
        raise RuntimeError(msg)
-    gribmsg = PyString_FromStringAndSize(<char *>cgrib, ierr)
+    gribmsg = PyBytes_FromStringAndSize(<char *>cgrib, ierr)
     return gribmsg, ierr
 
 def grib2_end(gribmsg):
@@ -554,12 +554,12 @@ def grib2_end(gribmsg):
     cdef unsigned char *cgrib
     # add some extra space to grib message (enough to hold section 8).
     gribmsg = gribmsg + '        '
-    cgrib = <unsigned char *>PyString_AsString(gribmsg)
+    cgrib = <unsigned char *>PyBytes_AsString(gribmsg)
     ierr = g2_gribend(cgrib)
     if ierr < 0:
        msg = "error in grib2_end, error code = %i" % ierr
        raise RuntimeError(msg)
-    gribmsg = PyString_FromStringAndSize(<char *>cgrib, ierr)
+    gribmsg = PyBytes_FromStringAndSize(<char *>cgrib, ierr)
     return gribmsg, ierr
 
 def grib2_addgrid(gribmsg,object gds,object gdstmpl,object deflist=None, defnum = 0):
@@ -625,12 +625,12 @@ def grib2_addgrid(gribmsg,object gds,object gdstmpl,object deflist=None, defnum 
        ideflist = NULL
        idefnum = 0
     gribmsg = gribmsg + 4*(256+4+gds[2]+1)*" "
-    cgrib = <unsigned char *>PyString_AsString(gribmsg)
+    cgrib = <unsigned char *>PyBytes_AsString(gribmsg)
     ierr = g2_addgrid(cgrib, igds, igdstmpl, ideflist, idefnum)
     if ierr < 0:
        msg = "error in grib2_addgrid, error code = %i" % ierr
        raise RuntimeError(msg)
-    gribmsg = PyString_FromStringAndSize(<char *>cgrib, ierr)
+    gribmsg = PyBytes_FromStringAndSize(<char *>cgrib, ierr)
     return gribmsg, ierr
 
 
@@ -735,12 +735,12 @@ def grib2_addfield(gribmsg,pdsnum,object pdstmpl,object coordlist,
     else:
         bmap = NULL
     gribmsg = gribmsg + 4*(len(drstmpl)+ngrdpts+4)*" "
-    cgrib = <unsigned char *>PyString_AsString(gribmsg)
+    cgrib = <unsigned char *>PyBytes_AsString(gribmsg)
     ierr = g2_addfield(cgrib,ipdsnum,ipdstmpl,fcoordlist,numcoord,idrsnum,idrstmpl,fld,ngrdpts,ibmap,bmap)
     if ierr < 0:
        msg = "error in grib2_addfield, error code = %i" % ierr
        raise RuntimeError(msg)
-    gribmsg = PyString_FromStringAndSize(<char *>cgrib, ierr)
+    gribmsg = PyBytes_FromStringAndSize(<char *>cgrib, ierr)
     return gribmsg, ierr
 
 def _redtoreg(int nlons, object lonsperlat, object redgrid, object zeros, order=1):
