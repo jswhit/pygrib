@@ -153,6 +153,7 @@ __version__ = '1.9.0'
 import numpy as np
 from datetime import datetime
 from numpy import ma
+from ncepgrib2 import Grib2Decode
 try:
     import pyproj
 except ImportError:
@@ -973,14 +974,18 @@ cdef class gribmessage(object):
                     storageorder='F'
                 else:
                     storageorder='C'
-                datarr = np.zeros(size, np.double, order=storageorder)
-                err = grib_get_double_array(self._gh, name, <double *>datarr.data, &size)
-                if err:
-                    raise RuntimeError(grib_get_error_message(err))
-                if key == 'values':
-                    return self._reshape_mask(datarr)
+                if self.packingType.startswith('grid_complex'): # use ncep lib to decode data.
+                    grb = Grib2Decode(self.tostring(), gribmsg=True)
+                    return grb.data()
                 else:
-                    return datarr
+                    datarr = np.zeros(size, np.double, order=storageorder)
+                    err = grib_get_double_array(self._gh, name, <double *>datarr.data, &size)
+                    if err:
+                        raise RuntimeError(grib_get_error_message(err))
+                    if key == 'values':
+                        return self._reshape_mask(datarr)
+                    else:
+                        return datarr
         elif typ == GRIB_TYPE_STRING:
             size=1024 # grib_get_size returns 1 ?
             err = grib_get_string(self._gh, name, strdata, &size)
