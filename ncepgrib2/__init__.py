@@ -1,186 +1,4 @@
-__version__ = '20090105'
-__doc__ = """
-Introduction
-============
-
-Python module for reading and writing GRIB edition 2 (GRIB2) files
-(U{download<http://code.google.com/p/pygrib2/downloads/list>}). 
-GRIB2 is the second version of the World Meterological Organization
-(WMO) standard for distributing gridded data. The standard is
-outlined in U{FM92 GRIB Edition 2, Code Form and Tables
-<http://www.wmo.ch/pages/prog/www/WMOCodes/Operational/GRIB2/FM92-GRIB2-2007Nov.pdf>}. The module
-includes a programmer interface for reading/writing GRIB2 grids as well as command
-line utilities for listing the contents of a grib file and 're-packing' a
-grib file using a different compression scheme.
-
-Required
-========
-
-- U{Python<http://python.org>} 2.3 or higher.  
-- U{numpy<http://sourceforge.net/project/showfiles.php?group_id=1369>}
-  N-dimensional array object for python. Version 1.2.1 or higher.
-- U{pyproj<http://code.google.com/p/pyproj/>} Python interface to 
-  U{PROJ.4<http://proj.maptools.org>} library for cartographic transformations.
-- U{Jasper<http://www.ece.uvic.ca/~mdadams/jasper>} library. This library
-  is a C implementation of the JPEG-2000 Part-1 standard (ISO/IEC 15444-1).
-- U{PNG<http://www.libpng.org/pub/png/libpng.html>} library. This library
-  is a C implementation of the Portable Network Graphics
-  (PNG) image compression format. It's probably already on your system.
-- U{zlib<http://www.gzip.org/zlib/>} compression library.
-  It's almost certainly already on your system.
-
-Installation
-============
-
- - set the environment variables C{$JASPER_DIR}, C{$PNG_DIR} and 
- C{$ZLIB_DIR} so that the include files and libraries for jasper,
- png and zlib will be found.  For example, the include files for 
- jasper should be found in C{$JASPER_DIR/include}, and the jasper
- library should be found in C{$JASPER_DIR/lib}.
-
- - Run 'python setup.py install', as root if necessary.
-
-
-Example usage
-=============
-
- - from the python interpreter prompt, import the package::
-    >>> from grib2 import Grib2Decode, dump
- - open a GRIB2 file, create a list of Grib2Message instances::
-    >>> grbs = Grib2Decode('sampledata/gfs.grb')  
- - print an inventory of the file::
-    >>> for grb in grbs:
-    >>>     print grb 
-    1:HGT [gpm]:100000 Pa (Isobaric Surface):72 Hour Forecast initialized 2004120912:Latitude/longitude:Unperturbed high-resolution control forecast member 0 of 10
-    2:HGT [gpm]:97500 Pa (Isobaric Surface):72 Hour Forecast initialized 2004120912:Latitude/longitude:Unperturbed high-resolution control forecast member 0 of 10
-    3:HGT [gpm]:95000 Pa (Isobaric Surface):72 Hour Forecast initialized 2004120912:Latitude/longitude:Unperturbed high-resolution control forecast member 0 of 10
-  
-       .....
-
- - find the first grib message containing 500 hPa geopotential height:: 
-    >>> z500 = [g for g in grbs if g.parameter=='HGT' and g.vertical_level=='50000 Pa' and g.vertical_level_descriptor=='Isobaric Surface'][0]
- - extract the 500 hPa height data::
-    >>> z500data = z500.data()
-    >>> print z500.shape, z500data.min(), z500data.max()
-    (73, 144) 4834.89990234 5931.20019531
- - get the latitudes and longitudes of the grid::
-    >>> lats, lons = z500.grid()
-    >>> print lats.shape, lats.min(), lats.max(), lons.shape, lons.min(), lons.max()
-    (73, 144) -90.0 90.0 (73, 144) 0.0 357.5
- - dump just this grib message to another file::
-    >>> dump('gfs_z500.grb',[z500])
- - read that file back in and verify it's contents::
-    >>> grbs = Grib2Decode('gfs_z500.grb')
-    >>> for g in grbs:
-    >>>    print g
-    1:HGT [gpm]:50000 Pa (Isobaric Surface):72 Hour Forecast initialized 2004120912:Latitude/longitude:Unperturbed high-resolution control forecast member 0 of 10
-
-Documentation
-=============
-
- - see below for python API documentation (L{Grib2Decode}, L{Grib2Encode},
-   L{Grib2Message}, L{dump}).
-  
-Links
-=====
-
- - U{WMO GRIB information<http://www.wmo.ch/pages/prog/www/WMOCodes/GRIB.html>}.
- - U{wgrib2<http://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/>}
- - U{NCEP GRIB2 C and FORTRAN libraries
-   <http://www.nco.ncep.noaa.gov/pmb/codes/GRIB2/>}. This package uses
-   C routines from g2clib.  
- - U{ECMWF gribAPI<http://www.ecmwf.int/products/data/software/grib2.html>}
- - U{MDL GRIB2 Decoder<http://weather.gov/mdl/iwt/grib2/decoder.htm>}
- - U{Cython<http://www.cython.org>}
- (used to create python interface to g2clib and proj4).
- - U{proj.4<http://trac.osgeo.org/proj>} (used to perform cartographic
- transformations).
-
-Changelog
-=========
-
- - B{20041213}: initial release. Fully supports lat/lon, gaussian, lambert
-   conformal, polar stereographic and mercator grids.  Includes all
-   product (section 4) tables included in the 20031105 version of the WMO
-   GRIB2 document. Works with every GRIB2 file I could find -
-   if you find one it has trouble with please let me know.
- - B{20041215}: Fixed to handle files with 'communications headers' at
-   beginning of GRIB message.
- - B{20041217}: Added C{matchrecs} class method to find GRIB records with
-   matching gdtnum, pdtnum, idsect, gdtmpl or pdtmpl values. Added example
-   that reads an ETA grid and plots it with U{Matplotlib<http://matplotlib.sf.net/>}.
- - B{20050118}: Updated C code to g2clib-1.0.2 (from 1.0.1).
- - B{20050316}: added a new class (L{Grib2Encode}) for encoding GRIB2 messages.
-   Renamed Grib2 class L{Grib2Decode}. Additional options for rdgrib utility.
- - B{20050322}: bugfixes for L{Grib2Encode}.
-   Added test script (test3.py) that exercises both Grib2Decode and Grib2Encode.
- - B{20050716}: Added some support for irregular grids (such as 
-   ECMWF reduced gaussian grids). JPEG2000 and PNG support is now optional.
- - B{20050829}: getfld and getflds L{Grib2Decode} methods can
-   now return masked arrays when there is a bitmap.
- - B{20050830}: Now displays more ensemble info in inventory.
- - B{20051121}: Now uses Numeric by default (no longer requires
-   numarray).  Can easily be modified to use nummarray or Numeric by
-   modifying the imports in 3 files (grib2.py, proj.py and gaussian.py).
-   A new utility, gribrepack, is included for repacking a grib2 file
-   with a different compression scheme.
- - B{20051125}: Updated grib2 tables to version 3 (released
-   by WMO on Nov 2, 2005).
- - B{20060117}: Now uses numpy by default (instead of Numeric).
-   Python 2.5 compatibility fixes.
- - B{20070130}: Fixes some bugs found by Rob Cermak.  Now
-   requires pyproj be installed first. Updated to g2clib 1.0.4.
- - B{20070428}: Fixed memory leaks with a patch provided
-   by Thomas Natschlager.
- - B{20070501}: Included new parameters approved by WMO
-   for operational implementation in November, 2007.
-   These new parameters are used in the U{TIGGE
-   <http://tigge.ecmwf.int/tigge/d/tigge/>} grib2 files, so now all TIGGE
-   files should be interpreted correctly. 'Reduced' global gaussian grids
-   (from ECMWF) are now expanded to full global gaussian grids automatically
-   using linear interpolation.
- - B{20070503}: Now partially supports grid definition template 90 (space-view
-   satellite projection). Can't yet handle case when sub-satellite point is off the
-   equator and earth is specified as an oblate spheroid. Does work with EUMETSAT
-   grib2 files.  Bug fix for Oblate Spheroid earth shape (major and minor
-   radii are actually in km, not m).
- - B{20070515}: Totally revamped API for reading.  Now hosted on google code.
-   Supports Albers equal area, and azimuthal equidistant projections, although
-   these are untested since I couldn't find any grib files in the wild that use these.
-   Some support for spectral data and rotated lat/lon and gaussian grids.
-   Lots of bug fixes.
- - B{20070615}: Compatibility fix for python < 2.5, bug fixes.
- - B{20080710}: Some support for GDT 204.  Update g2clib to 1.0.5.
-   Tables updated, local use section now accessible. Fixed possible memory leak.
-   NCEP parameter abbreviations included (via C{parameter_abbrev} instance
-   variable).  Inventory string now uses the abbreviation instead of the full
-   parameter name. Added C{originating_center} instance variable.
- - B{20090101}: Bug fixes for scan mode handling, ensemble metadata, 
-   wave tables, satellite perspective projection.  Masked arrays now returned
-   by default is bitmap present. Updated g2clib to version 1.1.7..
- - B{%(__version__)s}: Updated parameter tables, fixed lots of errors in units.
-
-@author: Jeffrey Whitaker.
-
-@contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
-
-@version: %(__version__)s
-
-@copyright: copyright 2007 by Jeffrey Whitaker.
-
-@license: Permission to use, copy, modify, and distribute this software and its
-documentation for any purpose and without fee is hereby granted,
-provided that the above copyright notice appear in all copies and that
-both that copyright notice and this permission notice appear in
-supporting documentation.
-THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
-INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO
-EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, INDIRECT OR
-CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF
-USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-""" % locals()
+__version__ = '1.9.0'
 import g2clib
 import struct
 import gaussian
@@ -1003,7 +821,8 @@ def Grib2Decode(filename,gribmsg=False):
     """
  Read the contents of a GRIB2 file.
 
- @param filename: name of GRIB2 file.
+ @param filename: name of GRIB2 file (default, gribmsg=False) or binary string 
+ representing a grib message (if gribmsg=True).
 
  @return:  a list of L{Grib2Message} instances representing all of the
  grib messages in the file.  Messages with multiple fields are split 
@@ -1011,7 +830,9 @@ def Grib2Decode(filename,gribmsg=False):
  just one data field). The metadata in each GRIB2 message can be
  accessed via L{Grib2Message} instance variables, the actual data 
  can be read using L{Grib2Message.data}, and the lat/lon values of the grid
- can be accesses using L{Grib2Message.grid}.
+ can be accesses using L{Grib2Message.grid}. If there is only one grib
+ message, just the L{Grib2Message} instance is returned, instead of a list
+ with one element.
     """
     if gribmsg:
         f = StringIO(filename)
