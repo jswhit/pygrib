@@ -10,7 +10,6 @@ from StringIO import StringIO
 
 import numpy as N
 from numpy import ma
-from proj import Proj
 import pyproj
 
 # Code Table 3.2: Shape of the Earth.
@@ -771,28 +770,47 @@ lat/lon values returned by grid method may be incorrect."""
             dy = self.gridlength_in_y_direction
             lon1, lat1 = self.longitude_first_gridpoint, self.latitude_first_gridpoint
             if gdtnum == 10: # mercator.
-                lon2, lat2 = self.longitude_last_gridpoint, self.latitude_last_gridpoint
                 projparams['lat_ts']=self.proj4_lat_ts
                 projparams['proj']=self.proj4_proj
                 projparams['lon_0']=self.proj4_lon_0
-                pj = Proj(projparams,lon1,lat1,lon2,lat2)
+                pj = pyproj.Proj(self.projparams)
+                llcrnrx, llcrnry = pj(lon1,lat1)
+                x = llcrnrx+dx*np.arange(nx)
+                y = llcrnry+dy*np.arange(ny)
+                x, y = np.meshgrid(x, y)
+                lons, lats = pj(x, y, inverse=True)
             elif gdtnum == 20:  # stereographic
                 projparams['lat_ts']=self.proj4_lat_ts
                 projparams['proj']=self.proj4_proj
                 projparams['lat_0']=self.proj4_lat_0
                 projparams['lon_0']=self.proj4_lon_0
-                pj = Proj(projparams,lon1,lat1,(nx-1)*dx,(ny-1)*dy,urcrnrislatlon=False)
+                pj = pyproj.Proj(self.projparams)
+                llcrnrx, llcrnry = pj(lon1,lat1)
+                x = llcrnrx+dx*np.arange(nx)
+                y = llcrnry+dy*np.arange(ny)
+                x, y = np.meshgrid(x, y)
+                lons, lats = pj(x, y, inverse=True)
             elif gdtnum in [30,31]: # lambert, albers
                 projparams['lat_1']=self.proj4_lat_1
                 projparams['lat_2']=self.proj4_lat_2
                 projparams['proj']=self.proj4_proj
                 projparams['lon_0']=self.proj4_lon_0
-                pj = Proj(projparams,lon1,lat1,(nx-1)*dx,(ny-1)*dy,urcrnrislatlon=False)
+                pj = pyproj.Proj(self.projparams)
+                llcrnrx, llcrnry = pj(lon1,lat1)
+                x = llcrnrx+dx*np.arange(nx)
+                y = llcrnry+dy*np.arange(ny)
+                x, y = np.meshgrid(x, y)
+                lons, lats = pj(x, y, inverse=True)
             elif gdtnum == 110: # azimuthal equidistant
                 projparams['proj']=self.proj4_proj
                 projparams['lat_0']=self.proj4_lat_0
                 projparams['lon_0']=self.proj4_lon_0
-                pj = Proj(projparams,lon1,lat1,(nx-1)*dx,(ny-1)*dy,urcrnrislatlon=False)
+                pj = pyproj.Proj(self.projparams)
+                llcrnrx, llcrnry = pj(lon1,lat1)
+                x = llcrnrx+dx*np.arange(nx)
+                y = llcrnry+dy*np.arange(ny)
+                x, y = np.meshgrid(x, y)
+                lons, lats = pj(x, y, inverse=True)
             lons, lats = pj.makegrid(nx,ny)
         elif gdtnum == 90: # satellite projection.
             nx = self.points_in_x_direction
