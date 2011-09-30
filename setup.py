@@ -66,7 +66,10 @@ incdirs.append("g2clib")
 macros=[]
 if jasper_dir is not None or jasper_libdir is not None: macros.append(('USE_JPEG2000',1))
 if png_dir is not None or png_libdir is not None: macros.append(('USE_PNG',1))
-if sys.maxint > 2**31-1: macros.append(('__64BIT__',1))
+if hasattr(sys,'maxsize'):
+    if sys.maxsize > 2**31-1: macros.append(('__64BIT__',1))
+else:
+    if sys.maxint > 2**31-1: macros.append(('__64BIT__',1))
 g2clibext = Extension("g2clib",g2clib_deps,include_dirs=incdirs,library_dirs=libdirs,libraries=libraries,define_macros=macros)
 
 
