@@ -932,10 +932,18 @@ cdef class gribmessage(object):
         cdef char strdata[1024]
         bytestr = _strencode(key)
         name = bytestr
-        err = grib_get_size(self._gh, name, &size)
-        if err:
-            raise RuntimeError(grib_get_error_message(err))
-        err = grib_get_native_type(self._gh, name, &typ)
+        usenceplib = key == 'values' and self.packingType.startswith('grid_complex')
+        if usenceplib:
+            size = self.numberOfValues 
+        else:
+            err = grib_get_size(self._gh, name, &size)
+            if err:
+                raise RuntimeError(grib_get_error_message(err))
+        if usenceplib:
+            typ = 2
+            err = 0
+        else:
+            err = grib_get_native_type(self._gh, name, &typ)
         # force 'paramId' to be size 1 (it returns a size of 7,
         # which is a relic from earlier versions of grib_api in which
         # paramId was a string and not an integer)
@@ -974,7 +982,7 @@ cdef class gribmessage(object):
                     storageorder='F'
                 else:
                     storageorder='C'
-                if self.packingType.startswith('grid_complex'): # use ncep lib to decode data.
+                if usenceplib: # use ncep lib to decode data.
                     grb = Grib2Decode(self.tostring(), gribmsg=True)
                     return grb.data()
                 else:
@@ -1031,9 +1039,13 @@ cdef class gribmessage(object):
         cdef FILE *out
         bytestr = b'values'
         name = bytestr
-        err = grib_get_size(self._gh, name, &size)
-        if err:
-            raise RuntimeError(grib_get_error_message(err))
+        usenceplib = self.packingType.startswith('grid_complex')
+        if usenceplib:
+            size = self.numberOfValues
+        else:
+            err = grib_get_size(self._gh, name, &size)
+            if err:
+                raise RuntimeError(grib_get_error_message(err))
         err = grib_get_message(self._gh, &message, &size)
         if err:
             raise RuntimeError(grib_get_error_message(err))

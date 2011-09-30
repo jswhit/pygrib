@@ -2,7 +2,7 @@ import pygrib
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
-grbs = pygrib.open('../sampledata/dspr.temp.grb')
+grbs = pygrib.open('../sampledata/dspr.temp.bin')
 for grb in grbs:
     if grb['forecastTime'] == 12:
         break

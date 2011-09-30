@@ -18,7 +18,7 @@ if jasper_dir is None or png_dir is None:
     """
     sys.exit(1)
 
-incdirs = ["g2clib_src"]
+incdirs = ["g2clib"]
 libdirs=[]
 libraries=[]
 macros=[]
