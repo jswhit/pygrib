@@ -153,7 +153,6 @@ __version__ = '1.9.0'
 import numpy as np
 from datetime import datetime
 from numpy import ma
-from ncepgrib2 import Grib2Decode
 try:
     import pyproj
 except ImportError:
@@ -161,6 +160,7 @@ except ImportError:
         from mpl_toolkits.basemap import pyproj
     except:
         raise ImportError("either pyproj or basemap required")
+from ncepgrib2 import Grib2Decode
 import_array()
 
 cdef extern from "stdlib.h":

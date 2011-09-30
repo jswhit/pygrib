@@ -5,11 +5,20 @@ import string
 import math
 import warnings
 from datetime import datetime
-from StringIO import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 import numpy as N
 from numpy import ma
-import pyproj
+try:
+    import pyproj
+except ImportError:
+    try:
+        from mpl_toolkits.basemap import pyproj
+    except:
+        raise ImportError("either pyproj or basemap required")
 
 # Code Table 3.2: Shape of the Earth.
 earthparams={0:6367470.0,
@@ -496,7 +505,7 @@ class Grib2Message:
             elif projflag == 1:
                 self.proj4_lat_0 = -90
             else:
-                raise ValueError,'Invalid projection center flag = %s' % projflag
+                raise ValueError('Invalid projection center flag = %s'%projflag)
             self.proj4_lon_0 = gdtmpl[13]/1.e6
             self.gridlength_in_x_direction = gdtmpl[14]/1000.
             self.gridlength_in_y_direction = gdtmpl[15]/1000.
@@ -877,7 +886,7 @@ def Grib2Decode(filename,gribmsg=False):
         # check to see it's a grib edition 2 file.
         vers = struct.unpack('>B',f.read(1))[0]
         if vers != 2: 
-            raise IOError, 'not a GRIB2 file (version number %d)' % vers
+            raise IOError('not a GRIB2 file (version number %d)' % vers)
         lengrib = struct.unpack('>q',f.read(8))[0]
         msglen.append(lengrib)
         startingpos.append(startpos)
@@ -887,12 +896,12 @@ def Grib2Decode(filename,gribmsg=False):
         # make sure the message ends with '7777'
         end = gribmsg[-4:lengrib]
         if end != '7777':
-           raise IOError, 'partial GRIB message (no "7777" at end)'
+           raise IOError('partial GRIB message (no "7777" at end)')
         # do next message.
         nmsg=nmsg+1
     # if no grib messages found, nmsg is still 0 and it's not GRIB.
     if nmsg==0:
-       raise IOError, 'not a GRIB file'
+       raise IOError('not a GRIB file')
     # now for each grib message, find number of fields.
     numfields = []
     f.seek(0) # rewind file.
@@ -1019,7 +1028,7 @@ def Grib2Decode(filename,gribmsg=False):
             else:
                 if sectnum != 7:
                    msg = 'unknown section = %i' % sectnum
-                   raise ValueError,msg
+                   raise ValueError(msg)
                 sxn7pos.append(pos)
                 pos = pos + lensect
         # extend by repeating last value for all remaining fields.
@@ -1388,7 +1397,7 @@ def _gaulats(k):
            iter = iter + 1
            if iter > 10:
 # Error exit
-               raise ValueError, 'gaulats: No convergence in 10 iterations'
+               raise ValueError('gaulats: No convergence in 10 iterations')
 # Computation of the legendre polynomial
            for n in range(2,k+1):
              fn = float(n)
