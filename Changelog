@@ -7,7 +7,7 @@ version 1.9.0 (not yet released)
   create grib2 messages from scratch.
 * grb.__repr__ returns parameterName and parameterUnits, if name and units
   keys don't exist (issue 36).
-* regenerate with Cython 0.15, fix a couple of latent bugs found by new Cython
+* regenerate with Cython 0.15.1, fix a couple of latent bugs found by new Cython
   compiler.
 
 version 1.8.4 - svn revision 478
