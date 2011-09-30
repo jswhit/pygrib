@@ -1,7 +1,6 @@
 __version__ = '1.9.0'
 import g2clib
 import struct
-import gaussian
 import string
 import math
 import warnings
@@ -753,7 +752,7 @@ lat/lon values returned by grid method may be incorrect."""
                 delon = self.gridlength_in_x_direction
             lons = N.arange(lon1,lon2+delon,delon)
             # compute gaussian lats (north to south)
-            lats = gaussian.lats(nlats)
+            lats = _gaulats(nlats)
             if lat1 < lat2:  # reverse them if necessary
                 lats = lats[::-1]
             # flip if scan mode says to.
@@ -1345,7 +1344,7 @@ class Grib2Encode:
 #derived from fortran CCM3 code.
 
 # 1st 50 zeros of the bessel function.
-bz=N.array([2.4048255577,   5.5200781103,
+_bz=N.array([2.4048255577,   5.5200781103,
     8.6537279129,  11.7915344391,  14.9309177086,  18.0710639679,
    21.2116366299,  24.3524715308,  27.4934791320,  30.6346064684,
    33.7758202136,  36.9170983537,  40.0584257646,  43.1997917132,
@@ -1357,10 +1356,10 @@ bz=N.array([2.4048255577,   5.5200781103,
   109.1714896498, 112.3130502805, 115.4546126537, 118.5961766309,
   121.7377420880, 124.8793089132, 128.0208770059, 131.1624462752,
   134.3040166383, 137.4455880203, 140.5871603528, 143.7287335737,
-  146.8703076258, 150.0118824570, 153.1534580192, 156.2950342685],'d')
+  146.8703076258, 150.0118824570, 153.1534580192, 156.2950342685],N.float)
   
 
-def lats(k):
+def _gaulats(k):
     """
  Calculate latitudes for gaussian quadrature.
  The algorithm is described in Davis and Rabinowitz,
@@ -1378,7 +1377,7 @@ def lats(k):
     c = (1.-(2./N.pi)**2)*0.25
     fk = float(k)
     kk = k/2
-    sinlat = bsslzr(kk)
+    sinlat = _bsslzr(kk)
     for i in range(kk):
         xz = N.cos(sinlat[i]/math.sqrt((fk+0.5)**2+c))
 # This is the first approximation to xz
@@ -1403,25 +1402,25 @@ def lats(k):
            avsp = math.fabs(sp)
            if avsp < _eps: break
            sinlat[i] = xz
-    lats = N.zeros(n,'d')
+    lats = N.zeros(n,N.float)
 # Complete the latitudes, using the symmetry.
     lats[0:kk] = (180./N.pi)*N.arcsin(sinlat[0:kk])
     lats[k-kk:k] = -lats[0:kk][::-1]
     return lats
 
 
-def bsslzr(n):
+def _bsslzr(n):
     """
  Return n zeros (or if n>50, approximate zeros), of the Bessel function
  j0, in the array bes. The first 50 zeros will be given exactly, and the
  remaining zeros are computed by extrapolation, and therefore not exact.
     """
     nn = n
-    bes = N.zeros(n,'d')
+    bes = N.zeros(n,N.float)
     if n > 50:
-      bes[49] = bz[49]
+      bes[49] = _bz[49]
       for j in range(50,n):
           bes[j] = bes[j-1] + N.pi
       nn = 49
-    bes[0:nn] = bz[0:nn]
+    bes[0:nn] = _bz[0:nn]
     return bes
