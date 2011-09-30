@@ -1,6 +1,5 @@
 from distutils.core import setup, Extension
-import numpy
-import os
+import os, glob, numpy, sys
 
 grib_api_dir = os.environ.get('GRIBAPI_DIR')
 grib_api_libdir = os.environ.get('GRIBAPI_LIBDIR')
@@ -61,6 +60,16 @@ if zlib_libdir is None and zlib_dir is not None:
 if zlib_incdir is None and zlib_dir is not None: 
     incdirs.append(os.path.join(zlib_dir,'include'))
 
+g2clib_deps = glob.glob('g2clib/*.c')
+g2clib_deps.append('g2clib.c')
+incdirs.append("g2clib")
+macros=[]
+if jasper_dir is not None or jasper_libdir is not None: macros.append(('USE_JPEG2000',1))
+if png_dir is not None or png_libdir is not None: macros.append(('USE_PNG',1))
+if sys.maxint > 2**31-1: macros.append(('__64BIT__',1))
+g2clibext = Extension("g2clib",g2clib_deps,include_dirs=incdirs,library_dirs=libdirs,libraries=libraries,define_macros=macros)
+
+
 setup(name = "pygrib",
       version = "1.9.0",
       description       = "Python module for reading/writing GRIB files",
@@ -70,10 +79,11 @@ setup(name = "pygrib",
       download_url      = "http://code.google.com/p/pygrib/downloads/list",
       scripts =
       ['utils/grib_list','utils/grib_repack','utils/cnvgrib1to2','utils/cnvgrib2to1'],
+      packages          = ['ncepgrib2'],
       ext_modules = [Extension(
         "pygrib",
         ["pygrib.c"],
 	include_dirs=incdirs,
         library_dirs=libdirs,
         libraries=libraries
-      )])
+      ),g2clibext])
