@@ -1244,21 +1244,32 @@ class Grib2Encode:
  10 for oceanographic products).
 
  @param idsect:  Sequence containing identification section (section 1).
-  - idsect[0]=Id of orginating centre (Common Code Table C-1) 
+  - idsect[0]=Id of orginating centre (Common Code
+    U{Table C-1<http://www.nws.noaa.gov/tg/GRIB_C1.htm>}) 
   - idsect[1]=Id of orginating sub-centre (local table) 
-  - idsect[2]=GRIB Master Tables Version Number (Code Table 1.0) 
-  - idsect[3]=GRIB Local Tables Version Number (Code Table 1.1) 
-  - idsect[4]=Significance of Reference Time (Code Table 1.2) 
+  - idsect[2]=GRIB Master Tables Version Number (Code 
+    U{Table 1.0
+    <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table1-0.shtml>})
+  - idsect[3]=GRIB Local Tables Version Number (Code 
+    U{Table 1.1
+    <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table1-1.shtml>})
+  - idsect[4]=Significance of Reference Time (Code 
+    U{Table 1.2
+    <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table1-2.shtml>})
   - idsect[5]=Reference Time - Year (4 digits) 
   - idsect[6]=Reference Time - Month 
   - idsect[7]=Reference Time - Day 
   - idsect[8]=Reference Time - Hour 
   - idsect[9]=Reference Time - Minute 
   - idsect[10]=Reference Time - Second 
-  - idsect[11]=Production status of data (Code Table 1.3) 
-  - idsect[12]=Type of processed data (Code Table 1.4) 
+  - idsect[11]=Production status of data (Code
+    U{Table 1.3
+    <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table1-3.shtml>})
+  - idsect[12]=Type of processed data (Code
+    U{Table
+    1.4<http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table1-4.shtml>})
         """
-        self.msg,msglen=g2clib.grib2_create(N.array([discipline,2],'i'),N.array(idsect,'i'))
+        self.msg,msglen=g2clib.grib2_create(N.array([discipline,2],N.int32),N.array(idsect,N.int32))
 
     def addgrid(self,gdsinfo,gdtmpl,deflist=None):
         """
