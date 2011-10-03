@@ -172,7 +172,7 @@ def unpack1(gribmsg, ipos, object zeros):
        msg = "Error unpacking section 1 - error code = %i" % ierr
        raise RuntimeError(msg)
 
-    idsect = _toarray(ids, zeros(idslen, 'i'))
+    idsect = _toarray(ids, zeros(idslen, 'i4'))
     return idsect,iofst/8
 
 
@@ -231,9 +231,9 @@ def unpack3(gribmsg, ipos, object zeros):
        msg = "Error unpacking section 3 - error code = %i" % ierr
        raise RuntimeError(msg)
 
-    gdtmpl = _toarray(igdstmpl, zeros(mapgridlen, 'i'))
-    gds = _toarray(igds, zeros(5, 'i'))
-    deflist = _toarray(ideflist, zeros(idefnum, 'i'))
+    gdtmpl = _toarray(igdstmpl, zeros(mapgridlen, 'i4'))
+    gds = _toarray(igds, zeros(5, 'i4'))
+    deflist = _toarray(ideflist, zeros(idefnum, 'i4'))
 
     return gds,gdtmpl,deflist,iofst/8
 
@@ -282,8 +282,8 @@ def unpack4(gribmsg,ipos,object zeros):
        msg = "Error unpacking section 4 - error code = %i" % ierr
        raise RuntimeError(msg)
 
-    pdtmpl = _toarray(ipdstmpl, zeros(mappdslen, 'i'))
-    coordlist = _toarray(icoordlist, zeros(numcoord, 'f'))
+    pdtmpl = _toarray(ipdstmpl, zeros(mappdslen, 'i4'))
+    coordlist = _toarray(icoordlist, zeros(numcoord, 'f4'))
 
     return pdtmpl,ipdsnum,coordlist,iofst/8
     
@@ -328,7 +328,7 @@ def unpack5(gribmsg,ipos,object zeros):
        msg = "Error unpacking section 5 - error code = %i" % ierr
        raise RuntimeError(msg)
 
-    drtmpl = _toarray(idrstmpl, zeros(mapdrslen, 'i'))
+    drtmpl = _toarray(idrstmpl, zeros(mapdrslen, 'i4'))
     return drtmpl,idrsnum,ndpts,iofst/8
     
 def unpack6(gribmsg,ndpts,ipos,object zeros):
@@ -371,7 +371,7 @@ def unpack6(gribmsg,ndpts,ipos,object zeros):
         msg = "Error unpacking section 6 - error code = %i" % ierr
         raise RuntimeError(msg)
     if ibmap == 0:
-        bitmap = _toarray(bmap, zeros(ngpts, 'i'))
+        bitmap = _toarray(bmap, zeros(ngpts, 'i4'))
     else:
         bitmap = None
         free(bmap)
@@ -455,7 +455,7 @@ def unpack7(gribmsg,gdtnum,object gdtmpl,drtnum,object drtmpl,ndpts,ipos,object 
         minmaxstring = minmaxstring % (fldmin,fldmax)
         print minmaxstring
 
-    data = _toarray(fld, zeros(ngpts, 'f', order=storageorder))
+    data = _toarray(fld, zeros(ngpts, 'f4', order=storageorder))
     return data
 
 # routines for writing grib2 files.
@@ -507,7 +507,7 @@ def grib2_create(object listsec0, object listsec1):
     cdef unsigned char *cgrib
     # cgrib needs to be big enough to hold sec0 and sec1.
     lgrib = 4*(len(listsec0)+len(listsec1))
-    gribmsg = lgrib*" "
+    gribmsg = lgrib*b" "
     cgrib = <unsigned char *>PyBytes_AsString(gribmsg)
     PyObject_AsReadBuffer(listsec0, &listsec0dat, &buflen) 
     PyObject_AsReadBuffer(listsec1, &listsec1dat, &buflen) 
@@ -553,7 +553,7 @@ def grib2_end(gribmsg):
     cdef g2int ierr
     cdef unsigned char *cgrib
     # add some extra space to grib message (enough to hold section 8).
-    gribmsg = gribmsg + '        '
+    gribmsg = gribmsg + b'        '
     cgrib = <unsigned char *>PyBytes_AsString(gribmsg)
     ierr = g2_gribend(cgrib)
     if ierr < 0:
@@ -624,7 +624,7 @@ def grib2_addgrid(gribmsg,object gds,object gdstmpl,object deflist=None, defnum 
     else:
        ideflist = NULL
        idefnum = 0
-    gribmsg = gribmsg + 4*(256+4+gds[2]+1)*" "
+    gribmsg = gribmsg + 4*(256+4+gds[2]+1)*b" "
     cgrib = <unsigned char *>PyBytes_AsString(gribmsg)
     ierr = g2_addgrid(cgrib, igds, igdstmpl, ideflist, idefnum)
     if ierr < 0:
@@ -734,7 +734,7 @@ def grib2_addfield(gribmsg,pdsnum,object pdstmpl,object coordlist,
         bmap  = <g2int *>bitmapdat
     else:
         bmap = NULL
-    gribmsg = gribmsg + 4*(len(drstmpl)+ngrdpts+4)*" "
+    gribmsg = gribmsg + 4*(len(drstmpl)+ngrdpts+4)*b" "
     cgrib = <unsigned char *>PyBytes_AsString(gribmsg)
     ierr = g2_addfield(cgrib,ipdsnum,ipdstmpl,fcoordlist,numcoord,idrsnum,idrstmpl,fld,ngrdpts,ibmap,bmap)
     if ierr < 0:
@@ -759,7 +759,7 @@ def _redtoreg(int nlons, object lonsperlat, object redgrid, object zeros, order=
     lonsperlatdat = <g2int *>lonsperlatbuf
     PyObject_AsReadBuffer(redgrid, &redgridbuf, &buflen)
     redgriddat = <g2float *>redgridbuf
-    reggrid = zeros((nlats,nlons),'f')
+    reggrid = zeros((nlats,nlons),'f4')
     # get pointer to output data buffer.
     PyObject_AsWriteBuffer(reggrid, &reggridbuf, &buflen) 
     reggriddat = <g2float *>reggridbuf
