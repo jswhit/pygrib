@@ -8,7 +8,7 @@ from datetime import datetime
 try:
     from StringIO import StringIO
 except ImportError:
-    from io import StringIO
+    from io import BytesIO as StringIO
 
 import numpy as N
 from numpy import ma
@@ -653,7 +653,7 @@ lat/lon values returned by grid method may be incorrect."""
                 order = 1
         try:
             f = open(self._grib_filename,'rb')
-        except TypeError:
+        except (TypeError,IOError):
             f = StringIO(self._grib_filename)
         f.seek(self._grib_message_byteoffset)
         gribmsg = f.read(self._grib_message_length)
@@ -874,7 +874,7 @@ def Grib2Decode(filename,gribmsg=False):
         nbyte = f.tell()
         while 1:
             f.seek(nbyte)
-            start = f.read(4)
+            start = f.read(4).decode('ascii','ignore')
             if start == '' or start == 'GRIB': break
             nbyte = nbyte + 1
         if start == '': break # at EOF
@@ -894,7 +894,7 @@ def Grib2Decode(filename,gribmsg=False):
         f.seek(startpos)
         gribmsg = f.read(lengrib)
         # make sure the message ends with '7777'
-        end = gribmsg[-4:lengrib]
+        end = gribmsg[-4:lengrib].decode('ascii','ignore')
         if end != '7777':
            raise IOError('partial GRIB message (no "7777" at end)')
         # do next message.
@@ -911,14 +911,14 @@ def Grib2Decode(filename,gribmsg=False):
         pos = 0
         numflds = 0
         while 1:
-            if gribmsg[pos:pos+4] == 'GRIB':
+            if gribmsg[pos:pos+4].decode('ascii','ignore') == 'GRIB':
                 sectnum = 0
                 lensect = 16
-            elif gribmsg[pos:pos+4] == '7777':
+            elif gribmsg[pos:pos+4].decode('ascii','ignore') == '7777':
                 break
             else:
                 lensect = struct.unpack('>i',gribmsg[pos:pos+4])[0]
-                sectnum = struct.unpack('>B',gribmsg[pos+4])[0]
+                sectnum = struct.unpack('>B',gribmsg[pos+4:pos+5])[0]
                 if sectnum == 4: numflds=numflds+1
                 #if sectnum == 2: numlocal=numlocal+1
             pos = pos + lensect
@@ -978,9 +978,9 @@ def Grib2Decode(filename,gribmsg=False):
         localsxns = []
         while 1:
             # check to see if this is the end of the message.
-            if gribmsg[pos:pos+4] == '7777': break
+            if gribmsg[pos:pos+4].decode('ascii','ignore') == '7777': break
             lensect = struct.unpack('>i',gribmsg[pos:pos+4])[0]
-            sectnum = struct.unpack('>B',gribmsg[pos+4])[0]
+            sectnum = struct.unpack('>B',gribmsg[pos+4:pos+5])[0]
             # section 2, local use section.
             if sectnum == 2:
                 # "local use section", used by NDFD to store WX
@@ -1153,27 +1153,27 @@ def _unpack1(gribmsg,pos):
     pos = pos + 2
     idsect.append(struct.unpack('>h',gribmsg[pos:pos+2])[0])
     pos = pos + 2
-    idsect.append(struct.unpack('>B',gribmsg[pos])[0])
+    idsect.append(struct.unpack('>B',gribmsg[pos:pos+1])[0])
     pos = pos + 1
-    idsect.append(struct.unpack('>B',gribmsg[pos])[0])
+    idsect.append(struct.unpack('>B',gribmsg[pos:pos+1])[0])
     pos = pos + 1
-    idsect.append(struct.unpack('>B',gribmsg[pos])[0])
+    idsect.append(struct.unpack('>B',gribmsg[pos:pos+1])[0])
     pos = pos + 1
     idsect.append(struct.unpack('>h',gribmsg[pos:pos+2])[0])
     pos = pos + 2
-    idsect.append(struct.unpack('>B',gribmsg[pos])[0])
+    idsect.append(struct.unpack('>B',gribmsg[pos:pos+1])[0])
     pos = pos + 1
-    idsect.append(struct.unpack('>B',gribmsg[pos])[0])
+    idsect.append(struct.unpack('>B',gribmsg[pos:pos+1])[0])
     pos = pos + 1
-    idsect.append(struct.unpack('>B',gribmsg[pos])[0])
+    idsect.append(struct.unpack('>B',gribmsg[pos:pos+1])[0])
     pos = pos + 1
-    idsect.append(struct.unpack('>B',gribmsg[pos])[0])
+    idsect.append(struct.unpack('>B',gribmsg[pos:pos+1])[0])
     pos = pos + 1
-    idsect.append(struct.unpack('>B',gribmsg[pos])[0])
+    idsect.append(struct.unpack('>B',gribmsg[pos:pos+1])[0])
     pos = pos + 1
-    idsect.append(struct.unpack('>B',gribmsg[pos])[0])
+    idsect.append(struct.unpack('>B',gribmsg[pos:pos+1])[0])
     pos = pos + 1
-    idsect.append(struct.unpack('>B',gribmsg[pos])[0])
+    idsect.append(struct.unpack('>B',gribmsg[pos:pos+1])[0])
     pos = pos + 1
     return N.array(idsect,'i'),pos
 
@@ -1187,8 +1187,8 @@ def _repeatlast(numfields,listin):
 
 def _flatten(numfields, listin):
    listout = []
-   for n in xrange(len(listin)):
-       for i in xrange(numfields[n]):
+   for n in range(len(listin)):
+       for i in range(numfields[n]):
            listout.append(listin[n][i])
    return listout
 
