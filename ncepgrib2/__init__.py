@@ -1276,13 +1276,19 @@ class Grib2Encode:
  Add a grid definition section (section 3) to the GRIB2 message.
 
  @param gdsinfo: Sequence containing information needed for the grid definition section.
-  - gdsinfo[0] = Source of grid definition (see Code Table 3.0) 
+  - gdsinfo[0] = Source of grid definition (see Code  
+    U{Table 3.0
+    <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table3-0.shtml>})
   - gdsinfo[1] = Number of grid points in the defined grid.
   - gdsinfo[2] = Number of octets needed for each additional grid points defn.
     Used to define number of points in each row for non-reg grids (=0 for 
     regular grid).
-  - gdsinfo[3] = Interp. of list for optional points defn (Code Table 3.11)
-  - gdsinfo[4] = Grid Definition Template Number (Code Table 3.1)
+  - gdsinfo[3] = Interp. of list for optional points defn (Code 
+    U{Table 3.11
+    <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table3-11.shtml>})
+  - gdsinfo[4] = Grid Definition Template Number (Code 
+    U{Table 3.1
+    <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table3-1.shtml>})
 
  @param gdtmpl: Contains the data values for the specified Grid Definition 
  Template ( NN=gds[4] ).  Each element of this integer  
@@ -1304,14 +1310,17 @@ class Grib2Encode:
  Add a product definition section, data representation section,
  bitmap section and data section to the GRIB2 message (sections 4-7).
 
- @param pdtnum: Product Definition Template Number (see Code Table 4.0)
+ @param pdtnum: Product Definition Template Number (see Code U{Table
+ 4.0<http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table4-0.shtml>})
 
  @param pdtmpl: Sequence with the data values for the specified Product Definition
  Template (N=pdtnum).  Each element of this integer 
  array contains an entry (in the order specified) of Product
  Definition Template 4.N
 
- @param drtnum: Data Representation Template Number (see Code Table 5.0).
+ @param drtnum: Data Representation Template Number (see Code
+ U{Table 5.0
+ <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table5-0.shtml>})
 
  @param drtmpl: Sequence with the data values for the specified Data Representation
  Template (N=drtnum).  Each element of this integer 
@@ -1329,7 +1338,7 @@ class Grib2Encode:
  the vertical discretization with model data
  on hybrid coordinate vertical levels. Default None.
 
- @param bitmapflag: Bitmap indicator (see Code Table 6.0) Default 255.
+ @param bitmapflag: Bitmap indicator (see Code U{Table 6.0<http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table6-0.shtml>}) Default 255.
   - 0 = bitmap applies and is included in Section 6.
   - 1-253 = Predefined bitmap applies
   - 254 = Previously defined bitmap applies to this field
