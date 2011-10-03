@@ -21,7 +21,7 @@ except ImportError:
         raise ImportError("either pyproj or basemap required")
 
 # Code Table 3.2: Shape of the Earth.
-earthparams={0:6367470.0,
+_earthparams={0:6367470.0,
 1:'Spherical - radius specified in m by data producer',
 2:(6378160.0,6356775.0),
 3:'OblateSpheroid - major and minor axes specified in km by data producer',
@@ -31,12 +31,12 @@ earthparams={0:6367470.0,
 7:'OblateSpheroid - major and minor axes specified in m by data producer',
 8:6371200.0,
 255:'Missing'}
-for n in range(192):
-    if not n in earthparams: earthparams[n]='Reserved'
-for n in range(192,255):
-    earthparams[n] = 'Reserved for local use'
+for _n in range(192):
+    if not _n in _earthparams: _earthparams[_n]='Reserved'
+for _n in range(192,255):
+    _earthparams[_n] = 'Reserved for local use'
 
-table0={1:('Melbourne (WMC)','ammc'),
+_table0={1:('Melbourne (WMC)','ammc'),
 2:('Melbourne - BMRC (WMC)',None),
 3:('Melbourne (WMC)',None),
 4:('Moscow (WMC)',None),
@@ -431,7 +431,7 @@ class Grib2Message:
         reggrid = gdsinfo[2] == 0 # gdsinfo[2]=0 means regular 2-d grid
         # shape of the earth.
         if gdtnum not in [50,51,52,1200]:
-            earthR = earthparams[gdtmpl[0]]
+            earthR = _earthparams[gdtmpl[0]]
             if earthR == 'Reserved': earthR = None
         else:
             earthR = None
@@ -1084,8 +1084,8 @@ def Grib2Decode(filename,gribmsg=False):
     gribs = []
     for n in range(len(msgstart)):
         kwargs = {}
-        kwargs['originating_center']=table0[identsect[n][0]][0]
-        wmo_code = table0[identsect[n][0]][1]
+        kwargs['originating_center']=_table0[identsect[n][0]][0]
+        wmo_code = _table0[identsect[n][0]][1]
         if wmo_code is not None:
             kwargs['center_wmo_code']=wmo_code
         kwargs['grid_definition_template_number']=gdtnum[n]
