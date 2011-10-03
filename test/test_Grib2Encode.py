@@ -1,16 +1,17 @@
 from ncepgrib2 import Grib2Decode, Grib2Encode
 import numpy as N
+import sys
 # open a GRIB2 file, create a Grib2 class instance.
 filein = '../sampledata/gfs.grb'
-print 'input grib file:',filein
+sys.stdout.write('input grib file: %s\n' % filein)
 grbs = Grib2Decode(filein)
 # open a file for output.
 fileout = 'test.grb'
-print 'output grib file:',fileout
+sys.stdout.write('output grib file: %s\n' % fileout)
 f=open(fileout,'wb')
 # test encoding sxn0, sxn1.
-print 'message number,field number,bitmap flag,min,max:'
-print '------------------------------------------------'
+sys.stdout.write('message number,field number,bitmap flag,min,max:\n')
+sys.stdout.write('------------------------------------------------\n')
 for nmsg,grb in enumerate(grbs):
     grbo = Grib2Encode(grb.discipline_code,grb.identification_section)
     # add grid definition template
@@ -29,7 +30,7 @@ for nmsg,grb in enumerate(grbs):
         fieldmin = fieldcompress.min(); fieldmax = fieldcompress.max()
     else:
         fieldmin = field.min(); fieldmax = field.max()
-    print nmsg+1,bitmapflag,fieldmin,fieldmax
+    sys.stdout.write('%s %s %s %s\n' % (nmsg+1,bitmapflag,fieldmin,fieldmax))
     # reset data to match scanning mode flags.
     # (scanning mode madness is undone when data is extracted
     #  from grib message - to write it back it correctly it
@@ -60,5 +61,5 @@ for nmsg,grb in enumerate(grbs):
 # close the output file
 f.close()
 # close the input GRIB2 file.
-print 'done! '+filein+' and '+fileout+' should have identical data'
-print '(run grib_list on both and compare output)'
+sys.stdout.write('done! '+filein+' and '+fileout+' should have identical data\n')
+sys.stdout.write('(run grib_list on both and compare output)\n')
