@@ -13,7 +13,7 @@ recursive-include ncepgrib2_docs *
 include sampledata/*.grb
 include sampledata/*.grib*
 include sampledata/*.bin
-recursive-include g2clib *
+recursive-include g2clib_src *
 include ncepgrib2/*py
 include test/README
 include test/*py

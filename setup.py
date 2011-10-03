@@ -60,9 +60,9 @@ if zlib_libdir is None and zlib_dir is not None:
 if zlib_incdir is None and zlib_dir is not None: 
     incdirs.append(os.path.join(zlib_dir,'include'))
 
-g2clib_deps = glob.glob('g2clib/*.c')
+g2clib_deps = glob.glob('g2clib_src/*.c')
 g2clib_deps.append('g2clib.c')
-incdirs.append("g2clib")
+incdirs.append("g2clib_src")
 macros=[]
 if jasper_dir is not None or jasper_libdir is not None: macros.append(('USE_JPEG2000',1))
 if png_dir is not None or png_libdir is not None: macros.append(('USE_PNG',1))
