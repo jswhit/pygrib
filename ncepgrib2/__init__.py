@@ -334,19 +334,25 @@ class Grib2Message:
  is decoded and used to set various instance variables.
  
  @ivar bitmap_indicator_flag: flag to indicate whether a bit-map is used (0 for yes, 255 for no).
- @ivar data_representation_template: data representation template  from section 5.
- @ivar data_representation_template_number: data representation template number from section 5.
+ @ivar data_representation_template: data representation template from section 5.
+ @ivar data_representation_template_number: data representation template number
+ from section 5
+ (U{Table 5.0
+ <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table5-0.shtml>})
  @ivar has_local_use_section:  True if grib message contains a local use 
  section. If True the actual local use section is contained in the
  C{_local_use_section} instance variable, as a raw byte string.
- @ivar discipline: product discipline for grib message.
- @ivar discipline_code: product discipline code for grib message.
+ @ivar discipline_code: product discipline code for grib message
+ (U{Table 0.0
+ <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table0-0.shtml>}).
  @ivar earthRmajor: major (equatorial) earth radius.
  @ivar earthRminor: minor (polar) earth radius.
  @ivar grid_definition_info: grid definition section information from section 3.
   See L{Grib2Encode.addgrid} for details.
  @ivar grid_definition_template: grid definition template from section 3.
- @ivar grid_definition_template_number: grid definition template number from section 3.
+ @ivar grid_definition_template_number: grid definition template number from section 3
+ (U{Table 3.1
+ <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table3-1.shtml>}).
  @ivar gridlength_in_x_direction: x (or longitudinal) direction grid length.
  @ivar gridlength_in_y_direction: y (or latitudinal) direction grid length.
  @ivar identification_section: data from identification section (section 1).
@@ -357,7 +363,9 @@ class Grib2Message:
  @ivar longitude_last_gridpoint: longitude of last grid point on grid.
  @ivar originating_center: name of national/international originating center.
  @ivar center_wmo_code: 4 character wmo code for originating center.
- @ivar scanmodeflags: scanning mode flags from Table 3.4.
+ @ivar scanmodeflags: scanning mode flags from Table 3.4
+ (U{Table 3.4
+ <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table3-4.shtml>}).
 
   - bit 1:
 
@@ -387,8 +395,9 @@ class Grib2Message:
  @ivar points_in_x_direction: number of points in the x (longitudinal) direction.
  @ivar points_in_y_direction: number of points in the y (latitudinal) direction.
  @ivar product_definition_template: product definition template from section 4.
- @ivar product_definition_template_name: product definition template name.
- @ivar product_definition_template_number: product definition template number from section 4.
+ @ivar product_definition_template_number: product definition template number from section 4
+ (U{Table 4.0
+ <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table4-0.shtml>}).
  @ivar shape_of_earth: string describing the shape of the earth (e.g. 'Oblate Spheroid', 'Spheroid').
  @ivar spectral_truncation_parameters:  pentagonal truncation parameters that describe the 
  spherical harmonic truncation (only relevant for grid_definition_template_numbers 50-52).
