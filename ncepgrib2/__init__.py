@@ -32,7 +32,7 @@ earthparams={0:6367470.0,
 8:6371200.0,
 255:'Missing'}
 for n in range(192):
-    if not earthparams.has_key(n): earthparams[n]='Reserved'
+    if not n in earthparams: earthparams[n]='Reserved'
 for n in range(192,255):
     earthparams[n] = 'Reserved for local use'
 
