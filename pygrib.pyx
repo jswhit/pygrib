@@ -263,6 +263,7 @@ cdef extern from "grib_api.h":
                              size_t data_len)
     int grib_julian_to_datetime(double jd, long *year, long *month, long *day, long *hour, long *minute, long *second)
     int grib_datetime_to_julian(long year, long month, long day, long hour, long minute, long second, double *jd)
+    int grib_get_gaussian_latitudes(long truncation,double* latitudes)
 
 
 missingvalue_int = GRIB_MISSING_LONG
@@ -277,6 +278,14 @@ def _get_grib_api_version():
     major = v
     return "%d.%d.%d" % (major,minor,revision)
 grib_api_version = _get_grib_api_version()
+
+def gaulats(object nlats):
+    cdef ndarray lats
+    if nlats%2:
+        raise ValueError('nlats must be even')
+    lats = np.empty(nlats, np.float64)
+    grib_get_gaussian_latitudes(<long>nlats/2, <double *>lats.data)
+    return lats
 
 # turn on support for multi-field grib messages.
 grib_multi_support_on(NULL)
