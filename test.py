@@ -183,6 +183,19 @@ def test():
     >>> grbs.messages
     343
     >>> grbs.close()
+ 
+    test ndfd file with 'grid_complex_spatial_differencing' encoding
+    >>> grbs = pygrib.open('sampledata/dspr.temp.bin')
+    >>> for grb in grbs: grb
+    1:Maximum temperature:K (max):mercator:surface:level 0:fcst time 2-14:from 201109292200
+    2:Maximum temperature:K (max):mercator:surface:level 0:fcst time 26-38:from 201109292200
+    3:Maximum temperature:K (max):mercator:surface:level 0:fcst time 50-62:from 201109292200
+    4:Maximum temperature:K (max):mercator:surface:level 0:fcst time 74-86:from 201109292200
+    >>> str(grb.packingType)
+    'grid_complex_spatial_differencing'
+    >>> data = grb.values
+    >>> str('min/max %5.2f %5.2f' % (data.min(), data.max()))
+    'min/max 295.40 308.10'
     """
 
 if __name__ == "__main__":
