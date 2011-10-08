@@ -1066,24 +1066,24 @@ def Grib2Decode(filename,gribmsg=False):
         identsect.append(_repeatlast(numfields[n],[idsect]))
         discipline.append(_repeatlast(numfields[n],[discipl]))
 
-    gdtnum = _flatten(numfields,gdtnum)
-    gdtmpl = _flatten(numfields,gdtmpl)
-    gdeflist = _flatten(numfields,gdeflist)
-    gdsinfo = _flatten(numfields,gdsinfo)
-    pdtmpl = _flatten(numfields,pdtmpl)
-    pdtnum = _flatten(numfields,pdtnum)
-    coordlist = _flatten(numfields,coordlist)
-    drtmpl = _flatten(numfields,drtmpl)
-    drtnum = _flatten(numfields,drtnum)
-    ndpts = _flatten(numfields,ndpts)
-    bitmapflag = _flatten(numfields,bitmapflag)
-    bitmap = _flatten(numfields,bitmap)
-    pos7 = _flatten(numfields,pos7)
-    localsxn = _flatten(numfields,localsxn)
-    msgstart = _flatten(numfields,msgstart)
-    msglength = _flatten(numfields,msglength)
-    identsect = _flatten(numfields,identsect)
-    discipline = _flatten(numfields,discipline)
+    gdtnum = _flatten(gdtnum)
+    gdtmpl = _flatten(gdtmpl)
+    gdeflist = _flatten(gdeflist)
+    gdsinfo = _flatten(gdsinfo)
+    pdtmpl = _flatten(pdtmpl)
+    pdtnum = _flatten(pdtnum)
+    coordlist = _flatten(coordlist)
+    drtmpl = _flatten(drtmpl)
+    drtnum = _flatten(drtnum)
+    ndpts = _flatten(ndpts)
+    bitmapflag = _flatten(bitmapflag)
+    bitmap = _flatten(bitmap)
+    pos7 = _flatten(pos7)
+    localsxn = _flatten(localsxn)
+    msgstart = _flatten(msgstart)
+    msglength = _flatten(msglength)
+    identsect = _flatten(identsect)
+    discipline = _flatten(discipline)
 
     gribs = []
     for n in range(len(msgstart)):
@@ -1198,12 +1198,8 @@ def _repeatlast(numfields,listin):
             listin.append(last)
     return listin
 
-def _flatten(numfields, listin):
-   listout = []
-   for n in range(len(listin)):
-       for i in range(numfields[n]):
-           listout.append(listin[n][i])
-   return listout
+def _flatten(listin):
+    return [item for listin in l for item in listin]
 
 class Grib2Encode:
     """
