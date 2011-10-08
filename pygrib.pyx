@@ -1300,8 +1300,14 @@ cdef class gribmessage(object):
             raise ValueError('unsupported grid %s' % self['gridType'])
 
         if self['gridType'] in ['regular_gg','regular_ll']: # regular lat/lon grid
-            lons = self['distinctLongitudes']
-            lats = self['distinctLatitudes']
+            nx = self['Ni']
+            lon1 = self['longitudeOfFirstGridPointInDegrees']
+            lon2 = self['longitudeOfLastGridPointInDegrees']
+            lons = np.linspace(lon1,lon2,nx)
+            ny = self['Nj']
+            lat1 = self['latitudeOfFirstGridPointInDegrees']
+            lat2 = self['latitudeOfLastGridPointInDegrees']
+            lats = np.linspace(lat1,lat2,ny)
             lons,lats = np.meshgrid(lons,lats) 
         elif self['gridType'] == 'reduced_gg': # reduced global gaussian grid
             lats = self['distinctLatitudes']
