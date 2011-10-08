@@ -11,9 +11,9 @@ for grb in pygrib.open('../sampledata/ecmwf_tigge.grb'):
 
 #from ncepgrib2 import Grib2Decode
 #grbs = Grib2Decode('../sampledata/ecmwf_tigge.grb')
-#grb = grbs[14]
-#fld = grb.data()
-#lats,lons = grb.grid()
+#grbx = grbs[14]
+#fld = grbx.data()
+#lats,lons = grbx.grid()
 
 llcrnrlon = lons[0,0]
 llcrnrlat = lats[0,0]
