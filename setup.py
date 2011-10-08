@@ -86,4 +86,5 @@ setup(name = "pygrib",
       download_url      = "http://code.google.com/p/pygrib/downloads/list",
       scripts =
       ['utils/grib_list','utils/grib_repack','utils/cnvgrib1to2','utils/cnvgrib2to1'],
-      ext_modules       = [pygribext,g2clibext,redtoregext])
+      ext_modules       = [pygribext,g2clibext,redtoregext],
+      py_modules        = ["ncepgrib2"])

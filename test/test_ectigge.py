@@ -8,6 +8,13 @@ for grb in pygrib.open('../sampledata/ecmwf_tigge.grb'):
         fld = grb['values']
         lats,lons = grb.latlons()
         break
+
+#from ncepgrib2 import Grib2Decode
+#grbs = Grib2Decode('../sampledata/ecmwf_tigge.grb')
+#grb = grbs[14]
+#fld = grb.data()
+#lats,lons = grb.grid()
+
 llcrnrlon = lons[0,0]
 llcrnrlat = lats[0,0]
 urcrnrlon = lons[-1,-1]
