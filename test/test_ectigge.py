@@ -23,13 +23,7 @@ m = Basemap(llcrnrlon=llcrnrlon,llcrnrlat=llcrnrlat,
             urcrnrlon=urcrnrlon,urcrnrlat=urcrnrlat,
             resolution='l',projection='cyl')
 CS = m.contourf(lons,lats,fld,15,cmap=plt.cm.jet)
-#im = m.pcolor(lons,lats,fld,cmap=plt.cm.jet,shading='flat')
-ax = plt.gca()
-pos = ax.get_position()
-l, b, w, h = pos.bounds
-cax = plt.axes([l+w+0.025, b, 0.025, h]) # setup colorbar axes
-plt.colorbar(drawedges=True, cax=cax, format='%g') # draw colorbar
-plt.axes(ax)  # make the original axes current again
+plt.colorbar(shrink=0.6)
 m.drawcoastlines()
 # draw parallels
 delat = 30.
