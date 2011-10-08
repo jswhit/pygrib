@@ -4,6 +4,9 @@ include pygrib.pyx
 include pygrib.c
 include g2clib.pyx
 include g2clib.c
+include redtoreg.pyx
+include redtoreg.c
+include ncepgrib2.py
 include setup.py
 include test.py
 include README
@@ -14,6 +17,5 @@ include sampledata/*.grb
 include sampledata/*.grib*
 include sampledata/*.bin
 recursive-include g2clib_src *
-include ncepgrib2/*py
 include test/README
 include test/*py

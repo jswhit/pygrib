@@ -71,6 +71,10 @@ if hasattr(sys,'maxsize'):
 else:
     if sys.maxint > 2**31-1: macros.append(('__64BIT__',1))
 g2clibext = Extension("g2clib",g2clib_deps,include_dirs=incdirs,library_dirs=libdirs,libraries=libraries,define_macros=macros)
+redtoregext =\
+Extension("redtoreg",["redtoreg.c"],include_dirs=[numpy.get_include()])
+pygribext =\
+Extension("pygrib",["pygrib.c"],include_dirs=incdirs,library_dirs=libdirs,libraries=libraries)
 
 
 setup(name = "pygrib",
@@ -82,11 +86,4 @@ setup(name = "pygrib",
       download_url      = "http://code.google.com/p/pygrib/downloads/list",
       scripts =
       ['utils/grib_list','utils/grib_repack','utils/cnvgrib1to2','utils/cnvgrib2to1'],
-      packages          = ['ncepgrib2'],
-      ext_modules = [Extension(
-        "pygrib",
-        ["pygrib.c"],
-	include_dirs=incdirs,
-        library_dirs=libdirs,
-        libraries=libraries
-      ),g2clibext])
+      ext_modules       = [pygribext,g2clibext,redtoregext])
