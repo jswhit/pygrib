@@ -4,30 +4,27 @@ c-wrappers that Pyrex generates."""
 
 import math
 
-#cdef extern from "pycompat.h":
-#    ctypedef int Py_ssize_t
-
 # Some helper routines from the Python API
 cdef extern from "Python.h":
-  # To access integers
-  object PyInt_FromLong(long)
-  long PyInt_AsLong(object)
-  # To access doubles
-  object PyFloat_FromDouble(double)
-  # To access strings
-  char * PyBytes_AsString(object string)
-  object PyBytes_FromString(char *s)
-  object PyBytes_FromStringAndSize(char *s, size_t size)
-  int PyObject_AsWriteBuffer(object, void **rbuf, Py_ssize_t *len)
-  int PyObject_AsReadBuffer(object, void **rbuf, Py_ssize_t *len)
-  int PyObject_CheckReadBuffer(object)
+    # To access integers
+    object PyInt_FromLong(long)
+    long PyInt_AsLong(object)
+    # To access doubles
+    object PyFloat_FromDouble(double)
+    # To access strings
+    char * PyBytes_AsString(object string)
+    object PyBytes_FromString(char *s)
+    object PyBytes_FromStringAndSize(char *s, size_t size)
+    int PyObject_AsWriteBuffer(object, void **rbuf, Py_ssize_t *len)
+    int PyObject_AsReadBuffer(object, void **rbuf, Py_ssize_t *len)
+    int PyObject_CheckReadBuffer(object)
 
 cdef extern from "stdlib.h":
     void free(void *ptr)
 
 # get 32 bit integer type
 cdef extern from "inttypes.h":
-  ctypedef long int32_t
+    ctypedef long int32_t
 
 # Functions from grib2c lib.
 cdef extern from "grib2.h":
