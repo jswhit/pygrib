@@ -1199,7 +1199,9 @@ def _repeatlast(numfields,listin):
     return listin
 
 def _flatten(listin):
-    if len(listin) == 1:
+    if len(listin) == 0:
+        return listin
+    elif len(listin) == 1:
         return listin[0]
     else:
         return [item for listin in l for item in listin]
