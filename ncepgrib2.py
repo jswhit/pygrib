@@ -1199,7 +1199,10 @@ def _repeatlast(numfields,listin):
     return listin
 
 def _flatten(listin):
-    return [item for listin in l for item in listin]
+    if len(listin) == 1:
+        return listin[0]
+    else:
+        return [item for listin in l for item in listin]
 
 class Grib2Encode:
     """

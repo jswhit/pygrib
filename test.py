@@ -169,6 +169,9 @@ def test():
     77:Temperature:K (instant):regular_ll:isobaricInhPa:level 35000 Pa:fcst time 72:from 201110080000
     85:Temperature:K (instant):regular_ll:isobaricInhPa:level 40000 Pa:fcst time 72:from 201110080000
     93:Temperature:K (instant):regular_ll:isobaricInhPa:level 45000 Pa:fcst time 72:from 201110080000
+    >>> lats, lons = grb.latlons() # returns lat/lon values on grid.
+    >>> str('min/max of %d lats on %s grid %4.2f %4.2f' % (grb['Nj'], grb['typeOfGrid'],lats.min(),lats.max()))
+    'min/max of 73 lats on regular_ll grid -90.00 90.00'
     >>> grbstr = grb.tostring()
     >>> grb2 = pygrib.fromstring(grbstr)
     >>> grb2
