@@ -626,12 +626,12 @@ lat/lon values returned by grid method may be incorrect."""
                 strings.append('%s = %s\n'%(k,self.__dict__[k]))
         return ''.join(strings)
 
-    def data(self,fill_value=9999.0,masked_array=True,expand=True,order=None):
+    def data(self,fill_value=9.9692099683868690e+36,masked_array=True,expand=True,order=None):
         """
  returns an unpacked data grid.
  
  @keyword fill_value: missing or masked data is filled with this value
- (default 9999.0).
+ (default 9.9692099683868690e+36).
  @keyword masked_array: if True, return masked array if there is bitmap
  for missing or masked data (default True).
  @keyword expand:  if True (default), ECMWF 'reduced' gaussian grids are
