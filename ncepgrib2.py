@@ -4,6 +4,7 @@ import struct
 import string
 import math
 import warnings
+import operator
 from datetime import datetime
 try:
     from StringIO import StringIO
@@ -1198,13 +1199,9 @@ def _repeatlast(numfields,listin):
             listin.append(last)
     return listin
 
-def _flatten(listin):
-    if len(listin) == 0:
-        return listin
-    elif len(listin) == 1:
-        return listin[0]
-    else:
-        return [item for listin in l for item in listin]
+def _flatten(lst):
+    return reduce(operator.add,lst)
+ 
 
 class Grib2Encode:
     """
