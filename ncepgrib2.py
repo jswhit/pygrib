@@ -698,7 +698,7 @@ lat/lon values returned by grid method may be incorrect."""
         if hasattr(self,'points_in_y_direction'):
             ny = self.points_in_y_direction
         if nx is not None and ny is not None: # rectangular grid.
-            if hasattr(fld,'mask'):
+            if ma.isMA(fld):
                 fld = ma.reshape(fld,(ny,nx))
             else:
                 fld = N.reshape(fld,(ny,nx))
@@ -707,7 +707,7 @@ lat/lon values returned by grid method may be incorrect."""
                 if expand: 
                     nx = 2*ny
                     lonsperlat = self.grid_definition_list
-                    if hasattr(fld,'mask'):
+                    if ma.isMA(fld):
                         fld = ma.filled(fld)
                         fld = _redtoreg(nx, lonsperlat,\
                                 fld.astype('f8'), fill_value)

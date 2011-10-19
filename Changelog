@@ -1,5 +1,6 @@
 version 1.9.0 (not yet released)
 ================================
+* use numpy.ma.isMA instead of hasattr(arr,'mask').
 * include ncep grib2 lib and python interface (ncepgrib2 module).  This
   is used by pygrib to decode grib messages with packingType='grid_complex'
   and 'grid_complex_spatial_differencing' since grib_api does not decode

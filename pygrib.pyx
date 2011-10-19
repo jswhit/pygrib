@@ -1065,7 +1065,7 @@ cdef class gribmessage(object):
         if datarr.ndim > 2:
             raise ValueError('array must be 1d or 2d')
         # if array is masked, put in masked values and convert to plain numpy array.
-        if hasattr(datarr,'mask'):
+        if ma.isMA(datarr):
             datarr = datarr.filled()
         # raise error is expanded reduced grid array is supplied.
         if self['gridType'].startswith('reduced'):
