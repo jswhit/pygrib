@@ -43,9 +43,9 @@ Installation
  jasper should be found in C{$JASPER_DIR/include} or
  C{$JASPER_DIR/include/jasper}, and the jasper
  library should be found in C{$JASPER_DIR/lib} or C{$JASPER_DIR/lib64}. If any of
- those environment variables are not set, then the default search paths will be used.  
- If the GRIB API library was compiled without JASPER, PNG or OpenJPEG support, then the 
- corresponding environment variable need not be set. If the libraries and
+ those environment variables are not set, then it is assumed that GRIB API was
+ not built with support for that library.
+ If the libraries and
  include files are installed in separate locations, the environment variables
  C{$GRIBAPI_INCDIR} and C{$GRIBAPI_LIBDIR} can be used to define the locations
  separately (same goes for C{JASPER}, C{OPENJPEG}, C{PNG} and C{ZLIB}).
