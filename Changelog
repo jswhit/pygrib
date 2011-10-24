@@ -1,3 +1,7 @@
+since version 1.9.0
+===================
+* fix bug in ncepgrib2 (issue 38)
+
 version 1.9.0 (svn revision 511)
 ================================
 * use numpy.ma.isMA instead of hasattr(arr,'mask').

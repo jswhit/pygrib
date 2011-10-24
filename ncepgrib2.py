@@ -11,7 +11,7 @@ try:
 except ImportError:
     from io import BytesIO as StringIO
 
-import numpy as N
+import numpy as np
 from numpy import ma
 try:
     import pyproj
@@ -306,15 +306,15 @@ def _dec2bin(val, maxbits = 8):
 
 def _putieeeint(r):
     """convert a float to a IEEE format 32 bit integer"""
-    ra = N.array([r],'f')
-    ia = N.empty(1,'i')
+    ra = np.array([r],'f')
+    ia = np.empty(1,'i')
     g2clib.rtoi_ieee(ra,ia)
     return ia[0]
 
 def _getieeeint(i):
     """convert an IEEE format 32 bit integer to a float"""
-    ia = N.array([i],'i')
-    ra = N.empty(1,'f')
+    ia = np.array([i],'i')
+    ra = np.empty(1,'f')
     g2clib.itor_ieee(ia,ra)
     return ra[0]
 
@@ -582,9 +582,9 @@ only geostationary perspective is supported.
 lat/lon values returned by grid method may be incorrect."""
                 warnings.warn(msg)
             # latitude of horizon on central meridian
-            lonmax = 90.-(180./N.pi)*N.arcsin(self.earthRmajor/self.proj4_h)
+            lonmax = 90.-(180./np.pi)*np.arcsin(self.earthRmajor/self.proj4_h)
             # longitude of horizon on equator
-            latmax = 90.-(180./N.pi)*N.arcsin(self.earthRminor/self.proj4_h)
+            latmax = 90.-(180./np.pi)*np.arcsin(self.earthRminor/self.proj4_h)
             # truncate to nearest thousandth of a degree (to make sure
             # they aren't slightly over the horizon)
             latmax = int(1000*latmax)/1000.
@@ -675,18 +675,18 @@ lat/lon values returned by grid method may be incorrect."""
         gdsinfo = self.grid_definition_info
         ngrdpts = gdsinfo[1]
         ipos = self._section7_byte_offset
-        fld1=g2clib.unpack7(gribmsg,gdtnum,gdtmpl,drtnum,drtmpl,ndpts,ipos,N.empty,storageorder=storageorder)
+        fld1=g2clib.unpack7(gribmsg,gdtnum,gdtmpl,drtnum,drtmpl,ndpts,ipos,np.empty,storageorder=storageorder)
         # apply bitmap.
         if bitmapflag == 0:
             bitmap=self._bitmap
-            fld = fill_value*N.ones(ngrdpts,'f')
-            N.put(fld,N.nonzero(bitmap),fld1)
+            fld = fill_value*np.ones(ngrdpts,'f')
+            np.put(fld,np.nonzero(bitmap),fld1)
             if masked_array:
                 fld = ma.masked_values(fld,fill_value)
         # missing values instead of bitmap
         elif masked_array and hasattr(self,'missing_value'):
             if hasattr(self, 'missing_value2'):
-                mask = N.logical_or(fld1 == self.missing_value, fld1 == self.missing_value2)
+                mask = np.logical_or(fld1 == self.missing_value, fld1 == self.missing_value2)
             else:
                 mask = fld1 == self.missing_value
             fld = ma.array(fld1,mask=mask)
@@ -701,7 +701,7 @@ lat/lon values returned by grid method may be incorrect."""
             if ma.isMA(fld):
                 fld = ma.reshape(fld,(ny,nx))
             else:
-                fld = N.reshape(fld,(ny,nx))
+                fld = np.reshape(fld,(ny,nx))
         else:
             if gdsinfo[2] and gdtnum == 40: # ECMWF 'reduced' global gaussian grid.
                 if expand: 
@@ -755,14 +755,14 @@ lat/lon values returned by grid method may be incorrect."""
             lon2, lat2 = self.longitude_last_gridpoint, self.latitude_last_gridpoint
             delon = self.gridlength_in_x_direction
             delat = self.gridlength_in_y_direction
-            lats = N.arange(lat1,lat2+delat,delat)
-            lons = N.arange(lon1,lon2+delon,delon)
+            lats = np.arange(lat1,lat2+delat,delat)
+            lons = np.arange(lon1,lon2+delon,delon)
             # flip if scan mode says to.
             if self.scanmodeflags[0]:
                 lons = lons[::-1]
             if not self.scanmodeflags[1]:
                 lats = lats[::-1]
-            lons,lats = N.meshgrid(lons,lats) # make 2-d arrays.
+            lons,lats = np.meshgrid(lons,lats) # make 2-d arrays.
         elif gdtnum == 40: # gaussian grid (only works for global!)
             lon1, lat1 = self.longitude_first_gridpoint, self.latitude_first_gridpoint
             lon2, lat2 = self.longitude_last_gridpoint, self.latitude_last_gridpoint
@@ -773,7 +773,7 @@ lat/lon values returned by grid method may be incorrect."""
             else:
                 nlons = self.points_in_x_direction
                 delon = self.gridlength_in_x_direction
-            lons = N.arange(lon1,lon2+delon,delon)
+            lons = np.arange(lon1,lon2+delon,delon)
             # compute gaussian lats (north to south)
             lats = gaulats(nlats)
             if lat1 < lat2:  # reverse them if necessary
@@ -783,7 +783,7 @@ lat/lon values returned by grid method may be incorrect."""
                 lons = lons[::-1]
             if not self.scanmodeflags[1]:
                 lats = lats[::-1]
-            lons,lats = N.meshgrid(lons,lats) # make 2-d arrays
+            lons,lats = np.meshgrid(lons,lats) # make 2-d arrays
         # mercator, lambert conformal, stereographic, albers equal area, azimuthal equidistant
         elif gdtnum in [10,20,30,31,110]:
             nx = self.points_in_x_direction
@@ -795,7 +795,7 @@ lat/lon values returned by grid method may be incorrect."""
                 projparams['lat_ts']=self.proj4_lat_ts
                 projparams['proj']=self.proj4_proj
                 projparams['lon_0']=self.proj4_lon_0
-                pj = pyproj.Proj(self.projparams)
+                pj = pyproj.Proj(projparams)
                 llcrnrx, llcrnry = pj(lon1,lat1)
                 x = llcrnrx+dx*np.arange(nx)
                 y = llcrnry+dy*np.arange(ny)
@@ -806,7 +806,7 @@ lat/lon values returned by grid method may be incorrect."""
                 projparams['proj']=self.proj4_proj
                 projparams['lat_0']=self.proj4_lat_0
                 projparams['lon_0']=self.proj4_lon_0
-                pj = pyproj.Proj(self.projparams)
+                pj = pyproj.Proj(projparams)
                 llcrnrx, llcrnry = pj(lon1,lat1)
                 x = llcrnrx+dx*np.arange(nx)
                 y = llcrnry+dy*np.arange(ny)
@@ -817,7 +817,7 @@ lat/lon values returned by grid method may be incorrect."""
                 projparams['lat_2']=self.proj4_lat_2
                 projparams['proj']=self.proj4_proj
                 projparams['lon_0']=self.proj4_lon_0
-                pj = pyproj.Proj(self.projparams)
+                pj = pyproj.Proj(projparams)
                 llcrnrx, llcrnry = pj(lon1,lat1)
                 x = llcrnrx+dx*np.arange(nx)
                 y = llcrnry+dy*np.arange(ny)
@@ -827,13 +827,12 @@ lat/lon values returned by grid method may be incorrect."""
                 projparams['proj']=self.proj4_proj
                 projparams['lat_0']=self.proj4_lat_0
                 projparams['lon_0']=self.proj4_lon_0
-                pj = pyproj.Proj(self.projparams)
+                pj = pyproj.Proj(projparams)
                 llcrnrx, llcrnry = pj(lon1,lat1)
                 x = llcrnrx+dx*np.arange(nx)
                 y = llcrnry+dy*np.arange(ny)
                 x, y = np.meshgrid(x, y)
                 lons, lats = pj(x, y, inverse=True)
-            lons, lats = pj.makegrid(nx,ny)
         elif gdtnum == 90: # satellite projection.
             nx = self.points_in_x_direction
             ny = self.points_in_y_direction
@@ -844,15 +843,15 @@ lat/lon values returned by grid method may be incorrect."""
             projparams['lat_0']=self.proj4_lat_0
             projparams['h']=self.proj4_h
             pj = pyproj.Proj(projparams)
-            x = dx*N.indices((ny,nx),'f')[1,:,:]
+            x = dx*np.indices((ny,nx),'f')[1,:,:]
             x = x - 0.5*x.max()
-            y = dy*N.indices((ny,nx),'f')[0,:,:]
+            y = dy*np.indices((ny,nx),'f')[0,:,:]
             y = y - 0.5*y.max()
             lons, lats = pj(x,y,inverse=True)
             # set lons,lats to 1.e30 where undefined
-            abslons = N.fabs(lons); abslats = N.fabs(lats)
-            lons = N.where(abslons < 1.e20, lons, 1.e30)
-            lats = N.where(abslats < 1.e20, lats, 1.e30)
+            abslons = np.fabs(lons); abslats = np.fabs(lats)
+            lons = np.where(abslons < 1.e20, lons, 1.e30)
+            lats = np.where(abslats < 1.e20, lats, 1.e30)
         else:
             raise ValueError('unsupported grid')
         return lats.astype('f'), lons.astype('f')
@@ -974,7 +973,7 @@ def Grib2Decode(filename,gribmsg=False):
         # unpack section 1, octets 1-21 (13 parameters).  This section
         # can occur only once per grib message.
         #idsect,pos = _unpack1(gribmsg,lensect0) # python version
-        idsect,pos = g2clib.unpack1(gribmsg,lensect0,N.empty) # c version
+        idsect,pos = g2clib.unpack1(gribmsg,lensect0,np.empty) # c version
         # loop over rest of sections in message.
         gdtnums = []
         gdtmpls = []
@@ -1005,26 +1004,26 @@ def Grib2Decode(filename,gribmsg=False):
                 pos = pos + lensect
             # section 3, grid definition section.
             elif sectnum == 3:
-                gds,gdtempl,deflist,pos = g2clib.unpack3(gribmsg,pos,N.empty)
+                gds,gdtempl,deflist,pos = g2clib.unpack3(gribmsg,pos,np.empty)
                 gdtnums.append(gds[4])
                 gdtmpls.append(gdtempl)
                 gdeflists.append(deflist)
                 gdsinfos.append(gds)
             # section, product definition section.
             elif sectnum == 4:
-                pdtempl,pdtn,coordlst,pos = g2clib.unpack4(gribmsg,pos,N.empty)
+                pdtempl,pdtn,coordlst,pos = g2clib.unpack4(gribmsg,pos,np.empty)
                 pdtmpls.append(pdtempl)
                 coordlists.append(coordlst)
                 pdtnums.append(pdtn)
             # section 5, data representation section.
             elif sectnum == 5:
-                drtempl,drtn,npts,pos = g2clib.unpack5(gribmsg,pos,N.empty)
+                drtempl,drtn,npts,pos = g2clib.unpack5(gribmsg,pos,np.empty)
                 drtmpls.append(drtempl)
                 drtnums.append(drtn)
                 ndptslist.append(npts)
             # section 6, bit-map section.
             elif sectnum == 6:
-                bmap,bmapflag = g2clib.unpack6(gribmsg,gds[1],pos,N.empty)
+                bmap,bmapflag = g2clib.unpack6(gribmsg,gds[1],pos,np.empty)
                 #bitmapflag = struct.unpack('>B',gribmsg[pos+5])[0]
                 if bmapflag == 0:
                     bitmaps.append(bmap.astype('b'))
@@ -1189,7 +1188,7 @@ def _unpack1(gribmsg,pos):
     pos = pos + 1
     idsect.append(struct.unpack('>B',gribmsg[pos:pos+1])[0])
     pos = pos + 1
-    return N.array(idsect,'i'),pos
+    return np.array(idsect,'i'),pos
 
 def _repeatlast(numfields,listin):
     """repeat last item in listin, until len(listin) = numfields"""
@@ -1280,7 +1279,7 @@ class Grib2Encode:
     U{Table
     1.4<http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table1-4.shtml>})
         """
-        self.msg,msglen=g2clib.grib2_create(N.array([discipline,2],N.int32),N.array(idsect,N.int32))
+        self.msg,msglen=g2clib.grib2_create(np.array([discipline,2],np.int32),np.array(idsect,np.int32))
 
     def addgrid(self,gdsinfo,gdtmpl,deflist=None):
         """
@@ -1311,10 +1310,10 @@ class Grib2Encode:
  of a non-regular grid.
         """
         if deflist is not None:
-            dflist = N.array(deflist,'i')
+            dflist = np.array(deflist,'i')
         else:
             dflist = None
-        self.msg,msglen=g2clib.grib2_addgrid(self.msg,N.array(gdsinfo,'i'),N.array(gdtmpl,'i'),dflist)
+        self.msg,msglen=g2clib.grib2_addgrid(self.msg,np.array(gdsinfo,'i'),np.array(gdtmpl,'i'),dflist)
 
     def addfield(self,pdtnum,pdtmpl,drtnum,drtmpl,field,coordlist=None,bitmapflag=255,bitmap=None):
         """
@@ -1360,16 +1359,16 @@ class Grib2Encode:
  @param bitmap: int32 numpy array containing bitmap to be added 
  (if bitmapflag=0 or 254). Default None.
         """
-        fld = N.array(field.astype('f'),'f')
+        fld = np.array(field.astype('f'),'f')
         if bitmap is not None:
-            bmap = N.ravel(N.array(bitmap,'i'))
+            bmap = np.ravel(np.array(bitmap,'i'))
         else:
             bmap = None
         if coordlist is not None:
-            crdlist = N.array(coordlist,'f')
+            crdlist = np.array(coordlist,'f')
         else:
             crdlist = None
-        self.msg,msglen=g2clib.grib2_addfield(self.msg,pdtnum,N.array(pdtmpl,'i'),crdlist,drtnum,N.array(drtmpl,'i'),N.ravel(fld),bitmapflag,bmap)
+        self.msg,msglen=g2clib.grib2_addfield(self.msg,pdtnum,np.array(pdtmpl,'i'),crdlist,drtnum,np.array(drtmpl,'i'),np.ravel(fld),bitmapflag,bmap)
 
     def end(self):
         """
