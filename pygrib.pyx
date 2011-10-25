@@ -287,6 +287,14 @@ def gaulats(object nlats):
     grib_get_gaussian_latitudes(<long>nlats/2, <double *>lats.data)
     return lats
 
+# dict for forecast time units.
+_ftimedict = {}
+_ftimedict[0]='mins'
+_ftimedict[1]='hrs'
+_ftimedict[2]='days'
+_ftimedict[3]='months'
+_ftimedict[4]='yrs'
+
 # turn on support for multi-field grib messages.
 grib_multi_support_on(NULL)
 
@@ -660,6 +668,9 @@ cdef class gribmessage(object):
             self.__dict__[name]=value
     def __repr__(self):
         """prints a short inventory of the grib message"""
+        ftimeunits = ""
+        if self.indicatorOfUnitOfTimeRange in _ftimedict:
+            ftimeunits = _ftimedict[self.indicatorOfUnitOfTimeRange]
         inventory = []
         if self.valid_key('name'):
             if self['name'] != 'unknown':
@@ -714,12 +725,16 @@ cdef class gribmessage(object):
                 inventory.append(levstring)
         elif self.valid_key('level'):
             inventory.append(':level %s' % self['level'])
-        if self.valid_key('stepRange'):
+        if self.has_key('stepRange'):
+            # this is a hack to work around grib_api bug
+            # sometimes stepUnits and indicatorOfUnitOfTimeRange 
+            # are inconsistent.
+            self.stepUnits = self.indicatorOfUnitOfTimeRange
             ftime = self['stepRange']
-            inventory.append(':fcst time '+ftime)
+            inventory.append(':fcst time %s %s'% (ftime,ftimeunits))
         elif self.valid_key('forecastTime'):
             ftime = repr(self['forecastTime'])
-            inventory.append(':fcst time '+ftime)
+            inventory.append(':fcst time %s %s'% (ftime,ftimeunits))
         if self.valid_key('dataDate') and self.valid_key('dataTime'):
             inventory.append(
             ':from '+repr(self['dataDate'])+'%04i' % self['dataTime'])

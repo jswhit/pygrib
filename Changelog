@@ -1,5 +1,6 @@
 since version 1.9.0
 ===================
+* add forecast time units in gribmessage.__repr__
 * fix bug in ncepgrib2 (issue 38)
 
 version 1.9.0 (svn revision 511)
