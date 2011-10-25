@@ -762,6 +762,7 @@ lat/lon values returned by grid method may be incorrect."""
                 lons = lons[::-1]
             if not self.scanmodeflags[1]:
                 lats = lats[::-1]
+            projparams['proj'] = 'cyl'
             lons,lats = np.meshgrid(lons,lats) # make 2-d arrays.
         elif gdtnum == 40: # gaussian grid (only works for global!)
             lon1, lat1 = self.longitude_first_gridpoint, self.latitude_first_gridpoint
@@ -783,6 +784,7 @@ lat/lon values returned by grid method may be incorrect."""
                 lons = lons[::-1]
             if not self.scanmodeflags[1]:
                 lats = lats[::-1]
+            projparams['proj'] = 'cyl'
             lons,lats = np.meshgrid(lons,lats) # make 2-d arrays
         # mercator, lambert conformal, stereographic, albers equal area, azimuthal equidistant
         elif gdtnum in [10,20,30,31,110]:
@@ -854,6 +856,7 @@ lat/lon values returned by grid method may be incorrect."""
             lats = np.where(abslats < 1.e20, lats, 1.e30)
         else:
             raise ValueError('unsupported grid')
+        self.projparams = projparams
         return lats.astype('f'), lons.astype('f')
 
 def Grib2Decode(filename,gribmsg=False):
