@@ -646,6 +646,16 @@ cdef class gribmessage(object):
     """
     Grib message object.
 
+    Each grib message has attributes corresponding to grib message
+    keys for 
+    U{GRIB1 <http://www.ecmwf.int/publications/manuals/d/gribapi/fm92/grib21>}
+    and
+    U{GRIB2 <http://www.ecmwf.int/publications/manuals/d/gribapi/fm92/grib2/>}.
+    Parameter names are
+    are given by the C{name}, C{shortName} and C{paramID} U{keys
+    <http://http://www.ecmwf.int/publications/manuals/d/gribapi/param/>}.
+    Pygrib also defines some special pygrib attributes:
+
     @ivar messagenumber: The grib message number in the file.
 
     @ivar projparams: A dictionary containing proj4 key/value pairs describing 
