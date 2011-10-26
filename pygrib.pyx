@@ -287,13 +287,20 @@ def gaulats(object nlats):
     grib_get_gaussian_latitudes(<long>nlats/2, <double *>lats.data)
     return lats
 
-# dict for forecast time units.
+# dict for forecast time units (Code Table 4.4).
 _ftimedict = {}
 _ftimedict[0]='mins'
 _ftimedict[1]='hrs'
 _ftimedict[2]='days'
 _ftimedict[3]='months'
 _ftimedict[4]='yrs'
+_ftimedict[5]='decades'
+_ftimedict[6]='30 yr periods'
+_ftimedict[7]='centuries'
+_ftimedict[10]='3 hr periods'
+_ftimedict[11]='6 hr periods'
+_ftimedict[12]='12 hr periods'
+_ftimedict[13]='secs'
 
 # turn on support for multi-field grib messages.
 grib_multi_support_on(NULL)
@@ -641,6 +648,18 @@ cdef _setdates(gribmessage grb):
         elif grb.fcstimeunits == 'days':
             grb.validDate =\
             julian_to_datetime(grb.julianDay+ftime)
+        elif grb.fcstimeunits == 'secs':
+            grb.validDate =\
+            julian_to_datetime(grb.julianDay+ftime/86400.)
+        elif grb.fcstimeunits == '3 hr periods':
+            grb.validDate =\
+            julian_to_datetime(grb.julianDay+ftime/8.)
+        elif grb.fcstimeunits == '6 hr periods':
+            grb.validDate =\
+            julian_to_datetime(grb.julianDay+ftime/4.)
+        elif grb.fcstimeunits == '12 hr periods':
+            grb.validDate =\
+            julian_to_datetime(grb.julianDay+ftime/2.)
     return grb
 
 cdef class gribmessage(object):
@@ -669,7 +688,7 @@ cdef class gribmessage(object):
     array.
 
     @ivar fcstimeunits:  A string representing the forecast time units
-    ('mins','hrs','days','yrs', or an empty string if not defined).
+    (an empty string if not defined).
 
     @ivar analDate:  A python datetime instance describing the analysis date
     and time for the forecast. Only set if forecastTime and julianDay keys
@@ -677,7 +696,7 @@ cdef class gribmessage(object):
 
     @ivar validDate:  A python datetime instance describing the valid date
     and time for the forecast. Only set if forecastTime and julianDay keys
-    exist, and fcstimeunits is 'mins','hrs' or 'days'. If forecast time
+    exist, and fcstimeunits is defined. If forecast time
     is a range, then C{validDate} corresponds to the end of the range."""
     cdef grib_handle *_gh
     cdef public messagenumber, projparams, validDate, analDate,\
