@@ -71,17 +71,17 @@ Example usage
     2
     >>> grb = grbs.read(1)[0] # read returns a list with the next N (N=1 in this case) messages.
     >>> grb # printing a grib message object displays summary info
-    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
+    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
     >>> grbs.tell()
     3
  - print an inventory of the file::
     >>> grbs.seek(0)
     >>> for grb in grbs:
     >>>     grb 
-    1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120:from 200402291200
-    2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
-    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
-    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120:from 200402291200
+    1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs:from 200402291200
+    2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120 hrs:from 200402291200
+    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
+    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
  - find the first grib message with a matching name::
     >>> grb = grbs.select(name='Maximum temperature')[0]
  - extract the data values using the 'values' key
@@ -101,7 +101,7 @@ Example usage
  - get the second grib message::
     >>> grb = grbs.message(2) # same as grbs.seek(1); grb=grbs.readline()
     >>> grb
-    2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120:from 200402291200
+    2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120 hrs:from 200402291200
  - modify the values associated with existing keys (either via attribute or
  dictionary access)::
     >>> grb['forecastTime'] = 240
@@ -114,7 +114,7 @@ Example usage
     >>> grbout.write(msg)
     >>> grbout.close()
     >>> pygrib.open('test.grb').readline() 
-    1:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 240:from 201001011200
+    1:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 240 hrs:from 201001011200
 
 Documentation
 =============
@@ -501,25 +501,25 @@ Example usage:
 >>> grbs = pygrib.open('sampledata/gfs.grb')
 >>> selected_grbs=grbs.select(shortName='gh',typeOfLevel='isobaricInhPa',level=10)
 >>> for grb in selected_grbs: grb
-26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst
 >>> # the __call__ method does the same thing
 >>> selected_grbs=grbs(shortName='gh',typeOfLevel='isobaricInhPa',level=10)
 >>> for grb in selected_grbs: grb
-26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst
 >>> # to select multiple specific key values, use containers (e.g. sequences)
 >>> selected_grbs=grbs(shortName=['u','v'],typeOfLevel='isobaricInhPa',level=[10,50])
 >>> for grb in selected_grbs: grb
-193:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50 Pa:fcst time 72:from 200412091200:lo res cntl fcst
-194:v-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50 Pa:fcst time 72:from 200412091200:lo res cntl fcst
-199:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst
-200:v-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+193:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst
+194:v-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst
+199:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst
+200:v-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst
 >>> # to select key values based on a conditional expression, use a function
 >>> selected_grbs=grbs(shortName='gh',level=lambda l: l < 500 and l >= 300)
 >>> for grb in selected_grbs: grb
-14:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 45000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
-15:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 40000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
-16:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 35000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
-17:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 30000 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+14:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 45000 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst
+15:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 40000 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst
+16:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 35000 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst
+17:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 30000 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst
 """
         msgnum = self.tell()
         grbs = [grb for grb in self if _find(grb, **kwargs)]
@@ -1531,12 +1531,12 @@ Example usage:
 >>> selected_grbs=grbindx.select(shortName='gh',typeOfLevel='isobaricInhPa',level=500)
 >>> for grb in selected_grbs:
 >>>     grb
-1:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 500 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+1:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 500 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst
 >>> # __call__ method does same thing as select
 >>> selected_grbs=grbindx(shortName='u',typeOfLevel='isobaricInhPa',level=250)
 >>> for grb in selected_grbs:
 >>>     grb
-1:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 250 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+1:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 250 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst
 >>> grbindx.close()
 
 @ivar keys: list of strings containing keys used in the index.
@@ -1596,12 +1596,12 @@ Example usage:
 >>> selected_grbs=grbindx.select(shortName='gh',typeOfLevel='isobaricInhPa',level=500)
 >>> for grb in selected_grbs:
 >>>     grb
-1:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 500 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+1:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 500 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst
 >>> # __call__ method does same thing as select
 >>> selected_grbs=grbindx(shortName='u',typeOfLevel='isobaricInhPa',level=250)
 >>> for grb in selected_grbs:
 >>>     grb
-1:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 250 Pa:fcst time 72:from 200412091200:lo res cntl fcst
+1:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 250 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst
 >>> grbindx.close()
 """
         cdef grib_handle *gh
