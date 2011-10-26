@@ -25,6 +25,7 @@ pygrib.gribmessage.__new__	pygrib.gribmessage-class.html#__new__
 pygrib.gribmessage.is_missing	pygrib.gribmessage-class.html#is_missing
 pygrib.gribmessage._read_only_keys	pygrib.gribmessage-class.html#_read_only_keys
 pygrib.gribmessage.projparams	pygrib.gribmessage-class.html#projparams
+pygrib.gribmessage.fcstimeunits	pygrib.gribmessage-class.html#fcstimeunits
 pygrib.gribmessage.__getattr__	pygrib.gribmessage-class.html#__getattr__
 pygrib.gribmessage.messagenumber	pygrib.gribmessage-class.html#messagenumber
 pygrib.gribmessage._unshape_mask	pygrib.gribmessage-class.html#_unshape_mask

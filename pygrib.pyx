@@ -548,7 +548,7 @@ Example usage:
 # keep track of python gribmessage attributes so they can be
 # distinguished from grib keys.
 _private_atts =\
-['_gh','expand_reduced','projparams','messagenumber','_all_keys','_ro_keys']
+['_gh','fcstimeunits','expand_reduced','projparams','messagenumber','_all_keys','_ro_keys']
 
 def julian_to_datetime(object jd):
     """
@@ -587,11 +587,22 @@ cdef _create_gribmessage(grib_handle *gh, object messagenumber):
     grb._all_keys = grb.keys()
     grb._ro_keys  = grb._read_only_keys()
     grb._set_projparams() # set projection parameter dict.
+    #grb.fcstimeunits = ""
+    if grb.has_key('indicatorOfUnitOfTimeRange') and\
+       grb.indicatorOfUnitOfTimeRange in _ftimedict:
+        grb.fcstimeunits = _ftimedict[grb.indicatorOfUnitOfTimeRange]
     if grb.has_key('forecastTime') and grb.has_key('julianDay'):
         grb.analDate =\
         julian_to_datetime(grb.julianDay)
-        grb.validDate =\
-        julian_to_datetime(grb.julianDay+grb.forecastTime/24.)
+        if grb.fcstimeunits == 'hrs':
+            grb.validDate =\
+            julian_to_datetime(grb.julianDay+grb.forecastTime/24.)
+        elif grb.fcstimeunits == 'mins':
+            grb.validDate =\
+            julian_to_datetime(grb.julianDay+grb.forecastTime/1440.)
+        elif grb.fcstimeunits == 'days':
+            grb.validDate =\
+            julian_to_datetime(grb.julianDay+grb.forecastTime)
     return grb
 
 def fromstring(gribstring):
@@ -613,11 +624,22 @@ def fromstring(gribstring):
     grb._all_keys = grb.keys()
     grb._ro_keys  = grb._read_only_keys()
     grb._set_projparams() # set projection parameter dict.
+    grb.fcstimeunits = ""
+    if grb.has_key('indicatorOfUnitOfTimeRange') and\
+       grb.indicatorOfUnitOfTimeRange in _ftimedict:
+        grb.fcstimeunits = _ftimedict[grb.indicatorOfUnitOfTimeRange]
     if grb.has_key('forecastTime') and grb.has_key('julianDay'):
         grb.analDate =\
         julian_to_datetime(grb.julianDay)
-        grb.validDate =\
-        julian_to_datetime(grb.julianDay+grb.forecastTime/24.)
+        if grb.fcstimeunits == 'hrs':
+            grb.validDate =\
+            julian_to_datetime(grb.julianDay+grb.forecastTime/24.)
+        elif grb.fcstimeunits == 'mins':
+            grb.validDate =\
+            julian_to_datetime(grb.julianDay+grb.forecastTime/1440.)
+        elif grb.fcstimeunits == 'days':
+            grb.validDate =\
+            julian_to_datetime(grb.julianDay+grb.forecastTime)
     return grb
 
 cdef class gribmessage(object):
@@ -634,16 +656,19 @@ cdef class gribmessage(object):
     False, data is kept on unstructured reduced grid, and is returned in a 1-d
     array.
 
+    @ivar fcstimeunits:  A string representing the forecast time units
+    ('mins','hrs','days','yrs', or an empty string if not defined).
+
     @ivar analDate:  A python datetime instance describing the analysis date
     and time for the forecast. Only set if forecastTime and julianDay keys
     exist.
 
     @ivar validDate:  A python datetime instanace describing the valid date
     and time for the forecast. Only set if forecastTime and julianDay keys
-    exist."""
+    exist, and fcstimeunits is 'mins','hrs' or 'days'."""
     cdef grib_handle *_gh
     cdef public messagenumber, projparams, validDate, analDate,\
-    expand_reduced, _ro_keys, _all_keys
+    expand_reduced, _ro_keys, _all_keys, fcstimeunits
     def __init__(self):
         # calling "__new__()" will not call "__init__()" !
         raise TypeError("This class cannot be instantiated from Python")
@@ -668,9 +693,6 @@ cdef class gribmessage(object):
             self.__dict__[name]=value
     def __repr__(self):
         """prints a short inventory of the grib message"""
-        ftimeunits = ""
-        if self.indicatorOfUnitOfTimeRange in _ftimedict:
-            ftimeunits = _ftimedict[self.indicatorOfUnitOfTimeRange]
         inventory = []
         if self.valid_key('name'):
             if self['name'] != 'unknown':
@@ -730,15 +752,15 @@ cdef class gribmessage(object):
             # sometimes stepUnits and indicatorOfUnitOfTimeRange 
             # are inconsistent.
             self.stepUnits = self.indicatorOfUnitOfTimeRange
-            ftime = self['stepRange']
+            ftime = self['stepRange'] # computed key, uses stepUnits
             if self.valid_key('stepType') and self['stepType'] != 'instant':
                 inventory.append(':fcst time %s %s (%s)'%\
-                    (ftime,ftimeunits,self.stepType))
+                    (ftime,self.fcstimeunits,self.stepType))
             else:
-                inventory.append(':fcst time %s %s'% (ftime,ftimeunits))
+                inventory.append(':fcst time %s %s'% (ftime,self.fcstimeunits))
         elif self.valid_key('forecastTime'):
             ftime = repr(self['forecastTime'])
-            inventory.append(':fcst time %s %s'% (ftime,ftimeunits))
+            inventory.append(':fcst time %s %s'% (ftime,self.fcstimeunits))
         if self.valid_key('dataDate') and self.valid_key('dataTime'):
             inventory.append(
             ':from '+repr(self['dataDate'])+'%04i' % self['dataTime'])
