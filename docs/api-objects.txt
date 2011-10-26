@@ -5,6 +5,7 @@ pygrib._find	pygrib-module.html#_find
 pygrib._private_atts	pygrib-module.html#_private_atts
 pygrib.julian_to_datetime	pygrib-module.html#julian_to_datetime
 pygrib.__package__	pygrib-module.html#__package__
+pygrib._ftimedict	pygrib-module.html#_ftimedict
 pygrib.__version__	pygrib-module.html#__version__
 pygrib._is_container	pygrib-module.html#_is_container
 pygrib._get_grib_api_version	pygrib-module.html#_get_grib_api_version

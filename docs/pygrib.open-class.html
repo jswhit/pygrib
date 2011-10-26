@@ -162,7 +162,7 @@ object --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pygrib.open-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">filename</span>)</span><br />
-      x.__init__(...) initializes x; see x.__class__.__doc__ for signature</td>
+      x.__init__(...) initializes x; see help(type(x)) for signature</td>
           <td align="right" valign="top">
             
             
@@ -484,8 +484,7 @@ object --+
     </td>
   </tr></table>
   
-  <p>x.__init__(...) initializes x; see x.__class__.__doc__ for 
-  signature</p>
+  <p>x.__init__(...) initializes x; see help(type(x)) for signature</p>
   <dl class="fields">
     <dt>Overrides:
         object.__init__
@@ -611,25 +610,25 @@ object --+
 <span class="py-prompt">&gt;&gt;&gt; </span>grbs = pygrib.open(<span class="py-string">'sampledata/gfs.grb'</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span>selected_grbs=grbs.select(shortName=<span class="py-string">'gh'</span>,typeOfLevel=<span class="py-string">'isobaricInhPa'</span>,level=10)
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> grb <span class="py-keyword">in</span> selected_grbs: grb
-<span class="py-output">26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst</span>
+<span class="py-output">26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst</span>
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># the __call__ method does the same thing</span>
 <span class="py-prompt">&gt;&gt;&gt; </span>selected_grbs=grbs(shortName=<span class="py-string">'gh'</span>,typeOfLevel=<span class="py-string">'isobaricInhPa'</span>,level=10)
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> grb <span class="py-keyword">in</span> selected_grbs: grb
-<span class="py-output">26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst</span>
+<span class="py-output">26:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst</span>
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># to select multiple specific key values, use containers (e.g. sequences)</span>
 <span class="py-prompt">&gt;&gt;&gt; </span>selected_grbs=grbs(shortName=[<span class="py-string">'u'</span>,<span class="py-string">'v'</span>],typeOfLevel=<span class="py-string">'isobaricInhPa'</span>,level=[10,50])
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> grb <span class="py-keyword">in</span> selected_grbs: grb
-<span class="py-output">193:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50 Pa:fcst time 72:from 200412091200:lo res cntl fcst</span>
-<span class="py-output">194:v-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50 Pa:fcst time 72:from 200412091200:lo res cntl fcst</span>
-<span class="py-output">199:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst</span>
-<span class="py-output">200:v-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72:from 200412091200:lo res cntl fcst</span>
+<span class="py-output">193:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst</span>
+<span class="py-output">194:v-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 50 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst</span>
+<span class="py-output">199:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst</span>
+<span class="py-output">200:v-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 10 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst</span>
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># to select key values based on a conditional expression, use a function</span>
 <span class="py-prompt">&gt;&gt;&gt; </span>selected_grbs=grbs(shortName=<span class="py-string">'gh'</span>,level=<span class="py-keyword">lambda</span> l: l &lt; 500 <span class="py-keyword">and</span> l &gt;= 300)
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> grb <span class="py-keyword">in</span> selected_grbs: grb
-<span class="py-output">14:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 45000 Pa:fcst time 72:from 200412091200:lo res cntl fcst</span>
-<span class="py-output">15:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 40000 Pa:fcst time 72:from 200412091200:lo res cntl fcst</span>
-<span class="py-output">16:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 35000 Pa:fcst time 72:from 200412091200:lo res cntl fcst</span>
-<span class="py-output">17:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 30000 Pa:fcst time 72:from 200412091200:lo res cntl fcst</span></pre>
+<span class="py-output">14:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 45000 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst</span>
+<span class="py-output">15:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 40000 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst</span>
+<span class="py-output">16:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 35000 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst</span>
+<span class="py-output">17:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 30000 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst</span></pre>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -661,7 +660,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Oct 21 17:04:54 2011
+    Generated by Epydoc 3.0.1 on Tue Oct 25 20:15:28 2011
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
