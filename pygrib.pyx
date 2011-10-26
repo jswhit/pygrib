@@ -761,10 +761,6 @@ cdef class gribmessage(object):
         elif self.valid_key('level'):
             inventory.append(':level %s' % self['level'])
         if self.has_key('stepRange'):
-            # this is a hack to work around grib_api bug
-            # sometimes stepUnits and indicatorOfUnitOfTimeRange 
-            # are inconsistent.
-            self.stepUnits = self.indicatorOfUnitOfTimeRange
             ftime = self['stepRange'] # computed key, uses stepUnits
             if self.valid_key('stepType') and self['stepType'] != 'instant':
                 inventory.append(':fcst time %s %s (%s)'%\

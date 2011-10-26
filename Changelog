@@ -1,4 +1,4 @@
-version 1.9.1 (svn revision 526)
+version 1.9.1 (svn revision 527)
 ================================
 * validDate now correctly defined if forecast time units
   is minutes or days, not just hours. If forecast time is 
