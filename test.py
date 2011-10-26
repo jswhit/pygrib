@@ -5,16 +5,16 @@ def test():
     open a grib file, create an iterator.
     >>> import pygrib
     >>> list(pygrib.open('sampledata/flux.grb'))
-    [1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs:from 200402291200, 2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120 hrs:from 200402291200, 3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200, 4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200]
+    [1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs (avg):from 200402291200, 2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120 hrs:from 200402291200, 3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200, 4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200]
     >>> pygrib.open('sampledata/flux.grb').read()
-    [1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs:from 200402291200, 2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120 hrs:from 200402291200, 3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200, 4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200]
+    [1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs (avg):from 200402291200, 2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120 hrs:from 200402291200, 3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200, 4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200]
     >>> grbs = pygrib.open('sampledata/flux.grb')
 
     acts like a file object
     >>> grbs.tell()
     0
     >>> grbs.read(1)
-    [1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs:from 200402291200]
+    [1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs (avg):from 200402291200]
     >>> grbs.tell()
     1
     >>> grbs.read(2)
@@ -35,7 +35,7 @@ def test():
     first grib message
     >>> grb1 = grbs.readline()
     >>> grb1
-    1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs:from 200402291200
+    1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs (avg):from 200402291200
 
     iterate over rest of grib messages.
     >>> for grb in grbs: grb
@@ -49,12 +49,12 @@ def test():
 
     grb1 is still first grib message
     >>> grb1
-    1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs:from 200402291200
+    1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs (avg):from 200402291200
 
     position iterator at beginning again.
     >>> grbs.rewind() 
     >>> for grb in grbs: grb
-    1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs:from 200402291200
+    1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs (avg):from 200402291200
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120 hrs:from 200402291200
     3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
     4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
@@ -75,7 +75,7 @@ def test():
     position iterator at next grib message.
     >>> grb = grbs.readline() 
     >>> grb # back to the 1st message
-    1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs:from 200402291200
+    1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs (avg):from 200402291200
 
     use select method to choose grib messages based upon specified key/value pairs.
     >>> selected_grbs = grbs.select(level=2,typeOfLevel='heightAboveGround') # get all 2-m level fields
@@ -190,10 +190,10 @@ def test():
     test ndfd file with 'grid_complex_spatial_differencing' encoding
     >>> grbs = pygrib.open('sampledata/dspr.temp.bin')
     >>> for grb in grbs: grb
-    1:Maximum temperature:K (max):mercator:surface:level 0:fcst time 2-14 hrs:from 201109292200
-    2:Maximum temperature:K (max):mercator:surface:level 0:fcst time 26-38 hrs:from 201109292200
-    3:Maximum temperature:K (max):mercator:surface:level 0:fcst time 50-62 hrs:from 201109292200
-    4:Maximum temperature:K (max):mercator:surface:level 0:fcst time 74-86 hrs:from 201109292200
+    1:Maximum temperature:K (max):mercator:surface:level 0:fcst time 2-14 hrs (max):from 201109292200
+    2:Maximum temperature:K (max):mercator:surface:level 0:fcst time 26-38 hrs (max):from 201109292200
+    3:Maximum temperature:K (max):mercator:surface:level 0:fcst time 50-62 hrs (max):from 201109292200
+    4:Maximum temperature:K (max):mercator:surface:level 0:fcst time 74-86 hrs (max):from 201109292200
     >>> str(grb.packingType)
     'grid_complex_spatial_differencing'
     >>> data = grb.values

@@ -78,7 +78,7 @@ Example usage
     >>> grbs.seek(0)
     >>> for grb in grbs:
     >>>     grb 
-    1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs:from 200402291200
+    1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs (avg):from 200402291200
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120 hrs:from 200402291200
     3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
     4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
@@ -731,7 +731,11 @@ cdef class gribmessage(object):
             # are inconsistent.
             self.stepUnits = self.indicatorOfUnitOfTimeRange
             ftime = self['stepRange']
-            inventory.append(':fcst time %s %s'% (ftime,ftimeunits))
+            if self.has_key('stepType') and self['stepType'] != 'instant':
+                inventory.append(':fcst time %s %s (%s)'%\
+                        (ftime,ftimeunits,self.stepType))
+            else:
+                inventory.append(':fcst time %s %s'% (ftime,ftimeunits))
         elif self.valid_key('forecastTime'):
             ftime = repr(self['forecastTime'])
             inventory.append(':fcst time %s %s'% (ftime,ftimeunits))
