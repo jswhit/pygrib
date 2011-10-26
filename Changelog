@@ -1,8 +1,9 @@
 version 1.9.1 (not yet released)
 ================================
 * validDate now correctly defined if forecast time units
-  is minutes or days, not just hours. fcstimeunits gribmessage
-  instance variable added.
+  is minutes or days, not just hours. If forecast time is 
+  a range, validDate corresponds to the end of the range.
+  fcstimeunits gribmessage instance variable added.
 * fix bug for reg lat/lon and gaussian grids introduced in 1.9.0.
 * add type of forecast interval (max,accum,avg) to gribmessage.__repr__
 * add forecast time units in gribmessage.__repr__

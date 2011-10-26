@@ -587,23 +587,7 @@ cdef _create_gribmessage(grib_handle *gh, object messagenumber):
     grb._all_keys = grb.keys()
     grb._ro_keys  = grb._read_only_keys()
     grb._set_projparams() # set projection parameter dict.
-    #grb.fcstimeunits = ""
-    if grb.has_key('indicatorOfUnitOfTimeRange') and\
-       grb.indicatorOfUnitOfTimeRange in _ftimedict:
-        grb.fcstimeunits = _ftimedict[grb.indicatorOfUnitOfTimeRange]
-    if grb.has_key('forecastTime') and grb.has_key('julianDay'):
-        grb.analDate =\
-        julian_to_datetime(grb.julianDay)
-        if grb.fcstimeunits == 'hrs':
-            grb.validDate =\
-            julian_to_datetime(grb.julianDay+grb.forecastTime/24.)
-        elif grb.fcstimeunits == 'mins':
-            grb.validDate =\
-            julian_to_datetime(grb.julianDay+grb.forecastTime/1440.)
-        elif grb.fcstimeunits == 'days':
-            grb.validDate =\
-            julian_to_datetime(grb.julianDay+grb.forecastTime)
-    return grb
+    return _setdates(grb)
 
 def fromstring(gribstring):
     """
@@ -624,6 +608,10 @@ def fromstring(gribstring):
     grb._all_keys = grb.keys()
     grb._ro_keys  = grb._read_only_keys()
     grb._set_projparams() # set projection parameter dict.
+    return _setdates(grb)
+
+cdef _setdates(gribmessage grb):
+    # set fcstimeunits, analDate and validDate attributes
     grb.fcstimeunits = ""
     if grb.has_key('indicatorOfUnitOfTimeRange') and\
        grb.indicatorOfUnitOfTimeRange in _ftimedict:
@@ -631,15 +619,28 @@ def fromstring(gribstring):
     if grb.has_key('forecastTime') and grb.has_key('julianDay'):
         grb.analDate =\
         julian_to_datetime(grb.julianDay)
+        if grb.has_key('stepRange'):
+            # this is a hack to work around grib_api bug
+            # sometimes stepUnits and indicatorOfUnitOfTimeRange 
+            # are inconsistent.
+            grb.stepUnits = grb.indicatorOfUnitOfTimeRange
+            ftime = grb['stepRange'] # computed key, uses stepUnits
+            # if it's a range, use the end of the range to define validDate
+            try: 
+                ftime = float(ftime.split('-')[1])
+            except:
+                ftime = grb.forecastTime
+        else:
+            ftime = grb.forecastTime
         if grb.fcstimeunits == 'hrs':
             grb.validDate =\
-            julian_to_datetime(grb.julianDay+grb.forecastTime/24.)
+            julian_to_datetime(grb.julianDay+ftime/24.)
         elif grb.fcstimeunits == 'mins':
             grb.validDate =\
-            julian_to_datetime(grb.julianDay+grb.forecastTime/1440.)
+            julian_to_datetime(grb.julianDay+ftime/1440.)
         elif grb.fcstimeunits == 'days':
             grb.validDate =\
-            julian_to_datetime(grb.julianDay+grb.forecastTime)
+            julian_to_datetime(grb.julianDay+ftime)
     return grb
 
 cdef class gribmessage(object):
@@ -648,13 +649,14 @@ cdef class gribmessage(object):
 
     Each grib message has attributes corresponding to grib message
     keys for 
-    U{GRIB1 <http://www.ecmwf.int/publications/manuals/d/gribapi/fm92/grib21>}
+    U{GRIB1 <http://www.ecmwf.int/publications/manuals/d/gribapi/fm92/grib1>}
     and
     U{GRIB2 <http://www.ecmwf.int/publications/manuals/d/gribapi/fm92/grib2/>}.
     Parameter names are
-    are given by the C{name}, C{shortName} and C{paramID} U{keys
-    <http://http://www.ecmwf.int/publications/manuals/d/gribapi/param/>}.
-    Pygrib also defines some special pygrib attributes:
+    are given by the C{name}, C{shortName} and C{paramID}
+    U{keys <http://www.ecmwf.int/publications/manuals/d/gribapi/param/>}.
+    pygrib also defines some special attributes which are defined below
+    under the heading B{Instance Variables}.
 
     @ivar messagenumber: The grib message number in the file.
 
@@ -673,9 +675,10 @@ cdef class gribmessage(object):
     and time for the forecast. Only set if forecastTime and julianDay keys
     exist.
 
-    @ivar validDate:  A python datetime instanace describing the valid date
+    @ivar validDate:  A python datetime instance describing the valid date
     and time for the forecast. Only set if forecastTime and julianDay keys
-    exist, and fcstimeunits is 'mins','hrs' or 'days'."""
+    exist, and fcstimeunits is 'mins','hrs' or 'days'. If forecast time
+    is a range, then C{validDate} corresponds to the end of the range."""
     cdef grib_handle *_gh
     cdef public messagenumber, projparams, validDate, analDate,\
     expand_reduced, _ro_keys, _all_keys, fcstimeunits
