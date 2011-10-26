@@ -26,4 +26,5 @@ else:
                     sys.stdout.write('%s = %s\n'%(k,v))
                 except:
                     sys.stdout.write('%s = NOT FOUND\n'%k)
+sys.stdout.write('packing = %s\n' % grb.packingType)
 grbs.close()
