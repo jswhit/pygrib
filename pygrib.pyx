@@ -1329,6 +1329,8 @@ cdef class gribmessage(object):
             # workaround for grib_api bug with complex packing.
             # (distinctLatitudes throws error)
             if self.packingType.startswith('grid_complex'):
+                # this is not strictly correct for gaussian grids,
+                # but the error is very small.
                 if lat1 < lat2:
                     lats = np.linspace(lat1,lat2,ny)
                 else:
