@@ -1,5 +1,6 @@
 version 1.9.1 (not yet released)
 ================================
+* fix bug for reg lat/lon and gaussian grids introduced in 1.9.0.
 * add type of forecast interval (max,accum,avg) to gribmessage.__repr__
 * add forecast time units in gribmessage.__repr__
 * fix bug in ncepgrib2 (issue 38)

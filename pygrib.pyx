@@ -731,9 +731,9 @@ cdef class gribmessage(object):
             # are inconsistent.
             self.stepUnits = self.indicatorOfUnitOfTimeRange
             ftime = self['stepRange']
-            if self.has_key('stepType') and self['stepType'] != 'instant':
+            if self.valid_key('stepType') and self['stepType'] != 'instant':
                 inventory.append(':fcst time %s %s (%s)'%\
-                        (ftime,ftimeunits,self.stepType))
+                    (ftime,ftimeunits,self.stepType))
             else:
                 inventory.append(':fcst time %s %s'% (ftime,ftimeunits))
         elif self.valid_key('forecastTime'):
@@ -1326,7 +1326,15 @@ cdef class gribmessage(object):
             ny = self['Nj']
             lat1 = self['latitudeOfFirstGridPointInDegrees']
             lat2 = self['latitudeOfLastGridPointInDegrees']
-            lats = np.linspace(lat1,lat2,ny)
+            # workaround for grib_api bug with complex packing.
+            # (distinctLatitudes throws error)
+            if self.packingType.startswith('grid_complex'):
+                if lat1 < lat2:
+                    lats = np.linspace(lat1,lat2,ny)
+                else:
+                    lats = np.linspace(lat2,lat1,ny)
+            else:
+                lats = self['distinctLatitudes']
             lons,lats = np.meshgrid(lons,lats) 
         elif self['gridType'] == 'reduced_gg': # reduced global gaussian grid
             lats = self['distinctLatitudes']
