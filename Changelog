@@ -1,3 +1,11 @@
+since 1.9.1
+===========
+* fix calculation of longitudes for gridType='regular_ll', when
+  longitudeOfLastGridPoint < longitudeOfFirstGridPoint.  For 
+  example, for ECMWF grids sometimes longitudeOfFirstGridPoint = 0
+  and longitudeOfLastGridPoint = -0.5.  In such cases, 
+  longitudeOfLastGridPoint should be treated as 359.5 (issue 39)
+
 version 1.9.1 (svn revision 527)
 ================================
 * validDate now correctly defined if forecast time units
