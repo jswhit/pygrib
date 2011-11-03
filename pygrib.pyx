@@ -1372,6 +1372,8 @@ cdef class gribmessage(object):
             nx = self['Ni']
             lon1 = self['longitudeOfFirstGridPointInDegrees']
             lon2 = self['longitudeOfLastGridPointInDegrees']
+            if lon1 >= 0 and lon2 < 0 and self.iDirectionIncrement > 0:
+                lon2 = 360+lon2
             lons = np.linspace(lon1,lon2,nx)
             ny = self['Nj']
             lat1 = self['latitudeOfFirstGridPointInDegrees']
