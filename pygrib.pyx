@@ -1370,16 +1370,16 @@ cdef class gribmessage(object):
 
         if self['gridType'] in ['regular_gg','regular_ll']: # regular lat/lon grid
             nx = self['Ni']
+            ny = self['Nj']
             lon1 = self['longitudeOfFirstGridPointInDegrees']
             lon2 = self['longitudeOfLastGridPointInDegrees']
             if lon1 >= 0 and lon2 < 0 and self.iDirectionIncrement > 0:
                 lon2 = 360+lon2
-            lons = np.linspace(lon1,lon2,nx)
-            ny = self['Nj']
             lat1 = self['latitudeOfFirstGridPointInDegrees']
             lat2 = self['latitudeOfLastGridPointInDegrees']
             # workaround for grib_api bug with complex packing.
-            # (distinctLatitudes throws error)
+            # (distinctLongitudes, distinctLatitudes throws error,
+            #  so use np.linspace to define values)
             if self.packingType.startswith('grid_complex'):
                 # this is not strictly correct for gaussian grids,
                 # but the error is very small.
@@ -1387,8 +1387,10 @@ cdef class gribmessage(object):
                     lats = np.linspace(lat1,lat2,ny)
                 else:
                     lats = np.linspace(lat2,lat1,ny)
+                lons = np.linspace(lon1,lon2,nx)
             else:
                 lats = self['distinctLatitudes']
+                lons = self['distinctLongitudes']
             lons,lats = np.meshgrid(lons,lats) 
         elif self['gridType'] == 'reduced_gg': # reduced global gaussian grid
             lats = self['distinctLatitudes']
