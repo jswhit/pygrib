@@ -23,7 +23,6 @@ Required
   transformations B{or} U{matplotlib<http://matplotlib.sf.net>} and
   the U{basemap<http://matplotlib.sf.net/basemap/doc/html>} toolkit.
   Pyproj 1.8.9 is required for Python 3.
-  
 - U{GRIB API<http://www.ecmwf.int/products/data/software/grib_api.html>} C library
   for encoding and decoding GRIB messages (edition 1 and edition 2).
   Version 1.8.0 or higher required.
@@ -31,6 +30,12 @@ Required
   U{Jasper<http://www.ece.uvic.ca/~mdadams/jasper>} or 
   U{OpenJPEG<http://www.openjpeg.org>} for JPEG200 encoding,
   and U{PNG<http://www.libpng.org/pub/png/libpng.html>} for PNG encoding.
+
+These dependencies are available via the package management system of most
+Linux distributions, and on MacOS X using U{macports<http://macports.org/>}. 
+If you build grib_api yourself as a static library on a 64-bit system
+you may need to set C{CFLAGS} to C{'-O2 -fPIC'} before running the C{configure}
+script.
 
 Installation
 ============
