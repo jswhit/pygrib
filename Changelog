@@ -1,5 +1,5 @@
-since 1.9.1
-===========
+version 1.9.2 (not yet released)
+================================
 * fix calculation of longitudes for gridType='regular_ll', when
   longitudeOfLastGridPoint < longitudeOfFirstGridPoint.  For 
   example, for ECMWF grids sometimes longitudeOfFirstGridPoint = 0
