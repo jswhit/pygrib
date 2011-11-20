@@ -35,7 +35,10 @@ These dependencies are available via the package management system of most
 Linux distributions, and on MacOS X using U{macports<http://macports.org/>}. 
 If you build grib_api yourself as a static library on a 64-bit system
 you may need to set C{CFLAGS} to C{'-O2 -fPIC'} before running the C{configure}
-script.
+script.  To use pygrib on Windows, you must use the
+U{Cygwin<http://cygwin.com>} environment, since the grib_api library requires a 
+posix environment.  Cygwin installation instructions are available on the
+U{Wiki<http://code.google.com/p/pygrib/wiki/CygwinWindowsInstall>}.
 
 Installation
 ============
