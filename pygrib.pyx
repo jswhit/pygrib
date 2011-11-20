@@ -288,6 +288,11 @@ def _get_grib_api_version():
 grib_api_version = _get_grib_api_version()
 
 def gaulats(object nlats):
+    """
+    gaulats(nlats)
+
+    Returns nlats gaussian latitudes, in degrees, oriented from
+    north to south.  nlats must be even."""
     cdef ndarray lats
     if nlats%2:
         raise ValueError('nlats must be even')
