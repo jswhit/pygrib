@@ -485,7 +485,6 @@ cdef class open(object):
         cdef grib_handle* gh 
         cdef int err
         rewind(self._fd)
-        self._gh = NULL
         self.messagenumber = 0
     def message(self, N):
         """
@@ -542,6 +541,7 @@ Example usage:
 17:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 30000 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst
 """
         msgnum = self.tell()
+        self.rewind() # always search from beginning
         grbs = [grb for grb in self if _find(grb, **kwargs)]
         self.seek(msgnum) # leave iterator in original position.
         return grbs

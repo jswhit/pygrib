@@ -1,5 +1,8 @@
 version 1.9.2 (not yet released)
 ================================
+* change behavior of open.select, so that it always searches
+  from beginning of file (not from where iterator is currently
+  positioned).
 * fix calculation of longitudes for gridType='regular_ll', when
   longitudeOfLastGridPoint < longitudeOfFirstGridPoint.  For 
   example, for ECMWF grids sometimes longitudeOfFirstGridPoint = 0
