@@ -1708,8 +1708,7 @@ Example usage:
                 err = grib_index_select_double(self._gi, key, doubval)
                 if err:
                     raise RuntimeError(grib_get_error_message(err))
-            elif typ == 's' or isinstance(v,str) or isinstance(v,bytes) or\
-                 isinstance(v,unicode):
+            elif typ == 's' or _is_stringlike(v):
                 bytestr = _strencode(v)
                 strval = bytestr
                 err = grib_index_select_string(self._gi, key, strval)
@@ -1738,12 +1737,18 @@ Example usage:
         deallocate C structures associated with class instance"""
         grib_index_delete(self._gi)
 
+def _is_stringlike(a):
+    if type(a) == str or type(a) == bytes or type(a) == unicode:
+        return True
+    else:
+        return False
+
 def _is_container(a):
     # is object container-like?  (can test for
     # membership with "is in", but not a string)
     try: 1 in a
     except: return False
-    if type(a) == str or type(a) == bytes or type(a) == unicode: return False
+    if _is_stringlike(a): return False
     return True
 
 def _find(grb, **kwargs):
