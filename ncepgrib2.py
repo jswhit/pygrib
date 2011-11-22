@@ -1204,7 +1204,7 @@ def _repeatlast(numfields,listin):
 def _flatten(lst):
     try: 
         flist = functools.reduce(operator.add,lst)
-    except NameError:
+    except NameError: # no reduce in python 3.
         import functools
         flist = functools.reduce(operator.add,lst)
     return flist
