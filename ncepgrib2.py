@@ -1202,7 +1202,12 @@ def _repeatlast(numfields,listin):
     return listin
 
 def _flatten(lst):
-    return reduce(operator.add,lst)
+    try: 
+        flist = functools.reduce(operator.add,lst)
+    except NameError:
+        import functools
+        flist = functools.reduce(operator.add,lst)
+    return flist
  
 
 class Grib2Encode:

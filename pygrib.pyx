@@ -1708,7 +1708,8 @@ Example usage:
                 err = grib_index_select_double(self._gi, key, doubval)
                 if err:
                     raise RuntimeError(grib_get_error_message(err))
-            elif typ == 's' or isinstance(v,str) or isinstance(v,bytes):
+            elif typ == 's' or isinstance(v,str) or isinstance(v,bytes) or\
+                 isinstance(v,unicode):
                 bytestr = _strencode(v)
                 strval = bytestr
                 err = grib_index_select_string(self._gi, key, strval)
@@ -1742,7 +1743,7 @@ def _is_container(a):
     # membership with "is in", but not a string)
     try: 1 in a
     except: return False
-    if type(a) == str or type(a) == bytes: return False
+    if type(a) == str or type(a) == bytes or type(a) == unicode: return False
     return True
 
 def _find(grb, **kwargs):

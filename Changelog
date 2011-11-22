@@ -1,5 +1,6 @@
 version 1.9.2 (not yet released)
 ================================
+* python 3 fix for ncepgrib2.
 * change behavior of open.select, so that it always searches
   from beginning of file (not from where iterator is currently
   positioned).
