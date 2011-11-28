@@ -482,8 +482,6 @@ cdef class open(object):
         self.closed = True
     def rewind(self):
         """rewind iterator (same as seek(0))"""
-        cdef grib_handle* gh 
-        cdef int err
         rewind(self._fd)
         self.messagenumber = 0
     def message(self, N):
@@ -492,7 +490,6 @@ cdef class open(object):
         
         retrieve N'th message in iterator.
         same as seek(N-1) followed by readline()."""
-        cdef int err
         if N < 1:
             raise IOError('grb message numbers start at 1')
         # if iterator positioned past message N, reposition at beginning.
@@ -549,6 +546,7 @@ Example usage:
         """advance iterator n messages from current position.
         if return_msgs==True, grib message instances are returned
         in a list"""
+        cdef int err
         if nmsgs < 0: 
             raise ValueError('nmsgs must be >= 0 in _advance')
         if return_msgs: grbs=[]
@@ -580,9 +578,11 @@ def julian_to_datetime(object jd):
     julianDay and forecastTime keys."""
     cdef double julday
     cdef long year, month, day, hour, minute, second
-    cdef int ierr
+    cdef int err
     julday = jd
-    ierr = grib_julian_to_datetime(julday, &year, &month, &day, &hour, &minute, &second)
+    err = grib_julian_to_datetime(julday, &year, &month, &day, &hour, &minute, &second)
+    if err:
+        raise RuntimeError(grib_get_error_message(err))
     return datetime(year, month, day, hour, minute, second)
 
 def datetime_to_julian(object d):
@@ -596,6 +596,8 @@ def datetime_to_julian(object d):
     year = d.year; month = d.month; day = d.day; hour = d.hour
     minute = d.minute; second = d.second
     err = grib_datetime_to_julian(year,month,day,hour,minute,second,&julday)
+    if err:
+        raise RuntimeError(grib_get_error_message(err))
     return julday
 
 cdef _create_gribmessage(grib_handle *gh, object messagenumber):
