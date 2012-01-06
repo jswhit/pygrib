@@ -1,3 +1,7 @@
+since version 1.9.2
+===================
+* update NCEP grib lib (g2clib) to version 1.2.3.
+
 version 1.9.2 (svn revision 544)
 ================================
 * python 3 fix for ncepgrib2.
