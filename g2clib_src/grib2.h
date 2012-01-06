@@ -2,7 +2,7 @@
 #define _grib2_H
 #include<stdio.h>
 
-#define G2_VERSION "g2clib-1.2.2"
+#define G2_VERSION "g2clib-1.2.3"
 /*                .      .    .                                       .
 //   PRGMMR: Gilbert         ORG: W/NP11    DATE: 2002-10-25
 //

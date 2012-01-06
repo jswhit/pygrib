@@ -108,17 +108,23 @@ int comunpack(unsigned char *cpack,g2int lensec,g2int idrsnum,g2int *idrstmpl,g2
 //
       if (idrsnum == 3) {
          if (nbitsd != 0) {
-              gbit(cpack,&isign,iofst,1);
-              iofst=iofst+1;
-              gbit(cpack,&ival1,iofst,nbitsd-1);
-              iofst=iofst+nbitsd-1;
-              if (isign == 1) ival1=-ival1;
+// wne mistake here shoujld be unsigned int
+              gbit(cpack,&ival1,iofst,nbitsd);
+              iofst=iofst+nbitsd;
+//              gbit(cpack,&isign,iofst,1);
+//              iofst=iofst+1;
+//              gbit(cpack,&ival1,iofst,nbitsd-1);
+//              iofst=iofst+nbitsd-1;
+//              if (isign == 1) ival1=-ival1;
               if (idrstmpl[16] == 2) {
-                 gbit(cpack,&isign,iofst,1);
-                 iofst=iofst+1;
-                 gbit(cpack,&ival2,iofst,nbitsd-1);
-                 iofst=iofst+nbitsd-1;
-                 if (isign == 1) ival2=-ival2;
+// wne mistake here shoujld be unsigned int
+                 gbit(cpack,&ival2,iofst,nbitsd);
+                 iofst=iofst+nbitsd;
+//                 gbit(cpack,&isign,iofst,1);
+//                 iofst=iofst+1;
+//                 gbit(cpack,&ival2,iofst,nbitsd-1);
+//                 iofst=iofst+nbitsd-1;
+//                 if (isign == 1) ival2=-ival2;
               }
               gbit(cpack,&isign,iofst,1);
               iofst=iofst+1;
@@ -224,7 +230,7 @@ int comunpack(unsigned char *cpack,g2int lensec,g2int idrsnum,g2int *idrstmpl,g2
          // missing values included
          ifldmiss=(g2int *)malloc(ndpts*sizeof(g2int));
          //printf("ALLOC ifldmiss: %d %x\n",(int)ndpts,ifldmiss);
-         //for (j=0;j<ndpts;j++) ifldmiss[j]=0;
+         for (j=0;j<ndpts;j++) ifldmiss[j]=0;
          n=0;
          non=0;
          for (j=0;j<ngroups;j++) {

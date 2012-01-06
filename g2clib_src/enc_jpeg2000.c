@@ -1,5 +1,5 @@
 #ifndef USE_JPEG2000
- void dummy1(void) {}
+ void dummy(void) {}
 #else   /* USE_JPEG2000 */
 
 #include <stdio.h>
