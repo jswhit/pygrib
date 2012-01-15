@@ -1349,6 +1349,7 @@ class Grib2Encode:
         """
  Add a product definition section, data representation section,
  bitmap section and data section to the GRIB2 message (sections 4-7).
+ Must be called after grid definition section is created with L{addgrid}.
 
  @param pdtnum: Product Definition Template Number (see Code U{Table
  4.0<http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table4-0.shtml>})
@@ -1373,26 +1374,12 @@ class Grib2Encode:
  spatial differencing, if desired.
 
  @param field:  numpy array of data points to pack.
- If field is a masked array, then the unmasked points are
- extracted and converted to a numpy array, the bitmap is set to field.mask,
- bitmapflag is set to zero and the bitmapflag and bmap keywords are ignored.
+ If field is a masked array, then a bitmap is created from
+ the mask.
 
  @param coordlist: Sequence containing floating point values intended to document
  the vertical discretization with model data
  on hybrid coordinate vertical levels. Default None.
-
- @param bitmapflag: Bitmap indicator (see Code U{Table
- 6.0<http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table6-0.shtml>})
- Default 255. Ignored if field is a masked array.
-  - 0 = bitmap applies and is included in Section 6.
-  - 1-253 = Predefined bitmap applies
-  - 254 = Previously defined bitmap applies to this field
-    (it still must be provided, it just won't
-    be encoded into the message again)
-  - 255 = Bit map does not apply to this product.
-
- @param bitmap: int32 numpy array containing bitmap to be added 
- (if bitmapflag=0 or 254). Default None. Ignored if field is a masked array.
         """
         if not hasattr(self,'scanmodeflags'):
             raise ValueError('addgrid must be called before addfield')
@@ -1417,10 +1404,8 @@ class Grib2Encode:
             bmap = 1 - np.ravel(field.mask.astype('i'))
             bitmapflag  = 0
         else:
-            if bitmap is not None:
-                bmap = np.ravel(bitmap.astype('i'))
-            else:
-                bmap = None
+            bitmapflag = 255
+            bmap = None
         if coordlist is not None:
             crdlist = np.array(coordlist,'f')
         else:

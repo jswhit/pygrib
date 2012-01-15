@@ -19,8 +19,6 @@ grbo.addgrid(grb.grid_definition_info,grb.grid_definition_template)
 print ma.isMA(data)
 print data.min(), data.max()
 print grb.bitmap_indicator_flag
-# specify bitmap
-#grbo.addfield(grb.product_definition_template_number,grb.product_definition_template,grb.data_representation_template_number,grb.data_representation_template,data,bitmapflag=0,bitmap=grb._bitmap)
 # bitmap read from data mask.
 grbo.addfield(grb.product_definition_template_number,grb.product_definition_template,grb.data_representation_template_number,grb.data_representation_template,data)
 # finalize the grib message.
