@@ -1,65 +1,57 @@
+import pygrib
+import numpy as np
+from numpy import ma
 from ncepgrib2 import Grib2Decode, Grib2Encode
-import numpy as N
-import sys
-# open a GRIB2 file, create a Grib2 class instance.
-filein = '../sampledata/gfs.grb'
-sys.stdout.write('input grib file: %s\n' % filein)
-grbs = Grib2Decode(filein)
-# open a file for output.
-fileout = 'test.grb'
-sys.stdout.write('output grib file: %s\n' % fileout)
-f=open(fileout,'wb')
-# test encoding sxn0, sxn1.
-sys.stdout.write('message number,field number,bitmap flag,min,max:\n')
-sys.stdout.write('------------------------------------------------\n')
-for nmsg,grb in enumerate(grbs):
-    grbo = Grib2Encode(grb.discipline_code,grb.identification_section)
-    # add grid definition template
-    if hasattr(grb,'grid_definition_list'):
-       grbo.addgrid(grb.grid_definition_info,grb.grid_definition_template,deflist=grb.grid_definition_list)
-    else:
-       grbo.addgrid(grb.grid_definition_info,grb.grid_definition_template)
-    field = grb.data()
-    bitmapflag = grb.bitmap_indicator_flag
-    if bitmapflag == 0:
-        bitmap = grb._bitmap
-    else:
-        bitmap = None
-    if bitmap is not None:
-        fieldcompress = N.compress(N.ravel(bitmap),N.ravel(field))
-        fieldmin = fieldcompress.min(); fieldmax = fieldcompress.max()
-    else:
-        fieldmin = field.min(); fieldmax = field.max()
-    sys.stdout.write('%s %s %s %s\n' % (nmsg+1,bitmapflag,fieldmin,fieldmax))
-    # reset data to match scanning mode flags.
-    # (scanning mode madness is undone when data is extracted
-    #  from grib message - to write it back it correctly it
-    #  must be reset to be consistent with scanning model flags).
-    # rows scan in the -x direction (so flip)
-    if grb.scanmodeflags[0]:
-        fieldsave = field.astype('f') # casting makes a copy
-        field[:,:] = fieldsave[:,::-1]
-    # columns scan in the -y direction (so flip)
-    if not grb.scanmodeflags[1]:
-        fieldsave = field.astype('f') # casting makes a copy
-        field[:,:] = fieldsave[::-1,:]
-    # adjacent rows scan in opposite direction.
-    # (flip every other row)
-    if grb.scanmodeflags[3]:
-        fieldsave = field.astype('f') # casting makes a copy
-        field[1::2,:] = fieldsave[1::2,::-1]
-    # add product definition template, data representation template
-    # and data (field and optional bitmap).
-    if hasattr(grb,'extra_vertical_coordinate_info'):
-        grbo.addfield(grb.product_definition_template_number,grb.product_definition_template,grb.data_representation_template_number,grb.data_representation_template,field,coordlist=grb.extra_vertical_coordinate_info,bitmapflag=bitmapflag,bitmap=bitmap)
-    else:
-        grbo.addfield(grb.product_definition_template_number,grb.product_definition_template,grb.data_representation_template_number,grb.data_representation_template,field,bitmapflag=bitmapflag,bitmap=bitmap)
-    # finalize the grib message.
-    grbo.end()
-    # write it to the file.
-    f.write(grbo.msg)
+from mpl_toolkits.basemap import Basemap
+import matplotlib.pyplot as plt
+
+grbs = pygrib.open('../sampledata/gfs.t12z.pgrbf120.2p5deg.grib2')
+grbmsg = grbs[208] # soil moisture
+data = grbmsg.values
+print data.min(), data.max()
+
+grb = Grib2Decode(grbmsg.tostring(), gribmsg=True)
+f=open('test_masked.grb','wb')
+grbo = Grib2Encode(grb.discipline_code,grb.identification_section)
+grbo.addgrid(grb.grid_definition_info,grb.grid_definition_template)
+# add product definition template, data representation template
+# and data (data and optional bitmap).
+print ma.isMA(data)
+print data.min(), data.max()
+print grb.bitmap_indicator_flag
+# specify bitmap
+#grbo.addfield(grb.product_definition_template_number,grb.product_definition_template,grb.data_representation_template_number,grb.data_representation_template,data,bitmapflag=0,bitmap=grb._bitmap,scanmodeflags=grb.scanmodeflags)
+# bitmap read from data mask.
+grbo.addfield(grb.product_definition_template_number,grb.product_definition_template,grb.data_representation_template_number,grb.data_representation_template,data,scanmodeflags=grb.scanmodeflags)
+# finalize the grib message.
+grbo.end()
+# write it to the file.
+f.write(grbo.msg)
 # close the output file
 f.close()
-# close the input GRIB2 file.
-sys.stdout.write('done! '+filein+' and '+fileout+' should have identical data\n')
-sys.stdout.write('(run grib_list on both and compare output)\n')
+
+grbs = pygrib.open('test_masked.grb')
+grb = grbs.readline()
+#grbs = pygrib.open('../sampledata/gfs.t12z.pgrbf120.2p5deg.grib2')
+#grb = grbs[208] # soil moisture
+lats,lons = grb.latlons()
+data = grb.values
+#data = ma.masked_values(data,9999.0)
+print data.min(), data.max()
+print ma.isMA(data)
+m = Basemap(lon_0=180,projection='kav7')
+x, y = m(lons, lats)
+CS = m.contourf(x,y,data,15,cmap=plt.cm.jet)
+m.drawmapboundary(fill_color='w')
+m.colorbar()
+m.drawcoastlines()
+# draw parallels
+delat = 30.
+circles = np.arange(-90.,90.+delat,delat)
+m.drawparallels(circles,labels=[1,0,0,0])
+# draw meridians
+delon = 60.
+meridians = np.arange(0,360,delon)
+m.drawmeridians(meridians,labels=[0,0,0,1])
+plt.title('soil moisture')
+plt.show()
