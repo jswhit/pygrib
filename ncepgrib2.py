@@ -1321,9 +1321,31 @@ class Grib2Encode:
             dflist = np.array(deflist,'i')
         else:
             dflist = None
+        self.scanmodeflags = None
+        gdtnum = gdsinfo[4]
+        if gdtnum in [0,1,2,3,40,41,42,43,44,203,205,32768,32769]:
+            self.scanmodeflags = _dec2bin(gdtmpl[18])[0:4]
+        elif gdtnum == 10: # mercator
+            self.scanmodeflags = _dec2bin(gdtmpl[15])[0:4]
+        elif gdtnum == 20: # stereographic
+            self.scanmodeflags = _dec2bin(gdtmpl[17])[0:4]
+        elif gdtnum == 30: # lambert conformal
+            self.scanmodeflags = _dec2bin(gdtmpl[17])[0:4]
+        elif gdtnum == 31: # albers equal area.
+            self.scanmodeflags = _dec2bin(gdtmpl[17])[0:4]
+        elif gdtnum == 90: # near-sided vertical perspective satellite projection
+            self.scanmodeflags = _dec2bin(gdtmpl[16])[0:4]
+        elif gdtnum == 110: # azimuthal equidistant.
+            self.scanmodeflags = _dec2bin(gdtmpl[15])[0:4]
+        elif gdtnum == 120:
+            self.scanmodeflags = _dec2bin(gdtmpl[6])[0:4]
+        elif gdtnum == 204: # curvilinear orthogonal
+            self.scanmodeflags = _dec2bin(gdtmpl[18])[0:4]
+        elif gdtnum in [1000,1100]:
+            self.scanmodeflags = _dec2bin(gdtmpl[12])[0:4]
         self.msg,msglen=g2clib.grib2_addgrid(self.msg,np.array(gdsinfo,'i'),np.array(gdtmpl,'i'),dflist)
 
-    def addfield(self,pdtnum,pdtmpl,drtnum,drtmpl,field,coordlist=None,bitmapflag=255,bitmap=None,scanmodeflags=None):
+    def addfield(self,pdtnum,pdtmpl,drtnum,drtmpl,field,coordlist=None,bitmapflag=255,bitmap=None):
         """
  Add a product definition section, data representation section,
  bitmap section and data section to the GRIB2 message (sections 4-7).
@@ -1371,26 +1393,23 @@ class Grib2Encode:
 
  @param bitmap: int32 numpy array containing bitmap to be added 
  (if bitmapflag=0 or 254). Default None. Ignored if field is a masked array.
-
- @param scanmodeflags: scanning mode flags from Table 3.4
- (U{Table 3.4
- <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table3-4.shtml>}).
- Default None.  If given, the input field array is reordered to be 
- consistent with the specified scan order.
         """
-        # if scanmodeflags given, reorder array to be consistent with
+        if not hasattr(self,'scanmodeflags'):
+            raise ValueError('addgrid must be called before addfield')
+        # reorder array to be consistent with
         # specified scan order.
-        if scanmodeflags is not None:
-            if scanmodeflags[0]:
+        if self.scanmodeflags is not None:
+            if self.scanmodeflags[0]:
+            # rows scan in the -x direction (so flip)
                 fieldsave = field.astype('f') # casting makes a copy
                 field[:,:] = fieldsave[:,::-1]
             # columns scan in the -y direction (so flip)
-            if not scanmodeflags[1]:
+            if not self.scanmodeflags[1]:
                 fieldsave = field.astype('f') # casting makes a copy
                 field[:,:] = fieldsave[::-1,:]
             # adjacent rows scan in opposite direction.
             # (flip every other row)
-            if scanmodeflags[3]:
+            if self.scanmodeflags[3]:
                 fieldsave = field.astype('f') # casting makes a copy
                 field[1::2,:] = fieldsave[1::2,::-1]
         fld = field.astype('f')
