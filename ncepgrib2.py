@@ -1309,11 +1309,11 @@ class Grib2Encode:
     <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table3-1.shtml>})
 
  @param gdtmpl: Contains the data values for the specified Grid Definition 
- Template ( NN=gds[4] ).  Each element of this integer  
+ Template ( NN=gdsinfo[4] ).  Each element of this integer  
  array contains an entry (in the order specified) of Grid 
  Definition Template 3.NN 
 
- @param deflist: (Used if gds[2] != 0)  Sequence containing the
+ @param deflist: (Used if gdsinfo[2] != 0)  Sequence containing the
  number of grid points contained in each row (or column) 
  of a non-regular grid.
         """
