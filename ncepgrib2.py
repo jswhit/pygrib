@@ -1395,8 +1395,7 @@ class Grib2Encode:
                 field[1::2,:] = fieldsave[1::2,::-1]
         fld = field.astype('f')
         if ma.isMA(field):
-            bmap = np.ravel(field.mask.astype('i'))
-            bmap = 1 - bmap
+            bmap = 1 - np.ravel(field.mask.astype('i'))
             bitmapflag  = 0
         else:
             if bitmap is not None:
