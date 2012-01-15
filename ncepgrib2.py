@@ -1350,13 +1350,18 @@ class Grib2Encode:
  Use this to specify scaling factors and order of
  spatial differencing, if desired.
 
- @param field:  float32 numpy array of data points to pack.
+ @param field:  numpy array of data points to pack.
+ If field is a masked array, then the unmasked points are
+ extracted and converted to a numpy array, the bitmap is set to field.mask,
+ bitmapflag is set to zero and the bitmapflag and bmap keywords are ignored.
 
  @param coordlist: Sequence containing floating point values intended to document
  the vertical discretization with model data
  on hybrid coordinate vertical levels. Default None.
 
- @param bitmapflag: Bitmap indicator (see Code U{Table 6.0<http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table6-0.shtml>}) Default 255.
+ @param bitmapflag: Bitmap indicator (see Code U{Table
+ 6.0<http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table6-0.shtml>})
+ Default 255. Ignored if field is a masked array.
   - 0 = bitmap applies and is included in Section 6.
   - 1-253 = Predefined bitmap applies
   - 254 = Previously defined bitmap applies to this field
@@ -1365,13 +1370,18 @@ class Grib2Encode:
   - 255 = Bit map does not apply to this product.
 
  @param bitmap: int32 numpy array containing bitmap to be added 
- (if bitmapflag=0 or 254). Default None.
+ (if bitmapflag=0 or 254). Default None. Ignored if field is a masked array.
         """
-        fld = np.array(field.astype('f'),'f')
-        if bitmap is not None:
-            bmap = np.ravel(np.array(bitmap,'i'))
+        if ma.isMA(field):
+            bmap = np.ravel(field.mask.astype('i'))
+            fld = field.compressed().astype('f')
+            bitmapflag  = 0
         else:
-            bmap = None
+            fld = field.astype('f')
+            if bitmap is not None:
+                bmap = np.ravel(bitmap.astype('i'))
+            else:
+                bmap = None
         if coordlist is not None:
             crdlist = np.array(coordlist,'f')
         else:
