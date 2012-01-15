@@ -1323,7 +1323,7 @@ class Grib2Encode:
             dflist = None
         self.msg,msglen=g2clib.grib2_addgrid(self.msg,np.array(gdsinfo,'i'),np.array(gdtmpl,'i'),dflist)
 
-    def addfield(self,pdtnum,pdtmpl,drtnum,drtmpl,field,coordlist=None,bitmapflag=255,bitmap=None):
+    def addfield(self,pdtnum,pdtmpl,drtnum,drtmpl,field,coordlist=None,bitmapflag=255,bitmap=None,scanmodeflags=None):
         """
  Add a product definition section, data representation section,
  bitmap section and data section to the GRIB2 message (sections 4-7).
@@ -1371,7 +1371,28 @@ class Grib2Encode:
 
  @param bitmap: int32 numpy array containing bitmap to be added 
  (if bitmapflag=0 or 254). Default None. Ignored if field is a masked array.
+
+ @param scanmodeflags: scanning mode flags from Table 3.4
+ (U{Table 3.4
+ <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table3-4.shtml>}).
+ Default None.  If given, the input field array is reordered to be 
+ consistent with the specified scan order.
         """
+        # if scanmodeflags given, reorder array to be consistent with
+        # specified scan order.
+        if scanmodeflags is not None:
+            if scanmodeflags[0]:
+                fieldsave = field.astype('f') # casting makes a copy
+                field[:,:] = fieldsave[:,::-1]
+            # columns scan in the -y direction (so flip)
+            if not scanmodeflags[1]:
+                fieldsave = field.astype('f') # casting makes a copy
+                field[:,:] = fieldsave[::-1,:]
+            # adjacent rows scan in opposite direction.
+            # (flip every other row)
+            if scanmodeflags[3]:
+                fieldsave = field.astype('f') # casting makes a copy
+                field[1::2,:] = fieldsave[1::2,::-1]
         fld = field.astype('f')
         if ma.isMA(field):
             bmap = np.ravel(field.mask.astype('i'))
