@@ -1372,12 +1372,12 @@ class Grib2Encode:
  @param bitmap: int32 numpy array containing bitmap to be added 
  (if bitmapflag=0 or 254). Default None. Ignored if field is a masked array.
         """
+        fld = field.astype('f')
         if ma.isMA(field):
             bmap = np.ravel(field.mask.astype('i'))
-            fld = field.compressed().astype('f')
+            bmap = 1 - bmap
             bitmapflag  = 0
         else:
-            fld = field.astype('f')
             if bitmap is not None:
                 bmap = np.ravel(bitmap.astype('i'))
             else:
