@@ -56,4 +56,6 @@ g2libc-1.2.1 - August   2010 - Added PDT 4.40,4,41,4,42,4,43 for Atmospheric Che
                              - Added GDT 3.32769 Rot Lat/Lon None E-grid (Arakawa)
                              - If section 2 has zero length, return IERR=0
 
-g2libc-1.2.2 - December 2010 - Corrected PDT 4.42,4.43 for Atmospheric Chemical Constituents
+g2libc-1.2.2 - March    2011 - Corrected PDT 4.42,4.43 for Atmospheric Chemical Constituents
+
+g2libc-1.2.3 - November 2011 - Fixed bugs in routines dec_png.c and enc_png.c
