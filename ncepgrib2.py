@@ -628,7 +628,8 @@ lat/lon values returned by grid method may be incorrect."""
 
     def data(self,fill_value=9.9692099683868690e+36,masked_array=True,expand=True,order=None):
         """
- returns an unpacked data grid.
+ returns an unpacked data grid.  Can also be accomplished with L{values}
+ property.
  
  @keyword fill_value: missing or masked data is filled with this value
  (default 9.9692099683868690e+36).
@@ -743,7 +744,7 @@ lat/lon values returned by grid method may be incorrect."""
  return lats,lons (in degrees) of grid.
  currently can handle reg. lat/lon, global gaussian, mercator, stereographic,
  lambert conformal, albers equal-area, space-view and azimuthal 
- equidistant grids.
+ equidistant grids.  L{latlons} method does the same thing.
 
  @return: C{B{lats},B{lons}}, float32 numpy arrays 
  containing latitudes and longitudes of grid (in degrees).
