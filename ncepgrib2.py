@@ -1345,7 +1345,7 @@ class Grib2Encode:
             self.scanmodeflags = _dec2bin(gdtmpl[12])[0:4]
         self.msg,msglen=g2clib.grib2_addgrid(self.msg,np.array(gdsinfo,'i'),np.array(gdtmpl,'i'),dflist)
 
-    def addfield(self,pdtnum,pdtmpl,drtnum,drtmpl,field,coordlist=None,bitmapflag=255,bitmap=None):
+    def addfield(self,pdtnum,pdtmpl,drtnum,drtmpl,field,coordlist=None):
         """
  Add a product definition section, data representation section,
  bitmap section and data section to the GRIB2 message (sections 4-7).
