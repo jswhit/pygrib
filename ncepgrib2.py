@@ -732,6 +732,12 @@ lat/lon values returned by grid method may be incorrect."""
                 fld[1::2,:] = fldsave[1::2,::-1]
         return fld
 
+    values = property(data)
+
+    def latlons(self):
+        """alias for L{grid}"""
+        return self.grid()
+
     def grid(self):
         """
  return lats,lons (in degrees) of grid.
