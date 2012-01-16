@@ -1,5 +1,5 @@
-since version 1.9.2
-===================
+version 1.9.3 (not yet released)
+================================
 * update NCEP grib lib (g2clib) to version 1.2.3.
 * ncepgrib2.Grib2Encode.addfield now accepts masked arrays
   (the bitmap is automatically created from the mask). bitmapflag and 

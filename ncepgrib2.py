@@ -1,4 +1,4 @@
-__version__ = '1.9.2'
+__version__ = '1.9.3'
 import g2clib
 import struct
 import string
