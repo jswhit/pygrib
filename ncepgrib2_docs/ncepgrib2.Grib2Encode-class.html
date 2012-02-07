@@ -37,7 +37,7 @@
   <tr valign="top">
     <td width="100%">
       <span class="breadcrumbs">
-        <a href="ncepgrib2-module.html">Package&nbsp;ncepgrib2</a> ::
+        <a href="ncepgrib2-module.html">Module&nbsp;ncepgrib2</a> ::
         Class&nbsp;Grib2Encode
       </span>
     </td>
@@ -153,9 +153,7 @@
         <span class="summary-sig-arg">drtnum</span>,
         <span class="summary-sig-arg">drtmpl</span>,
         <span class="summary-sig-arg">field</span>,
-        <span class="summary-sig-arg">coordlist</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">bitmapflag</span>=<span class="summary-sig-default">255</span>,
-        <span class="summary-sig-arg">bitmap</span>=<span class="summary-sig-default">None</span>)</span><br />
+        <span class="summary-sig-arg">coordlist</span>=<span class="summary-sig-default">None</span>)</span><br />
       Add a product definition section, data representation section, bitmap
       section and data section to the GRIB2 message (sections 4-7).</td>
           <td align="right" valign="top">
@@ -335,9 +333,7 @@
         <span class="sig-arg">drtnum</span>,
         <span class="sig-arg">drtmpl</span>,
         <span class="sig-arg">field</span>,
-        <span class="sig-arg">coordlist</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">bitmapflag</span>=<span class="sig-default">255</span>,
-        <span class="sig-arg">bitmap</span>=<span class="sig-default">None</span>)</span>
+        <span class="sig-arg">coordlist</span>=<span class="sig-default">None</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="ncepgrib2-pysrc.html#Grib2Encode.addfield">source&nbsp;code</a></span>&nbsp;
@@ -345,7 +341,10 @@
   </tr></table>
   
   <p>Add a product definition section, data representation section, bitmap 
-  section and data section to the GRIB2 message (sections 4-7).</p>
+  section and data section to the GRIB2 message (sections 4-7). Must be 
+  called after grid definition section is created with <a 
+  href="ncepgrib2.Grib2Encode-class.html#addgrid" 
+  class="link">addgrid</a>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -366,31 +365,11 @@
           template (eg. reference values, number of bits, etc...) may be 
           changed by the data packing algorithms. Use this to specify 
           scaling factors and order of spatial differencing, if desired.</li>
-        <li><strong class="pname"><code>field</code></strong> - float32 numpy array of data points to pack.</li>
+        <li><strong class="pname"><code>field</code></strong> - numpy array of data points to pack. If field is a masked array, 
+          then a bitmap is created from the mask.</li>
         <li><strong class="pname"><code>coordlist</code></strong> - Sequence containing floating point values intended to document 
           the vertical discretization with model data on hybrid coordinate 
           vertical levels. Default None.</li>
-        <li><strong class="pname"><code>bitmapflag</code></strong> - Bitmap indicator (see Code <a 
-          href="http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table6-0.shtml"
-          target="_top">Table 6.0</a>) Default 255.
-          <ul>
-            <li>
-              0 = bitmap applies and is included in Section 6.
-            </li>
-            <li>
-              1-253 = Predefined bitmap applies
-            </li>
-            <li>
-              254 = Previously defined bitmap applies to this field (it 
-              still must be provided, it just won't be encoded into the 
-              message again)
-            </li>
-            <li>
-              255 = Bit map does not apply to this product.
-            </li>
-          </ul></li>
-        <li><strong class="pname"><code>bitmap</code></strong> - int32 numpy array containing bitmap to be added (if bitmapflag=0 
-          or 254). Default None.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -445,10 +424,10 @@
             </li>
           </ul></li>
         <li><strong class="pname"><code>gdtmpl</code></strong> - Contains the data values for the specified Grid Definition 
-          Template ( NN=gds[4] ).  Each element of this integer array 
+          Template ( NN=gdsinfo[4] ).  Each element of this integer array 
           contains an entry (in the order specified) of Grid Definition 
           Template 3.NN</li>
-        <li><strong class="pname"><code>deflist</code></strong> - (Used if gds[2] != 0)  Sequence containing the number of grid 
+        <li><strong class="pname"><code>deflist</code></strong> - (Used if gdsinfo[2] != 0)  Sequence containing the number of grid
           points contained in each row (or column) of a non-regular grid.</li>
     </ul></dd>
   </dl>
@@ -525,7 +504,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Oct  3 15:46:10 2011
+    Generated by Epydoc 3.0.1 on Tue Feb  7 13:42:33 2012
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
