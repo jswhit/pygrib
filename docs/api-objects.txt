@@ -4,6 +4,7 @@ pygrib.default_encoding	pygrib-module.html#default_encoding
 pygrib._find	pygrib-module.html#_find
 pygrib._private_atts	pygrib-module.html#_private_atts
 pygrib.julian_to_datetime	pygrib-module.html#julian_to_datetime
+pygrib._is_stringlike	pygrib-module.html#_is_stringlike
 pygrib.__package__	pygrib-module.html#__package__
 pygrib._ftimedict	pygrib-module.html#_ftimedict
 pygrib.__version__	pygrib-module.html#__version__
