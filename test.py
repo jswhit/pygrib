@@ -126,7 +126,7 @@ def test():
     240
     >>> grb['parameterNumber'] = 2 # change to pressure tendency
     >>> data = grb['values']
-    >>> grb['values']=data/86400. # put in units of Pa/S
+    >>> grb['values']=data/1000. # rescale
 
     open an output file for writing
     >>> grbout = open('test.grb','wb')
@@ -150,7 +150,7 @@ def test():
     >>> grb.validDate
     datetime.datetime(2004, 3, 10, 12, 0)
     >>> str('min/max %4.2f %4.2f' % (grb['minimum'],grb['maximum']))
-    'min/max 0.57 1.27'
+    'min/max 49.65 109.65'
     >>> grbs.close()
 
     test open.select with scalars, sequences and functions.
