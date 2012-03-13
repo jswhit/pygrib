@@ -1,5 +1,6 @@
 version 1.9.3 (not yet released)
 ================================
+* update test.py so tests pass with grib_api 1.9.16.
 * update NCEP grib lib (g2clib) to version 1.2.3.
 * ncepgrib2.Grib2Encode.addfield now accepts masked arrays
   (the bitmap is automatically created from the mask). bitmapflag and 
