@@ -1026,12 +1026,14 @@ cdef class gribmessage(object):
         bytestr = _strencode(key)
         name = bytestr
         usenceplib = key == 'values' and self.packingType.startswith('grid_complex')
+        # this workaround only needed for grib_api < 1.9.16.
         if usenceplib:
             size = self.numberOfValues 
         else:
             err = grib_get_size(self._gh, name, &size)
             if err:
                 raise RuntimeError(grib_get_error_message(err))
+        # this workaround only needed for grib_api < 1.9.16.
         if usenceplib:
             typ = 2
             err = 0
@@ -1075,7 +1077,9 @@ cdef class gribmessage(object):
                     storageorder='F'
                 else:
                     storageorder='C'
-                if usenceplib: # use ncep lib to decode data.
+                if usenceplib: 
+                    # use ncep lib to decode data (workaround for grib_api
+                    # bug with second-order complex packing).
                     grb = Grib2Decode(self.tostring(), gribmsg=True)
                     return grb.data()
                 else:
@@ -1133,6 +1137,7 @@ cdef class gribmessage(object):
         bytestr = b'values'
         name = bytestr
         usenceplib = self.packingType.startswith('grid_complex')
+        # this workaround only needed for grib_api < 1.9.16.
         if usenceplib:
             size = self.numberOfValues
         else:
