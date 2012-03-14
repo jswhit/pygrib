@@ -1,5 +1,7 @@
 version 1.9.3 (not yet released)
 ================================
+* added "reload" function to update all keys in gribmessage instance
+  to be consistent with modified keys.
 * update test.py so tests pass with grib_api 1.9.16.
 * update NCEP grib lib (g2clib) to version 1.2.3.
 * ncepgrib2.Grib2Encode.addfield now accepts masked arrays
