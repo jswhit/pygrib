@@ -679,10 +679,14 @@ cdef _setdates(gribmessage grb):
 
 def reload(gribmessage grb):
     """
+    reload(grb)
+
     Recreate gribmessage object, updating all the keys to be consistent
     with each other.  For example, if the forecastTime key is changed,
     recreating the gribmessage object with this function will cause
-    the analDate and verifDate keys to be updated accordingly."""
+    the analDate and verifDate keys to be updated accordingly.
+
+    Equivalent to fromstring(grb.tostring())"""
     return fromstring(grb.tostring())
 
 cdef class gribmessage(object):
