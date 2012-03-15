@@ -609,7 +609,7 @@ cdef _create_gribmessage(grib_handle *gh, object messagenumber):
     grb._all_keys = grb.keys()
     grb._ro_keys  = grb._read_only_keys()
     grb._set_projparams() # set projection parameter dict.
-    return _setdates(grb)
+    return setdates(grb)
 
 def fromstring(gribstring):
     """
@@ -630,10 +630,15 @@ def fromstring(gribstring):
     grb._all_keys = grb.keys()
     grb._ro_keys  = grb._read_only_keys()
     grb._set_projparams() # set projection parameter dict.
-    return _setdates(grb)
+    return setdates(grb)
 
-cdef _setdates(gribmessage grb):
-    # set fcstimeunits, analDate and validDate attributes
+def setdates(gribmessage grb):
+    """
+    setdates(grb)
+    
+    set fcstimeunits, analDate and validDate attributes using
+    julianDay, forecastTime and indicatorOfUnitOfTimeRange.
+    """
     grb.fcstimeunits = ""
     if grb.has_key('indicatorOfUnitOfTimeRange') and\
        grb.indicatorOfUnitOfTimeRange in _ftimedict:
