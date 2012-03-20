@@ -1428,6 +1428,9 @@ cdef class gribmessage(object):
             else:
                 lats = self['distinctLatitudes']
                 lons = self['distinctLongitudes']
+            # don't trust distinctLongitudes at all (bug in grib_api 1.9.16
+            # when longitudeOfLastGridPointInDegrees < 0).
+            lons = np.linspace(lon1,lon2,nx)
             lons,lats = np.meshgrid(lons,lats) 
         elif self['gridType'] == 'reduced_gg': # reduced global gaussian grid
             lats = self['distinctLatitudes']
