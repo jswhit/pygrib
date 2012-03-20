@@ -1,5 +1,7 @@
 version 1.9.3 (not yet released)
-================================
+================================ 
+* workaround for bug in grib_api 1.9.16 (distinctLongitudes are
+  wrong when longitudeOfLastGridPoint < 0).
 * exposed setdates function, which can be used to update analDate and
   validDate keys when forecastTime and/or julianDay keys are changes.
 * added "reload" function to update all keys in gribmessage instance
