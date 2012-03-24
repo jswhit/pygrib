@@ -15,7 +15,7 @@ comments for editing.
 
 * Run 'python setup.py build'
 
-* Run 'python setup.py install' (with sudo if necessary')
+* Run 'python setup.py install' (with sudo if necessary)
 
 * Run 'python test.py' to test your pygrib installation.
 
