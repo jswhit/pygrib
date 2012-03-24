@@ -3,16 +3,27 @@
 # Follow instructions below for editing.
 [directories]
 # uncomment and set to grib_api install location.
-#gribapi_dir = /usr/local
-# if grib_api not built with jasper support for JPEG200,
+# Include files should be located in grib_api_dir/include and
+# the library should be located in grib_api_dir/lib.
+# If the libraries and include files are installed in separate locations,
+# use grib_api_libdir and grib_api_incdir to specify the locations
+# separately.  
+#grib_api_dir = /usr/local
+# if grib_api was built with jasper support for JPEG200,
 # uncomment and set to jasper lib install location.
+# If the libraries and include files are installed in separate locations,
+# use jasper_libdir and jasper_incdir.
 #jasper_dir = /usr/local
-# if grib_api not built with openjpeg support for JPEG200,
+# if grib_api was built with openjpeg support for JPEG200,
 # uncomment and set to openjpeg lib install location.
+# If the libraries and include files are installed in separate locations,
+# use openjpeg_libdir and openjpeg_incdir.
 #openjpeg_dir = /usr/local
-# if grib_api not built with png support,
+# if grib_api was built with png support,
 # uncomment and set to png lib install location.
+# If the libraries and include files are installed in separate locations,
+# use png_libdir and png_incdir.
 #png_dir = /usr
-# if grib_api not built with png support,
+# if grib_api was built with png support,
 # uncomment and set to zlib install location.
 #zlib_dir = /usr
