@@ -8,7 +8,16 @@ the NCEP grib2 C library, including
 command line utilities for listing (grib_list) and repacking (grib_repack)
 GRIB files.
 
-For installation instructions and API documentation, see docs/index.html or
+Quickstart:
+
+* Copy setup.cfg.template to setup.cfg, open in text editor, follow instructions in
+comments for editing.
+
+* Run 'python setup.py build'
+
+* Run 'python setup.py install' (with sudo if necessary')
+
+For full installation instructions and API documentation, see docs/index.html or
 http://pygrib.googlecode.com/svn/trunk/docs/index.html.
 
 Questions or comments - contact Jeff Whitaker <jeffrey.s.whitaker@noaa.gov>

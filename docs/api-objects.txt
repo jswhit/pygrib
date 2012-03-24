@@ -4,6 +4,7 @@ pygrib.default_encoding	pygrib-module.html#default_encoding
 pygrib._find	pygrib-module.html#_find
 pygrib._private_atts	pygrib-module.html#_private_atts
 pygrib.julian_to_datetime	pygrib-module.html#julian_to_datetime
+pygrib.reload	pygrib-module.html#reload
 pygrib._is_stringlike	pygrib-module.html#_is_stringlike
 pygrib.__package__	pygrib-module.html#__package__
 pygrib._ftimedict	pygrib-module.html#_ftimedict
@@ -14,6 +15,7 @@ pygrib.missingvalue_float	pygrib-module.html#missingvalue_float
 pygrib.gaulats	pygrib-module.html#gaulats
 pygrib.fromstring	pygrib-module.html#fromstring
 pygrib.grib_api_version	pygrib-module.html#grib_api_version
+pygrib.setdates	pygrib-module.html#setdates
 pygrib.datetime_to_julian	pygrib-module.html#datetime_to_julian
 pygrib.gribmessage	pygrib.gribmessage-class.html
 pygrib.gribmessage.latlons	pygrib.gribmessage-class.html#latlons

@@ -1,0 +1,18 @@
+# Rename this file to setup.cfg to set pygrib's
+# build options. 
+# Follow instructions below for editing.
+[directories]
+# uncomment and set to grib_api install location.
+#gribapi_dir = /usr/local
+# if grib_api not built with jasper support for JPEG200,
+# uncomment and set to jasper lib install location.
+#jasper_dir = /usr/local
+# if grib_api not built with openjpeg support for JPEG200,
+# uncomment and set to openjpeg lib install location.
+#openjpeg_dir = /usr/local
+# if grib_api not built with png support,
+# uncomment and set to png lib install location.
+#png_dir = /usr
+# if grib_api not built with png support,
+# uncomment and set to zlib install location.
+#zlib_dir = /usr

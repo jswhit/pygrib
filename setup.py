@@ -1,5 +1,9 @@
 from distutils.core import setup, Extension
 import os, glob, numpy, sys
+if sys.version_info[0] < 3:
+    import ConfigParser as configparser
+else:
+    import configparser
 
 grib_api_dir = os.environ.get('GRIBAPI_DIR')
 grib_api_libdir = os.environ.get('GRIBAPI_LIBDIR')
@@ -16,6 +20,43 @@ zlib_incdir = os.environ.get('ZLIB_INCDIR')
 openjpeg_dir = os.environ.get('OPENJPEG_DIR')
 openjpeg_libdir = os.environ.get('OPENJPEG_LIBDIR')
 openjpeg_incdir = os.environ.get('OPENJPEG_INCDIR')
+
+setup_cfg = os.environ.get('PYGRIBSETUPCFG', 'setup.cfg')
+# contents of setup.cfg will override env vars.
+if os.path.exists(setup_cfg):
+    print 'reading from setup.cfg...'
+    config = configparser.SafeConfigParser()
+    config.read(setup_cfg)
+    try: grib_api_dir = config.get("directories", "grib_api_dir")
+    except: pass
+    try: grib_api_libdir = config.get("directories", "grib_api_libdir")
+    except: pass
+    try: grib_api_incdir = config.get("directories", "grib_api_incdir")
+    except: pass
+    try: jasper_dir = config.get("directories", "jasper_dir")
+    except: pass
+    try: jasper_libdir = config.get("directories", "jasper_libdir")
+    except: pass
+    try: jasper_incdir = config.get("directories", "jasper_incdir")
+    except: pass
+    try: png_dir = config.get("directories", "png_dir")
+    except: pass
+    try: png_libdir = config.get("directories", "png_libdir")
+    except: pass
+    try: png_incdir = config.get("directories", "png_incdir")
+    except: pass
+    try: openjpeg_dir = config.get("directories", "openjpeg_dir")
+    except: pass
+    try: openjpeg_libdir = config.get("directories", "openjpeg_libdir")
+    except: pass
+    try: openjpeg_incdir = config.get("directories", "openjpeg_incdir")
+    except: pass
+    try: zlib_dir = config.get("directories", "zlib_dir")
+    except: pass
+    try: zlib_libdir = config.get("directories", "zlib_libdir")
+    except: pass
+    try: zlib_incdir = config.get("directories", "zlib_incdir")
+    except: pass
 
 libdirs=[]
 incdirs=[numpy.get_include()]

@@ -44,7 +44,9 @@ Installation
 ============
 
  - U{Download<http://code.google.com/p/pygrib/downloads/list>} the source code. 
- - set the environment variables C{$GRIBAPI_DIR}, C{$JASPER_DIR}, C{$OPENJPEG_DIR},
+ - pygrib installation options can either be set with environment variables,
+ or specified in a text file (setup.cfg).  To use environment variables,
+ set C{$GRIBAPI_DIR}, C{$JASPER_DIR}, C{$OPENJPEG_DIR},
  C{$PNG_DIR} and C{$ZLIB_DIR} so that the include files and libraries for
  GRIB API, Jasper, OpenJPEG, PNG and zlib will be found.  
  For example, the include files for 
@@ -57,7 +59,14 @@ Installation
  include files are installed in separate locations, the environment variables
  C{$GRIBAPI_INCDIR} and C{$GRIBAPI_LIBDIR} can be used to define the locations
  separately (same goes for C{JASPER}, C{OPENJPEG}, C{PNG} and C{ZLIB}).
+ To use setup.cfg, copy setup.cfg.template to setup.cfg, open setup.cfg in a 
+ text editor and follow the instructions in the comments for editing.
  - Run 'python setup.py build' and then 'python setup.py install', as root if necessary.
+ Note that if you are using environment variables to specify the build options,
+ you cannot build and install in one step with 'sudo python setup.py install',
+ since sudo does not pass environment variables.  Instead, run 'python setup.py
+ build' first as a regular user, then run 'sudo python setup.py install' if the
+ install directory requires admin or root privileges.
  - Run 'python test.py' to test your installation.
  - Look at examples in C{test} directory (most require 
  U{matplotlib<http://matplotlib.sf.net>} and
@@ -638,6 +647,9 @@ def setdates(gribmessage grb):
     
     set fcstimeunits, analDate and validDate attributes using
     julianDay, forecastTime and indicatorOfUnitOfTimeRange.
+    Called automatically when gribmessage instance created,
+    but can be called manually to update keys if one of 
+    them is modified after instance creation.
     """
     grb.fcstimeunits = ""
     if grb.has_key('indicatorOfUnitOfTimeRange') and\
