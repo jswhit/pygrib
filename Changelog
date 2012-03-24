@@ -1,4 +1,4 @@
-version 1.9.3 (not yet released)
+version 1.9.3 (svn revision 180)
 ================================ 
 * workaround for bug in grib_api 1.9.16 (distinctLongitudes are
   wrong when longitudeOfLastGridPoint < 0).
