@@ -149,8 +149,12 @@ def test():
     datetime.datetime(2004, 2, 29, 12, 0)
     >>> grb.validDate
     datetime.datetime(2004, 3, 10, 12, 0)
-    >>> str('min/max %4.2f %4.2f' % (grb['minimum'],grb['maximum']))
-    'min/max 49.65 109.65'
+
+    disable this test for now, since the result depends on the version
+    of grib_api installed.
+    #>>> str('min/max %4.2f %4.2f' % (grb['minimum'],grb['maximum']))
+    #'min/max 49.65 109.65'
+
     >>> grbs.close()
 
     test open.select with scalars, sequences and functions.

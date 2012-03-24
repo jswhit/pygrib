@@ -17,6 +17,8 @@ comments for editing.
 
 * Run 'python setup.py install' (with sudo if necessary')
 
+* Run 'python test.py' to test your pygrib installation.
+
 For full installation instructions and API documentation, see docs/index.html or
 http://pygrib.googlecode.com/svn/trunk/docs/index.html.
 
