@@ -491,14 +491,14 @@ cdef class open(object):
         self.closed = True
     def rewind(self):
         """rewind iterator (same as seek(0))"""
-        # rewind file and reset iterator.
+        # before rewinding, move iterator to end of file
+        # to make sure it is not left in a funky state
+        # (such as in the middle of a multi-part message, issue 54)
+        while 1:
+            gh = grib_handle_new_from_file(NULL, self._fd, &err)
+            err = grib_handle_delete(gh)
+            if gh == NULL: break
         rewind(self._fd)
-        if self._gh != NULL:
-            err = grib_handle_delete(self._gh)
-            if err:
-                raise RuntimeError(grib_get_error_message(err))
-        self._gh = NULL
-        # set message number counter to zero.
         self.messagenumber = 0
     def message(self, N):
         """
