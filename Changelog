@@ -1,6 +1,6 @@
 version 1.9.4 (not yet released)
 ================================
-* reset iterator when in rewind (fixes issue 54).
+* reset iterator in rewind method (fixes issue 54).
 
 version 1.9.3 (svn revision 583)
 ================================ 
