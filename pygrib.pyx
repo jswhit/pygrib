@@ -147,7 +147,7 @@ Changelog
 
 @contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
 
-@version: 1.9.3
+@version: 1.9.4
 
 @copyright: copyright 2010 by Jeffrey Whitaker.
 
@@ -165,7 +165,7 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE."""
 __test__ = None
 del __test__ # hack so epydoc doesn't show __test__
-__version__ = '1.9.3'
+__version__ = '1.9.4'
 
 import numpy as np
 from datetime import datetime
@@ -491,7 +491,14 @@ cdef class open(object):
         self.closed = True
     def rewind(self):
         """rewind iterator (same as seek(0))"""
+        # rewind file and reset iterator.
         rewind(self._fd)
+        if self._gh != NULL:
+            err = grib_handle_delete(self._gh)
+            if err:
+                raise RuntimeError(grib_get_error_message(err))
+        self._gh = NULL
+        # set message number counter to zero.
         self.messagenumber = 0
     def message(self, N):
         """

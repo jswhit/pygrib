@@ -1,3 +1,7 @@
+version 1.9.4 (not yet released)
+================================
+* reset iterator when in rewind (fixes issue 54).
+
 version 1.9.3 (svn revision 583)
 ================================ 
 * workaround for bug in grib_api 1.9.16 (distinctLongitudes are
