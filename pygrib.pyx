@@ -662,9 +662,7 @@ def setdates(gribmessage grb):
     if grb.has_key('indicatorOfUnitOfTimeRange') and\
        grb.indicatorOfUnitOfTimeRange in _ftimedict:
         grb.fcstimeunits = _ftimedict[grb.indicatorOfUnitOfTimeRange]
-    if grb.has_key('forecastTime') and grb.has_key('julianDay'):
-        grb.analDate =\
-        julian_to_datetime(grb.julianDay)
+    if grb.has_key('forecastTime'):
         if grb.has_key('stepRange'):
             # this is a hack to work around grib_api bug
             # sometimes stepUnits and indicatorOfUnitOfTimeRange 
@@ -678,6 +676,11 @@ def setdates(gribmessage grb):
                 ftime = grb.forecastTime
         else:
             ftime = grb.forecastTime
+    else:
+        ftime = 0
+    if grb.has_key('julianDay'):
+        grb.analDate =\
+        julian_to_datetime(grb.julianDay)
         if grb.fcstimeunits == 'hrs':
             grb.validDate =\
             julian_to_datetime(grb.julianDay+ftime/24.)

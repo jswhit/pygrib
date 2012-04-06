@@ -1,5 +1,6 @@
 version 1.9.4 (not yet released)
 ================================
+* assume forecastTime=0 if missing when computing analDate, verifDate keys.
 * reset iterator in rewind method (fixes issue 54).
 
 version 1.9.3 (svn revision 583)
