@@ -1,0 +1,19 @@
+* untar in home directory.
+
+* sudo vi /opt/local/etc/macports/sources.conf, add the line
+file:///Users/<myusername>/ports
+  just *before* the line
+rsync://rsync.macports.org/release/ports [default]
+
+* cd /Users/<myusername>/ports; sudo portindex
+
+* sudo port install py27-pygrib
+
+* also recommended:
+
+  sudo port install py27-matplotlib +pyqt4 +ghostscript
+  sudo port install py27-matplotlib-basemap
+  sudo port install py27-scipy
+  sudo port install py27-ipython +pyqt4
+  sudo port install netcdf +hdf4
+  sudo port install py27-netcdf4
