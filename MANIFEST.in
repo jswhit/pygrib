@@ -11,8 +11,10 @@ include setup.cfg.template
 include setup.py
 include test.py
 include README
+include README.macosx
 include utils/*grib*
 recursive-include docs *
+recursive-include ports *
 recursive-include ncepgrib2_docs *
 include sampledata/*.grb
 include sampledata/*.grib*
