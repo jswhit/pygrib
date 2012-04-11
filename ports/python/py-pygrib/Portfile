@@ -4,7 +4,7 @@ PortSystem          1.0
 PortGroup           python 1.0
 
 name                py-pygrib
-version             1.9.4svn
+version             svnhead
 categories-append   science
 platforms           darwin
 maintainers         openmaintainer
