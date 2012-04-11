@@ -4,7 +4,7 @@ PortSystem          1.0
 PortGroup           python 1.0
 
 name                py-pygrib
-version             1.9.3
+version             1.9.4svn
 categories-append   science
 platforms           darwin
 maintainers         openmaintainer
@@ -14,10 +14,10 @@ homepage            http://code.google.com/p/pygrib/
 master_sites        http://pygrib.googlecode.com/files/
 license             MIT
 
-distname            pygrib-${version}
-checksums           md5    b627e9b2598508fb1213c975d9adb1a1 \
-                    sha1   575a9f019c8cb46b18ef286edef0b191dcaa24fd \
-                    rmd160 0c3e0040d2b56600026992c79052a819bd03a25e
+distname            trunk
+
+fetch.type          svn
+svn.url             http://pygrib.googlecode.com/svn/${distname}
 
 depends_lib-append  port:py${python.version}-pyproj port:py${python.version}-numpy port:grib_api
 
