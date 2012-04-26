@@ -91,6 +91,17 @@ def test():
     >>> selgrbs = grbindx(name='Maximum temperature',level=2,typeOfLevel='heightAboveGround')
     >>> for grb in selgrbs: grb
     1:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
+    >>> grbindx.write('flux.grb.idx') # save the index
+    >>> grbindx.close()
+
+    reload the saved index
+    >>> grbindx = pygrib.index('flux.grb.idx')
+    >>> selgrbs = grbindx(name='Minimum temperature',level=2,typeOfLevel='heightAboveGround')
+    >>> for grb in selgrbs: grb
+    1:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
+    >>> selgrbs = grbindx(name='Maximum temperature',level=2,typeOfLevel='heightAboveGround')
+    >>> for grb in selgrbs: grb
+    1:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
     >>> grbindx.close()
 
     >>> grb = selgrbs[0]
