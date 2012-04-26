@@ -1,5 +1,9 @@
 version 1.9.4 (not yet released)
 ================================
+* Added 'write' method to index, so grib index can be saved.
+  Saved grid index can be re-loaded using pygrib.index(filename)
+  (if no keys are specified, then filename is assumed to represent
+  a saved index instead of grib file).
 * added MacPorts portfile (so it can be installed via MacPorts
   on macosx using a "local Portfile repository").
 * assume forecastTime=0 if missing when computing analDate, verifDate keys.

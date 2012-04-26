@@ -281,6 +281,8 @@ cdef extern from "grib_api.h":
     int grib_julian_to_datetime(double jd, long *year, long *month, long *day, long *hour, long *minute, long *second)
     int grib_datetime_to_julian(long year, long month, long day, long hour, long minute, long second, double *jd)
     int grib_get_gaussian_latitudes(long truncation,double* latitudes)
+    int grib_index_write(grib_index *index, char *filename)
+    grib_index* grib_index_read(grib_context* c, char* filename,int *err)
 
 
 missingvalue_int = GRIB_MISSING_LONG
@@ -1654,6 +1656,9 @@ Unlike L{open.select}, containers or callables cannot be used to
 select multiple key values.
 However, using L{index.select} is much faster than L{open.select}.
 
+If no key are given (i.e. *args is empty), it is assumed the filename represents a previously
+saved index (created using L{index.write}) instead of a GRIB file.
+
 Example usage:
 
 >>> import pygrib
@@ -1685,27 +1690,35 @@ name (i.e. C{level:l} will search for values of C{level} that are longs).
         bytestr = _strencode(filename)
         filenamec = bytestr
         if args == ():
-            raise ValueError('no keys specified for index')
-        bytestr = _strencode(','.join(args))
-        keys = bytestr
-        self._gi = grib_index_new_from_file (NULL, filenamec, keys, &err)
-        if err:
-            raise RuntimeError(grib_get_error_message(err))
+            #raise ValueError('no keys specified for index')
+            # assume filename is a saved index.
+            self._gi = grib_index_read(NULL, filenamec, &err)
+            if err:
+                raise RuntimeError(grib_get_error_message(err))
+        else:
+            bytestr = _strencode(','.join(args))
+            keys = bytestr
+            self._gi = grib_index_new_from_file (NULL, filenamec, keys, &err)
+            if err:
+                raise RuntimeError(grib_get_error_message(err))
     def __init__(self, filename, *args):
         # initalize Python level objects
         self.name = filename
-        # is type is specified, strip it off.
-        keys = [arg.split(':')[0] for arg in args]
-        # if type is declared, save it (None if not declared)
-        types = []
-        for arg in args:
-            try: 
-                type = arg.split(':')[1]
-            except IndexError:
-                type = None
-            types.append(type)
-        self.keys = keys
-        self.types = types
+        self.keys = None
+        self.types = None
+        if args != ():
+            # is type is specified, strip it off.
+            keys = [arg.split(':')[0] for arg in args]
+            # if type is declared, save it (None if not declared)
+            types = []
+            for arg in args:
+                try: 
+                    type = arg.split(':')[1]
+                except IndexError:
+                    type = None
+                types.append(type)
+            self.keys = keys
+            self.types = types
     def __call__(self, **kwargs):
         """same as L{select}"""
         return self.select(**kwargs)
@@ -1742,9 +1755,12 @@ Example usage:
         # set index selection.
         # used declared type if available, other infer from type of value.
         for k,v in kwargs.items():
-            if k not in self.keys:
+            if self.keys is not None and k not in self.keys:
                 raise KeyError('key not part of grib index')
-            typ = self.types[self.keys.index(k)]
+            if self.types is not None:
+                typ = self.types[self.keys.index(k)]
+            else:
+                typ = None
             bytestr = _strencode(k)
             key = bytestr
             if typ == 'l' or (type(v) == int or type(v) == long):
@@ -1779,6 +1795,17 @@ Example usage:
                 raise RuntimeError(grib_get_error_message(err))
         # return the list of grib messages.
         return grbs
+    def write(self,filename):
+        """
+        write(filename)
+
+        save grib index to file"""
+        cdef char * filenamec
+        bytestr = _strencode(filename)
+        filenamec = bytestr
+        err = grib_index_write(self._gi, filenamec);
+        if err:
+            raise RuntimeError(grib_get_error_message(err))
     def close(self):
         """
         close()
