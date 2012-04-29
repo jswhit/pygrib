@@ -1,4 +1,4 @@
-version 1.9.4 (svn revision 607)
+version 1.9.4 (svn revision 609)
 ================================
 * Added 'write' method to index, so grib index can be saved.
   Saved grid index can be re-loaded using pygrib.index(filename)
