@@ -11,4 +11,4 @@ rsync://rsync.macports.org/release/ports [default]
 * sudo port install py-pygrib
 This will install pygrib from svn HEAD. To periodically upgrade, just do
    - sudo port uninstall py-pygrib
-   - sudo port install py-pygrib (this re-download and rebuild)
+   - sudo port install py-pygrib (this will re-download and rebuild)
