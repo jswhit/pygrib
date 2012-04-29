@@ -1436,6 +1436,8 @@ cdef class gribmessage(object):
             lon2 = self['longitudeOfLastGridPointInDegrees']
             if lon1 >= 0 and lon2 < 0 and self.iDirectionIncrement > 0:
                 lon2 = 360+lon2
+            if lon1 >= 0 and lon2 < lon1 and self.iDirectionIncrement > 0:
+                lon1 = lon1-360
             lat1 = self['latitudeOfFirstGridPointInDegrees']
             lat2 = self['latitudeOfLastGridPointInDegrees']
             # workaround for grib_api bug with complex packing.
@@ -1452,7 +1454,7 @@ cdef class gribmessage(object):
             else:
                 lats = self['distinctLatitudes']
                 lons = self['distinctLongitudes']
-            # don't trust distinctLongitudes at all 
+            # don't trust distinctLongitudes 
             # when longitudeOfLastGridPointInDegrees < 0
             # (bug in grib_api 1.9.16)
             if lon2 < 0:
