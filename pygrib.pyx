@@ -1676,7 +1676,7 @@ Example usage:
 >>> for grb in selected_grbs:
 >>>     grb
 1:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 250 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst
->>> grbindx.save('gfs.grb.idx') # save index to a file
+>>> grbindx.write('gfs.grb.idx') # save index to a file
 >>> grbindx.close()
 >>> grbindx = pygrib.index('gfs.grb.idx') # re-open index (no keys specified)
 >>> for grb in selected_grbs:
