@@ -74,7 +74,7 @@ Installation
  - If you're on MacOS X, see
  U{README.macosx<http://pygrib.googlecode.com/svn/trunk/README.macosx>}
  for special instruction on how to install pygrib and all it's
- dependencies using U{macports<http://macports.org}.
+ dependencies using U{macports<http://macports.org>}.
 
 
 Example usage
