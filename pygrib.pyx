@@ -72,9 +72,9 @@ Installation
  U{matplotlib<http://matplotlib.sf.net>} and
  U{basemap<http://matplotlib.sourceforge.net/basemap/doc/html/>}).
  - If you're on MacOS X, see
- U{README.osx<http://netcdf4-python.googlecode.com/svn/trunk/README.osx>}
+ U{README.macosx<http://netcdf4-python.googlecode.com/svn/trunk/README.macosx>}
  for special instruction on how to install pygrib and all it's
- dependencies using U{macports<http://macports.org"}.
+ dependencies using U{macports<http://macports.org}.
 
 
 Example usage
