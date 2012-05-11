@@ -151,7 +151,7 @@ Changelog
 
 @contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
 
-@version: 1.9.4
+@version: 1.9.5
 
 @copyright: copyright 2010 by Jeffrey Whitaker.
 
@@ -169,7 +169,7 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE."""
 __test__ = None
 del __test__ # hack so epydoc doesn't show __test__
-__version__ = '1.9.4'
+__version__ = '1.9.5'
 
 import numpy as np
 from datetime import datetime
@@ -563,6 +563,8 @@ Example usage:
         self.rewind() # always search from beginning
         grbs = [grb for grb in self if _find(grb, **kwargs)]
         self.seek(msgnum) # leave iterator in original position.
+        if not grbs:
+            raise ValueError('no matches found')
         return grbs
     def _advance(self,nmsgs,return_msgs=False):
         """advance iterator n messages from current position.
@@ -1762,11 +1764,13 @@ Example usage:
 """
         cdef grib_handle *gh
         cdef int err
+        cdef size_t size
         cdef long longval
         cdef double doubval
         cdef char *strval, *key
         # set index selection.
         # used declared type if available, other infer from type of value.
+        sizetot = 0
         for k,v in kwargs.items():
             if self.keys is not None and k not in self.keys:
                 raise KeyError('key not part of grib index')
@@ -1776,6 +1780,13 @@ Example usage:
                 typ = None
             bytestr = _strencode(k)
             key = bytestr
+            err = grib_index_get_size(self._gi, key, &size)
+            if err:
+                raise RuntimeError(grib_get_error_message(err))
+            sizetot = sizetot + size
+            # if there are no matches for this key, just skip it
+            if not size:
+                continue
             if typ == 'l' or (type(v) == int or type(v) == long):
                 longval = long(v)
                 err = grib_index_select_long(self._gi, key, longval)
@@ -1794,6 +1805,9 @@ Example usage:
                     raise RuntimeError(grib_get_error_message(err))
             else:
                 raise TypeError('value must be float, int or string')
+        # if no matches found, raise an error.
+        if sizetot == 0:
+            raise ValueError('no matches found')
         # create a list of grib messages corresponding to selection.
         messagenumber = 0; grbs = []
         while 1:
@@ -1806,6 +1820,8 @@ Example usage:
             err = grib_handle_delete(gh)
             if err:
                 raise RuntimeError(grib_get_error_message(err))
+        if not grbs:
+            raise ValueError('no matches found')
         # return the list of grib messages.
         return grbs
     def write(self,filename):
