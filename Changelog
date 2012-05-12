@@ -1,7 +1,7 @@
 version 1.9.5 (not yet released)
 ================================
 * change behaviour of select method (for index and open objects)
-  so that an error is raised if there are no matches.  This has
+  so that an error is raised if there are no matches. 
   This avoids a segfault that happens if the select method is
   called for an index created from an empty file.
 
