@@ -1841,6 +1841,9 @@ Example usage:
 
         deallocate C structures associated with class instance"""
         grib_index_delete(self._gi)
+    def __dealloc__(self):
+        # finalization (inverse of __cinit__): needed to allow garbage collector to free memory.
+        grib_index_delete(self._gi)
 
 def _is_stringlike(a):
     if type(a) == str or type(a) == bytes or type(a) == unicode:
