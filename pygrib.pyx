@@ -1667,7 +1667,7 @@ select multiple key values.
 However, using L{index.select} is much faster than L{open.select}.
 
 If no key are given (i.e. *args is empty), it is assumed the filename represents a previously
-saved index (created using L{index.write}) instead of a GRIB file.
+saved index (created using the C{grib_index_build} tool or L{index.write}) instead of a GRIB file.
 
 Example usage:
 
