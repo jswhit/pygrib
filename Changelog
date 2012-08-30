@@ -1,5 +1,6 @@
 version 1.9.5 (not yet released)
 ================================
+* fix radius of the earth definition of WGS84 ellipsoid (issue 58).
 * change behaviour of select method (for index and open objects)
   so that an error is raised if there are no matches. 
   This avoids a segfault that happens if the select method is

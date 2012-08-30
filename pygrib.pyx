@@ -1328,7 +1328,7 @@ cdef class gribmessage(object):
         elif self['shapeOfTheEarth'] == 0:
             projparams['a']=6367470.0
             projparams['b']=6367470.0
-        elif self['shapeOfTheEarth'] == 0: # WGS84
+        elif self['shapeOfTheEarth'] == 5: # WGS84
             projparams['a']=6378137.0
             projparams['b']=6356752.3142
         elif self['shapeOfTheEarth'] == 8:
