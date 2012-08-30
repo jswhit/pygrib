@@ -1281,61 +1281,67 @@ cdef class gribmessage(object):
         """
         projparams = {}
 
-        if self['shapeOfTheEarth'] == 6:
-            projparams['a']=6371229.0
-            projparams['b']=6371229.0
-        elif self['shapeOfTheEarth'] in [3,7]:
-            if self.has_key('scaleFactorOfMajorAxisOfOblateSpheroidEarth'):
-                scalea = self['scaleFactorOfMajorAxisOfOblateSpheroidEarth']
-                scaleb = self['scaleFactorOfMinorAxisOfOblateSpheroidEarth']
-                if scalea and scalea is not missingvalue_int:
-                    scalea = np.power(10.0,-scalea)
-                    if self['shapeOfTheEarth'] == 3: # radius in km
-                        scalea = 1000.*scalea
-                else:
-                    scalea = 1
-                if scaleb and scaleb is not missingvalue_int:
-                    scaleb = np.power(10.0,-scaleb)
-                    if self['shapeOfTheEarth'] == 3: # radius in km
-                        scaleb = 1000.*scaleb
-                else:
-                    scaleb = 1.
-            else:
-                scalea = 1.
-                scaleb = 1.
-            if grib_api_version < 10900:
-                projparams['a']=self['scaledValueOfMajorAxisOfOblateSpheroidEarth']*scalea
-                projparams['b']=self['scaledValueOfMinorAxisOfOblateSpheroidEarth']*scaleb
-            else:
-                projparams['a']=self['scaledValueOfEarthMajorAxis']*scalea
-                projparams['b']=self['scaledValueOfEarthMinorAxis']*scaleb
-        elif self['shapeOfTheEarth'] == 2:
-            projparams['a']=6378160.0
-            projparams['b']=6356775.0 
-        elif self['shapeOfTheEarth'] == 1:
-            if self.has_key('scaleFactorOfRadiusOfSphericalEarth'):
-                scalea = self['scaleFactorOfRadiusOfSphericalEarth']
-                if scalea and scalea is not missingvalue_int:
-                    scalea = np.power(10.0,-scalea)
-                else:
-                    scalea = 1
-                scaleb = scalea
-            else:
-                scalea = 1.
-                scaleb = 1.
-            projparams['a']=self['scaledValueOfRadiusOfSphericalEarth']*scalea
-            projparams['b']=self['scaledValueOfRadiusOfSphericalEarth']*scaleb
-        elif self['shapeOfTheEarth'] == 0:
-            projparams['a']=6367470.0
-            projparams['b']=6367470.0
-        elif self['shapeOfTheEarth'] == 5: # WGS84
-            projparams['a']=6378137.0
-            projparams['b']=6356752.3142
-        elif self['shapeOfTheEarth'] == 8:
-            projparams['a']=6371200.0
-            projparams['b']=6371200.0
+        # check for radius key, if it exists just use it
+        # and don't bother with shapeOfTheEarth
+        if self.has_key('radius'):
+            projparams['a'] = self['radius']
+            projparams['b'] = self['radius']
         else:
-            raise ValueError('unknown shape of the earth flag')
+            if self['shapeOfTheEarth'] == 6:
+                projparams['a']=6371229.0
+                projparams['b']=6371229.0
+            elif self['shapeOfTheEarth'] in [3,7]:
+                if self.has_key('scaleFactorOfMajorAxisOfOblateSpheroidEarth'):
+                    scalea = self['scaleFactorOfMajorAxisOfOblateSpheroidEarth']
+                    scaleb = self['scaleFactorOfMinorAxisOfOblateSpheroidEarth']
+                    if scalea and scalea is not missingvalue_int:
+                        scalea = np.power(10.0,-scalea)
+                        if self['shapeOfTheEarth'] == 3: # radius in km
+                            scalea = 1000.*scalea
+                    else:
+                        scalea = 1
+                    if scaleb and scaleb is not missingvalue_int:
+                        scaleb = np.power(10.0,-scaleb)
+                        if self['shapeOfTheEarth'] == 3: # radius in km
+                            scaleb = 1000.*scaleb
+                    else:
+                        scaleb = 1.
+                else:
+                    scalea = 1.
+                    scaleb = 1.
+                if grib_api_version < 10900:
+                    projparams['a']=self['scaledValueOfMajorAxisOfOblateSpheroidEarth']*scalea
+                    projparams['b']=self['scaledValueOfMinorAxisOfOblateSpheroidEarth']*scaleb
+                else:
+                    projparams['a']=self['scaledValueOfEarthMajorAxis']*scalea
+                    projparams['b']=self['scaledValueOfEarthMinorAxis']*scaleb
+            elif self['shapeOfTheEarth'] == 2:
+                projparams['a']=6378160.0
+                projparams['b']=6356775.0 
+            elif self['shapeOfTheEarth'] == 1:
+                if self.has_key('scaleFactorOfRadiusOfSphericalEarth'):
+                    scalea = self['scaleFactorOfRadiusOfSphericalEarth']
+                    if scalea and scalea is not missingvalue_int:
+                        scalea = np.power(10.0,-scalea)
+                    else:
+                        scalea = 1
+                    scaleb = scalea
+                else:
+                    scalea = 1.
+                    scaleb = 1.
+                projparams['a']=self['scaledValueOfRadiusOfSphericalEarth']*scalea
+                projparams['b']=self['scaledValueOfRadiusOfSphericalEarth']*scaleb
+            elif self['shapeOfTheEarth'] == 0:
+                projparams['a']=6367470.0
+                projparams['b']=6367470.0
+            elif self['shapeOfTheEarth'] == 5: # WGS84
+                projparams['a']=6378137.0
+                projparams['b']=6356752.3142
+            elif self['shapeOfTheEarth'] == 8:
+                projparams['a']=6371200.0
+                projparams['b']=6371200.0
+            else:
+                raise ValueError('unknown shape of the earth flag')
 
         if self['gridType'] in ['reduced_gg','reduced_ll','regular_gg','regular_ll']: # regular lat/lon grid
             projparams['proj']='cyl'
