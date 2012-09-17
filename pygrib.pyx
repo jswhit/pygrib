@@ -1854,6 +1854,13 @@ Example usage:
 
         deallocate C structures associated with class instance"""
         grib_index_delete(self._gi)
+        self._gi = NULL
+
+    def __dealloc__(self):
+        # deallocate storage when there are no more references
+        # to the object.
+        if self._gi != NULL:
+            grib_index_delete(self._gi)
 
 def _is_stringlike(a):
     if type(a) == str or type(a) == bytes or type(a) == unicode:
