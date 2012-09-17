@@ -1,5 +1,6 @@
-version 1.9.5 (svn revision 622)
+version 1.9.5 (svn revision 623)
 ================================
+* fix compilation issue when jpeg/openjpeg or png not needed (issue 59).
 * add __dealloc__ method that closes file handles when no more 
   references exist to the object.
 * fix radius of the earth definition of WGS84 ellipsoid, use 'radius' key

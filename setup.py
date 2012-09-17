@@ -62,55 +62,68 @@ libdirs=[]
 incdirs=[numpy.get_include()]
 libraries=['grib_api']
 
-if grib_api_libdir is None and grib_api_dir is not None: 
+if grib_api_libdir is None and grib_api_dir is not None:
     libdirs.append(os.path.join(grib_api_dir,'lib'))
     libdirs.append(os.path.join(grib_api_dir,'lib64'))
-if grib_api_incdir is None and grib_api_dir is not None: 
+if grib_api_incdir is None and grib_api_dir is not None:
     incdirs.append(os.path.join(grib_api_dir,'include'))
 
 if jasper_dir is not None or jasper_libdir is not None:
     libraries.append("jasper")
-if jasper_libdir is None and jasper_dir is not None: 
+if jasper_libdir is None and jasper_dir is not None:
     libdirs.append(os.path.join(jasper_dir,'lib'))
     libdirs.append(os.path.join(jasper_dir,'lib64'))
-if jasper_incdir is None and jasper_dir is not None: 
+if jasper_incdir is None and jasper_dir is not None:
     incdirs.append(os.path.join(jasper_dir,'include'))
     incdirs.append(os.path.join(jasper_dir,'include/jasper'))
 
 if openjpeg_dir is not None or openjpeg_libdir is not None:
     libraries.append("openjpeg")
-if openjpeg_libdir is None and openjpeg_dir is not None: 
+if openjpeg_libdir is None and openjpeg_dir is not None:
     libdirs.append(os.path.join(openjpeg_dir,'lib'))
     libdirs.append(os.path.join(openjpeg_dir,'lib64'))
-if openjpeg_incdir is None and openjpeg_dir is not None: 
+if openjpeg_incdir is None and openjpeg_dir is not None:
     incdirs.append(os.path.join(openjpeg_dir,'include'))
 
 if png_dir is not None or png_libdir is not None:
     libraries.append("png")
-if png_libdir is None and png_dir is not None: 
+if png_libdir is None and png_dir is not None:
     libdirs.append(os.path.join(png_dir,'lib'))
     libdirs.append(os.path.join(png_dir,'lib64'))
-if png_incdir is None and png_dir is not None: 
+if png_incdir is None and png_dir is not None:
     incdirs.append(os.path.join(png_dir,'include'))
 
 if zlib_dir is not None or zlib_libdir is not None:
     libraries.append("z")
-if zlib_libdir is None and zlib_dir is not None: 
+if zlib_libdir is None and zlib_dir is not None:
     libdirs.append(os.path.join(zlib_dir,'lib'))
     libdirs.append(os.path.join(zlib_dir,'lib64'))
-if zlib_incdir is None and zlib_dir is not None: 
+if zlib_incdir is None and zlib_dir is not None:
     incdirs.append(os.path.join(zlib_dir,'include'))
 
 g2clib_deps = glob.glob('g2clib_src/*.c')
 g2clib_deps.append('g2clib.c')
 incdirs.append("g2clib_src")
 macros=[]
-if jasper_dir is not None or jasper_libdir is not None: macros.append(('USE_JPEG2000',1))
-if png_dir is not None or png_libdir is not None: macros.append(('USE_PNG',1))
+
+# if jasper or openjpeg lib not available...
+if 'jasper' not in libraries and 'openjpeg' not in libraries:
+    g2clib_deps.remove('g2clib_src/jpcpack.c')
+    g2clib_deps.remove('g2clib_src/jpcunpack.c')
+else:
+    macros.append(('USE_JPEG2000',1))
+# if png lib not available...
+if 'png' not in libraries:
+    g2clib_deps.remove('g2clib_src/pngpack.c')
+    g2clib_deps.remove('g2clib_src/pngunpack.c')
+else:
+    macros.append(('USE_PNG',1))
+
 if hasattr(sys,'maxsize'):
     if sys.maxsize > 2**31-1: macros.append(('__64BIT__',1))
 else:
     if sys.maxint > 2**31-1: macros.append(('__64BIT__',1))
+
 g2clibext = Extension("g2clib",g2clib_deps,include_dirs=incdirs,library_dirs=libdirs,libraries=libraries,define_macros=macros)
 redtoregext =\
 Extension("redtoreg",["redtoreg.c"],include_dirs=[numpy.get_include()])
