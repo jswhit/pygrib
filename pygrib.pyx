@@ -486,8 +486,6 @@ cdef class open(object):
         close()
 
         close GRIB file, deallocate C structures associated with class instance"""
-        # doesn't have __dealloc__, user must explicitly call close.
-        # having both causes segfaults.
         cdef int err
         fclose(self._fd)
         if self._gh != NULL:
@@ -495,6 +493,15 @@ cdef class open(object):
             if err:
                 raise RuntimeError(grib_get_error_message(err))
         self.closed = True
+        self._fd = NULL
+
+    def __dealloc__(self):
+        # close file handle if there are no more references 
+        # to the object.
+        cdef int err
+        if self._fd:
+            fclose(self._fd)
+
     def rewind(self):
         """rewind iterator (same as seek(0))"""
         # before rewinding, move iterator to end of file

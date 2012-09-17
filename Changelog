@@ -1,5 +1,7 @@
-version 1.9.5 (svn revision 620)
+version 1.9.5 (svn revision 622)
 ================================
+* add __dealloc__ method that closes file handles when no more 
+  references exist to the object.
 * fix radius of the earth definition of WGS84 ellipsoid, use 'radius' key
   to set earth radius if available (issue 58).
 * change behaviour of select method (for index and open objects)
