@@ -18,6 +18,8 @@ g2int getpdsindex(g2int number)
 //                       Added Product Definition Template 4.15
 // 2010-08-03  Vuong     Added Product Definition Template 4.42 and 4.43
 // 2010-12-08  Vuong     Corrected Product Definition Template 4.42 and 4.43
+// 2012-03-29  Vuong     Added Templates 4.44,4.45,4.46,4.47,4.48,4.50,
+//                       4.51,4.91,4.32 and 4.52
 //
 // USAGE:    index=getpdsindex(number)
 //   INPUT ARGUMENT LIST:
@@ -66,6 +68,8 @@ gtemplate *getpdstemplate(g2int number)
 // 2009-08-05  Vuong     Added Product Definition Template 4.31
 // 2010-08-03  Vuong     Added Product Definition Template 4.42 and 4.43
 // 2010-12-08  Vuong     Corrected Product Definition Template 4.42 and 4.43
+// 2012-02-15  Vuong     Added Templates 4.44,4.45,4.46,4.47,4.48,4.50,
+//                       4.51,4.91,4.32 and 4.52
 //
 // USAGE:    CALL getpdstemplate(number)
 //   INPUT ARGUMENT LIST:
@@ -127,6 +131,8 @@ gtemplate *extpdstemplate(g2int number,g2int *list)
 // 2009-08-05  Vuong     Added Product Definition Template 4.31
 // 2010-08-03  Vuong     Added Product Definition Template 4.42 and 4.43
 // 2010-12-08  Vuong     Corrected Product Definition Template 4.42 and 4.43
+// 2012-02-15  Vuong     Added Templates 4.44,4.45,4.46,4.47,4.48,4.50,
+//                       4.51,4.91,4.32 and 4.52
 //
 // USAGE:    CALL extpdstemplate(number,list)
 //   INPUT ARGUMENT LIST:
@@ -311,6 +317,92 @@ gtemplate *extpdstemplate(g2int number,g2int *list)
                  }
               }
            }
+           else if ( number == 32 ) {
+              new->extlen=list[9]*10;
+              new->ext=(g2int *)malloc(sizeof(g2int)*new->extlen);
+              for (i=0;i<list[9];i++) {
+                 l=i*5;
+                 new->ext[l]=2;
+                 new->ext[l+1]=2;
+                 new->ext[l+2]=2;
+                 new->ext[l+3]=1;
+                 new->ext[l+4]=4;
+              }
+           }
+           else if ( number == 46 ) {
+              if ( list[27] > 1 ) {
+                 new->extlen=(list[27]-1)*6;
+                 new->ext=(g2int *)malloc(sizeof(g2int)*new->extlen);
+                 for (j=2;j<=list[27];j++) {
+                    l=(j-2)*6;
+                    for (k=0;k<6;k++) {
+                       new->ext[l+k]=new->map[29+k];
+                    }
+                 }
+              }
+           }
+           else if ( number == 47 ) {
+              if ( list[30] > 1 ) {
+                 new->extlen=(list[30]-1)*6;
+                 new->ext=(g2int *)malloc(sizeof(g2int)*new->extlen);
+                 for (j=2;j<=list[30];j++) {
+                    l=(j-2)*6;
+                    for (k=0;k<6;k++) {
+                       new->ext[l+k]=new->map[32+k];
+                    }
+                 }
+              }
+           else if ( number == 51 ) {
+              new->extlen=list[15]*11;
+              new->ext=(g2int *)malloc(sizeof(g2int)*new->extlen);
+              for (i=0;i<list[15];i++) {
+                 l=i*6;
+                 new->ext[l]=1;
+                 new->ext[l+1]=1;
+                 new->ext[l+2]=-1;
+                 new->ext[l+3]=-4;
+                 new->ext[l+4]=-1;
+                 new->ext[l+5]=-4;
+              }
+           }
+           else if ( number == 91 ) {
+              new->extlen=list[15]*11;
+              new->ext=(g2int *)malloc(sizeof(g2int)*new->extlen);
+              for (i=0;i<list[15];i++) {
+                 l=i*13;
+                 new->ext[l]=1;
+                 new->ext[l+1]=1;
+                 new->ext[l+2]=-1;
+                 new->ext[l+3]=-4;
+                 new->ext[l+4]=-1;
+                 new->ext[l+5]=-4;
+                 new->ext[l+6]=2;
+                 new->ext[l+7]=1;
+                 new->ext[l+8]=1;
+                 new->ext[l+9]=1;
+                 new->ext[l+10]=1;
+                 new->ext[l+11]=1;
+                 new->ext[l+12]=1;
+              }
+             if ( list[28] = 1 ) {
+                 new->ext[l]=1;
+                 new->ext[l+1]=1;
+                 new->ext[l+2]=1;
+                 new->ext[l+3]=4;
+                 new->ext[l+4]=1;
+                 new->ext[l+5]=4;
+              }
+              else if ( list[28] > 1 ) {
+                 new->ext[l]=1;
+                 new->ext[l+1]=1;
+                 new->ext[l+2]=1;
+                 new->ext[l+3]=4;
+                 new->ext[l+4]=1;
+                 new->ext[l+5]=4;
+              }
+             }
+           }
+
            return(new);
 
 }

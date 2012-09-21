@@ -34,10 +34,13 @@
 //                       Added Product Definition Template 4.15
 // 2010-08-03  Vuong     Added Product Definition Template 4.40,4.41,4.42,4.43
 // 2010-12-08  Vuong     Corrected Definition Template 4.42,4.43
+// 2010-12-08  Vuong     Corrected Definition Template 4.42,4.43
+// 2012-03-29  Vuong     Added Templates 4.44,4.45,4.46,4.47,4.48,4.50,
+//                       4.51,4.91,4.32 and 4.52
 //
 //$$$
 
-      #define MAXPDSTEMP 29           // maximum number of templates
+      #define MAXPDSTEMP 39           // maximum number of templates
       #define MAXPDSMAPLEN 200        // maximum template map length
 
       struct pdstemplate 
@@ -133,7 +136,47 @@
          {1100,15,0, {1,1,1,1,1,2,1,1,4,1,-1,-4,1,-1,-4} },
              // 4.1100: Hovmoller-type grid with averaging or other
              //         statistical processing
-         {1101,22,0, {1,1,1,1,1,2,1,1,4,1,-1,-4,1,-1,-4,4,1,1,1,4,1,4} }
+         {1101,22,0, {1,1,1,1,1,2,1,1,4,1,-1,-4,1,-1,-4,4,1,1,1,4,1,4} },
+             // 4.32:Simulate (synthetic) Satellite Product
+         {32,10,1, {1,1,1,1,1,2,1,1,2,1} },
+             // 4.44: Analysis or forecast at a horizontal level or in a horizontal layer
+             // at a point in time for Aerosol
+         {44,21,0, {1,1,2,1,-1,-4,-1,-4,1,1,1,2,1,1,2,1,-1,-4,1,-1,-4} },
+             // 4.45: Individual ensemble forecast, control and 
+             // perturbed,  at a horizontal level or in a horizontal layer
+             // at a point in time for Aerosol
+         {45,24,0, {1,1,2,1,-1,-4,-1,-4,1,1,1,2,1,1,4,1,-1,-4,1,-1,-4,1,1,1} },
+             // 4.46: Ave or Accum or Extreme value at level/layer
+             // at horizontal level or in a horizontal in a continuous or
+             // non-continuous time interval for Aerosol
+         {46,35,1, {1,1,2,1,-1,-4,-1,-4,1,1,1,2,1,1,4,1,-1,-4,1,-1,-4,2,1,1,1,1,1,1,4,1,1,1,4,1,4} },
+             // 4.47: Individual ensemble forecast, control and 
+             // perturbed, at horizontal level or in a horizontal
+             // in a continuous or non-continuous time interval for Aerosol
+         {47,38,1, {1,1,1,2,1,-1,-4,-1,-4,1,1,2,1,1,4,1,-1,-4,1,-1,-4,1,1,1,2,1,1,1,1,1,1,4,1,1,1,4,1,4} },
+
+             //             VALIDATION --- PDT 4.48
+             // 4.48: Analysis or forecast at a horizontal level or in a horizontal layer
+             // at a point in time for Optical Properties of Aerosol
+         {48,26,0, {1,1,2,1,-1,-4,-1,-4,1,-1,-4,-1,-4,1,1,1,2,1,1,4,1,-1,-4,1,-1,-4} },
+
+             //             VALIDATION --- PDT 4.50
+             // 4.50: Analysis or forecast of multi component parameter or
+             // matrix element at a point in time
+         {50,21,0, {1,1,1,1,1,2,1,1,4,1,-1,-4,1,-1,-4,1,1,4,4,4,4} },
+
+             //             VALIDATIONi --- PDT 4.52
+             // 4.52: Analysis or forecast of Wave parameters
+             // at the Sea surface at a point in time
+         {52,15,0, {1,1,1,1,1,1,1,1,2,1,1,4,1,-1,-4} },
+
+             // 4.51: Categorical forecasts at a horizontal level or
+             // in a horizontal layer at a point in time
+         {51,16,1, {1,1,1,1,1,2,1,1,4,1,-1,-4,1,-1,-4,1} },
+             // 4.91: Categorical forecasts at a horizontal level or
+             // in a horizontal layer at a point in time
+             // in a continuous or non-continuous time interval
+         {91,16,1, {1,1,1,1,1,2,1,1,4,1,-1,-4,1,-1,-4,1} }
 
       } ;
 
