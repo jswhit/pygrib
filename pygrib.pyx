@@ -694,29 +694,54 @@ def setdates(gribmessage grb):
     else:
         ftime = 0
     if grb.has_key('julianDay'):
-        grb.analDate =\
-        julian_to_datetime(grb.julianDay)
+        # don't do anything if datetime fails (because of a miscoded julianDay)
+        try:
+            grb.analDate =\
+            julian_to_datetime(grb.julianDay)
+        except ValueError:
+            return grb
         if grb.fcstimeunits == 'hrs':
-            grb.validDate =\
-            julian_to_datetime(grb.julianDay+ftime/24.)
+            try:
+                grb.validDate =\
+                julian_to_datetime(grb.julianDay+ftime/24.)
+            except ValueError:
+                return grb
         elif grb.fcstimeunits == 'mins':
-            grb.validDate =\
-            julian_to_datetime(grb.julianDay+ftime/1440.)
+            try:
+                grb.validDate =\
+                julian_to_datetime(grb.julianDay+ftime/1440.)
+            except ValueError:
+                return grb
         elif grb.fcstimeunits == 'days':
-            grb.validDate =\
-            julian_to_datetime(grb.julianDay+ftime)
+            try:
+                grb.validDate =\
+                julian_to_datetime(grb.julianDay+ftime)
+            except ValueError:
+                return grb
         elif grb.fcstimeunits == 'secs':
-            grb.validDate =\
-            julian_to_datetime(grb.julianDay+ftime/86400.)
+            try:
+                grb.validDate =\
+                julian_to_datetime(grb.julianDay+ftime/86400.)
+            except ValueError:
+                return grb
         elif grb.fcstimeunits == '3 hr periods':
-            grb.validDate =\
-            julian_to_datetime(grb.julianDay+ftime/8.)
+            try:
+                grb.validDate =\
+                julian_to_datetime(grb.julianDay+ftime/8.)
+            except ValueError:
+                return grb
         elif grb.fcstimeunits == '6 hr periods':
-            grb.validDate =\
-            julian_to_datetime(grb.julianDay+ftime/4.)
+            try:
+                grb.validDate =\
+                julian_to_datetime(grb.julianDay+ftime/4.)
+            except ValueError:
+                return grb
         elif grb.fcstimeunits == '12 hr periods':
-            grb.validDate =\
-            julian_to_datetime(grb.julianDay+ftime/2.)
+            try:
+                grb.validDate =\
+                julian_to_datetime(grb.julianDay+ftime/2.)
+            except ValueError:
+                return grb
     return grb
 
 def reload(gribmessage grb):
