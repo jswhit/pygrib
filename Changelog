@@ -1,7 +1,7 @@
-version 1.9.5 (svn revision 629)
+version 1.9.5 (svn revision 630)
 ================================
 * avoid crashing when julianDay is miscoded (by just not setting analDate,
-  verifDate keys).
+  validDate keys).
 * update g2clib source to version 1.4.0.
 * fix compilation issue when jpeg/openjpeg or png not needed (issue 59).
 * add __dealloc__ method that closes file handles when no more 
