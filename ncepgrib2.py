@@ -633,14 +633,17 @@ lat/lon values returned by grid method may be incorrect."""
  
  @keyword fill_value: missing or masked data is filled with this value
  (default 9.9692099683868690e+36).
+ 
  @keyword masked_array: if True, return masked array if there is bitmap
  for missing or masked data (default True).
+ 
  @keyword expand:  if True (default), ECMWF 'reduced' gaussian grids are
  expanded to regular gaussian grids.
+ 
  @keyword order: if 1, linear interpolation is used for expanding reduced
  gaussian grids.  if 0, nearest neighbor interpolation is used. Default 
  is 0 if grid has missing or bitmapped values, 1 otherwise.
- 
+  
  @return: C{B{data}}, a float32 numpy regular or masked array
  with shape (nlats,lons) containing the request grid.
         """

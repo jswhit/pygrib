@@ -6,10 +6,10 @@ ncepgrib2._table0	ncepgrib2-module.html#_table0
 ncepgrib2._putieeeint	ncepgrib2-module.html#_putieeeint
 ncepgrib2.__package__	ncepgrib2-module.html#__package__
 ncepgrib2._n	ncepgrib2-module.html#_n
+ncepgrib2._getieeeint	ncepgrib2-module.html#_getieeeint
 ncepgrib2._getdate	ncepgrib2-module.html#_getdate
 ncepgrib2._earthparams	ncepgrib2-module.html#_earthparams
 ncepgrib2._unpack1	ncepgrib2-module.html#_unpack1
-ncepgrib2._getieeeint	ncepgrib2-module.html#_getieeeint
 ncepgrib2._isString	ncepgrib2-module.html#_isString
 ncepgrib2.Grib2Decode	ncepgrib2-module.html#Grib2Decode
 ncepgrib2._flatten	ncepgrib2-module.html#_flatten
@@ -22,7 +22,7 @@ ncepgrib2.Grib2Encode.addfield	ncepgrib2.Grib2Encode-class.html#addfield
 ncepgrib2.Grib2Message	ncepgrib2.Grib2Message-class.html
 ncepgrib2.Grib2Message.shape_of_earth	ncepgrib2.Grib2Message-class.html#shape_of_earth
 ncepgrib2.Grib2Message.data_representation_template_number	ncepgrib2.Grib2Message-class.html#data_representation_template_number
-ncepgrib2.Grib2Message.earthRmajor	ncepgrib2.Grib2Message-class.html#earthRmajor
+ncepgrib2.Grib2Message.latlons	ncepgrib2.Grib2Message-class.html#latlons
 ncepgrib2.Grib2Message.product_definition_template_number	ncepgrib2.Grib2Message-class.html#product_definition_template_number
 ncepgrib2.Grib2Message.longitude_of_southern_pole	ncepgrib2.Grib2Message-class.html#longitude_of_southern_pole
 ncepgrib2.Grib2Message.bitmap_indicator_flag	ncepgrib2.Grib2Message-class.html#bitmap_indicator_flag
@@ -36,6 +36,7 @@ ncepgrib2.Grib2Message.grid_definition_template_number	ncepgrib2.Grib2Message-cl
 ncepgrib2.Grib2Message.longitude_first_gridpoint	ncepgrib2.Grib2Message-class.html#longitude_first_gridpoint
 ncepgrib2.Grib2Message.grid_definition_info	ncepgrib2.Grib2Message-class.html#grid_definition_info
 ncepgrib2.Grib2Message.identification_section	ncepgrib2.Grib2Message-class.html#identification_section
+ncepgrib2.Grib2Message.earthRmajor	ncepgrib2.Grib2Message-class.html#earthRmajor
 ncepgrib2.Grib2Message.latitude_of_southern_pole	ncepgrib2.Grib2Message-class.html#latitude_of_southern_pole
 ncepgrib2.Grib2Message.angle_of_pole_rotation	ncepgrib2.Grib2Message-class.html#angle_of_pole_rotation
 ncepgrib2.Grib2Message.gridlength_in_x_direction	ncepgrib2.Grib2Message-class.html#gridlength_in_x_direction
@@ -50,6 +51,7 @@ ncepgrib2.Grib2Message.gridlength_in_y_direction	ncepgrib2.Grib2Message-class.ht
 ncepgrib2.Grib2Message.points_in_x_direction	ncepgrib2.Grib2Message-class.html#points_in_x_direction
 ncepgrib2.Grib2Message.product_definition_template	ncepgrib2.Grib2Message-class.html#product_definition_template
 ncepgrib2.Grib2Message.grid_definition_template	ncepgrib2.Grib2Message-class.html#grid_definition_template
+ncepgrib2.Grib2Message.values	ncepgrib2.Grib2Message-class.html#values
 ncepgrib2.Grib2Message.__repr__	ncepgrib2.Grib2Message-class.html#__repr__
 ncepgrib2.Grib2Message.longitude_last_gridpoint	ncepgrib2.Grib2Message-class.html#longitude_last_gridpoint
 ncepgrib2.Grib2Message.points_in_y_direction	ncepgrib2.Grib2Message-class.html#points_in_y_direction

@@ -1,4 +1,4 @@
-version 1.9.5 (svn revision 630)
+version 1.9.5 (svn revision 631)
 ================================
 * avoid crashing when julianDay is miscoded (by just not setting analDate,
   validDate keys).
