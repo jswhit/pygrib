@@ -333,6 +333,14 @@ _ftimedict[13]='secs'
 # turn on support for multi-field grib messages.
 grib_multi_support_on(NULL)
 
+def multi_support_on():
+    """turn on support for multi-field grib messages (default)"""
+    grib_multi_support_on(NULL)
+
+def multi_support_off():
+    """turn off support for multi-field grib messages"""
+    grib_multi_support_off(NULL)
+
 cdef class open(object):
     """ 
     open(filename)
