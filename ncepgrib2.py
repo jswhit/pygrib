@@ -293,16 +293,16 @@ _table0={1:('Melbourne (WMC)','ammc'),
 254:('EUMETSAT Operations Center',None),
 255:('Missing Value',None)}
 
-def _dec2bin(val, maxbits = 8): 
-    """ 
-    A decimal to binary converter. Returns bits in a list. 
-    """ 
-    retval = [] 
-    for i in range(maxbits - 1, -1, -1): 
-        bit = int(val / (2 ** i)) 
-        val = (val % (2 ** i)) 
-        retval.append(bit) 
-    return retval 
+def _dec2bin(val, maxbits = 8):
+    """
+    A decimal to binary converter. Returns bits in a list.
+    """
+    retval = []
+    for i in range(maxbits - 1, -1, -1):
+        bit = int(val / (2 ** i))
+        val = (val % (2 ** i))
+        retval.append(bit)
+    return retval
 
 def _putieeeint(r):
     """convert a float to a IEEE format 32 bit integer"""
@@ -333,14 +333,14 @@ class Grib2Message:
 
  When a class instance is created, metadata in the GRIB2 file
  is decoded and used to set various instance variables.
- 
+
  @ivar bitmap_indicator_flag: flag to indicate whether a bit-map is used (0 for yes, 255 for no).
  @ivar data_representation_template: data representation template from section 5.
  @ivar data_representation_template_number: data representation template number
  from section 5
  (U{Table 5.0
  <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table5-0.shtml>})
- @ivar has_local_use_section:  True if grib message contains a local use 
+ @ivar has_local_use_section:  True if grib message contains a local use
  section. If True the actual local use section is contained in the
  C{_local_use_section} instance variable, as a raw byte string.
  @ivar discipline_code: product discipline code for grib message
@@ -400,14 +400,14 @@ class Grib2Message:
  (U{Table 4.0
  <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table4-0.shtml>}).
  @ivar shape_of_earth: string describing the shape of the earth (e.g. 'Oblate Spheroid', 'Spheroid').
- @ivar spectral_truncation_parameters:  pentagonal truncation parameters that describe the 
+ @ivar spectral_truncation_parameters:  pentagonal truncation parameters that describe the
  spherical harmonic truncation (only relevant for grid_definition_template_numbers 50-52).
  For triangular truncation, all three of these numbers are the same.
- @ivar latitude_of_southern_pole: the geographic latitude in degrees of the southern 
+ @ivar latitude_of_southern_pole: the geographic latitude in degrees of the southern
  pole of the coordinate system (for rotated lat/lon or gaussian grids).
- @ivar longitude_of_southern_pole: the geographic longitude in degrees of the southern 
+ @ivar longitude_of_southern_pole: the geographic longitude in degrees of the southern
  pole of the coordinate system (for rotated lat/lon or gaussian grids).
- @ivar angle_of_pole_rotation: The angle of rotation in degrees about the new 
+ @ivar angle_of_pole_rotation: The angle of rotation in degrees about the new
  polar axis (measured clockwise when looking from the southern to the northern pole)
  of the coordinate system. For rotated lat/lon or gaussian grids.
  @ivar missing_value: primary missing value (for data_representation_template_numbers
@@ -415,12 +415,12 @@ class Grib2Message:
  @ivar missing_value2: secondary missing value (for data_representation_template_numbers
  2 and 3).
  @ivar proj4_: instance variables with this prefix are used to set the map projection
- parameters for U{PROJ.4<http://proj.maptools.org>}. 
+ parameters for U{PROJ.4<http://proj.maptools.org>}.
     """
     def __init__(self,**kwargs):
         """
  create a Grib2Decode class instance given a GRIB Edition 2 filename.
- 
+
  (used by L{Grib2Decode} function - not directly called by user)
         """
         for k,v in kwargs.items():
@@ -464,7 +464,7 @@ class Grib2Message:
             self.shape_of_earth = 'OblateSpheroid'
             self.earthRmajor = earthR[0]
             self.earthRminor = earthR[1]
-        else: 
+        else:
             if earthR is not None:
                 self.shape_of_earth = 'Spherical'
                 self.earthRmajor = earthR
@@ -613,9 +613,9 @@ lat/lon values returned by grid method may be incorrect."""
         drtnum = self.data_representation_template_number
         drtmpl = self.data_representation_template
         if (drtnum == 2 or drtnum == 3) and drtmpl[6] != 0:
-            self.missing_value = _getieeeint(drtmpl[7]) 
+            self.missing_value = _getieeeint(drtmpl[7])
             if drtmpl[6] == 2:
-                self.missing_value2 = _getieeeint(drtmpl[8]) 
+                self.missing_value2 = _getieeeint(drtmpl[8])
 
     def __repr__(self):
         strings = []
@@ -630,22 +630,22 @@ lat/lon values returned by grid method may be incorrect."""
         """
  returns an unpacked data grid.  Can also be accomplished with L{values}
  property.
- 
+
  @keyword fill_value: missing or masked data is filled with this value
  (default 9.9692099683868690e+36).
- 
+
  @keyword masked_array: if True, return masked array if there is bitmap
  for missing or masked data (default True).
- 
+
  @keyword expand:  if True (default), ECMWF 'reduced' gaussian grids are
  expanded to regular gaussian grids.
- 
+
  @keyword order: if 1, linear interpolation is used for expanding reduced
- gaussian grids.  if 0, nearest neighbor interpolation is used. Default 
+ gaussian grids.  if 0, nearest neighbor interpolation is used. Default
  is 0 if grid has missing or bitmapped values, 1 otherwise.
-  
+
  @return: C{B{data}}, a float32 numpy regular or masked array
- with shape (nlats,lons) containing the request grid.
+ with shape (nlats,lons) containing the requested grid.
         """
         # make sure scan mode is supported.
         # if there is no 'scanmodeflags', then grid is not supported.
@@ -708,7 +708,7 @@ lat/lon values returned by grid method may be incorrect."""
                 fld = np.reshape(fld,(ny,nx))
         else:
             if gdsinfo[2] and gdtnum == 40: # ECMWF 'reduced' global gaussian grid.
-                if expand: 
+                if expand:
                     nx = 2*ny
                     lonsperlat = self.grid_definition_list
                     if ma.isMA(fld):
@@ -746,10 +746,10 @@ lat/lon values returned by grid method may be incorrect."""
         """
  return lats,lons (in degrees) of grid.
  currently can handle reg. lat/lon, global gaussian, mercator, stereographic,
- lambert conformal, albers equal-area, space-view and azimuthal 
+ lambert conformal, albers equal-area, space-view and azimuthal
  equidistant grids.  L{latlons} method does the same thing.
 
- @return: C{B{lats},B{lons}}, float32 numpy arrays 
+ @return: C{B{lats},B{lons}}, float32 numpy arrays
  containing latitudes and longitudes of grid (in degrees).
         """
         from pygrib import gaulats
@@ -873,14 +873,14 @@ def Grib2Decode(filename,gribmsg=False):
     """
  Read the contents of a GRIB2 file.
 
- @param filename: name of GRIB2 file (default, gribmsg=False) or binary string 
+ @param filename: name of GRIB2 file (default, gribmsg=False) or binary string
  representing a grib message (if gribmsg=True).
 
  @return:  a list of L{Grib2Message} instances representing all of the
- grib messages in the file.  Messages with multiple fields are split 
+ grib messages in the file.  Messages with multiple fields are split
  into separate messages (so that each L{Grib2Message} instance contains
  just one data field). The metadata in each GRIB2 message can be
- accessed via L{Grib2Message} instance variables, the actual data 
+ accessed via L{Grib2Message} instance variables, the actual data
  can be read using L{Grib2Message.data}, and the lat/lon values of the grid
  can be accesses using L{Grib2Message.grid}. If there is only one grib
  message, just the L{Grib2Message} instance is returned, instead of a list
@@ -911,7 +911,7 @@ def Grib2Decode(filename,gribmsg=False):
         disciplines.append(struct.unpack('>B',f.read(1))[0])
         # check to see it's a grib edition 2 file.
         vers = struct.unpack('>B',f.read(1))[0]
-        if vers != 2: 
+        if vers != 2:
             raise IOError('not a GRIB2 file (version number %d)' % vers)
         lengrib = struct.unpack('>q',f.read(8))[0]
         msglen.append(lengrib)
@@ -1137,12 +1137,12 @@ def Grib2Decode(filename,gribmsg=False):
     if len(gribs) == 1:
         return gribs[0]
     else:
-        return gribs 
+        return gribs
 
 def dump(filename, grbs):
     """
  write the given L{Grib2Message} instances to a grib file.
- 
+
  @param filename: file to write grib data to.
  @param grbs: a list of L{Grib2Message} instances.
     """
@@ -1156,7 +1156,7 @@ def dump(filename, grbs):
         gribmsg = f.read(grb._grib_message_length)
         f.close()
         gribfile.write(gribmsg)
-    gribfile.close() 
+    gribfile.close()
 
 # private methods and functions below here.
 
@@ -1212,19 +1212,19 @@ def _repeatlast(numfields,listin):
     return listin
 
 def _flatten(lst):
-    try: 
+    try:
         flist = functools.reduce(operator.add,lst)
     except NameError: # no reduce in python 3.
         import functools
         flist = functools.reduce(operator.add,lst)
     return flist
- 
+
 
 class Grib2Encode:
     """
  Class for encoding data into a GRIB2 message.
-  - Creating a class instance (L{__init__}) initializes the message and adds 
-    sections 0 and 1 (the indicator and identification sections), 
+  - Creating a class instance (L{__init__}) initializes the message and adds
+    sections 0 and 1 (the indicator and identification sections),
   - method L{addgrid} adds a grid definition (section 3) to the messsage.
   - method L{addfield} adds sections 4-7 to the message (the product
     definition, data representation, bitmap and data sections).
@@ -1232,17 +1232,17 @@ class Grib2Encode:
 
 
  A GRIB Edition 2 message is a machine independent format for storing
- one or more gridded data fields.  Each GRIB2 message consists of the 
+ one or more gridded data fields.  Each GRIB2 message consists of the
  following sections:
   - SECTION 0: Indicator Section - only one per message
   - SECTION 1: Identification Section - only one per message
-  - SECTION 2: (Local Use Section) - optional                          
-  - SECTION 3: Grid Definition Section                                
-  - SECTION 4: Product Definition Section              
-  - SECTION 5: Data Representation Section   
-  - SECTION 6: Bit-map Section               
-  - SECTION 7: Data Section                  
-  - SECTION 8: End Section                   
+  - SECTION 2: (Local Use Section) - optional
+  - SECTION 3: Grid Definition Section
+  - SECTION 4: Product Definition Section
+  - SECTION 5: Data Representation Section
+  - SECTION 6: Bit-map Section
+  - SECTION 7: Data Section
+  - SECTION 8: End Section
 
  Sequences of GRIB sections 2 to 7, 3 to 7, or sections 4 to 7 may be repeated
  within a single GRIB message.  All sections within such repeated sequences
@@ -1266,30 +1266,30 @@ class Grib2Encode:
 
  L{addgrid}, L{addfield} and L{end} class methods must be called to complete
  the GRIB2 message.
- 
+
  @param discipline:  Discipline or GRIB Master Table Number (Code Table 0.0).
  (0 for meteorlogical, 1 for hydrological, 2 for land surface, 3 for space,
  10 for oceanographic products).
 
  @param idsect:  Sequence containing identification section (section 1).
   - idsect[0]=Id of orginating centre (Common Code
-    U{Table C-1<http://www.nws.noaa.gov/tg/GRIB_C1.htm>}) 
-  - idsect[1]=Id of orginating sub-centre (local table) 
-  - idsect[2]=GRIB Master Tables Version Number (Code 
+    U{Table C-1<http://www.nws.noaa.gov/tg/GRIB_C1.htm>})
+  - idsect[1]=Id of orginating sub-centre (local table)
+  - idsect[2]=GRIB Master Tables Version Number (Code
     U{Table 1.0
     <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table1-0.shtml>})
-  - idsect[3]=GRIB Local Tables Version Number (Code 
+  - idsect[3]=GRIB Local Tables Version Number (Code
     U{Table 1.1
     <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table1-1.shtml>})
-  - idsect[4]=Significance of Reference Time (Code 
+  - idsect[4]=Significance of Reference Time (Code
     U{Table 1.2
     <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table1-2.shtml>})
-  - idsect[5]=Reference Time - Year (4 digits) 
-  - idsect[6]=Reference Time - Month 
-  - idsect[7]=Reference Time - Day 
-  - idsect[8]=Reference Time - Hour 
-  - idsect[9]=Reference Time - Minute 
-  - idsect[10]=Reference Time - Second 
+  - idsect[5]=Reference Time - Year (4 digits)
+  - idsect[6]=Reference Time - Month
+  - idsect[7]=Reference Time - Day
+  - idsect[8]=Reference Time - Hour
+  - idsect[9]=Reference Time - Minute
+  - idsect[10]=Reference Time - Second
   - idsect[11]=Production status of data (Code
     U{Table 1.3
     <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table1-3.shtml>})
@@ -1304,27 +1304,27 @@ class Grib2Encode:
  Add a grid definition section (section 3) to the GRIB2 message.
 
  @param gdsinfo: Sequence containing information needed for the grid definition section.
-  - gdsinfo[0] = Source of grid definition (see Code  
+  - gdsinfo[0] = Source of grid definition (see Code
     U{Table 3.0
     <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table3-0.shtml>})
   - gdsinfo[1] = Number of grid points in the defined grid.
   - gdsinfo[2] = Number of octets needed for each additional grid points defn.
-    Used to define number of points in each row for non-reg grids (=0 for 
+    Used to define number of points in each row for non-reg grids (=0 for
     regular grid).
-  - gdsinfo[3] = Interp. of list for optional points defn (Code 
+  - gdsinfo[3] = Interp. of list for optional points defn (Code
     U{Table 3.11
     <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table3-11.shtml>})
-  - gdsinfo[4] = Grid Definition Template Number (Code 
+  - gdsinfo[4] = Grid Definition Template Number (Code
     U{Table 3.1
     <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table3-1.shtml>})
 
- @param gdtmpl: Contains the data values for the specified Grid Definition 
- Template ( NN=gdsinfo[4] ).  Each element of this integer  
- array contains an entry (in the order specified) of Grid 
- Definition Template 3.NN 
+ @param gdtmpl: Contains the data values for the specified Grid Definition
+ Template ( NN=gdsinfo[4] ).  Each element of this integer
+ array contains an entry (in the order specified) of Grid
+ Definition Template 3.NN
 
  @param deflist: (Used if gdsinfo[2] != 0)  Sequence containing the
- number of grid points contained in each row (or column) 
+ number of grid points contained in each row (or column)
  of a non-regular grid.
         """
         if deflist is not None:
@@ -1365,7 +1365,7 @@ class Grib2Encode:
  4.0<http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table4-0.shtml>})
 
  @param pdtmpl: Sequence with the data values for the specified Product Definition
- Template (N=pdtnum).  Each element of this integer 
+ Template (N=pdtnum).  Each element of this integer
  array contains an entry (in the order specified) of Product
  Definition Template 4.N
 
@@ -1374,7 +1374,7 @@ class Grib2Encode:
  <http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table5-0.shtml>})
 
  @param drtmpl: Sequence with the data values for the specified Data Representation
- Template (N=drtnum).  Each element of this integer 
+ Template (N=drtnum).  Each element of this integer
  array contains an entry (in the order specified) of Data
  Representation Template 5.N
  Note that some values in this template (eg. reference
