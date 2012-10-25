@@ -1,3 +1,11 @@
+since version 1.9.5 release
+===========================
+* print warning when trying to create an index from a file with
+  multi-field messages.  This is because keys inside multi-field messages
+  will not be indexed correctly by the grib_api library
+  (https://software.ecmwf.int/issues/browse/SUP-275). Partially addresses
+  issue 61.
+
 version 1.9.5 (svn revision 631)
 ================================
 * avoid crashing when julianDay is miscoded (by just not setting analDate,

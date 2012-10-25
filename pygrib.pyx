@@ -172,6 +172,7 @@ del __test__ # hack so epydoc doesn't show __test__
 __version__ = '1.9.5'
 
 import numpy as np
+import warnings
 from datetime import datetime
 from numpy import ma
 try:
@@ -287,6 +288,7 @@ cdef extern from "grib_api.h":
     int grib_get_gaussian_latitudes(long truncation,double* latitudes)
     int grib_index_write(grib_index *index, char *filename)
     grib_index* grib_index_read(grib_context* c, char* filename,int *err)
+    int grib_count_in_file(grib_context* c, FILE* f,int* n)
 
 
 missingvalue_int = GRIB_MISSING_LONG
@@ -364,7 +366,8 @@ cdef class open(object):
     @ivar name: The GRIB file which the instance represents."""
     cdef FILE *_fd
     cdef grib_handle *_gh
-    cdef public object name, messagenumber, messages, closed
+    cdef public object name, messagenumber, messages, closed,\
+                       has_multi_field_msgs
     def __cinit__(self, filename):
         # initialize C level objects.
         cdef grib_handle *gh
@@ -375,7 +378,7 @@ cdef class open(object):
             raise IOError("could not open %s", filename)
         self._gh = NULL
     def __init__(self, filename):
-        cdef int err
+        cdef int err, ncount
         cdef grib_handle *gh
         # initalize Python level objects
         self.name = filename
@@ -390,6 +393,14 @@ cdef class open(object):
             nmsgs = nmsgs + 1
         rewind(self._fd)
         self.messages = nmsgs 
+        err =  grib_count_in_file(NULL, self._fd, &ncount)
+        # if number of messages returned by grib_count_in_file
+        # differs from brute-force method of counting, then
+        # there must be multi-field messages in the file.
+        if ncount != self.messages:
+            self.has_multi_field_msgs=True
+        else:
+            self.has_multi_field_msgs=False
     def __iter__(self):
         return self
     def __next__(self):
@@ -1769,6 +1780,13 @@ name (i.e. C{level:l} will search for values of C{level} that are longs).
             self._gi = grib_index_new_from_file (NULL, filenamec, keys, &err)
             if err:
                 raise RuntimeError(grib_get_error_message(err))
+            grbs = open(filename)
+            if grbs.has_multi_field_msgs:
+                msg="""
+file %s has multi-field messages, keys inside multi-field
+messages will not be indexed correctly""" % filename
+                warnings.warn(msg)
+            grbs.close()
     def __init__(self, filename, *args):
         # initalize Python level objects
         self.name = filename
