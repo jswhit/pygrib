@@ -24,7 +24,7 @@ openjpeg_incdir = os.environ.get('OPENJPEG_INCDIR')
 setup_cfg = os.environ.get('PYGRIBSETUPCFG', 'setup.cfg')
 # contents of setup.cfg will override env vars.
 if os.path.exists(setup_cfg):
-    print 'reading from setup.cfg...'
+    sys.stdout.write('reading from setup.cfg...')
     config = configparser.SafeConfigParser()
     config.read(setup_cfg)
     try: grib_api_dir = config.get("directories", "grib_api_dir")
