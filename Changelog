@@ -1,4 +1,4 @@
-version 1.9.6 (svn revision 940)
+version 1.9.6 (svn revision 642)
 ================================
 * fixed print statement in setup.py and regenerated C interfaces with
   new version of Cython to fix python 3.3 errors.
