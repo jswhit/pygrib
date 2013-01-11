@@ -1,5 +1,7 @@
 since version 1.9.5 release
 ===========================
+* fixed print statement in setup.py and regenerated C interfaces with
+  new version of Cython to fix python 3.3 errors.
 * print warning when trying to create an index from a file with
   multi-field messages.  This is because keys inside multi-field messages
   will not be indexed correctly by the grib_api library
