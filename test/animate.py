@@ -9,6 +9,7 @@ import matplotlib.animation as animation
 grbs = pygrib.open('../sampledata/safrica.grib2')
 # grab all "brightness temp" grib messages.
 btemps = [grb for grb in grbs if grb['name']=='Brightness temperature']
+grb = btemps[0]
 lats, lons = grb.latlons()
 projd = grb.projparams
 grbs.close()
