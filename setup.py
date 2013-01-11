@@ -132,7 +132,7 @@ Extension("pygrib",["pygrib.c"],include_dirs=incdirs,library_dirs=libdirs,librar
 
 
 setup(name = "pygrib",
-      version = "1.9.5",
+      version = "1.9.6",
       description       = "Python module for reading/writing GRIB files",
       author            = "Jeff Whitaker",
       author_email      = "jeffrey.s.whitaker@noaa.gov",
