@@ -1,3 +1,4 @@
+from __future__ import print_function
 import pygrib
 import numpy as np
 from numpy import ma
@@ -9,7 +10,7 @@ import matplotlib.pyplot as plt
 grbs = pygrib.open('../sampledata/gfs.t12z.pgrbf120.2p5deg.grib2')
 grbmsg = grbs[208] # soil moisture
 data = grbmsg.values
-print data.min(), data.max()
+print(data.min(), data.max())
 
 # convert grib message to a ncepgrib2.Grib2Message instance.
 grb = Grib2Decode(grbmsg.tostring(), gribmsg=True)
@@ -36,7 +37,7 @@ f.close()
 grb = Grib2Decode('test_masked.grb')
 lats,lons = grb.latlons()
 data = grb.values
-print data.min(), data.max()
+print(data.min(), data.max())
 m = Basemap(lon_0=180,projection='kav7')
 x, y = m(lons, lats)
 CS = m.contourf(x,y,data,15,cmap=plt.cm.jet)
