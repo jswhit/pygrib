@@ -958,6 +958,11 @@ cdef class gribmessage(object):
             elif lowerlim is not None:
                 inventory.append(" (< %s)" % lowerlim)
         return ''.join(inventory)
+
+    def expand_grid(self,expand_reduced):
+        """toggle expansion of reduced grids to regular grids"""
+        self.expand_reduced = expand_reduced
+
     def is_missing(self,key):
         """
         is_missing(key)
@@ -1293,6 +1298,8 @@ cdef class gribmessage(object):
             if self.expand_reduced:
                 nx = 2*ny
                 datarr = _redtoreg(2*ny, self['pl'], datarr, missval)
+            else:
+                nx = None
         elif self.has_key('Nx') and self.has_key('Ny'):
             nx = self['Nx']
             ny = self['Ny']
@@ -1302,7 +1309,8 @@ cdef class gribmessage(object):
             ny = self['Nj']
         else: # probably spectral data.
             return datarr
-        if ny != GRIB_MISSING_LONG and nx != GRIB_MISSING_LONG:
+        if ny != GRIB_MISSING_LONG and nx != GRIB_MISSING_LONG and\
+           self.expand_reduced:
             datarr.shape = (ny,nx)
         # check scan modes for rect grids.
         if datarr.ndim == 2:
