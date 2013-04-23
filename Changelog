@@ -3,6 +3,8 @@ since version 1.9.6
 * added 'expand_grid' method to gribmessage - toggles expansion of
   reduced grids to regular grids.  Expansion is on by default, to turn
   off use grb.expand_grid(False).
+* added runtime_library_dirs to Extension in setup.py (so correct library
+  path is built in when linking shared libs).
 
 version 1.9.6 (svn revision 642)
 ================================
