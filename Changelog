@@ -1,5 +1,6 @@
 since version 1.9.6
 ===================
+* fix for GRIB1 mercator data (issue 72).
 * added 'expand_grid' method to gribmessage - toggles expansion of
   reduced grids to regular grids.  Expansion is on by default, to turn
   off use grb.expand_grid(False).

@@ -959,6 +959,13 @@ cdef class gribmessage(object):
                 inventory.append(" (< %s)" % lowerlim)
         return ''.join(inventory)
 
+    def _get_key(self, key, default=None):
+        """get key if it exists, otherwise return default value (default None)"""
+        if self.has_key(key):
+            return self[key]
+        else:
+            return default
+
     def expand_grid(self,expand_reduced):
         """toggle expansion of reduced grids to regular grids"""
         self.expand_reduced = expand_reduced
@@ -1460,14 +1467,20 @@ cdef class gribmessage(object):
             projparams['lon_0'] = self['centralLongitude']/1.e6
             projparams['proj'] = 'laea'
         elif self['gridType'] == 'mercator':
-            scale = float(self['grib2divider'])
+            scale = self._get_key('grib2divider',False)
+            if scale:
+                scale = float(scale)
+            else:
+                scale = 1000.
             lon1 = self['longitudeOfFirstGridPoint']/scale
-            if self['truncateDegrees']:
-                lon1 = int(lon1)
             lon2 = self['longitudeOfLastGridPoint']/scale
-            if self['truncateDegrees']:
+            if self._get_key('truncateDegrees',False):
+                lon1 = int(lon1)
                 lon2 = int(lon2)
-            projparams['lat_ts']=self['LaD']/scale
+            if self._get_key('LaD',False):
+                projparams['lat_ts'] = self['LaD']/scale
+            else:
+                projparams['lat_ts'] = self['Latin']/scale
             projparams['lon_0']=0.5*(lon1+lon2)
             projparams['proj']='merc'
         elif self['gridType'] in ['rotated_ll','rotated_gg']:
@@ -1681,19 +1694,21 @@ cdef class gribmessage(object):
             x, y = np.meshgrid(x, y)
             lons, lats = pj(x, y, inverse=True)
         elif self['gridType'] == 'mercator':
-            scale = float(self['grib2divider'])
-            lat1 = self['latitudeOfFirstGridPoint']/scale
-            if self['truncateDegrees']:
-                lat1 = int(lat1)
+            scale = self._get_key('grib2divider',False)
+            if scale:
+                scale = float(scale)
+            else:
+                scale = 1000.
             lon1 = self['longitudeOfFirstGridPoint']/scale
-            if self['truncateDegrees']:
-                lon1 = int(lon1)
-            lat2 = self['latitudeOfLastGridPoint']/scale
-            if self['truncateDegrees']:
-                lat2 = int(lat2)
             lon2 = self['longitudeOfLastGridPoint']/scale
-            if self['truncateDegrees']:
+            if self._get_key('truncateDegrees',False):
+                lon1 = int(lon1)
                 lon2 = int(lon2)
+            lat1 = self['latitudeOfFirstGridPoint']/scale
+            lat2 = self['latitudeOfLastGridPoint']/scale
+            if self._get_key('truncateDegrees',False):
+                lat1 = int(lat1)
+                lat2 = int(lat2)
             pj = pyproj.Proj(self.projparams)
             llcrnrx, llcrnry = pj(lon1,lat1)
             urcrnrx, urcrnry = pj(lon2,lat2)
