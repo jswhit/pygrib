@@ -123,6 +123,10 @@ Example usage
     >>> grb = grbs.message(2) # same as grbs.seek(1); grb=grbs.readline()
     >>> grb
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120 hrs:from 200402291200
+ - extract data and get lat/lon values for a subset over North America::
+    >>> data, lats, lons = grb.data(lat1=20,lat2=70,lon1=220,lon2=320)
+    >>> data.shape, lats.min(), lats.max(), lons.min(), lons.max()
+    (26, 53) 21.904439458 69.5216630593 221.25 318.75
  - modify the values associated with existing keys (either via attribute or
  dictionary access)::
     >>> grb['forecastTime'] = 240
@@ -1051,7 +1055,14 @@ cdef class gribmessage(object):
 	data(lat1=None,lat2=None,lon1=None,lon2=None)
 
 	extract data, lats and lons for a subset region defined
-	by lat1,lat2,lon1,lon2.
+	by the keywords  lat1,lat2,lon1,lon2.
+
+        The default values of lat1,lat2,lon1,lon2 are None, which
+        means the entire grid is returned.
+
+        If the grid type is unprojected lat/lon and a geographic
+        subset is requested (by using the lat1,lat2,lon1,lon2 keywords),
+        then 2-d arrays are returned, otherwise 1-d arrays are returned.
 	"""
         data = self.values
         lats, lons = self.latlons()
