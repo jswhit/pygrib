@@ -52,7 +52,7 @@ def test():
     1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs (avg):from 200402291200
 
     position iterator at beginning again.
-    >>> grbs.rewind() 
+    >>> grbs.rewind()
     >>> for grb in grbs: grb
     1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs (avg):from 200402291200
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120 hrs:from 200402291200
@@ -61,7 +61,7 @@ def test():
 
     get a specific grib message from the iterator.
     iterator will be positioned at this message.
-    >>> grb = grbs.message(3) 
+    >>> grb = grbs.message(3)
     >>> grb # 3rd message
     3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
 
@@ -73,7 +73,7 @@ def test():
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120 hrs:from 200402291200
 
     position iterator at next grib message.
-    >>> grb = grbs.readline() 
+    >>> grb = grbs.readline()
     >>> grb # back to the 1st message
     1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs (avg):from 200402291200
 
@@ -108,7 +108,7 @@ def test():
     >>> grb
     1:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
 
-    get the data and the lat/lon values of the Max temp grid 
+    get the data and the lat/lon values of the Max temp grid
     >>> data = grb['values'] # 'values' returns the data
     >>> 'shape/min/max data %s %6.2f %6.2f'%(str(data.shape),data.min(),data.max())
     'shape/min/max data (94, 192) 223.70 319.90'
@@ -129,7 +129,7 @@ def test():
 
     change the forecast time.
     gribmessage keys can be accessed either via attributes or key/value pairs.
-    >>> grb['forecastTime'] = 168  
+    >>> grb['forecastTime'] = 168
     >>> grb['forecastTime']
     168
     >>> grb.forecastTime = 240
@@ -187,6 +187,14 @@ def test():
     >>> lats, lons = grb.latlons() # returns lat/lon values on grid.
     >>> str('min/max of %d lats on %s grid %4.2f %4.2f' % (grb['Nj'], grb['typeOfGrid'],lats.min(),lats.max()))
     'min/max of 73 lats on regular_ll grid -90.00 90.00'
+
+    test data subsetting via data method.
+    >>> datsubset,latsubset,lonsubset=grb.data(lat1=15,lat2=65,lon1=220,lon2=320)
+    >>> latsubset.min(),latsubset.max(),lonsubset.min(),lonsubset.max()
+    (15.0, 65.0, 220.0, 320.0)
+    >>> 'shape/min/max data subset %s %6.2f %6.2f' % (str(datsubset.shape),datsubset.min(),datsubset.max())
+    'shape/min/max data subset (21, 41) 239.30 268.60'
+
     >>> grbstr = grb.tostring()
     >>> grb2 = pygrib.fromstring(grbstr)
     >>> grb2
@@ -201,7 +209,7 @@ def test():
     >>> grbs.messages
     343
     >>> grbs.close()
- 
+
     test ndfd file with 'grid_complex_spatial_differencing' encoding
     >>> grbs = pygrib.open('sampledata/dspr.temp.bin')
     >>> for grb in grbs: grb
