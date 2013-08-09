@@ -1,5 +1,5 @@
-version 1.9.7
-===================
+version 1.9.7 (not yet released)
+================================
 * add 'data' method for gribmessage that returns data, lats and lons
   for a subset region (defined by bounding lat and lon values).
 * fix for GRIB1 mercator data (issue 72).
