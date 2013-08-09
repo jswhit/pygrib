@@ -1069,11 +1069,14 @@ cdef class gribmessage(object):
             latsubset = lats[mask]
             lonsubset = lons[mask]
             # lat/lon grids
-            reduced_expand = self['gridType'] in ['reduced_ll','reduced_gg'] and self.expand_reducedj
+            reduced_expand = self['gridType'] in ['reduced_ll','reduced_gg'] and self.expand_reduced
             if self['gridType'] in ['regular_gg','regular_ll'] or reduced_expand: 
                 nlats = masklat[:,0].sum()
                 nlons = masklon[0,:].sum()
-                datsubset = np.reshape(datsubset,(nlats,nlons))
+                if ma.isMA(datsubset):
+                    datsubset = ma.reshape(datsubset,(nlats,nlons))
+                else:
+                    datsubset = np.reshape(datsubset,(nlats,nlons))
                 latsubset = np.reshape(latsubset,(nlats,nlons))
                 lonsubset = np.reshape(lonsubset,(nlats,nlons))
         return datsubset,latsubset, lonsubset
