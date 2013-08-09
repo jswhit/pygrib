@@ -1068,7 +1068,7 @@ cdef class gribmessage(object):
             datsubset = data[mask]
             latsubset = lats[mask]
             lonsubset = lons[mask]
-            # lat/lon grids
+            # reshape lat/lon grids so returned arrays are 2-d instead of 1-d
             reduced_expand = self['gridType'] in ['reduced_ll','reduced_gg'] and self.expand_reduced
             if self['gridType'] in ['regular_gg','regular_ll'] or reduced_expand: 
                 nlats = masklat[:,0].sum()
