@@ -1046,6 +1046,37 @@ cdef class gribmessage(object):
             if key not in keys_noro:
                 keys_ro.append(key)
         return keys_ro
+    def data(self,lat1=None,lat2=None,lon1=None,lon2=None):
+        """
+	data(lat1=None,lat2=None,lon1=None,lon2=None)
+
+	extract data, lats and lons for a subset region defined
+	by lat1,lat2,lon1,lon2.
+	"""
+        data = self.values
+        lats, lons = self.latlons()
+        if lon1==lon2==lat1==lat2==None:
+            datsubset = data; lonsubset = lons; latsubset = lats
+        else:
+            if lat1 is None: lat1 = lats.min()
+            if lat2 is None: lat2 = lats.max()
+            if lon1 is None: lon1 = lons.min()
+            if lon2 is None: lon2 = lons.max()
+            masklat = (lats >= lat1) & (lats <= lat2)
+            masklon = (lons >= lon1) & (lons <= lon2)
+            mask = masklat & masklon
+            datsubset = data[mask]
+            latsubset = lats[mask]
+            lonsubset = lons[mask]
+            # lat/lon grids
+            reduced_expand = self['gridType'] in ['reduced_ll','reduced_gg'] and self.expand_reducedj
+            if self['gridType'] in ['regular_gg','regular_ll'] or reduced_expand: 
+                nlats = masklat[:,0].sum()
+                nlons = masklon[0,:].sum()
+                datsubset = np.reshape(datsubset,(nlats,nlons))
+                latsubset = np.reshape(latsubset,(nlats,nlons))
+                lonsubset = np.reshape(lonsubset,(nlats,nlons))
+        return datsubset,latsubset, lonsubset
     def __setitem__(self, key, value):
         """
         change values associated with existing grib keys.

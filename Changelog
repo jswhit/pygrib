@@ -1,5 +1,7 @@
 since version 1.9.6
 ===================
+* add 'data' method for gribmessage that returns data, lats and lons
+  for a subset region (defined by bounding lat and lon values).
 * fix for GRIB1 mercator data (issue 72).
 * added 'expand_grid' method to gribmessage - toggles expansion of
   reduced grids to regular grids.  Expansion is on by default, to turn
