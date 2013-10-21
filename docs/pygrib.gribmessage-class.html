@@ -48,8 +48,8 @@
     </td>
   </tr>
 </table>
-<!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class gribmessage</h1><p class="nomargin-top"></p>
+<!-- ==================== TYPE DESCRIPTION ==================== -->
+<h1 class="epydoc">type gribmessage</h1><p class="nomargin-top"></p>
 <pre class="base-tree">
 object --+
          |
@@ -254,6 +254,44 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pygrib.gribmessage-class.html#data" class="summary-sig-name">data</a>(<span class="summary-sig-arg">lat1</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">lat2</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">lon1</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">lon2</span>=<span class="summary-sig-default">None</span>)</span><br />
+      extract data, lats and lons for a subset region defined by the 
+      keywords  lat1,lat2,lon1,lon2.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="expand_grid"></a><span class="summary-sig-name">expand_grid</span>(<span class="summary-sig-arg">...</span>)</span><br />
+      toggle expansion of reduced grids to regular grids</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a name="has_key"></a><span class="summary-sig-name">has_key</span>(<span class="summary-sig-arg">key</span>)</span><br />
       tests whether a grib message object has a specified key.</td>
           <td align="right" valign="top">
@@ -352,19 +390,6 @@ object --+
       
     </td>
   </tr>
-  <tr>
-    <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
-      <code>__format__</code>,
-      <code>__hash__</code>,
-      <code>__reduce__</code>,
-      <code>__reduce_ex__</code>,
-      <code>__sizeof__</code>,
-      <code>__str__</code>,
-      <code>__subclasshook__</code>
-      </p>
-    </td>
-  </tr>
 </table>
 <!-- ==================== INSTANCE VARIABLES ==================== -->
 <a name="section-InstanceVariables"></a>
@@ -425,22 +450,6 @@ object --+
         <a href="pygrib.gribmessage-class.html#validDate" class="summary-name">validDate</a><br />
       A python datetime instance describing the valid date and time for the
       forecast.
-    </td>
-  </tr>
-</table>
-<!-- ==================== PROPERTIES ==================== -->
-<a name="section-Properties"></a>
-<table class="summary" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td align="left" colspan="2" class="table-header">
-    <span class="table-header">Properties</span></td>
-</tr>
-  <tr>
-    <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
-      <code>__class__</code>
-      </p>
     </td>
   </tr>
 </table>
@@ -616,6 +625,34 @@ object --+
   </dl>
 </td></tr></table>
 </div>
+<a name="data"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">data</span>(<span class="sig-arg">lat1</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">lat2</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">lon1</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">lon2</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>extract data, lats and lons for a subset region defined by the 
+  keywords  lat1,lat2,lon1,lon2.</p>
+  <p>The default values of lat1,lat2,lon1,lon2 are None, which means the 
+  entire grid is returned.</p>
+  <p>If the grid type is unprojected lat/lon and a geographic subset is 
+  requested (by using the lat1,lat2,lon1,lon2 keywords), then 2-d arrays 
+  are returned, otherwise 1-d arrays are returned.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
 <a name="latlons"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -731,7 +768,8 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Jan 11 08:43:26 2013
+    Generated by Epydoc 3.0.1
+    on Mon Oct 21 13:23:56 2013
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

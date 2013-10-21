@@ -35,13 +35,16 @@ pygrib.gribmessage.__getattr__	pygrib.gribmessage-class.html#__getattr__
 pygrib.gribmessage.messagenumber	pygrib.gribmessage-class.html#messagenumber
 pygrib.gribmessage._unshape_mask	pygrib.gribmessage-class.html#_unshape_mask
 pygrib.gribmessage._ro_keys	pygrib.gribmessage-class.html#_ro_keys
+pygrib.gribmessage._get_key	pygrib.gribmessage-class.html#_get_key
 pygrib.gribmessage._reshape_mask	pygrib.gribmessage-class.html#_reshape_mask
 pygrib.gribmessage.analDate	pygrib.gribmessage-class.html#analDate
 pygrib.gribmessage.__getitem__	pygrib.gribmessage-class.html#__getitem__
 pygrib.gribmessage.keys	pygrib.gribmessage-class.html#keys
 pygrib.gribmessage.validDate	pygrib.gribmessage-class.html#validDate
+pygrib.gribmessage.expand_grid	pygrib.gribmessage-class.html#expand_grid
 pygrib.gribmessage.__setitem__	pygrib.gribmessage-class.html#__setitem__
 pygrib.gribmessage.tostring	pygrib.gribmessage-class.html#tostring
+pygrib.gribmessage.data	pygrib.gribmessage-class.html#data
 pygrib.gribmessage.__delitem__	pygrib.gribmessage-class.html#__delitem__
 pygrib.gribmessage.valid_key	pygrib.gribmessage-class.html#valid_key
 pygrib.gribmessage._set_projparams	pygrib.gribmessage-class.html#_set_projparams
