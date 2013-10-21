@@ -1,4 +1,4 @@
-version 1.9.7 (svn revision 658)
+version 1.9.7 (svn revision 660)
 ================================
 * add 'data' method for gribmessage that returns data, lats and lons
   for a subset region (defined by bounding lat and lon values).
