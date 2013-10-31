@@ -1,3 +1,9 @@
+since version 1.9.7
+===================
+
+* fix for issue 80 (remove mention of --packing_scheme from 
+  grib_repack help message).
+
 version 1.9.7 (svn revision 660)
 ================================
 * add 'data' method for gribmessage that returns data, lats and lons
