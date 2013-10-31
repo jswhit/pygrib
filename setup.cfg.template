@@ -27,3 +27,5 @@
 # if grib_api was built with png support,
 # uncomment and set to zlib install location.
 #zlib_dir = /usr
+# install man pages for command line utilities here
+#man_dir = /usr/local/man

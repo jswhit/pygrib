@@ -1,6 +1,8 @@
 since version 1.9.7
 ===================
-* add man pages (thanks to Jos De Klos and Alastair McKinstry).
+* add man pages (thanks to Jos De Klos and Alastair McKinstry). Modify
+  setup.py to install man pages in MAN_DIR/man1 (MAN_DIR is an environment
+  variable, or can be set in setup.cfg).
 * fix for issue 80 (remove mention of --packing_scheme from 
   grib_repack help message).
 

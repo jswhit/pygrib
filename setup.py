@@ -20,6 +20,8 @@ zlib_incdir = os.environ.get('ZLIB_INCDIR')
 openjpeg_dir = os.environ.get('OPENJPEG_DIR')
 openjpeg_libdir = os.environ.get('OPENJPEG_LIBDIR')
 openjpeg_incdir = os.environ.get('OPENJPEG_INCDIR')
+# where to install man pages?
+man_dir = os.environ.get('MAN_DIR')
 
 setup_cfg = os.environ.get('PYGRIBSETUPCFG', 'setup.cfg')
 # contents of setup.cfg will override env vars.
@@ -56,6 +58,8 @@ if os.path.exists(setup_cfg):
     try: zlib_libdir = config.get("directories", "zlib_libdir")
     except: pass
     try: zlib_incdir = config.get("directories", "zlib_incdir")
+    except: pass
+    try: man_dir = config.get("directories", "man_dir")
     except: pass
 
 libdirs=[]
@@ -132,6 +136,15 @@ pygribext =\
 Extension("pygrib",["pygrib.c"],include_dirs=incdirs,library_dirs=libdirs,\
           runtime_library_dirs=libdirs,libraries=libraries)
 
+# man pages installed in man_dir/man1
+if man_dir is not None:
+    manpages = glob.glob(os.path.join('man','*.1'))
+    data_files = [(os.path.join(man_dir,'man1'), manpages)]
+# if man_dir not set, man pages not installed
+else:
+    data_files = None
+
+
 
 setup(name = "pygrib",
       version = "1.9.7",
@@ -143,4 +156,5 @@ setup(name = "pygrib",
       scripts =
       ['utils/grib_list','utils/grib_repack','utils/cnvgrib1to2','utils/cnvgrib2to1'],
       ext_modules       = [pygribext,g2clibext,redtoregext],
-      py_modules        = ["ncepgrib2"])
+      py_modules        = ["ncepgrib2"],
+      data_files        = data_files)
