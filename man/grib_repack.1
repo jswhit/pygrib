@@ -1,0 +1,75 @@
+.\"updated 31-Oct-2013 by Jos de Kloe <josdekloe@gmail.com>
+
+.TH grib_repack 1 "2013-10-31" "pygrib"
+
+.SH NAME
+.B grib_repack \- change the packing scheme in a GRIB2 file
+
+.SH SYNOPSIS
+.B grib_repack 
+.I -pN grib2filein grib2fileout
+.PP
+.B grib_repack -h 
+
+.SH DESCRIPTION
+This command (from the pygrib package) repacks the data in 
+.I grib2filein
+with a different packing scheme, and writes it to a new file named
+.I grib2fileout
+
+.SH OPTIONS
+The following optional parameter is available:
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+show help message
+.TP
+The following parameter is required for normal use and not optional:
+.TP
+\fB\-pN\fR
+Desired packing type, where 
+.I N 
+is:
+.TP
+.B 0
+for simple packing
+.TP
+.B 1
+for simple matrix packing
+.TP
+.B 2
+for complex packing
+.TP
+.B 3
+for complex packing with spatial differencing
+.TP
+.B 4
+for no packing (ieee)
+.TP
+.B 40
+for JPEG2000 packing
+.TP
+.B 41
+for PNG packing
+.TP
+.B 61
+for simple log pre-processing
+
+.SH EXIT STATUS
+.TP
+0
+if OK
+.TP
+1
+if the program failed during the list stage
+or if it did not start due to incorrect commandline arguments
+
+.SH EXAMPLE
+The following commnd converts grib2filein to complex packing
+with spatial differencing, saves result to grib2fileout.
+.TP
+grib_repack -p3 grib2filein grib2fileout
+
+.SH AUTHORS
+Jeffrey Whitaker <jeffrey.s.whitaker@noaa.gov> wrote the code.
+.br
+Alastair McKinstry <mckinstry@debian.org> wrote this man page.

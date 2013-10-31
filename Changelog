@@ -1,6 +1,6 @@
 since version 1.9.7
 ===================
-
+* add man pages (thanks to Jos De Klos and Alastair McKinstry).
 * fix for issue 80 (remove mention of --packing_scheme from 
   grib_repack help message).
 

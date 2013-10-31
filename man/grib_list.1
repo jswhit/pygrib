@@ -1,0 +1,46 @@
+.\"updated 31-Oct-2013 by Jos de Kloe <josdekloe@gmail.com>
+
+.TH grib_list 1 "2013-10-31" "pygrib"
+
+.SH NAME
+.B grib_list \- List the contents of a GRIB or GRIB2 file
+
+.SH SYNOPSIS
+.B grib_list
+.I gribfile [-s]
+
+.SH DESCRIPTION
+This command (from the pygrib package) lists the contents
+of a GRIB1 or GRIB2 (meteorological data) formatted file.
+
+.SH OPTIONS
+Optional parameter:
+.TP
+.B -s
+Give a short, rather than long, form of the listing.
+
+.SH EXIT STATUS
+.TP
+0
+if OK
+.TP
+1
+if the program failed during the list stage
+or if it did not start due to a wrong number
+of commandline arguments
+
+.SH AUTHORS
+Jeffrey Whitaker <jeffrey.s.whitaker@noaa.gov> wrote the code.
+.br
+Alastair McKinstry <mckinstry@debian.org> wrote this man page.
+
+.SH SEE ALSO
+Related tools are
+.B cnvgrib1to2,
+.B cnvgrib2to1,
+and
+.B grib_repack
+which are all based on the more general python module
+.I pygrib
+and the c-library 
+.I gribapi

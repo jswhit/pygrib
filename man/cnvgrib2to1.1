@@ -1,0 +1,45 @@
+.\"updated 31-Oct-2013 by Jos de Kloe <josdekloe@gmail.com>
+
+.TH CNVGRIB2TO1 1 "2013-10-31" "pygrib"
+
+.SH NAME
+.B cnvgrib2to1 \- Convert a GRIB2 file to GRIB1 format
+
+.SH SYNOPSIS
+.B cnvgrib2to1 
+.I <grib2filename> 
+.I <grib1filename>
+
+.SH DESCRIPTION
+This command (from the pygrib package) converts a GRIB2 formatted file
+to a GRIB1 formatted file.
+
+GRIB is a file format defined for meteorological data defined by
+the WMO (World Meteorological Organisation).
+It is commonly used in meteorology to store historical and forecast
+weather data.
+
+.SH EXIT STATUS
+.TP
+0
+if OK or if the program did not start due to a wrong number
+of commandline arguments
+.TP
+1
+if the program failed during the conversion stage
+
+.SH AUTHORS
+Jeffrey Whitaker <jeffrey.s.whitaker@noaa.gov> wrote the code.
+.br
+Alastair McKinstry <mckinstry@debian.org> wrote this man page
+
+.SH SEE ALSO
+Related tools are
+.B cnvgrib1to2,
+.B grib_list
+and
+.B grib_repack
+which are all based on the more general python module
+.I pygrib
+and the c-library 
+.I gribapi
