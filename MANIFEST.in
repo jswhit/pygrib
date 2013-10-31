@@ -22,3 +22,4 @@ include sampledata/*.bin
 recursive-include g2clib_src *
 include test/README
 include test/*py
+include man/*.1
