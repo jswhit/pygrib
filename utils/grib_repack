@@ -24,7 +24,7 @@ parser.add_option("-p", default=False, action="store",dest="ipack",
 (options, args) = parser.parse_args()
 
 if not options.ipack:
-    sys.stdout.write('must specify a packing scheme with -p or --packing_scheme\n')
+    sys.stdout.write('must specify a packing scheme with -p\n')
     sys.exit(1)
 
 ipack = int(options.ipack)
