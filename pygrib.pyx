@@ -307,6 +307,7 @@ def _get_grib_api_version():
     major = v
     return "%d.%d.%d" % (major,minor,revision)
 grib_api_version = _get_grib_api_version()
+tolerate_badgrib = True
 
 def gaulats(object nlats):
     """
@@ -1055,7 +1056,7 @@ cdef class gribmessage(object):
 	data(lat1=None,lat2=None,lon1=None,lon2=None)
 
 	extract data, lats and lons for a subset region defined
-	by the keywords  lat1,lat2,lon1,lon2.
+	by the keywords lat1,lat2,lon1,lon2.
 
         The default values of lat1,lat2,lon1,lon2 are None, which
         means the entire grid is returned.
@@ -1187,7 +1188,10 @@ cdef class gribmessage(object):
         else:
             err = grib_get_size(self._gh, name, &size)
             if err:
-                raise RuntimeError(grib_get_error_message(err))
+                if tolerate_badgrib:
+                    return None
+                else:
+                    raise RuntimeError(grib_get_error_message(err))
         # this workaround only needed for grib_api < 1.9.16.
         if usenceplib:
             typ = 2
@@ -1452,7 +1456,7 @@ cdef class gribmessage(object):
                 projparams['a']=6371200.0
                 projparams['b']=6371200.0
             else:
-                raise ValueError('unknown shape of the earth flag')
+                if not tolerate_badgrib: raise ValueError('unknown shape of the earth flag')
 
         if self['gridType'] in ['reduced_gg','reduced_ll','regular_gg','regular_ll']: # regular lat/lon grid
             projparams['proj']='cyl'
@@ -1464,7 +1468,7 @@ cdef class gribmessage(object):
             elif self.has_key('projectionCenterFlag'):
                 projcenterflag = self['projectionCenterFlag']
             else:
-                raise KeyError('cannot find projection center flag')
+                if not tolerate_badgrib: raise KeyError('cannot find projection center flag')
             if projcenterflag == 0:
                 projparams['lat_0']=90.
             else:
