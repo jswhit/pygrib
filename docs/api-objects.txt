@@ -1,5 +1,6 @@
 pygrib	pygrib-module.html
 pygrib.missingvalue_int	pygrib-module.html#missingvalue_int
+pygrib.tolerate_badgrib_on	pygrib-module.html#tolerate_badgrib_on
 pygrib.default_encoding	pygrib-module.html#default_encoding
 pygrib.multi_support_off	pygrib-module.html#multi_support_off
 pygrib._find	pygrib-module.html#_find
@@ -13,12 +14,14 @@ pygrib._ftimedict	pygrib-module.html#_ftimedict
 pygrib.__version__	pygrib-module.html#__version__
 pygrib._is_container	pygrib-module.html#_is_container
 pygrib._get_grib_api_version	pygrib-module.html#_get_grib_api_version
+pygrib.tolerate_badgrib_off	pygrib-module.html#tolerate_badgrib_off
 pygrib.missingvalue_float	pygrib-module.html#missingvalue_float
 pygrib.gaulats	pygrib-module.html#gaulats
 pygrib.fromstring	pygrib-module.html#fromstring
 pygrib.grib_api_version	pygrib-module.html#grib_api_version
 pygrib.setdates	pygrib-module.html#setdates
 pygrib.datetime_to_julian	pygrib-module.html#datetime_to_julian
+pygrib.tolerate_badgrib	pygrib-module.html#tolerate_badgrib
 pygrib.gribmessage	pygrib.gribmessage-class.html
 pygrib.gribmessage.latlons	pygrib.gribmessage-class.html#latlons
 pygrib.gribmessage.__getattribute__	pygrib.gribmessage-class.html#__getattribute__
