@@ -4,15 +4,25 @@ pygrib.tolerate_badgrib = True
 if len(sys.argv) < 2:
     sys.stdout.write("'grib_list <grib_filename>' to get long listing\n")
     sys.stdout.write("'grib_list <grib_filename> -s' to get short listing\n")
+    sys.stdout.write("'grib_list <grib_filename> -m' to get short listing plus data min/max\n")
     sys.exit(1)
 fname = sys.argv[1]
 short = False
-if len(sys.argv) > 2 and sys.argv[2] == '-s':
-    short = True
+medium = False
+if len(sys.argv) > 2:
+    if sys.argv[2] == '-s': short=True
+    if sys.argv[2] == '-m': medium=True
 grbs = pygrib.open(fname)
 if short:
     for grb in grbs:
         sys.stdout.write(repr(grb)+'\n')
+elif medium:
+    for grb in grbs:
+        try:
+            data = grb.values
+	    sys.stdout.write(repr(grb)+':min/max=(%s,%s)'%(data.min(), data.max())+'\n')
+	except:
+	    sys.stdout.write(repr(grb)+':min/max=NO DATA'+'\n')
 else:
     for grb in grbs:
         sys.stdout.write('------message %d------\n' % grb.messagenumber)
