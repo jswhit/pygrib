@@ -14,6 +14,9 @@ def _redtoreg(object nlonsin, npc.ndarray lonsperlat, npc.ndarray redgrid, \
     nlons = nlonsin
     nlats = len(lonsperlat)
     npts = len(redgrid)
+    if lonsperlat.sum() != npts:
+        msg='size of reduced grid does not match number of data values'
+        raise ValueError(msg)
     reggrid = missval*np.ones((nlats,nlons),np.double)
     # get data buffers and cast to desired type.
     lonsptr = <long *>lonsperlat.data
