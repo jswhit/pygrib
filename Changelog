@@ -1,5 +1,8 @@
 version 1.9.8 (not yet released)
 ================================
+* raise exception in redtoreg.pyx if number of points on reduced grid
+  does not equal number of data values (to prevent segfault).
+* add -m option to grib_list (same as -s, but also print min/max of data).
 * add 'tolerate_badgrib' module variable. When set to True (default False)
   execptions won't be raised when grib files are encountered with missing or
   malformed keys. Toggle with tolerate_badgrib_on() and
