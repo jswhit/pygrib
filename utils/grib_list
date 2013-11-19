@@ -19,7 +19,7 @@ if short:
 elif medium:
     for grb in grbs:
         try:
-            data = grb.values
+            grb.expand_grid(False); data = grb.values
             sys.stdout.write(repr(grb)+':min/max=%g/%g'%(data.min(), data.max())+'\n')
         except:
             sys.stdout.write(repr(grb)+':min/max=NO DATA'+'\n')
