@@ -1,6 +1,6 @@
 since version 1.9.7
 ===================
-* add 'tolerate_badgrib' module variable. When set to False (default True)
+* add 'tolerate_badgrib' module variable. When set to True (default False)
   execptions won't be raised when grib files are encountered with missing or
   malformed keys.
 

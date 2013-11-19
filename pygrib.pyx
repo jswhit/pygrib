@@ -307,7 +307,7 @@ def _get_grib_api_version():
     major = v
     return "%d.%d.%d" % (major,minor,revision)
 grib_api_version = _get_grib_api_version()
-tolerate_badgrib = True
+tolerate_badgrib = False
 
 def gaulats(object nlats):
     """
