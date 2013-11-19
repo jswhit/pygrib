@@ -2,8 +2,8 @@ since version 1.9.7
 ===================
 * add 'tolerate_badgrib' module variable. When set to True (default False)
   execptions won't be raised when grib files are encountered with missing or
-  malformed keys.
-
+  malformed keys. Toggle with tolerate_badgrib_on() and
+  tolerate_badgrib_off().
 * add man pages (thanks to Jos De Klos and Alastair McKinstry). Modify
   setup.py to install man pages in MAN_DIR/man1 (MAN_DIR is an environment
   variable, or can be set in setup.cfg).

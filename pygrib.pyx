@@ -309,6 +309,21 @@ def _get_grib_api_version():
 grib_api_version = _get_grib_api_version()
 tolerate_badgrib = False
 
+def tolerate_badgrib_on():
+    """
+    don't raise an exception when a missing or malformed key is encountered.
+    """
+    global tolerate_badgrib
+    tolerate_badgrib = True
+
+def tolerate_badgrib_off():
+    """
+    raise an exception when a missing or malformed key is encountered
+    (default behavior).
+    """
+    global tolerate_badgrib
+    tolerate_badgrib = False
+
 def gaulats(object nlats):
     """
     gaulats(nlats)

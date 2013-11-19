@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import pygrib, sys
-pygrib.tolerate_badgrib = True
+pygrib.tolerate_badgrib_on()
 if len(sys.argv) < 2:
     sys.stdout.write("'grib_list <grib_filename>' to get long listing\n")
     sys.stdout.write("'grib_list <grib_filename> -s' to get short listing\n")
