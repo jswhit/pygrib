@@ -5,13 +5,7 @@ grbs = pygrib.open('../sampledata/flux.grb')
 grb = grbs.message(2)
 lats, lons = grb.latlons()
 data = grb['values']
-llcrnrlon = lons[0,0]
-llcrnrlat = lats[0,0]
-urcrnrlon = lons[-1,-1]
-urcrnrlat = lats[-1,-1]
-m = Basemap(llcrnrlon=llcrnrlon,llcrnrlat=llcrnrlat,
-            urcrnrlon=urcrnrlon,urcrnrlat=urcrnrlat,
-            resolution='c',projection='cyl')
+m = Basemap(lon_0=180)
 #m.scatter(lons.flat,lats.flat,1,marker='o',color='k',zorder=10)
 x,y = m(lons,lats)
 m.drawcoastlines()

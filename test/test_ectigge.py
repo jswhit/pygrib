@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from numpy import ma
 from mpl_toolkits.basemap import Basemap
+
 for grb in pygrib.open('../sampledata/ecmwf_tigge.grb'):
     if grb['parameterName'] == 'Soil moisture':
         fld = grb['values']
@@ -15,13 +16,7 @@ for grb in pygrib.open('../sampledata/ecmwf_tigge.grb'):
 #fld = grbx.data()
 #lats,lons = grbx.grid()
 
-llcrnrlon = lons[0,0]
-llcrnrlat = lats[0,0]
-urcrnrlon = lons[-1,-1]
-urcrnrlat = lats[-1,-1]
-m = Basemap(llcrnrlon=llcrnrlon,llcrnrlat=llcrnrlat,
-            urcrnrlon=urcrnrlon,urcrnrlat=urcrnrlat,
-            resolution='l',projection='cyl')
+m = Basemap(lon_0=180)
 CS = m.contourf(lons,lats,fld,15,cmap=plt.cm.jet)
 plt.colorbar(shrink=0.6)
 m.drawcoastlines()
