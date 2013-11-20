@@ -1,5 +1,7 @@
 version 1.9.8 (not yet released)
 ================================
+* fix segfaulting in ncepgrib2.py when interpolating from reduced to regular
+  grids.
 * raise exception in redtoreg.pyx if number of points on reduced grid
   does not equal number of data values (to prevent segfault).
 * add -m option to grib_list (same as -s, but also print min/max of data).
