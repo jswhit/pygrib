@@ -1336,14 +1336,14 @@ cdef class gribmessage(object):
                 raise ValueError("reduced grid data array must be 1d")
         if datarr.ndim == 2:
             # check scan modes for rect grids.
-            # rows scan in the -x direction (so flip)
-            if not self['jScansPositively']:
-                datsave = datarr.copy()
-                datarr[::-1,:] = datsave[:,:]
             # columns scan in the -y direction (so flip)
-            if self['iScansNegatively']:
-                datsave = datarr.copy()
-                datarr[:,::-1] = datsave[:,:]
+            #if not self['jScansPositively']:
+            #    datsave = datarr.copy()
+            #    datarr[::-1,:] = datsave[:,:]
+            # rows scan in the -x direction (so flip)
+            #if self['iScansNegatively']:
+            #    datsave = datarr.copy()
+            #    datarr[:,::-1] = datsave[:,:]
             # adjacent rows scan in opposite direction.
             # (flip every other row)
             if self['alternativeRowScanning']:
@@ -1385,14 +1385,14 @@ cdef class gribmessage(object):
             datarr.shape = (ny,nx)
         # check scan modes for rect grids.
         if datarr.ndim == 2:
-           # rows scan in the -x direction (so flip)
-           if not self['jScansPositively']:
-               datsave = datarr.copy()
-               datarr[:,:] = datsave[::-1,:]
            # columns scan in the -y direction (so flip)
-           if self['iScansNegatively']:
-               datsave = datarr.copy()
-               datarr[:,:] = datsave[:,::-1]
+           #if not self['jScansPositively']:
+           #    datsave = datarr.copy()
+           #    datarr[:,:] = datsave[::-1,:]
+           # rows scan in the -x direction (so flip)
+           #if self['iScansNegatively']:
+           #    datsave = datarr.copy()
+           #    datarr[:,:] = datsave[:,::-1]
            # adjacent rows scan in opposite direction.
            # (flip every other row)
            if self['alternativeRowScanning']:
