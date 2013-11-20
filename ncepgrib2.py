@@ -713,12 +713,12 @@ lat/lon values returned by grid method may be incorrect."""
                     lonsperlat = self.grid_definition_list
                     if ma.isMA(fld):
                         fld = ma.filled(fld)
-                        fld = _redtoreg(nx, lonsperlat,\
-                                fld.astype('f8'), fill_value)
+                        fld = _redtoreg(nx, lonsperlat.astype(np.long),\
+                                fld.astype(np.double), fill_value)
                         fld = ma.masked_values(fld,fill_value)
                     else:
-                        fld = _redtoreg(nx, lonsperlat, fld.astype('f8'),\
-                                fill_value)
+                        fld = _redtoreg(nx, lonsperlat.astype(np.long),\
+                                fld.astype(np.double), fill_value)
         # check scan modes for rect grids.
         if nx is not None and ny is not None:
             # rows scan in the -x direction (so flip)
