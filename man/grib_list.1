@@ -7,17 +7,20 @@
 
 .SH SYNOPSIS
 .B grib_list
-.I gribfile [-s]
+.I gribfile [-s] [-m]
 
 .SH DESCRIPTION
 This command (from the pygrib package) lists the contents
 of a GRIB1 or GRIB2 (meteorological data) formatted file.
 
 .SH OPTIONS
-Optional parameter:
+Optional parameters (only one can be specified):
 .TP
 .B -s
 Give a short, rather than long, form of the listing.
+.TP
+.B -m
+Adds min/max of data to short listing.
 
 .SH EXIT STATUS
 .TP
