@@ -722,13 +722,13 @@ lat/lon values returned by grid method may be incorrect."""
         # check scan modes for rect grids.
         if nx is not None and ny is not None:
             # rows scan in the -x direction (so flip)
-            if self.scanmodeflags[0]:
-                fldsave = fld.astype('f') # casting makes a copy
-                fld[:,:] = fldsave[:,::-1]
+            #if self.scanmodeflags[0]:
+            #    fldsave = fld.astype('f') # casting makes a copy
+            #    fld[:,:] = fldsave[:,::-1]
             # columns scan in the -y direction (so flip)
-            if not self.scanmodeflags[1]:
-                fldsave = fld.astype('f') # casting makes a copy
-                fld[:,:] = fldsave[::-1,:]
+            #if not self.scanmodeflags[1]:
+            #    fldsave = fld.astype('f') # casting makes a copy
+            #    fld[:,:] = fldsave[::-1,:]
             # adjacent rows scan in opposite direction.
             # (flip every other row)
             if self.scanmodeflags[3]:
@@ -1396,14 +1396,14 @@ class Grib2Encode:
         # reorder array to be consistent with
         # specified scan order.
         if self.scanmodeflags is not None:
-            if self.scanmodeflags[0]:
-            # rows scan in the -x direction (so flip)
-                fieldsave = field.astype('f') # casting makes a copy
-                field[:,:] = fieldsave[:,::-1]
-            # columns scan in the -y direction (so flip)
-            if not self.scanmodeflags[1]:
-                fieldsave = field.astype('f') # casting makes a copy
-                field[:,:] = fieldsave[::-1,:]
+            #if self.scanmodeflags[0]:
+            ## rows scan in the -x direction (so flip)
+            #    fieldsave = field.astype('f') # casting makes a copy
+            #    field[:,:] = fieldsave[:,::-1]
+            ## columns scan in the -y direction (so flip)
+            #if not self.scanmodeflags[1]:
+            #    fieldsave = field.astype('f') # casting makes a copy
+            #    field[:,:] = fieldsave[::-1,:]
             # adjacent rows scan in opposite direction.
             # (flip every other row)
             if self.scanmodeflags[3]:
