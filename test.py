@@ -193,7 +193,7 @@ def test():
     >>> latsubset.min(),latsubset.max(),lonsubset.min(),lonsubset.max()
     (15.0, 65.0, 220.0, 320.0)
     >>> 'shape/min/max data subset %s %6.2f %6.2f' % (str(datsubset.shape),datsubset.min(),datsubset.max())
-    'shape/min/max data subset (21, 41) 239.30 268.60'
+    'shape/min/max data subset (21, 41) 228.90 264.50'
 
     >>> grbstr = grb.tostring()
     >>> grb2 = pygrib.fromstring(grbstr)
