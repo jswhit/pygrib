@@ -1,12 +1,9 @@
 import pygrib
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
-# this file has key "projectionCentreFlag"
-for grb in pygrib.open('../sampledata/ngm.grb'):
-    if grb['parameterName'] == 'Pressure' and grb['typeOfLevel'] == 'surface':
-        data = grb['values']
-        lats,lons = grb.latlons()
-        break
+grbs = pygrib.open('../sampledata/ngm.grb')
+grb = grbs.select(parameterName='Pressure',typeOfLevel='surface')[0]
+data = grb.values; lats,lons = grb.latlons()
 llcrnrlon = lons[0,0]
 llcrnrlat = lats[0,0]
 urcrnrlon = lons[-1,-1]
