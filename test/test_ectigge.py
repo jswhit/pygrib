@@ -4,11 +4,10 @@ import numpy as np
 from numpy import ma
 from mpl_toolkits.basemap import Basemap
 
-for grb in pygrib.open('../sampledata/ecmwf_tigge.grb'):
-    if grb['parameterName'] == 'Soil moisture':
-        fld = grb['values']
-        lats,lons = grb.latlons()
-        break
+
+grbs = pygrib.open('../sampledata/ecmwf_tigge.grb')
+grb = grbs.select(parameterName='Soil moisture')[0]
+fld = grb.values; lats,lons = grb.latlons()
 
 #from ncepgrib2 import Grib2Decode
 #grbs = Grib2Decode('../sampledata/ecmwf_tigge.grb')
