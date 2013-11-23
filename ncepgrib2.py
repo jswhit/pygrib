@@ -768,10 +768,10 @@ lat/lon values returned by grid method may be incorrect."""
             lats = np.arange(lat1,lat2+delat,delat)
             lons = np.arange(lon1,lon2+delon,delon)
             # flip if scan mode says to.
-            if self.scanmodeflags[0]:
-                lons = lons[::-1]
-            if not self.scanmodeflags[1]:
-                lats = lats[::-1]
+            #if self.scanmodeflags[0]:
+            #    lons = lons[::-1]
+            #if not self.scanmodeflags[1]:
+            #    lats = lats[::-1]
             projparams['proj'] = 'cyl'
             lons,lats = np.meshgrid(lons,lats) # make 2-d arrays.
         elif gdtnum == 40: # gaussian grid (only works for global!)
@@ -790,10 +790,10 @@ lat/lon values returned by grid method may be incorrect."""
             if lat1 < lat2:  # reverse them if necessary
                 lats = lats[::-1]
             # flip if scan mode says to.
-            if self.scanmodeflags[0]:
-                lons = lons[::-1]
-            if not self.scanmodeflags[1]:
-                lats = lats[::-1]
+            #if self.scanmodeflags[0]:
+            #    lons = lons[::-1]
+            #if not self.scanmodeflags[1]:
+            #    lats = lats[::-1]
             projparams['proj'] = 'cyl'
             lons,lats = np.meshgrid(lons,lats) # make 2-d arrays
         # mercator, lambert conformal, stereographic, albers equal area, azimuthal equidistant
