@@ -1594,10 +1594,7 @@ cdef class gribmessage(object):
             if self.packingType.startswith('grid_complex'):
                 # this is not strictly correct for gaussian grids,
                 # but the error is very small.
-                if lat1 < lat2:
-                    lats = np.linspace(lat1,lat2,ny)
-                else:
-                    lats = np.linspace(lat2,lat1,ny)
+                lats = np.linspace(lat1,lat2,ny)
                 lons = np.linspace(lon1,lon2,nx)
             else:
                 lats = self['distinctLatitudes']
