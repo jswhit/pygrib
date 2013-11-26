@@ -1598,6 +1598,7 @@ cdef class gribmessage(object):
                 lons = np.linspace(lon1,lon2,nx)
             else:
                 lats = self['distinctLatitudes']
+                if lat2 < lat1 and lats[-1] > lats[0]: lats = lats[::-1]
                 lons = self['distinctLongitudes']
             # don't trust distinctLongitudes 
             # when longitudeOfLastGridPointInDegrees < 0
