@@ -59,6 +59,8 @@ Installation
  include files are installed in separate locations, the environment variables
  C{$GRIBAPI_INCDIR} and C{$GRIBAPI_LIBDIR} can be used to define the locations
  separately (same goes for C{JASPER}, C{OPENJPEG}, C{PNG} and C{ZLIB}).
+ Note that if both C{$GRIBAPI_DIR} and C{$GRIBAPI_INCDIR}/C{$GRIBAPI_LIBDIR}
+ are specified, C{$GRIBAPI_DIR} takes precedence.
  To use setup.cfg, copy setup.cfg.template to setup.cfg, open setup.cfg in a 
  text editor and follow the instructions in the comments for editing.
  - Run 'python setup.py build' and then 'python setup.py install', as root if necessary.
