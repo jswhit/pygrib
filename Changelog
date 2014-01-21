@@ -1,3 +1,8 @@
+version 1.9.9 (not yet released)
+================================
+* expand_grid(False) now suppresses expansion of lats, lons returned from
+  latlons method, as well as data (issue 84)..
+
 version 1.9.8 (svn tag v1.9.8rel)
 =================================
 * to be consistent with what the grib_api lib does, don't flip data grids

@@ -157,7 +157,7 @@ Changelog
 
 @contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
 
-@version: 1.9.8
+@version: 1.9.9
 
 @copyright: copyright 2010 by Jeffrey Whitaker.
 
@@ -989,7 +989,7 @@ cdef class gribmessage(object):
             return default
 
     def expand_grid(self,expand_reduced):
-        """toggle expansion of reduced grids to regular grids"""
+        """toggle expansion of 1D reduced grid data to a regular (2D) grid"""
         self.expand_reduced = expand_reduced
 
     def is_missing(self,key):
@@ -1609,26 +1609,34 @@ cdef class gribmessage(object):
                 lons = np.linspace(lon1,lon2,nx)
             lons,lats = np.meshgrid(lons,lats) 
         elif self['gridType'] == 'reduced_gg': # reduced global gaussian grid
-            lat1 = self['latitudeOfFirstGridPointInDegrees']
-            lat2 = self['latitudeOfLastGridPointInDegrees']
-            lats = self['distinctLatitudes']
-            if lat2 < lat1 and lats[-1] > lats[0]: lats = lats[::-1]
-            ny = self['Nj']
-            nx = 2*ny
-            lon1 = self['longitudeOfFirstGridPointInDegrees']
-            lon2 = self['longitudeOfLastGridPointInDegrees']
-            lons = np.linspace(lon1,lon2,nx)
-            lons,lats = np.meshgrid(lons,lats) 
+            if self.expand_reduced:
+                lat1 = self['latitudeOfFirstGridPointInDegrees']
+                lat2 = self['latitudeOfLastGridPointInDegrees']
+                lats = self['distinctLatitudes']
+                if lat2 < lat1 and lats[-1] > lats[0]: lats = lats[::-1]
+                ny = self['Nj']
+                nx = 2*ny
+                lon1 = self['longitudeOfFirstGridPointInDegrees']
+                lon2 = self['longitudeOfLastGridPointInDegrees']
+                lons = np.linspace(lon1,lon2,nx)
+                lons,lats = np.meshgrid(lons,lats) 
+            else:
+                lats = self['latitudes']
+                lons = self['longitudes']
         elif self['gridType'] == 'reduced_ll': # reduced lat/lon grid
-            ny = self['Nj']
-            nx = 2*ny
-            lat1 = self['latitudeOfFirstGridPointInDegrees']
-            lat2 = self['latitudeOfLastGridPointInDegrees']
-            lon1 = self['longitudeOfFirstGridPointInDegrees']
-            lon2 = self['longitudeOfLastGridPointInDegrees']
-            lons = np.linspace(lon1,lon2,nx)
-            lats = np.linspace(lat1,lat2,ny)
-            lons,lats = np.meshgrid(lons,lats) 
+            if self.expand_reduced:
+                ny = self['Nj']
+                nx = 2*ny
+                lat1 = self['latitudeOfFirstGridPointInDegrees']
+                lat2 = self['latitudeOfLastGridPointInDegrees']
+                lon1 = self['longitudeOfFirstGridPointInDegrees']
+                lon2 = self['longitudeOfLastGridPointInDegrees']
+                lons = np.linspace(lon1,lon2,nx)
+                lats = np.linspace(lat1,lat2,ny)
+                lons,lats = np.meshgrid(lons,lats) 
+            else:
+                lats = self['latitudes']
+                lons = self['longitudes']
         elif self['gridType'] == 'polar_stereographic':
             lat1 = self['latitudeOfFirstGridPointInDegrees']
             lon1 = self['longitudeOfFirstGridPointInDegrees']
