@@ -1,5 +1,6 @@
 version 1.9.9 (not yet released)
 ================================
+* analDate and validDate are now searchable with pygrib.open.select.
 * expand_grid(False) now suppresses expansion of lats, lons returned from
   latlons method, as well as data (issue 84)..
 

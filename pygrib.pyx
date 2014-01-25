@@ -1041,6 +1041,9 @@ cdef class gribmessage(object):
         err = grib_keys_iterator_delete(gi)
         if err:
             raise RuntimeError(grib_get_error_message(err))
+        # add extra python keys.
+        if hasattr(self,'analDate'): keys.append('analDate')
+        if hasattr(self,'validDate'): keys.append('validDate')
         return keys
     def _read_only_keys(self):
         """
@@ -2045,11 +2048,11 @@ def _find(grb, **kwargs):
         iscallable = hasattr(v, '__call__')
         # if v is callable and container-like, treat it as a container.
         # v not a container or a function.
-        if not iscontainer and not iscallable and grb[k]==v:
+        if not iscontainer and not iscallable and getattr(grb,k)==v:
             continue
-        elif iscontainer and grb[k] in v: # v a container.
+        elif iscontainer and getattr(grb,k) in v: # v a container.
             continue
-        elif iscallable and v(grb[k]): # v a function
+        elif iscallable and v(getattr(grb,k)): # v a function
             continue
         else:
             return False
