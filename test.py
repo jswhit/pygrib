@@ -184,6 +184,10 @@ def test():
     77:Temperature:K (instant):regular_ll:isobaricInhPa:level 35000 Pa:fcst time 72 hrs:from 201110080000
     85:Temperature:K (instant):regular_ll:isobaricInhPa:level 40000 Pa:fcst time 72 hrs:from 201110080000
     93:Temperature:K (instant):regular_ll:isobaricInhPa:level 45000 Pa:fcst time 72 hrs:from 201110080000
+    >>> from datetime import datetime
+    >>> sel_grbs = grbs.select(shortName='t',level=300,validDate=datetime(2011,10,11,0))
+    >>> for grb in sel_grbs: grb
+    69:Temperature:K (instant):regular_ll:isobaricInhPa:level 30000 Pa:fcst time 72 hrs:from 201110080000
     >>> lats, lons = grb.latlons() # returns lat/lon values on grid.
     >>> str('min/max of %d lats on %s grid %4.2f %4.2f' % (grb['Nj'], grb['typeOfGrid'],lats.min(),lats.max()))
     'min/max of 73 lats on regular_ll grid -90.00 90.00'
@@ -193,12 +197,12 @@ def test():
     >>> latsubset.min(),latsubset.max(),lonsubset.min(),lonsubset.max()
     (15.0, 65.0, 220.0, 320.0)
     >>> 'shape/min/max data subset %s %6.2f %6.2f' % (str(datsubset.shape),datsubset.min(),datsubset.max())
-    'shape/min/max data subset (21, 41) 239.30 268.60'
+    'shape/min/max data subset (21, 41) 219.70 247.60'
 
     >>> grbstr = grb.tostring()
     >>> grb2 = pygrib.fromstring(grbstr)
     >>> grb2
-    1:Temperature:K (instant):regular_ll:isobaricInhPa:level 45000 Pa:fcst time 72 hrs:from 201110080000
+    1:Temperature:K (instant):regular_ll:isobaricInhPa:level 30000 Pa:fcst time 72 hrs:from 201110080000
     >>> grb2.analDate
     datetime.datetime(2011, 10, 8, 0, 0)
     >>> grb2.validDate
