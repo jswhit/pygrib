@@ -1,4 +1,4 @@
-version 1.9.9 (not yet released)
+version 1.9.9 (svn tag v1.9.9rel)
 ================================
 * analDate and validDate are now searchable with pygrib.open.select.
 * expand_grid(False) now suppresses expansion of lats, lons returned from
