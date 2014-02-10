@@ -1866,7 +1866,8 @@ name (i.e. C{level:l} will search for values of C{level} that are longs).
         # initialize C level objects.
         cdef grib_index *gi
         cdef int err
-        cdef char *filenamec, *keys
+        cdef char *filenamec
+        cdef char *keys
         bytestr = _strencode(filename)
         filenamec = bytestr
         if args == ():
@@ -1939,7 +1940,8 @@ Example usage:
         cdef size_t size
         cdef long longval
         cdef double doubval
-        cdef char *strval, *key
+        cdef char *strval
+        cdef char *key
         # set index selection.
         # used declared type if available, other infer from type of value.
         sizetot = 0
