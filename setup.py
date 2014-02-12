@@ -152,7 +152,7 @@ setup(name = "pygrib",
       author            = "Jeff Whitaker",
       author_email      = "jeffrey.s.whitaker@noaa.gov",
       url               = "http://code.google.com/p/pygrib",
-      download_url      = "http://code.google.com/p/pygrib/downloads/list",
+      download_url      = "http://python.org/pypi/pygrib",
       scripts =
       ['utils/grib_list','utils/grib_repack','utils/cnvgrib1to2','utils/cnvgrib2to1'],
       ext_modules       = [pygribext,g2clibext,redtoregext],
