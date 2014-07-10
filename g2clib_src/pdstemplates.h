@@ -37,10 +37,11 @@
 // 2010-12-08  Vuong     Corrected Definition Template 4.42,4.43
 // 2012-03-29  Vuong     Added Templates 4.44,4.45,4.46,4.47,4.48,4.50,
 //                       4.51,4.91,4.32 and 4.52
+// 2013-08-05  Vuong     Corrected 4.91 and added Templates 4.33,4.34,4.53,4.54
 //
 //$$$
 
-      #define MAXPDSTEMP 39           // maximum number of templates
+      #define MAXPDSTEMP 43           // maximum number of templates
       #define MAXPDSMAPLEN 200        // maximum template map length
 
       struct pdstemplate 
@@ -155,7 +156,7 @@
              // in a continuous or non-continuous time interval for Aerosol
          {47,38,1, {1,1,1,2,1,-1,-4,-1,-4,1,1,2,1,1,4,1,-1,-4,1,-1,-4,1,1,1,2,1,1,1,1,1,1,4,1,1,1,4,1,4} },
 
-             //             VALIDATION --- PDT 4.48
+             //             PDT 4.48
              // 4.48: Analysis or forecast at a horizontal level or in a horizontal layer
              // at a point in time for Optical Properties of Aerosol
          {48,26,0, {1,1,2,1,-1,-4,-1,-4,1,-1,-4,-1,-4,1,1,1,2,1,1,4,1,-1,-4,1,-1,-4} },
@@ -165,7 +166,7 @@
              // matrix element at a point in time
          {50,21,0, {1,1,1,1,1,2,1,1,4,1,-1,-4,1,-1,-4,1,1,4,4,4,4} },
 
-             //             VALIDATIONi --- PDT 4.52
+             //             VALIDATION --- PDT 4.52
              // 4.52: Analysis or forecast of Wave parameters
              // at the Sea surface at a point in time
          {52,15,0, {1,1,1,1,1,1,1,1,2,1,1,4,1,-1,-4} },
@@ -173,10 +174,31 @@
              // 4.51: Categorical forecasts at a horizontal level or
              // in a horizontal layer at a point in time
          {51,16,1, {1,1,1,1,1,2,1,1,4,1,-1,-4,1,-1,-4,1} },
+
              // 4.91: Categorical forecasts at a horizontal level or
              // in a horizontal layer at a point in time
              // in a continuous or non-continuous time interval
-         {91,16,1, {1,1,1,1,1,2,1,1,4,1,-1,-4,1,-1,-4,1} }
+         {91,36,1, {1,1,2,1,-1,-4,-1,-4,1,-1,-4,-1,-4,1,1,1,2,1,1,4,1,-1,-4,1,-1,-4} },
+// PDT 4.33  (07/29/2013)
+             // 4.33: Individual ensemble forecast, control, perturbed,
+             // at a horizontal level or in a  horizontal layer
+             // at a point in time for simulated (synthetic) Satellite data
+         {33,18,1, {1,1,1,1,1,2,1,1,4,1,2,2,2,-1,-4,1,1,1} },
+// PDT 4.34  (07/29/2013)
+             // 4.34: Individual ensemble forecast, control, perturbed,
+             // at a horizontal level or in a  horizontal layer,in a continuous or
+             // non-continuous interval for simulated (synthetic) Satellite data
+         {34,32,1, {1,1,1,1,1,2,1,1,4,1,2,2,2,-1,-4,1,1,1,2,1,1,1,1,1,1,4,1,1,1,4,1,4} },
+// PDT 4.53  (07/29/2013)
+             // 4.53:  Partitioned parameters at
+             // horizontal level or horizontal layer
+             // at a point in time
+         {53,19,1, {1,1,1,1,4,2,1,1,1,2,1,1,4,1,-1,-4,1,-1,-4} },
+// PDT 4.54  (07/29/2013)
+             // 4.54: Individual ensemble forecast, control, perturbed,
+             // at a horizontal level or in a  horizontal layer
+             // at a point in time for partitioned parameters
+         {54,22,1, {1,1,1,1,4,2,1,1,1,2,1,1,4,1,-1,-4,1,-1,-4,1,1,1} }
 
       } ;
 

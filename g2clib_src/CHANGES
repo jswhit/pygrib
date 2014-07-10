@@ -1,4 +1,4 @@
-g2lib-1.0   - August 2003 - Original version
+glib-1.0   - August 2003 - Original version
 
 g2libc-1.0.1 - May 2004 - Changed the library name from "libg2c.a" to 
                           "libgrib2c.a" to avoid conflict with the g77 libg2c
@@ -52,10 +52,17 @@ g2libc-1.1.9 - June     2009 - Updated version jasper-1.900.1, libpng-1.2.35 and
 g2libc-1.2.0 - March    2010 - Added PDT 4.31 Satellite Product
                              - Added PDT 4.15 WAFS Product
 
-g2libc-1.2.1 - August   2010 - Added PDT 4.40,4,41,4,42,4,43 for Atmospheric Chemical Constituents
+g2libc-1.2.1 - August   2010 - Added PDT 4.40,4.41,4.42,4.43 for Atmospheric Chemical Constituents
                              - Added GDT 3.32769 Rot Lat/Lon None E-grid (Arakawa)
                              - If section 2 has zero length, return IERR=0
 
 g2libc-1.2.2 - March    2011 - Corrected PDT 4.42,4.43 for Atmospheric Chemical Constituents
 
 g2libc-1.2.3 - November 2011 - Fixed bugs in routines dec_png.c and enc_png.c
+
+g2libc-1.4.0 - May      2012 - Added PDT 4.44,4.45,4.46,4.47,4.48 for Aerosol products
+                             - PDT 4.50,4.51,4.52 iand 4.91 for Categorical forecast at a horizonal
+
+g2libc-1.5.0 - Sept.    2013 - Added PDT 4.33,4.34,4.53,4.54,4.50
+                             - Added GDT 3.4,3.5,3.12,3.101,3.140
+                             - Free up memory igds

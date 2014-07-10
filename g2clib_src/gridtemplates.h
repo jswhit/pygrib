@@ -34,10 +34,11 @@
 // 2007-08-16  Vuong     -  Added GDT 3.204  Curvilinear Orthogonal Grid
 // 2008-07-08  Vuong     -  Added GDT 3.32768 Rot Lat/Lon E-grid (Arakawa)
 // 2010-05-11  Vuong     -  Added GDT 3.32769 Rotate Lat/Lon Non-E Staggered grid (Arakawa)
+// 2013-08-06  Vuong     -  Added GDT 3.4,3.5,3.12,3.101,3.140
 //
 ////////////////////////////////////////////////////////////////////
 
-      #define MAXGRIDTEMP 26              // maximum number of templates
+      #define MAXGRIDTEMP 31              // maximum number of templates
       #define MAXGRIDMAPLEN 200           // maximum template map length
 
       struct gridtemplate
@@ -57,6 +58,18 @@
          { 2, 22, 0, {1,1,4,1,4,1,4,4,4,4,4,-4,4,1,-4,4,4,4,1,-4,4,-4} },
              // 3.3: Stretched & Rotated Lat/Lon grid
          { 3, 25, 0, {1,1,4,1,4,1,4,4,4,4,4,-4,4,1,-4,4,4,4,1,-4,4,4,-4,4,-4} },
+// Added GDT 3.4,3.5    (08/05/2013)
+             // 3.4: Variable resolution Latitude/Longitude
+         { 4, 13, 1, {1,1,4,1,4,1,4,4,4,4,4,1,1} },
+             // 3.5: Variable resolution rotate Latitude/Longitude
+         { 5, 16, 1, {1,1,4,1,4,1,4,4,4,4,4,1,1,-4,4,4} },
+             // 3.12: Transverse Mercator
+         {12, 22, 0, {1,1,4,1,4,1,4,4,4,-4,4,1,-4,4,4,1,4,4,-4,-4,-4,-4} },
+             // 3.101: General unstructured grid
+         {101, 4, 0, {1,4,1,-4} },
+             // 3.140: Lambert Azimuthal Equal Area Projection
+         {140, 17, 0, {1,1,4,1,4,1,4,4,4,-4,4,4,4,1,4,4,1} },
+//
              // 3.10: Mercator
          {10, 19, 0, {1,1,4,1,4,1,4,4,4,-4,4,1,-4,-4,4,1,4,4,4} },
              // 3.20: Polar Stereographic Projection

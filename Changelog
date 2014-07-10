@@ -1,5 +1,6 @@
 since version 1.9.9
 ===================
+* update ncep g2clib to version 1.5.0.
 * change download_url in setup.py to point to pypi instead of googlecode.
 * silence warnings ("Non-trivial type declarators in shared declaration (e.g.
   mix of pointers and values). Each pointer declaration should be on its own

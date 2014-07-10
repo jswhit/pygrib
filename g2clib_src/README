@@ -1,5 +1,6 @@
-                                                           JUNE 01, 2009
-                                                           W/NP11:SAG
+                                                           August 06, 2013
+                                                           W/SIB:VUONG
+
 
 g2clib Library.
 
@@ -50,7 +51,7 @@ libpng.a      This library is a C implementation of the Portable Network
               in the makefile.
 
               If not already installed on your system, download version 
-              libpng-1.2.35 from http://www.libpng.org/pub/png/libpng.html.
+              libpng-1.2.44 from http://www.libpng.org/pub/png/libpng.html.
 
               More information about PNG can be found at 
               http://www.libpng.org/pub/png/.
@@ -62,6 +63,6 @@ libz.a        This library contains compression/decompression routines
               in g2lib/makefile.
 
               If not already installed on your system, download version 
-              zlib-1.2.3 from http://www.gzip.org/zlib/.
+              zlib-1.2.6 from http://www.gzip.org/zlib/.
 
 

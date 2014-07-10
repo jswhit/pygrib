@@ -17,6 +17,7 @@ g2int getgridindex(g2int number)
 ! 2008-07-08  Vuong     -  Added GDT 3.32768 Rotate Lat/Lon E-grid (Arakawa)
 ! 2009-01-14  Vuong     -  Changed structure name template to gtemplate
 ! 2010-05-11  Vuong     -  Added GDT 3.32769 Rotate Lat/Lon Non-E Staggered grid (Arakawa)
+! 2013-08-06  Vuong     -  Added GDT 3.4,3.5,3.12,3.101,3.140
 !
 ! USAGE:    index=getgridindex(number)
 !   INPUT ARGUMENT LIST:
@@ -124,6 +125,7 @@ gtemplate *extgridtemplate(g2int number,g2int *list)
 ! 2008-07-08  Vuong     -  Added GDT 3.32768 Rotate Lat/Lon E-grid (Arakawa)
 ! 2009-01-14  Vuong     -  Changed structure name template to gtemplate
 ! 2010-05-11  Vuong     -  Added GDT 3.32769 Rotate Lat/Lon Non-E Staggered grid (Arakawa)
+! 2013-08-06  Vuong     -  Added GDT 3.4,3.5,3.12,3.101,3.140
 !
 ! USAGE:    CALL extgridtemplate(number,list)
 !   INPUT ARGUMENT LIST:
@@ -162,6 +164,30 @@ gtemplate *extgridtemplate(g2int number,g2int *list)
                  else {
                     new->ext[i]=-2;
                  }
+              }
+           }
+           else if ( number == 4 ) {
+              new->extlen=list[7];
+              new->ext=(g2int *)malloc(sizeof(g2int)*new->extlen);
+              for (i=0;i<new->extlen;i++) {
+                 new->ext[i]=4;
+              }
+              new->extlen=list[8];
+              new->ext=(g2int *)malloc(sizeof(g2int)*new->extlen);
+              for (i=0;i<new->extlen;i++) {
+                 new->ext[i]=-4;
+              }
+           }
+           else if ( number == 5 ) {
+              new->extlen=list[7];
+              new->ext=(g2int *)malloc(sizeof(g2int)*new->extlen);
+              for (i=0;i<new->extlen;i++) {
+                 new->ext[i]=4;
+              }
+              new->extlen=list[8];
+              new->ext=(g2int *)malloc(sizeof(g2int)*new->extlen);
+              for (i=0;i<new->extlen;i++) {
+                 new->ext[i]=-4;
               }
            }
            else if ( number == 1000 ) {
