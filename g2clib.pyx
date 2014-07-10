@@ -56,9 +56,12 @@ def rtoi_ieee(object rarr, object iarr):
     """
  Converts a float32 array into an int32 array of IEEE formatted values
     """
-    cdef void *rdat, *idat
-    cdef g2float *rdata, r1
-    cdef g2int *idata, i1
+    cdef void *rdat
+    cdef void *idat
+    cdef g2float *rdata
+    cdef g2float r1
+    cdef g2int *idata
+    cdef g2int i1
     cdef Py_ssize_t bufleni, buflenr
     if PyObject_AsReadBuffer(rarr, &rdat, &buflenr) <> 0:
         raise RuntimeError, 'error getting buffer for input real array'
@@ -74,7 +77,8 @@ def itor_ieee(object iarr, object rarr):
     """
  Converts an int32 array of IEEE values into a float32 array.
     """
-    cdef void *rdat, *idat
+    cdef void *rdat
+    cdef void *idat
     cdef g2float *rdata
     cdef g2int *idata
     cdef Py_ssize_t bufleni, buflenr
@@ -219,7 +223,9 @@ def unpack3(gribmsg, ipos, object zeros):
                 6 = memory allocation error
     """
     cdef unsigned char *cgrib
-    cdef g2int *igds, *igdstmpl, *ideflist
+    cdef g2int *igds
+    cdef g2int *igdstmpl
+    cdef g2int *ideflist
     cdef g2int mapgridlen, iofst, idefnum, ierr
     cgrib = <unsigned char *>PyBytes_AsString(gribmsg)
     iofst = <g2int>PyInt_AsLong(ipos*8)
@@ -416,9 +422,11 @@ def unpack7(gribmsg,gdtnum,object gdtmpl,drtnum,object drtmpl,ndpts,ipos,object 
     """
     cdef unsigned char *cgrib
     cdef g2int iofst, ierr, ngpts, idrsnum, igdsnum
-    cdef g2int *igdstmpl, *idrstmpl
+    cdef g2int *igdstmpl
+    cdef g2int *idrstmpl
     cdef g2float *fld
-    cdef void *drtmpldat, *gdtmpldat
+    cdef void *drtmpldat
+    cdef void *gdtmpldat
     cdef float rmin, rmax
     cdef int n
     cdef Py_ssize_t buflen
@@ -498,8 +506,11 @@ def grib2_create(object listsec0, object listsec1):
               > 0 = Current size of new GRIB2 message
                -1 = Tried to use for version other than GRIB Edition 2
     """
-    cdef g2int *isec0, *isec1, ierr
-    cdef void *listsec0dat, *listsec1dat
+    cdef g2int *isec0
+    cdef g2int *isec1
+    cdef g2int ierr
+    cdef void *listsec0dat
+    cdef void *listsec1dat
     cdef Py_ssize_t buflen
     cdef unsigned char *cgrib
     # cgrib needs to be big enough to hold sec0 and sec1.
@@ -606,9 +617,14 @@ def grib2_addgrid(gribmsg,object gds,object gdstmpl,object deflist=None, defnum 
                -4 = Previous Section was not 1, 2 or 7.
                -5 = Could not find requested Grid Definition Template.
     """
-    cdef g2int ierr, idefnum, *igds, *igdstmpl, *ideflist
+    cdef g2int ierr, idefnum
+    cdef g2int *igds
+    cdef g2int *igdstmpl
+    cdef g2int *ideflist
     cdef unsigned char  *cgrib
-    cdef void *gdsdat, *deflistdat, *gdstmpldat
+    cdef void *gdsdat
+    cdef void *deflistdat
+    cdef void *gdstmpldat
     cdef Py_ssize_t buflen
     PyObject_AsReadBuffer(gds, &gdsdat, &buflen) 
     PyObject_AsReadBuffer(gdstmpl, &gdstmpldat, &buflen) 
@@ -703,10 +719,18 @@ def grib2_addfield(gribmsg,pdsnum,object pdstmpl,object coordlist,
                     using DRT 5.51.
               -10 = Error packing data field. 
     """
-    cdef g2int ierr,ipdsnum,numcoord,*ipdstmpl,idrsnum,*idrstmpl
-    cdef g2float *fld, *fcoordlist
-    cdef g2int *bmap, ngrdpts, ibmap
-    cdef void *pdtmpldat, *drtmpldat, *coordlistdat, *fielddat, *bitmapdat
+    cdef g2int ierr,ipdsnum,numcoord,idrsnum
+    cdef g2int *ipdstmpl
+    cdef g2int *idrstmpl
+    cdef g2float *fld
+    cdef g2float *fcoordlist
+    cdef g2int *bmap
+    cdef g2int ngrdpts, ibmap
+    cdef void *pdtmpldat
+    cdef void *drtmpldat
+    cdef void *coordlistdat
+    cdef void *fielddat
+    cdef void *bitmapdat
     cdef Py_ssize_t buflen
     cdef unsigned char *cgrib
     ipdsnum = <g2int>PyInt_AsLong(pdsnum)

@@ -9,7 +9,8 @@ def _redtoreg(object nlonsin, npc.ndarray lonsperlat, npc.ndarray redgrid, \
     cdef long i, j, n, im, ip, indx, ilons, nlats, npts
     cdef double zxi, zdx, flons, missvl
     cdef npc.ndarray reggrid
-    cdef double *redgrdptr, *reggrdptr
+    cdef double *redgrdptr
+    cdef double *reggrdptr
     cdef long *lonsptr
     nlons = nlonsin
     nlats = len(lonsperlat)
