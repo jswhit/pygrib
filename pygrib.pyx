@@ -996,16 +996,14 @@ cdef class gribmessage(object):
         """
         is_missing(key)
 
-        returns True if value associated with key is equal
+        returns True if key is invalid or value associated with key is equal
         to grib missing value flag (False otherwise)"""
         cdef int err,miss
         cdef char *name
         bytestr = _strencode(key)
         name = bytestr
         miss = grib_is_missing(self._gh, name, &err)
-        if err:
-            raise RuntimeError(grib_get_error_message(err))
-        if miss:
+        if miss or err:
             return True
         else:
             return False

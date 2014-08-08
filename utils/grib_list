@@ -29,11 +29,11 @@ else:
         for k in grb.keys():
             if k.startswith('mars'): continue
             if k in ['values','codedValues','packedValues','unpackedValues']: continue
-            if grb.is_missing(k):
+            if grb.is_missing(k) and k not in ['analDate','validDate']:
                 sys.stdout.write('%s = MISSING\n' % k)
             else:
                 try:
-                    v = grb[k]
+                    v = getattr(grb,k)
                     sys.stdout.write('%s = %s\n'%(k,v))
                 except:
                     sys.stdout.write('%s = NOT FOUND\n'%k)

@@ -1,5 +1,8 @@
 since version 1.9.9
 ===================
+* make sure is_missing(key) method of grib message doesn't fail when
+  key is analDate or validDate.
+* fix grib_list so it handles analDate and validDate keys properly.
 * update ncep g2clib to version 1.5.0.
 * change download_url in setup.py to point to pypi instead of googlecode.
 * silence warnings ("Non-trivial type declarators in shared declaration (e.g.
