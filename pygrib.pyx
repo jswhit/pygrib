@@ -1836,6 +1836,8 @@ Example usage:
 
 >>> import pygrib
 >>> grbindx=pygrib.index('sampledata/gfs.grb','shortName','typeOfLevel','level')
+>>> grbindx.keys
+['shortName', 'level']
 >>> selected_grbs=grbindx.select(shortName='gh',typeOfLevel='isobaricInhPa',level=500)
 >>> for grb in selected_grbs:
 >>>     grb
@@ -1848,15 +1850,19 @@ Example usage:
 >>> grbindx.write('gfs.grb.idx') # save index to a file
 >>> grbindx.close()
 >>> grbindx = pygrib.index('gfs.grb.idx') # re-open index (no keys specified)
+>>> grbindx.keys # not set when opening a saved index file.
+None
 >>> for grb in selected_grbs:
 >>>     grb
 1:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 250 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst
 
-@ivar keys: list of strings containing keys used in the index.
+@ivar keys: list of strings containing keys used in the index.  Set to C{None}
+when opening a previously saved grib index file.
 
 @ivar types: if keys are typed, this list contains the type declarations
 (C{l}, C{s} or C{d}). Type declarations are specified by appending to the key
-name (i.e. C{level:l} will search for values of C{level} that are longs).
+name (i.e. C{level:l} will search for values of C{level} that are longs). Set
+to C{None} when opening a previously saved grib index file.
 """
     cdef grib_index *_gi
     cdef public object keys, types, name
