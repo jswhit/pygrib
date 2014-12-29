@@ -10,6 +10,8 @@ GRIB files.
 
 Quickstart:
 
+* Clone the github repository, or download a source release from https://pypi.python.org/pypi/pygrib.
+
 * Copy setup.cfg.template to setup.cfg, open in text editor, follow instructions in
 comments for editing.
 
