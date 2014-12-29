@@ -73,8 +73,7 @@ Installation
  - Look at examples in C{test} directory (most require 
  U{matplotlib<http://matplotlib.sf.net>} and
  U{basemap<http://matplotlib.sourceforge.net/basemap/doc/html/>}).
- - If you're on MacOS X, see
- U{README.macosx<http://pygrib.googlecode.com/svn/trunk/README.macosx>}
+ - If you're on MacOS X, see README.macosx
  for special instruction on how to install pygrib and all it's
  dependencies using U{macports<http://macports.org>}.
 
@@ -148,11 +147,6 @@ Documentation
 
  - see below for the full python API documentation.
   
-Changelog
-=========
-
- - see U{Changelog<http://pygrib.googlecode.com/svn/trunk/Changelog>} file.
-
 @author: Jeffrey Whitaker.
 
 @contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
