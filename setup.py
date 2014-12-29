@@ -151,7 +151,7 @@ setup(name = "pygrib",
       description       = "Python module for reading/writing GRIB files",
       author            = "Jeff Whitaker",
       author_email      = "jeffrey.s.whitaker@noaa.gov",
-      url               = "http://code.google.com/p/pygrib",
+      url               = "https://github.com/jswhit/pygrib",
       download_url      = "http://python.org/pypi/pygrib",
       scripts =
       ['utils/grib_list','utils/grib_repack','utils/cnvgrib1to2','utils/cnvgrib2to1'],
