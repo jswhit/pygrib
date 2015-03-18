@@ -1,3 +1,8 @@
+since version 2.0.0
+===================
+* make has_key gribmessage method more robust (it was returning False in
+  cases when a key actually did exist - issue #9).
+
 version 2.0.0 (git tag v2.0.0rel)
 =================================
 * migrate to Github (https://github.com/jswhit/pygrib).
