@@ -83,6 +83,12 @@ def test():
     3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
     4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
 
+    as above, but using step key (issue #9)
+    >>> selected_grbs = grbs.select(level=2,typeOfLevel='heightAboveGround',step=120) 
+    >>> for grb in selected_grbs: grb
+    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
+    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
+
     or create grib index instance for faster searching
     >>> grbindx = pygrib.index('sampledata/flux.grb','name','typeOfLevel','level')
     >>> selgrbs = grbindx(name='Minimum temperature',level=2,typeOfLevel='heightAboveGround')
