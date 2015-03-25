@@ -1277,7 +1277,14 @@ cdef class gribmessage(object):
 
         tests whether a grib message object has a specified key.
         """
-        return key in self._all_keys
+        if key in self._all_keys:
+            return True
+        try:
+            self[key]
+        except:
+            return False
+        else:
+            return True
     def valid_key(self,key):
         """
         valid_key(key)
