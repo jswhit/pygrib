@@ -24,7 +24,8 @@ cdef extern from "stdlib.h":
 
 # get 32 bit integer type
 cdef extern from "inttypes.h":
-    ctypedef long int32_t
+    #ctypedef long int32_t
+    ctypedef int int32_t
 
 # Functions from grib2c lib.
 cdef extern from "grib2.h":
@@ -755,7 +756,7 @@ def grib2_addfield(gribmsg,pdsnum,object pdstmpl,object coordlist,
         bmap  = <g2int *>bitmapdat
     else:
         bmap = NULL
-    gribmsg = gribmsg + 4*(len(drstmpl)+ngrdpts+4)*b" "
+    gribmsg = gribmsg + 4*(len(drstmpl)+ngrdpts+len(pdstmpl))*b" "
     cgrib = <unsigned char *>PyBytes_AsString(gribmsg)
     ierr = g2_addfield(cgrib,ipdsnum,ipdstmpl,fcoordlist,numcoord,idrsnum,idrstmpl,fld,ngrdpts,ibmap,bmap)
     if ierr < 0:

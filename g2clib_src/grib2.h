@@ -1,6 +1,7 @@
 #ifndef _grib2_H
 #define _grib2_H
 #include<stdio.h>
+#include<stdint.h>
 
 #define G2_VERSION "g2clib-1.5.0"
 /*                .      .    .                                       .
@@ -151,13 +152,8 @@
 //                     that holds the data.
 */
 
-#ifdef __64BIT__
-typedef int g2int;
-typedef unsigned int g2intu;
-#else
-typedef long g2int;
-typedef unsigned long g2intu;
-#endif
+typedef int32_t g2int;
+typedef uint32_t g2intu;
 typedef float g2float;
 
 struct gtemplate {
@@ -232,6 +228,7 @@ extern gtemplate *extdrstemplate(g2int,g2int *);
 extern gtemplate *getgridtemplate(g2int);
 extern gtemplate *extgridtemplate(g2int,g2int *);
 extern void simpack(g2float *,g2int,g2int *,unsigned char *,g2int *);
+extern void ieeepack(g2float *,g2int,g2int *,unsigned char *,g2int *);
 extern void compack(g2float *,g2int,g2int,g2int *,unsigned char *,g2int *);
 void misspack(g2float *,g2int ,g2int ,g2int *, unsigned char *, g2int *);
 void gbit(unsigned char *,g2int *,g2int ,g2int );

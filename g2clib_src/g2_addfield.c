@@ -5,6 +5,7 @@
 g2int getdim(unsigned char *,g2int *,g2int *,g2int *);
 g2int getpoly(unsigned char *,g2int *,g2int *,g2int *);
 void simpack(g2float *, g2int, g2int *, unsigned char *, g2int *);
+void ieeepack(g2float *, g2int, g2int *, unsigned char *, g2int *);
 void cmplxpack(g2float *, g2int, g2int, g2int *, unsigned char *, g2int *);
 void specpack(g2float *,g2int,g2int,g2int,g2int,g2int *,unsigned char *,
               g2int *);
@@ -98,7 +99,7 @@ g2int g2_addfield(unsigned char *cgrib,g2int ipdsnum,g2int *ipdstmpl,
 //               -4 = Previous Section was not 3 or 7.
 //               -5 = Could not find requested Product Definition Template.
 //               -6 = Section 3 (GDS) not previously defined in message
-//               -7 = Tried to use unsupported Data Representationi Template
+//               -7 = Tried to use unsupported Data Representation Template
 //               -8 = Specified use of a previously defined bitmap, but one
 //                    does not exist in the GRIB message.
 //               -9 = GDT of one of 5.50 through 5.53 required to pack field
@@ -134,6 +135,8 @@ g2int g2_addfield(unsigned char *cgrib,g2int ipdsnum,g2int *ipdstmpl,
       g2float *pfld;
       gtemplate  *mappds,*mapdrs;
       unsigned int allones=4294967295u;
+
+      cpack = NULL;
  
       ierr=0;
 //
@@ -327,6 +330,8 @@ g2int g2_addfield(unsigned char *cgrib,g2int ipdsnum,g2int *ipdstmpl,
         simpack(pfld,ndpts,idrstmpl,cpack,&lcpack);
       else if (idrsnum==2 || idrsnum==3)           //  Complex Packing
         cmplxpack(pfld,ndpts,idrsnum,idrstmpl,cpack,&lcpack);
+      else if (idrsnum == 4)           //  IEEE float
+        ieeepack(pfld,ndpts,idrstmpl,cpack,&lcpack);
       else if (idrsnum == 50) {         //  Sperical Harmonic Simple Packing 
         simpack(pfld+1,ndpts-1,idrstmpl,cpack,&lcpack);
         mkieee(pfld+0,idrstmpl+4,1);  // ensure RE(0,0) value is IEEE format

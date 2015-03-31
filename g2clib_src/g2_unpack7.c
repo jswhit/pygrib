@@ -5,6 +5,7 @@
 #include "grib2.h"
 
 g2int simunpack(unsigned char *,g2int *, g2int,g2float *);
+g2int ieeeunpack(unsigned char *,g2int *, g2int,g2float *);
 int comunpack(unsigned char *,g2int,g2int,g2int *,g2int,g2float *);
 g2int specunpack(unsigned char *,g2int *,g2int,g2int,g2int, g2int, g2float *);
 #ifdef USE_PNG
@@ -113,6 +114,8 @@ g2int g2_unpack7(unsigned char *cgrib,g2int *iofst,g2int igdsnum,g2int *igdstmpl
           return 7;
         }
       }
+      else if (idrsnum == 4) 
+        ieeeunpack(cgrib+ipos,idrstmpl,ndpts,lfld);
       else if (idrsnum == 50) {            // Spectral Simple
         simunpack(cgrib+ipos,idrstmpl,ndpts-1,lfld+1);
         rdieee(idrstmpl+4,lfld+0,1);

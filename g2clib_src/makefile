@@ -17,7 +17,8 @@ DEFS=-DUSE_JPEG2000 -DUSE_PNG
 #     can be found (jasper/*.h and png.h pngconf.h zconf.h zlib.h)
 #
 
-INC=-I/export/lnx102/wd42bv/jasper-1.900.1/src/libjasper/include
+INC=
+#-I/export/lnx102/wd42bv/jasper-1.900.1/src/libjasper/include
 
 #
 #   This "C" source code contains many uses of the C++
@@ -27,7 +28,7 @@ INC=-I/export/lnx102/wd42bv/jasper-1.900.1/src/libjasper/include
 
 CFLAGS= $(INC) $(DEFS)
 
-CC=cc
+CC=gcc
 
 LIB=libgrib2c.a
 ARFLAGS=
@@ -55,6 +56,7 @@ $(LIB):	$(LIB)(gridtemplates.o) \
 	$(LIB)(g2_info.o) \
 	$(LIB)(g2_getfld.o) \
 	$(LIB)(simunpack.o) \
+	$(LIB)(ieeeunpack.o) \
 	$(LIB)(comunpack.o) \
         $(LIB)(pack_gp.o) \
         $(LIB)(reduce.o) \
@@ -64,6 +66,7 @@ $(LIB):	$(LIB)(gridtemplates.o) \
 	$(LIB)(mkieee.o) \
 	$(LIB)(int_power.o) \
 	$(LIB)(simpack.o) \
+	$(LIB)(ieeepack.o) \
 	$(LIB)(compack.o) \
         $(LIB)(cmplxpack.o) \
 	$(LIB)(misspack.o) \
