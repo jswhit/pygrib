@@ -5,6 +5,15 @@ if sys.version_info[0] < 3:
 else:
     import configparser
 
+# pyproj is a runtime dependency
+try:
+    import pyproj
+except ImportError:
+    try:
+        from mpl_toolkits.basemap import pyproj
+    except:
+        raise ImportError("either pyproj or basemap required")
+
 grib_api_dir = os.environ.get('GRIBAPI_DIR')
 grib_api_libdir = os.environ.get('GRIBAPI_LIBDIR')
 grib_api_incdir = os.environ.get('GRIBAPI_INCDIR')
