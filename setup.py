@@ -1,9 +1,17 @@
 from distutils.core import setup, Extension
 import os, glob, numpy, sys
+from os import environ
 if sys.version_info[0] < 3:
     import ConfigParser as configparser
 else:
     import configparser
+
+class _ConfigParser(configparser.SafeConfigParser):
+    def getq(self, s, k, fallback):
+        try:
+            return self.get(s, k)
+        except:
+            return fallback
 
 # pyproj is a runtime dependency
 try:
@@ -14,66 +22,66 @@ except ImportError:
     except:
         raise ImportError("either pyproj or basemap required")
 
-grib_api_dir = os.environ.get('GRIBAPI_DIR')
-grib_api_libdir = os.environ.get('GRIBAPI_LIBDIR')
-grib_api_incdir = os.environ.get('GRIBAPI_INCDIR')
-jasper_dir = os.environ.get('JASPER_DIR')
-jasper_libdir = os.environ.get('JASPER_LIBDIR')
-jasper_incdir = os.environ.get('JASPER_INCDIR')
-png_dir = os.environ.get('PNG_DIR')
-png_libdir = os.environ.get('PNG_LIBDIR')
-png_incdir = os.environ.get('PNG_INCDIR')
-zlib_dir = os.environ.get('ZLIB_DIR')
-zlib_libdir = os.environ.get('ZLIB_LIBDIR')
-zlib_incdir = os.environ.get('ZLIB_INCDIR')
-openjpeg_dir = os.environ.get('OPENJPEG_DIR')
-openjpeg_libdir = os.environ.get('OPENJPEG_LIBDIR')
-openjpeg_incdir = os.environ.get('OPENJPEG_INCDIR')
-# where to install man pages?
-man_dir = os.environ.get('MAN_DIR')
+# build time dependancy
+try:
+    from Cython.Distutils import build_ext
+    #from Cython.Build import cythonize
+    cmdclass = {'build_ext': build_ext}
+    pygrib_pyx = "pygrib.pyx"
+    redtoreg_pyx = "redtoreg.pyx"
+    g2clib_pyx  = 'g2clib.pyx'
+except ImportError:
+    cmdclass = {}
+    pygrib_pyx = "pygrib.c"
+    redtoreg_pyx = "redtoreg.c"
+    g2clib_pyx  = 'g2clib.c'
+    
 
-setup_cfg = os.environ.get('PYGRIBSETUPCFG', 'setup.cfg')
+setup_cfg = environ.get('PYGRIBSETUPCFG', 'setup.cfg')
+config = _ConfigParser()
 # contents of setup.cfg will override env vars.
 if os.path.exists(setup_cfg):
     sys.stdout.write('reading from setup.cfg...')
-    config = configparser.SafeConfigParser()
     config.read(setup_cfg)
-    try: grib_api_dir = config.get("directories", "grib_api_dir")
-    except: pass
-    try: grib_api_libdir = config.get("directories", "grib_api_libdir")
-    except: pass
-    try: grib_api_incdir = config.get("directories", "grib_api_incdir")
-    except: pass
-    try: jasper_dir = config.get("directories", "jasper_dir")
-    except: pass
-    try: jasper_libdir = config.get("directories", "jasper_libdir")
-    except: pass
-    try: jasper_incdir = config.get("directories", "jasper_incdir")
-    except: pass
-    try: png_dir = config.get("directories", "png_dir")
-    except: pass
-    try: png_libdir = config.get("directories", "png_libdir")
-    except: pass
-    try: png_incdir = config.get("directories", "png_incdir")
-    except: pass
-    try: openjpeg_dir = config.get("directories", "openjpeg_dir")
-    except: pass
-    try: openjpeg_libdir = config.get("directories", "openjpeg_libdir")
-    except: pass
-    try: openjpeg_incdir = config.get("directories", "openjpeg_incdir")
-    except: pass
-    try: zlib_dir = config.get("directories", "zlib_dir")
-    except: pass
-    try: zlib_libdir = config.get("directories", "zlib_libdir")
-    except: pass
-    try: zlib_incdir = config.get("directories", "zlib_incdir")
-    except: pass
-    try: man_dir = config.get("directories", "man_dir")
-    except: pass
+grib_api_dir = config.getq(
+    "directories", "grib_api_dir", environ.get('GRIBAPI_DIR'))
+grib_api_libdir = config.getq(
+    "directories", "grib_api_libdir", environ.get('GRIBAPI_LIBDIR'))
+grib_api_incdir = config.getq(
+    "directories", "grib_api_incdir", environ.get('GRIBAPI_INCDIR'))
+jasper_dir = config.getq(
+    "directories", "jasper_dir", environ.get('JASPER_DIR'))
+jasper_libdir = config.getq(
+    "directories", "jasper_libdir", environ.get('JASPER_LIBDIR'))
+jasper_incdir = config.getq(
+    "directories", "jasper_incdir", environ.get('JASPER_INCDIR'))
+png_dir = config.getq(
+    "directories", "png_dir", environ.get('PNG_DIR'))
+png_libdir = config.getq(
+    "directories", "png_libdir", environ.get('PNG_LIBDIR'))
+png_incdir = config.getq(
+    "directories", "png_incdir", environ.get('PNG_INCDIR'))
+openjpeg_dir = config.getq(
+    "directories", "openjpeg_dir", environ.get('OPENJPEG_DIR'))
+openjpeg_libdir = config.getq(
+    "directories", "openjpeg_libdir", environ.get('OPENJPEG_LIBDIR'))
+openjpeg_incdir = config.getq(
+    "directories", "openjpeg_incdir", environ.get('OPENJPEG_INCDIR'))
+zlib_dir = config.getq(
+    "directories", "zlib_dir", environ.get('ZLIB_DIR'))
+zlib_libdir = config.getq(
+    "directories", "zlib_libdir", environ.get('ZLIB_LIBDIR'))
+zlib_incdir = config.getq(
+    "directories", "zlib_incdir", environ.get('ZLIB_INCDIR'))
+# where to install man pages?
+man_dir = config.getq(
+    "directories", "man_dir", environ.get('MAN_DIR'))
+grib_api_libname = config.getq(
+    "files", "grib_api_libname", 'grib_api')
 
 libdirs=[]
 incdirs=[numpy.get_include()]
-libraries=['grib_api']
+libraries=[grib_api_libname]
 
 if grib_api_libdir is None and grib_api_dir is not None:
     libdirs.append(os.path.join(grib_api_dir,'lib'))
@@ -115,20 +123,20 @@ if zlib_incdir is None and zlib_dir is not None:
     incdirs.append(os.path.join(zlib_dir,'include'))
 
 g2clib_deps = glob.glob('g2clib_src/*.c')
-g2clib_deps.append('g2clib.c')
+g2clib_deps.append(g2clib_pyx)
 incdirs.append("g2clib_src")
 macros=[]
 
 # if jasper or openjpeg lib not available...
 if 'jasper' not in libraries and 'openjpeg' not in libraries:
-    g2clib_deps.remove('g2clib_src/jpcpack.c')
-    g2clib_deps.remove('g2clib_src/jpcunpack.c')
+    g2clib_deps.remove(os.path.join('g2clib_src', 'jpcpack.c'))
+    g2clib_deps.remove(os.path.join('g2clib_src', 'jpcunpack.c'))
 else:
     macros.append(('USE_JPEG2000',1))
 # if png lib not available...
 if 'png' not in libraries:
-    g2clib_deps.remove('g2clib_src/pngpack.c')
-    g2clib_deps.remove('g2clib_src/pngunpack.c')
+    g2clib_deps.remove(os.path.join('g2clib_src', 'pngpack.c'))
+    g2clib_deps.remove(os.path.join('g2clib_src', 'pngunpack.c'))
 else:
     macros.append(('USE_PNG',1))
 
@@ -140,9 +148,9 @@ else:
 g2clibext = Extension("g2clib",g2clib_deps,include_dirs=incdirs,\
             library_dirs=libdirs,libraries=libraries,runtime_library_dirs=libdirs,define_macros=macros)
 redtoregext =\
-Extension("redtoreg",["redtoreg.c"],include_dirs=[numpy.get_include()])
+Extension("redtoreg",[redtoreg_pyx],include_dirs=[numpy.get_include()])
 pygribext =\
-Extension("pygrib",["pygrib.c"],include_dirs=incdirs,library_dirs=libdirs,\
+Extension("pygrib",[pygrib_pyx],include_dirs=incdirs,library_dirs=libdirs,\
           runtime_library_dirs=libdirs,libraries=libraries)
 
 # man pages installed in man_dir/man1
@@ -162,6 +170,7 @@ setup(name = "pygrib",
       author_email      = "jeffrey.s.whitaker@noaa.gov",
       url               = "https://github.com/jswhit/pygrib",
       download_url      = "http://python.org/pypi/pygrib",
+      cmdclass          = cmdclass,
       scripts =
       ['utils/grib_list','utils/grib_repack','utils/cnvgrib1to2','utils/cnvgrib2to1'],
       ext_modules       = [pygribext,g2clibext,redtoregext],
