@@ -29,3 +29,7 @@
 #zlib_dir = /usr
 # install man pages for command line utilities here
 #man_dir = /usr/local/man
+[files]
+# uncomment and set to grib_api library name.
+# If you are using GRIB-API with MSVS, library name might be 'grib_api_lib'.
+#grib_api_libname = grib_api_lib
