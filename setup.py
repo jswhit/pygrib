@@ -35,7 +35,7 @@ except ImportError:
     pygrib_pyx = "pygrib.c"
     redtoreg_pyx = "redtoreg.c"
     g2clib_pyx  = 'g2clib.c'
-    
+
 
 setup_cfg = environ.get('PYGRIBSETUPCFG', 'setup.cfg')
 config = _ConfigParser()
@@ -164,7 +164,7 @@ else:
 
 
 setup(name = "pygrib",
-      version = "2.0.0",
+      version = "2.0.1",
       description       = "Python module for reading/writing GRIB files",
       author            = "Jeff Whitaker",
       author_email      = "jeffrey.s.whitaker@noaa.gov",
