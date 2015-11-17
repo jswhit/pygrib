@@ -71,7 +71,7 @@ def rtoi_ieee(object rarr, object iarr):
         raise RuntimeError, 'integer output array must be as least as long a real input array'
     rdata = <g2float *>rdat
     idata = <g2int *>idat
-    mkieee(rdata, idata, buflenr/4)
+    mkieee(rdata, idata, buflenr//4)
 
 def itor_ieee(object iarr, object rarr):
     """
@@ -90,7 +90,7 @@ def itor_ieee(object iarr, object rarr):
         raise RuntimeError, 'real output array must be as least as long a integerinput array'
     rdata = <g2float *>rdat
     idata = <g2int *>idat
-    rdieee(idata, rdata, bufleni/4)
+    rdieee(idata, rdata, bufleni//4)
 
 cdef _toarray(void *items, object a):
     """
@@ -458,7 +458,7 @@ def unpack7(gribmsg,gdtnum,object gdtmpl,drtnum,object drtmpl,ndpts,ipos,object 
         format = "%."+repr(digitsofprecision+1)+"g"
         minmaxstring = 'min/max='+format+'/'+format
         minmaxstring = minmaxstring % (fldmin,fldmax)
-        print minmaxstring
+        print(minmaxstring)
 
     data = _toarray(fld, zeros(ngpts, 'f4', order=storageorder))
     return data

@@ -330,7 +330,7 @@ def gaulats(object nlats):
     if nlats%2:
         raise ValueError('nlats must be even')
     lats = np.empty(nlats, np.float64)
-    grib_get_gaussian_latitudes(<long>nlats/2, <double *>lats.data)
+    grib_get_gaussian_latitudes(<long>nlats//2, <double *>lats.data)
     return lats
 
 # dict for forecast time units (Code Table 4.4).
