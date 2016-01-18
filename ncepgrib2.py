@@ -668,7 +668,7 @@ lat/lon values returned by grid method may be incorrect."""
                 order = 1
         try:
             f = open(self._grib_filename,'rb')
-        except (TypeError,IOError):
+        except (ValueError,TypeError,IOError):
             f = StringIO(self._grib_filename)
         f.seek(self._grib_message_byteoffset)
         gribmsg = f.read(self._grib_message_length)
