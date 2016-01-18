@@ -1105,7 +1105,7 @@ static char __pyx_k_test[] = "__test__";
 static char __pyx_k_warn[] = "warn";
 static char __pyx_k_year[] = "year";
 static char __pyx_k_zero[] = "zero";
-static char __pyx_k_2_0_2[] = "2.0.2";
+static char __pyx_k_2_0_1[] = "2.0.1";
 static char __pyx_k_Latin[] = "Latin";
 static char __pyx_k_ascii[] = "ascii";
 static char __pyx_k_atype[] = "atype";
@@ -1395,7 +1395,7 @@ static char __pyx_k_unsupported_grid_earth_not_a_per[] = "unsupported grid - ear
 static char __pyx_k_value_must_be_float_int_or_strin[] = "value must be float, int or string";
 static PyObject *__pyx_kp_s_04i;
 static PyObject *__pyx_kp_s_12_hr_periods;
-static PyObject *__pyx_kp_s_2_0_2;
+static PyObject *__pyx_kp_s_2_0_1;
 static PyObject *__pyx_kp_s_30_yr_periods;
 static PyObject *__pyx_kp_s_3_hr_periods;
 static PyObject *__pyx_kp_s_6_hr_periods;
@@ -33141,7 +33141,7 @@ static struct PyModuleDef __pyx_moduledef = {
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_04i, __pyx_k_04i, sizeof(__pyx_k_04i), 0, 0, 1, 0},
   {&__pyx_kp_s_12_hr_periods, __pyx_k_12_hr_periods, sizeof(__pyx_k_12_hr_periods), 0, 0, 1, 0},
-  {&__pyx_kp_s_2_0_2, __pyx_k_2_0_2, sizeof(__pyx_k_2_0_2), 0, 0, 1, 0},
+  {&__pyx_kp_s_2_0_1, __pyx_k_2_0_1, sizeof(__pyx_k_2_0_1), 0, 0, 1, 0},
   {&__pyx_kp_s_30_yr_periods, __pyx_k_30_yr_periods, sizeof(__pyx_k_30_yr_periods), 0, 0, 1, 0},
   {&__pyx_kp_s_3_hr_periods, __pyx_k_3_hr_periods, sizeof(__pyx_k_3_hr_periods), 0, 0, 1, 0},
   {&__pyx_kp_s_6_hr_periods, __pyx_k_6_hr_periods, sizeof(__pyx_k_6_hr_periods), 0, 0, 1, 0},
@@ -34899,7 +34899,7 @@ PyMODINIT_FUNC PyInit_pygrib(void)
  * PERFORMANCE OF THIS SOFTWARE."""
  * __test__ = None             # <<<<<<<<<<<<<<
  * del __test__ # hack so epydoc doesn't show __test__
- * __version__ = '2.0.2'
+ * __version__ = '2.0.1'
  */
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, Py_None) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 170; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
@@ -34907,7 +34907,7 @@ PyMODINIT_FUNC PyInit_pygrib(void)
  * PERFORMANCE OF THIS SOFTWARE."""
  * __test__ = None
  * del __test__ # hack so epydoc doesn't show __test__             # <<<<<<<<<<<<<<
- * __version__ = '2.0.2'
+ * __version__ = '2.0.1'
  * 
  */
   if (__Pyx_PyObject_DelAttrStr(__pyx_m, __pyx_n_s_test) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 171; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -34915,14 +34915,14 @@ PyMODINIT_FUNC PyInit_pygrib(void)
   /* "pygrib.pyx":172
  * __test__ = None
  * del __test__ # hack so epydoc doesn't show __test__
- * __version__ = '2.0.2'             # <<<<<<<<<<<<<<
+ * __version__ = '2.0.1'             # <<<<<<<<<<<<<<
  * 
  * import numpy as np
  */
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_version, __pyx_kp_s_2_0_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_version, __pyx_kp_s_2_0_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
   /* "pygrib.pyx":174
- * __version__ = '2.0.2'
+ * __version__ = '2.0.1'
  * 
  * import numpy as np             # <<<<<<<<<<<<<<
  * import warnings
