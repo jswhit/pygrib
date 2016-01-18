@@ -668,6 +668,8 @@ lat/lon values returned by grid method may be incorrect."""
                 order = 1
         try:
             f = open(self._grib_filename,'rb')
+        # self._grib_filename can be a grib message binary string
+        # if it is, ValueError is returned in python 3.5 (issue #24)
         except (ValueError,TypeError,IOError):
             f = StringIO(self._grib_filename)
         f.seek(self._grib_message_byteoffset)
