@@ -23,5 +23,9 @@ comments for editing.
 
 For full installation instructions and API documentation, see https://jswhit.github.io/pygrib.
 
+Sample [iPython](http://ipython.org/) notebooks illustrating pygrib usage: 
+* http://nbviewer.jupyter.org/gist/jswhit/8635665
+* https://github.com/scollis/HRRR/blob/master/notebooks/HRRR%20Grib.ipynb
+
 Questions or comments - contact Jeff Whitaker <jeffrey.s.whitaker@noaa.gov>
 or use https://github.com/jswhit/pygrib/issues.
