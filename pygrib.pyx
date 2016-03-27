@@ -728,6 +728,7 @@ def setdates(gribmessage grb):
             ftime = grb.forecastTime
     else:
         ftime = 0
+    if ftime is None: ftime = 0. # make sure ftime is not None
     if grb.has_key('julianDay'):
         # don't do anything if datetime fails (because of a miscoded julianDay)
         try:
