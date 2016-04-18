@@ -65,7 +65,7 @@ for grb in grbs:
         sys.stdout.write('not a GRIB2 message, skipping ..\n')
         continue
     if grb['dataRepresentationTemplateNumber'] == ipack:
-	sys.stdout.write('no repacking required, skipping ..\n')
+        sys.stdout.write('no repacking required, skipping ..\n')
     grb['dataRepresentationTemplateNumber'] = ipack
     msg = grb.tostring()
     f.write(msg)
