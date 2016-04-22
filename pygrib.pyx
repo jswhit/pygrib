@@ -169,7 +169,7 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE."""
 __test__ = None
 del __test__ # hack so epydoc doesn't show __test__
-__version__ = '2.0.0'
+__version__ = '2.0.1'
 
 import numpy as np
 import warnings
@@ -330,7 +330,7 @@ def gaulats(object nlats):
     if nlats%2:
         raise ValueError('nlats must be even')
     lats = np.empty(nlats, np.float64)
-    grib_get_gaussian_latitudes(<long>nlats/2, <double *>lats.data)
+    grib_get_gaussian_latitudes(<long>nlats//2, <double *>lats.data)
     return lats
 
 # dict for forecast time units (Code Table 4.4).
@@ -728,6 +728,7 @@ def setdates(gribmessage grb):
             ftime = grb.forecastTime
     else:
         ftime = 0
+    if ftime is None: ftime = 0. # make sure ftime is not None
     if grb.has_key('julianDay'):
         # don't do anything if datetime fails (because of a miscoded julianDay)
         try:
@@ -1277,7 +1278,14 @@ cdef class gribmessage(object):
 
         tests whether a grib message object has a specified key.
         """
-        return key in self._all_keys
+        if key in self._all_keys:
+            return True
+        try:
+            self[key]
+        except:
+            return False
+        else:
+            return True
     def valid_key(self,key):
         """
         valid_key(key)

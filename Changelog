@@ -1,3 +1,18 @@
+since version 2.0.1
+===================
+* make sure ftime cannot be None (to avoid crash in grib_list).
+
+version 2.0.1 (git tag v2.0.1rel)
+================================
+* Fix for test failure on python 3.5 (issue #24).
+* improvements to setup.py, including making it more windows-friendly.
+  Added windows support in setup.cfg, should now be possible to build on 
+  windows if grib_api is built with MSVS (see
+  https://software.ecmwf.int/wiki/pages/viewpage.action?pageId=48109524). 
+  Pull request #18.
+* make has_key gribmessage method more robust (it was returning False in
+  cases when a key actually did exist - issue #9).
+
 version 2.0.0 (git tag v2.0.0rel)
 =================================
 * migrate to Github (https://github.com/jswhit/pygrib).
