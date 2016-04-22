@@ -1,6 +1,6 @@
 since version 2.0.1
 ===================
-* add .travis.yml for automated tests using travis.
+* add .travis.yml for automatically running test.py using travis CI.
 * make sure ftime cannot be None (to avoid crash in grib_list).
 
 version 2.0.1 (git tag v2.0.1rel)
