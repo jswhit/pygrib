@@ -1,0 +1,31 @@
+language: python
+
+sudo: false
+
+addons:
+  apt:
+    packages:
+      - libgrib-api-dev
+
+env:
+  global:
+    - DEPENDS="numpy pyproj"
+
+python:
+  - "2.7"
+  - "3.3"
+  - "3.4"
+  - "3.5"
+
+notifications:
+  email: false
+
+before_install:
+  - pip install $DEPENDS
+
+install:
+  - python setup.py build
+  - python setup.py install
+
+script:
+  - python test.py
