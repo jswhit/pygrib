@@ -174,7 +174,7 @@ def unpack1(gribmsg, ipos, object zeros):
        raise RuntimeError(msg)
 
     idsect = _toarray(ids, zeros(idslen, 'i4'))
-    return idsect,iofst/8
+    return idsect,iofst//8
 
 
 
@@ -238,7 +238,7 @@ def unpack3(gribmsg, ipos, object zeros):
     gds = _toarray(igds, zeros(5, 'i4'))
     deflist = _toarray(ideflist, zeros(idefnum, 'i4'))
 
-    return gds,gdtmpl,deflist,iofst/8
+    return gds,gdtmpl,deflist,iofst//8
 
 def unpack4(gribmsg,ipos,object zeros):
     """
@@ -288,7 +288,7 @@ def unpack4(gribmsg,ipos,object zeros):
     pdtmpl = _toarray(ipdstmpl, zeros(mappdslen, 'i4'))
     coordlist = _toarray(icoordlist, zeros(numcoord, 'f4'))
 
-    return pdtmpl,ipdsnum,coordlist,iofst/8
+    return pdtmpl,ipdsnum,coordlist,iofst//8
     
 def unpack5(gribmsg,ipos,object zeros):
     """
@@ -332,7 +332,7 @@ def unpack5(gribmsg,ipos,object zeros):
        raise RuntimeError(msg)
 
     drtmpl = _toarray(idrstmpl, zeros(mapdrslen, 'i4'))
-    return drtmpl,idrsnum,ndpts,iofst/8
+    return drtmpl,idrsnum,ndpts,iofst//8
     
 def unpack6(gribmsg,ndpts,ipos,object zeros):
     """
