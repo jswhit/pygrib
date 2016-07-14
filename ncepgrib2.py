@@ -474,7 +474,7 @@ class Grib2Message:
             self.points_in_y_direction = gdtmpl[8]
         if not reggrid and gdtnum == 40: # 'reduced' gaussian grid.
             self.points_in_y_direction = gdtmpl[8]
-        if gdtnum in [0,1,203,205,32768]: # regular or rotated lat/lon grid
+        if gdtnum in [0,1,203,205,32768,32769]: # regular or rotated lat/lon grid
             scalefact = float(gdtmpl[9])
             divisor = float(gdtmpl[10])
             if scalefact == 0: scalefact = 1.
