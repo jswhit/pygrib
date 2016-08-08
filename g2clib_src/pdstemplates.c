@@ -21,7 +21,8 @@ g2int getpdsindex(g2int number)
 // 2012-03-29  Vuong     Added Templates 4.44,4.45,4.46,4.47,4.48,4.50,
 //                       4.51,4.91,4.32 and 4.52
 // 2013-08-05  Vuong     Corrected 4.91 and added Templates 4.33,4.34,4.53,4.54
-//
+// 2015-10-07  Vuong     Added Templates 4.57, 4.60, 4.61 and
+//                       allow a forecast time to be negative
 // USAGE:    index=getpdsindex(number)
 //   INPUT ARGUMENT LIST:
 //     number   - NN, indicating the number of the Product Definition
@@ -72,6 +73,8 @@ gtemplate *getpdstemplate(g2int number)
 // 2012-02-15  Vuong     Added Templates 4.44,4.45,4.46,4.47,4.48,4.50,
 //                       4.51,4.91,4.32 and 4.52
 // 2013-08-05  Vuong     Corrected 4.91 and added Templates 4.33,4.34,4.53,4.54
+// 2015-10-07  Vuong     Added Templates 4.57, 4.60, 4.61 and
+//                       allow a forecast time to be negative
 //
 // USAGE:    CALL getpdstemplate(number)
 //   INPUT ARGUMENT LIST:
@@ -136,6 +139,8 @@ gtemplate *extpdstemplate(g2int number,g2int *list)
 // 2012-02-15  Vuong     Added Templates 4.44,4.45,4.46,4.47,4.48,4.50,
 //                       4.51,4.91,4.32 and 4.52
 // 2013-08-05  Vuong     Corrected 4.91 and added Templates 4.33,4.34,4.53,4.54
+// 2015-10-07  Vuong     Added Templates 4.57, 4.60, 4.61 and
+//                       allow a forecast time to be negative
 //
 // USAGE:    CALL extpdstemplate(number,list)
 //   INPUT ARGUMENT LIST:
@@ -423,6 +428,43 @@ gtemplate *extpdstemplate(g2int number,g2int *list)
                 new->ext[l+i]=1;
               }
              }
+// PDT 4.57  (10/07/2015)
+           else if ( number == 57 ) {
+              new->extlen=list[6]*15;
+              new->ext=(g2int *)malloc(sizeof(g2int)*new->extlen);
+              for (i=0;i<list[6];i++) {
+                 l=i*15;
+                 new->ext[l]=1;
+                 new->ext[l+1]=-4;
+                 new->ext[l+2]=1;
+                 new->ext[l+3]=1;
+                 new->ext[l+4]=1;
+                 new->ext[l+5]=2;
+                 new->ext[l+6]=1;
+                 new->ext[l+7]=1;
+                 new->ext[l+8]=-4;
+                 new->ext[l+9]=1;
+                 new->ext[l+10]=-1;
+                 new->ext[l+11]=-4;
+                 new->ext[l+12]=1;
+                 new->ext[l+13]=-1;
+                 new->ext[l+14]=-4;
+              }
+           }
+// PDT 4.61  (10/07/2015)
+           else if ( number == 61 ) {
+              if ( list[30] > 1 ) {
+                 new->extlen=(list[30]-1)*6;
+                 new->ext=(g2int *)malloc(sizeof(g2int)*new->extlen);
+                 for (j=2;j<=list[30];j++) {
+                    l=(j-2)*6;
+                    for (k=0;k<6;k++) {
+                       new->ext[l+k]=new->map[32+k];
+                    }
+                 }
+              }
+           }
+
            }
 
            return(new);
