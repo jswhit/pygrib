@@ -164,7 +164,7 @@ else:
 
 
 setup(name = "pygrib",
-      version = "2.0.1",
+      version = "2.0.2",
       description       = "Python module for reading/writing GRIB files",
       author            = "Jeff Whitaker",
       author_email      = "jeffrey.s.whitaker@noaa.gov",
