@@ -713,10 +713,10 @@ def setdates(gribmessage grb):
        grb.indicatorOfUnitOfTimeRange in _ftimedict:
         grb.fcstimeunits = _ftimedict[grb.indicatorOfUnitOfTimeRange]
     if grb.has_key('forecastTime'):
-        if grb.has_key('stepRange'):
-            # this is a hack to work around grib_api bug
-            # sometimes stepUnits and indicatorOfUnitOfTimeRange 
-            # are inconsistent.
+        if grb.has_key('forecastTime'):
+            ftime = grb.forecastTime
+        elif grb.has_key('stepRange'):
+            # if forecastTime doesn't exist, use end of stepRange.
             grb.stepUnits = grb.indicatorOfUnitOfTimeRange
             ftime = grb['stepRange'] # computed key, uses stepUnits
             # if it's a range, use the end of the range to define validDate
@@ -724,8 +724,6 @@ def setdates(gribmessage grb):
                 ftime = float(ftime.split('-')[1])
             except:
                 ftime = grb.forecastTime
-        else:
-            ftime = grb.forecastTime
     else:
         ftime = 0
     if ftime is None: ftime = 0. # make sure ftime is not None
