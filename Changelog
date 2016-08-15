@@ -3,6 +3,8 @@ version 2.0.2 (not yet released)
 * add .travis.yml for automatically running test.py using travis CI.
 * make sure ftime cannot be None (to avoid crash in grib_list).
 * update g2clib_src to version 1.6.0 from NCEP.
+* use forecastTime if available to define validDate - otherwise
+  fall back on end of stepRange (issue #40).
 
 version 2.0.1 (git tag v2.0.1rel)
 ================================
