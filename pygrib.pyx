@@ -717,13 +717,12 @@ def setdates(gribmessage grb):
             ftime = grb.forecastTime
         elif grb.has_key('stepRange'):
             # if forecastTime doesn't exist, use end of stepRange.
-            grb.stepUnits = grb.indicatorOfUnitOfTimeRange
             ftime = grb['stepRange'] # computed key, uses stepUnits
             # if it's a range, use the end of the range to define validDate
             try: 
                 ftime = float(ftime.split('-')[1])
             except:
-                ftime = grb.forecastTime
+                ftime = None
     else:
         ftime = 0
     if ftime is None: ftime = 0. # make sure ftime is not None
