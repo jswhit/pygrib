@@ -5,6 +5,9 @@ version 2.0.2 (not yet released)
 * update g2clib_src to version 1.6.0 from NCEP.
 * use forecastTime if available to define validDate - otherwise
   fall back on end of stepRange (issue #40).
+* comment out reference to private jasper variable (inmem_) in 
+  g2clib_src/enc_jpeg2000.c (no longer available in latest version of
+  Jasper lib)
 
 version 2.0.1 (git tag v2.0.1rel)
 ================================
