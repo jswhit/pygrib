@@ -1,4 +1,4 @@
-version 2.0.2 (not yet released)
+version 2.0.2 (git tag v2.0.2rel)
 ================================
 * add .travis.yml for automatically running test.py using travis CI.
 * make sure ftime cannot be None (to avoid crash in grib_list).
