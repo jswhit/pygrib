@@ -79,8 +79,8 @@ man_dir = config.getq(
 grib_api_libname = config.getq(
     "files", "grib_api_libname", 'grib_api')
 
-libdirs=[]
-incdirs=[numpy.get_include()]
+libdirs=[grib_api_libdir]
+incdirs=[numpy.get_include(), grib_api_incdir]
 libraries=[grib_api_libname]
 
 if grib_api_libdir is None and grib_api_dir is not None:
