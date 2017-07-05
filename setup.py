@@ -1,5 +1,5 @@
 from distutils.core import setup, Extension
-import os, glob, numpy, sys
+import os, glob, sys
 from os import environ
 if sys.version_info[0] < 3:
     import ConfigParser as configparser
@@ -13,14 +13,33 @@ class _ConfigParser(configparser.SafeConfigParser):
         except:
             return fallback
 
-# pyproj is a runtime dependency
+NUMPY_VERSION = ">= 1.9.3"
+install_requires = [
+  "numpy{}".format(NUMPY_VERSION),
+]
+
+# numpy must be installed before setup() starts. This is a common problem
+# solved by the following workaround.
 try:
-    import pyproj
+    import numpy
 except ImportError:
     try:
-        from mpl_toolkits.basemap import pyproj
-    except:
-        raise ImportError("either pyproj or basemap required")
+        import pip
+    except ImportError:
+        print("\nCould not automatically install numpy. Please install it "
+              "manually by typing:\n\n"
+              "pip install numpy{}\n".format(NUMPY_VERSION))
+        sys.exit(1)
+    else:
+        exitcode = pip.main(["install", "numpy{}".format(NUMPY_VERSION)])
+        import numpy
+
+# pyproj is a runtime dependency
+# (either pyproj or basemap required)
+try:
+    from mpl_toolkits.basemap import pyproj
+except ImportError:
+    install_requires.append("pyproj")
 
 # build time dependancy
 try:
@@ -189,4 +208,6 @@ setup(name = "pygrib",
       ['utils/grib_list','utils/grib_repack','utils/cnvgrib1to2','utils/cnvgrib2to1'],
       ext_modules       = [pygribext,g2clibext,redtoregext],
       py_modules        = ["ncepgrib2"],
-      data_files        = data_files)
+      data_files        = data_files,
+      install_requires=install_requires,
+)
