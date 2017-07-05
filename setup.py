@@ -15,7 +15,7 @@ class _ConfigParser(configparser.SafeConfigParser):
 
 NUMPY_VERSION = ">= 1.9.3"
 install_requires = [
-  "numpy{}".format(NUMPY_VERSION),
+  "numpy{0}".format(NUMPY_VERSION),
 ]
 
 # numpy must be installed before setup() starts. This is a common problem
@@ -28,10 +28,10 @@ except ImportError:
     except ImportError:
         print("\nCould not automatically install numpy. Please install it "
               "manually by typing:\n\n"
-              "pip install numpy{}\n".format(NUMPY_VERSION))
+              "pip install numpy{0}\n".format(NUMPY_VERSION))
         sys.exit(1)
     else:
-        exitcode = pip.main(["install", "numpy{}".format(NUMPY_VERSION)])
+        exitcode = pip.main(["install", "numpy{0}".format(NUMPY_VERSION)])
         import numpy
 
 # pyproj is a runtime dependency
