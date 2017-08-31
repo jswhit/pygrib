@@ -81,6 +81,11 @@ man_dir = config.getq(
 grib_api_libname = config.getq(
     "files", "grib_api_libname", 'grib_api')
 
+# Force ncepgrib2 in list if installing pygrib.
+if "pygrib" in packages_to_install and \
+   "ncepgrib2" not in packages_to_install:
+    packages_to_install = ["pygrib","ncepgrib2"]
+
 libraries=[]
 libdirs=[]
 incdirs=[numpy.get_include()]

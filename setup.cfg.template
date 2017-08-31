@@ -2,8 +2,8 @@
 # build options. 
 # Follow instructions below for editing.
 [install_options]
-# Provide a list of packages to install ("pygrib" or "ncepgrib2"). Both
-# can be provided.
+# Provide a list of packages to install.
+# IMPORTANT: If installing pygrib, then ncepgrib2 must be installed as well.
 #packages_to_install = []
 [directories]
 # uncomment and set to grib_api install location.
