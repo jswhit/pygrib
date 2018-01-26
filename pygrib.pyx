@@ -1547,6 +1547,7 @@ cdef class gribmessage(object):
                 projparams['lat_ts'] = self['LaD']/scale
             else:
                 projparams['lat_ts'] = self['Latin']/scale
+            if lon2 < lon1: lon2 += 360. # domain crosses Greenwich
             projparams['lon_0']=0.5*(lon1+lon2)
             projparams['proj']='merc'
         elif self['gridType'] in ['rotated_ll','rotated_gg']:
