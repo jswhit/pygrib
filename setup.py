@@ -79,7 +79,7 @@ zlib_incdir = config.getq(
 man_dir = config.getq(
     "directories", "man_dir", environ.get('MAN_DIR'))
 grib_api_libname = config.getq(
-    "files", "grib_api_libname", 'grib_api')
+    "files", "grib_api_libname", 'eccodes')
 
 # Force ncepgrib2 in list if installing pygrib.
 if "pygrib" in packages_to_install and \
