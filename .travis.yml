@@ -5,7 +5,7 @@ sudo: false
 addons:
   apt:
     packages:
-      - libgrib-api-dev
+      - libeccodes-dev
 
 env:
   global:
