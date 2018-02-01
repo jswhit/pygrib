@@ -1,7 +1,6 @@
 language: python
 
 sudo: false
-dist: artful
 
 addons:
   apt:
