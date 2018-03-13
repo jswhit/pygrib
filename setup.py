@@ -225,4 +225,5 @@ setup(name = "pygrib",
       scripts           = install_scripts,
       ext_modules       = install_ext_modules,
       py_modules        = install_py_modules,
+      install_requires  = install_requires,
       data_files        = data_files)
