@@ -62,6 +62,8 @@ config = _ConfigParser()
 if os.path.exists(setup_cfg):
     sys.stdout.write('reading from setup.cfg...')
     config.read(setup_cfg)
+packages_to_install = config.getq(
+    "install_options", "packages_to_install", ["pygrib","ncepgrib2"])
 grib_api_dir = config.getq(
     "directories", "grib_api_dir", environ.get('GRIBAPI_DIR'))
 grib_api_libdir = config.getq(
@@ -98,9 +100,15 @@ man_dir = config.getq(
 grib_api_libname = config.getq(
     "files", "grib_api_libname", 'grib_api')
 
+# Force ncepgrib2 in list if installing pygrib.
+if "pygrib" in packages_to_install and \
+   "ncepgrib2" not in packages_to_install:
+    packages_to_install = ["pygrib","ncepgrib2"]
+
+libraries=[]
 libdirs=[]
 incdirs=[numpy.get_include()]
-libraries=[grib_api_libname]
+if "pygrib" in packages_to_install: libraries+=[grib_api_libname]
 
 if grib_api_libdir is None and grib_api_dir is not None:
     libdirs.append(os.path.join(grib_api_dir,'lib'))
@@ -180,7 +188,17 @@ if man_dir is not None:
 else:
     data_files = None
 
+install_scripts = []
+install_ext_modules = []
+install_py_modules = []
 
+if "pygrib" in packages_to_install:
+    install_scripts += ['utils/grib_list','utils/grib_repack','utils/cnvgrib1to2','utils/cnvgrib2to1']
+    install_ext_modules += [pygribext,redtoregext]
+
+if "ncepgrib2" in packages_to_install:
+    install_ext_modules += [g2clibext]
+    install_py_modules += ["ncepgrib2"]
 
 setup(name = "pygrib",
       version = "2.0.2",
@@ -204,10 +222,7 @@ setup(name = "pygrib",
                            "License :: OSI Approved",
                            "Topic :: Software Development :: Libraries :: Python Modules"],
       cmdclass          = cmdclass,
-      scripts =
-      ['utils/grib_list','utils/grib_repack','utils/cnvgrib1to2','utils/cnvgrib2to1'],
-      ext_modules       = [pygribext,g2clibext,redtoregext],
-      py_modules        = ["ncepgrib2"],
-      data_files        = data_files,
-      install_requires=install_requires,
-)
+      scripts           = install_scripts,
+      ext_modules       = install_ext_modules,
+      py_modules        = install_py_modules,
+      data_files        = data_files)

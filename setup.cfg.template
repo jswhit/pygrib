@@ -1,6 +1,10 @@
 # Rename this file to setup.cfg to set pygrib's
 # build options. 
 # Follow instructions below for editing.
+[install_options]
+# Provide a list of packages to install.
+# IMPORTANT: If installing pygrib, then ncepgrib2 must be installed as well.
+#packages_to_install = []
 [directories]
 # uncomment and set to grib_api install location.
 # Include files should be located in grib_api_dir/include and
@@ -33,3 +37,5 @@
 # uncomment and set to grib_api library name.
 # If you are using GRIB-API with MSVS, library name might be 'grib_api_lib'.
 #grib_api_libname = grib_api_lib
+# If you are using the new eccodes lib instead of the old grib_api lib
+#grib_api_libname = eccodes

@@ -1,3 +1,8 @@
+since version 2.0.2 release
+===========================
+* fix for latlons method for mercator domains that cross Greenwich 
+(issue #67).
+
 version 2.0.2 (git tag v2.0.2rel)
 ================================
 * add .travis.yml for automatically running test.py using travis CI.
