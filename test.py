@@ -230,8 +230,15 @@ def test():
     >>> str(grb.packingType)
     'grid_complex_spatial_differencing'
     >>> data = grb.values
+    >>> grbs.close()
     >>> str('min/max %5.2f %5.2f' % (data.min(), data.max()))
     'min/max 295.40 308.10'
+    >>> grbs = pygrib.open('sampledata/no-radius-shapeOfEarth-7.grb2')
+    >>> for grb in grbs: print(grb)
+    1:Total precipitation:kg m-2 (accum):lambert:surface:level 0:fcst time 15-30 mins (accum):from 201804100000
+    >>> str(grb.packingType)
+    'grid_simple'
+    >>> grbs.close()
     """
 
 if __name__ == "__main__":
