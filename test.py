@@ -243,6 +243,10 @@ def test():
 
 if __name__ == "__main__":
     import doctest
-    doctest.testmod(verbose=True)
+    failure_count, test_count = doctest.testmod(verbose=True)
     import pygrib, sys
     sys.stdout.write('using GRIB API version %s\n' % pygrib.grib_api_version)
+    if failure_count==0:
+        sys.exit(0)
+    else:
+        sys.exit(1)
