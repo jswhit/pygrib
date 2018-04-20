@@ -37,3 +37,5 @@
 # uncomment and set to grib_api library name.
 # If you are using GRIB-API with MSVS, library name might be 'grib_api_lib'.
 #grib_api_libname = grib_api_lib
+# If you are using the new eccodes lib instead of the old grib_api lib
+#grib_api_libname = eccodes
