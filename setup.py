@@ -175,11 +175,14 @@ install_py_modules = []
 
 if "pygrib" in packages_to_install:
     install_scripts += ['utils/grib_list','utils/grib_repack','utils/cnvgrib1to2','utils/cnvgrib2to1']
-    install_ext_modules += [pygribext,redtoregext]
+    install_ext_modules += [pygribext]
 
 if "ncepgrib2" in packages_to_install:
     install_ext_modules += [g2clibext]
     install_py_modules += ["ncepgrib2"]
+
+# Must install redtoregext
+install_ext_modules += [redtoregext]
 
 setup(name = "pygrib",
       version = "2.0.2",
