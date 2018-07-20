@@ -174,6 +174,7 @@ __version__ = '2.0.2'
 import numpy as np
 import warnings
 from datetime import datetime
+from pkg_resources import parse_version
 from numpy import ma
 try:
     import pyproj
@@ -1441,7 +1442,7 @@ cdef class gribmessage(object):
                 else:
                     scalea = 1.
                     scaleb = 1.
-                if grib_api_version < 10900:
+                if parse_version(grib_api_version) < parse_version('1.9.0'):
                     projparams['a']=self['scaledValueOfMajorAxisOfOblateSpheroidEarth']*scalea
                     projparams['b']=self['scaledValueOfMinorAxisOfOblateSpheroidEarth']*scaleb
                 else:
