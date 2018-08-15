@@ -78,8 +78,11 @@ zlib_incdir = config.getq(
 # where to install man pages?
 man_dir = config.getq(
     "directories", "man_dir", environ.get('MAN_DIR'))
+#grib_api_libname = config.getq(
+#    "files", "grib_api_libname", 'grib_api')
+# use libeecodes by default (change in setup.cfg if needed)
 grib_api_libname = config.getq(
-    "files", "grib_api_libname", 'grib_api')
+    "files", "grib_api_libname", 'eccodes')
 
 # Force ncepgrib2 in list if installing pygrib.
 if "pygrib" in packages_to_install and \
@@ -182,7 +185,7 @@ if "ncepgrib2" in packages_to_install:
     install_py_modules += ["ncepgrib2"]
 
 setup(name = "pygrib",
-      version = "2.0.2",
+      version = "2.0.3",
       description       = "Python module for reading/writing GRIB files",
       author            = "Jeff Whitaker",
       author_email      = "jeffrey.s.whitaker@noaa.gov",
