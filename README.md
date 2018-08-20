@@ -13,7 +13,7 @@ Quickstart:
 * Clone the github repository, or download a source release from https://pypi.python.org/pypi/pygrib.
 
 * Copy setup.cfg.template to setup.cfg, open in text editor, follow instructions in
-comments for editing.  If you are using the new eccodes library instead of the old grib_api
+comments for editing.  If you are using the old grib_api library instead of the new eccodes
 library, be sure to uncomment the last line setup.cfg.
 
 * Run 'python setup.py build'

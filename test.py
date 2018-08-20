@@ -84,7 +84,7 @@ def test():
     4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
 
     as above, but using step key (issue #9)
-    >>> selected_grbs = grbs.select(level=2,typeOfLevel='heightAboveGround',step=120) 
+    >>> selected_grbs = grbs.select(level=2,typeOfLevel='heightAboveGround',step=120)
     >>> for grb in selected_grbs: grb
     3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
     4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
@@ -245,7 +245,7 @@ if __name__ == "__main__":
     import doctest
     failure_count, test_count = doctest.testmod(verbose=True)
     import pygrib, sys
-    sys.stdout.write('using GRIB API version %s\n' % pygrib.grib_api_version)
+    sys.stdout.write('using ECCODES library version %s\n' % pygrib.grib_api_version)
     if failure_count==0:
         sys.exit(0)
     else:
