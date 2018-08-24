@@ -17,6 +17,7 @@ recursive-include docs *
 recursive-include ports *
 recursive-include ncepgrib2_docs *
 include sampledata/*.grb
+include sampledata/*.grb2
 include sampledata/*.grib*
 include sampledata/*.bin
 recursive-include g2clib_src *
