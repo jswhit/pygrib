@@ -1109,7 +1109,7 @@ def Grib2Decode(filename,gribmsg=False):
             kwargs['center_wmo_code']=wmo_code
         kwargs['grid_definition_template_number']=gdtnum[n]
         kwargs['grid_definition_template']=gdtmpl[n]
-        if gdeflist[n] != []:
+        if gdeflist[n].size > 0:
             kwargs['grid_definition_list']=gdeflist[n]
         kwargs['grid_definition_info']=gdsinfo[n]
         kwargs['discipline_code']=discipline[n]
@@ -1117,7 +1117,7 @@ def Grib2Decode(filename,gribmsg=False):
         kwargs['product_definition_template']=pdtmpl[n]
         kwargs['data_representation_template_number']=drtnum[n]
         kwargs['data_representation_template']=drtmpl[n]
-        if coordlist[n] != []:
+        if coordlist[n].size > 0:
             kwargs['extra_vertical_coordinate_info']=coordlist[n]
         kwargs['number_of_data_points_to_unpack']=ndpts[n]
         kwargs['bitmap_indicator_flag']=bitmapflag[n]
