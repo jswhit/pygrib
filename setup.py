@@ -209,4 +209,5 @@ setup(name = "pygrib",
       scripts           = install_scripts,
       ext_modules       = install_ext_modules,
       py_modules        = install_py_modules,
-      data_files        = data_files)
+      data_files        = data_files,
+      install_requires  = ["numpy"])
