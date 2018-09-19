@@ -3,6 +3,7 @@ import g2clib
 import struct
 import string
 import math
+import functools
 import warnings
 import operator
 from datetime import datetime
@@ -1214,12 +1215,7 @@ def _repeatlast(numfields,listin):
     return listin
 
 def _flatten(lst):
-    try:
-        flist = functools.reduce(operator.add,lst)
-    except NameError: # no reduce in python 3.
-        import functools
-        flist = functools.reduce(operator.add,lst)
-    return flist
+    return functools.reduce(operator.add,lst)
 
 
 class Grib2Encode:
