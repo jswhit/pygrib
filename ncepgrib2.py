@@ -619,7 +619,8 @@ lat/lon values returned by grid method may be incorrect."""
 
     def __repr__(self):
         strings = []
-        keys = self.__dict__.keys()
+        # python 3 keys() is an iterator that can't be sorted
+        keys = list(self.__dict__.keys())
         keys.sort()
         for k in keys:
             if not k.startswith('_'):
