@@ -1448,6 +1448,9 @@ cdef class gribmessage(object):
                 else:
                     projparams['a']=self['scaledValueOfEarthMajorAxis']*scalea
                     projparams['b']=self['scaledValueOfEarthMinorAxis']*scaleb
+            elif self['shapeOfTheEarth'] == 4:
+                projparams['a']=6378137.0
+                projparams['b']=6356752.314
             elif self['shapeOfTheEarth'] == 2:
                 projparams['a']=6378160.0
                 projparams['b']=6356775.0 
