@@ -1802,12 +1802,14 @@ cdef class gribmessage(object):
             x, y = np.meshgrid(x, y)
             lons, lats = pj(x, y, inverse=True)
         elif self['gridType'] in ['rotated_ll','rotated_gg']:
-            rotatedlats = self['distinctLatitudes']
-            rotatedlons = self['distinctLongitudes']
-            d2r = np.pi/180.
-            lonsr, latsr = np.meshgrid(rotatedlons*d2r, rotatedlats*d2r)
+            #rotatedlats = self['distinctLatitudes']
+            #rotatedlons = self['distinctLongitudes']
+            #d2r = np.pi/180.
+            #lonsr, latsr = np.meshgrid(rotatedlons*d2r, rotatedlats*d2r)
             pj = pyproj.Proj(self.projparams)
-            lons,lats = pj(lonsr,latsr,inverse=True)
+            #lons,lats = pj(lonsr,latsr,inverse=True)
+            lons = self['longitudes'].reshape(self.Nj,self.Ni)
+            lats = self['latitudes'].reshape(self.Nj,self.Ni)
         else:
             raise ValueError('unsupported grid %s' % self['gridType'])
         return lats, lons
