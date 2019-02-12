@@ -1598,20 +1598,22 @@ cdef class gribmessage(object):
             # workaround for grib_api bug with complex packing.
             # (distinctLongitudes, distinctLatitudes throws error,
             #  so use np.linspace to define values)
-            if self.packingType.startswith('grid_complex'):
-                # this is not strictly correct for gaussian grids,
-                # but the error is very small.
-                lats = np.linspace(lat1,lat2,ny)
-                lons = np.linspace(lon1,lon2,nx)
-            else:
-                lats = self['distinctLatitudes']
-                if lat2 < lat1 and lats[-1] > lats[0]: lats = lats[::-1]
-                lons = self['distinctLongitudes']
+            #if self.packingType.startswith('grid_complex'):
+            #    # this is not strictly correct for gaussian grids,
+            #    # but the error is very small.
+            #    lats = np.linspace(lat1,lat2,ny)
+            #    lons = np.linspace(lon1,lon2,nx)
+            #else:
+            # this workaround no longer needed (issue #102)
+            lats = self['distinctLatitudes']
+            if lat2 < lat1 and lats[-1] > lats[0]: lats = lats[::-1]
+            lons = self['distinctLongitudes']
             # don't trust distinctLongitudes 
             # when longitudeOfLastGridPointInDegrees < 0
             # (bug in grib_api 1.9.16)
-            if lon2 < 0:
-                lons = np.linspace(lon1,lon2,nx)
+            # this workaround no longer neede (issue #102)
+            #if lon2 < 0:
+            #    lons = np.linspace(lon1,lon2,nx)
             lons,lats = np.meshgrid(lons,lats) 
         elif self['gridType'] == 'reduced_gg': # reduced global gaussian grid
             if self.expand_reduced:
