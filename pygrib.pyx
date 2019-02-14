@@ -1593,8 +1593,8 @@ cdef class gribmessage(object):
             #    lon2 = 360+lon2
             #if lon1 >= 0 and lon2 < lon1 and self.iDirectionIncrement > 0:
             #    lon1 = lon1-360
-            #lat1 = self['latitudeOfFirstGridPointInDegrees']
-            #lat2 = self['latitudeOfLastGridPointInDegrees']
+            lat1 = self['latitudeOfFirstGridPointInDegrees']
+            lat2 = self['latitudeOfLastGridPointInDegrees']
             # workaround for grib_api bug with complex packing.
             # (distinctLongitudes, distinctLatitudes throws error,
             #  so use np.linspace to define values)

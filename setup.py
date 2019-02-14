@@ -1,5 +1,5 @@
 from distutils.core import setup, Extension
-import os, glob, numpy, sys
+import os, glob, sys
 from os import environ
 if sys.version_info[0] < 3:
     import ConfigParser as configparser
@@ -91,6 +91,7 @@ if "pygrib" in packages_to_install and \
 
 libraries=[]
 libdirs=[]
+import numpy
 incdirs=[numpy.get_include()]
 if "pygrib" in packages_to_install: libraries+=[grib_api_libname]
 
@@ -185,7 +186,7 @@ if "ncepgrib2" in packages_to_install:
     install_py_modules += ["ncepgrib2"]
 
 setup(name = "pygrib",
-      version = "2.0.3",
+      version = "2.0.4",
       description       = "Python module for reading/writing GRIB files",
       author            = "Jeff Whitaker",
       author_email      = "jeffrey.s.whitaker@noaa.gov",
