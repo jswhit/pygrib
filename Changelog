@@ -1,3 +1,8 @@
+version 2.0.4 (git tag v2.0.4rel)
+================================
+* fix error in gaussian latitudes (issue #102)
+* fix MemoryError when computing rotated lat/lons (issue #99)
+
 version 2.0.3 (git tag v2.0.3rel)
 =================================
 * default lib name switched from grib_api to eccodes (can still
