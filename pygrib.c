@@ -1703,7 +1703,7 @@ static const char __pyx_k_warn[] = "warn";
 static const char __pyx_k_year[] = "year";
 static const char __pyx_k_zero[] = "zero";
 static const char __pyx_k_1_9_0[] = "1.9.0";
-static const char __pyx_k_2_0_3[] = "2.0.3";
+static const char __pyx_k_2_0_4[] = "2.0.4";
 static const char __pyx_k_Latin[] = "Latin";
 static const char __pyx_k_ascii[] = "ascii";
 static const char __pyx_k_atype[] = "atype";
@@ -2005,7 +2005,7 @@ static const char __pyx_k_value_must_be_float_int_or_strin[] = "value must be fl
 static PyObject *__pyx_kp_s_04i;
 static PyObject *__pyx_kp_s_12_hr_periods;
 static PyObject *__pyx_kp_s_1_9_0;
-static PyObject *__pyx_kp_s_2_0_3;
+static PyObject *__pyx_kp_s_2_0_4;
 static PyObject *__pyx_kp_s_30_yr_periods;
 static PyObject *__pyx_kp_s_3_hr_periods;
 static PyObject *__pyx_kp_s_6_hr_periods;
@@ -34054,7 +34054,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_04i, __pyx_k_04i, sizeof(__pyx_k_04i), 0, 0, 1, 0},
   {&__pyx_kp_s_12_hr_periods, __pyx_k_12_hr_periods, sizeof(__pyx_k_12_hr_periods), 0, 0, 1, 0},
   {&__pyx_kp_s_1_9_0, __pyx_k_1_9_0, sizeof(__pyx_k_1_9_0), 0, 0, 1, 0},
-  {&__pyx_kp_s_2_0_3, __pyx_k_2_0_3, sizeof(__pyx_k_2_0_3), 0, 0, 1, 0},
+  {&__pyx_kp_s_2_0_4, __pyx_k_2_0_4, sizeof(__pyx_k_2_0_4), 0, 0, 1, 0},
   {&__pyx_kp_s_30_yr_periods, __pyx_k_30_yr_periods, sizeof(__pyx_k_30_yr_periods), 0, 0, 1, 0},
   {&__pyx_kp_s_3_hr_periods, __pyx_k_3_hr_periods, sizeof(__pyx_k_3_hr_periods), 0, 0, 1, 0},
   {&__pyx_kp_s_6_hr_periods, __pyx_k_6_hr_periods, sizeof(__pyx_k_6_hr_periods), 0, 0, 1, 0},
@@ -35357,7 +35357,7 @@ if (!__Pyx_RefNanny) {
  * PERFORMANCE OF THIS SOFTWARE."""
  * __test__ = None             # <<<<<<<<<<<<<<
  * del __test__ # hack so epydoc doesn't show __test__
- * __version__ = '2.0.3'
+ * __version__ = '2.0.4'
  */
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, Py_None) < 0) __PYX_ERR(0, 170, __pyx_L1_error)
 
@@ -35365,7 +35365,7 @@ if (!__Pyx_RefNanny) {
  * PERFORMANCE OF THIS SOFTWARE."""
  * __test__ = None
  * del __test__ # hack so epydoc doesn't show __test__             # <<<<<<<<<<<<<<
- * __version__ = '2.0.3'
+ * __version__ = '2.0.4'
  * 
  */
   if (__Pyx_PyObject_DelAttrStr(__pyx_m, __pyx_n_s_test) < 0) __PYX_ERR(0, 171, __pyx_L1_error)
@@ -35373,14 +35373,14 @@ if (!__Pyx_RefNanny) {
   /* "pygrib.pyx":172
  * __test__ = None
  * del __test__ # hack so epydoc doesn't show __test__
- * __version__ = '2.0.3'             # <<<<<<<<<<<<<<
+ * __version__ = '2.0.4'             # <<<<<<<<<<<<<<
  * 
  * import numpy as np
  */
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_version, __pyx_kp_s_2_0_3) < 0) __PYX_ERR(0, 172, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_version, __pyx_kp_s_2_0_4) < 0) __PYX_ERR(0, 172, __pyx_L1_error)
 
   /* "pygrib.pyx":174
- * __version__ = '2.0.3'
+ * __version__ = '2.0.4'
  * 
  * import numpy as np             # <<<<<<<<<<<<<<
  * import warnings
