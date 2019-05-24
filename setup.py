@@ -182,8 +182,11 @@ if "pygrib" in packages_to_install:
     install_ext_modules += [pygribext,redtoregext]
 
 if "ncepgrib2" in packages_to_install:
-    install_ext_modules += [g2clibext]
+    install_ext_modules += [g2clibext,redtoregext]
     install_py_modules += ["ncepgrib2"]
+
+# Make sure only 1 instance of redtoregext exists in install_ext_modules
+install_ext_modules = list(set(install_ext_modules))
 
 setup(name = "pygrib",
       version = "2.0.4",
