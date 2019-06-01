@@ -756,7 +756,6 @@ lat/lon values returned by grid method may be incorrect."""
  @return: C{B{lats},B{lons}}, float32 numpy arrays
  containing latitudes and longitudes of grid (in degrees).
         """
-        from pygrib import gaulats
         gdsinfo = self.grid_definition_info
         gdtnum = self.grid_definition_template_number
         gdtmpl = self.grid_definition_template
@@ -779,6 +778,10 @@ lat/lon values returned by grid method may be incorrect."""
             projparams['proj'] = 'cyl'
             lons,lats = np.meshgrid(lons,lats) # make 2-d arrays.
         elif gdtnum == 40: # gaussian grid (only works for global!)
+            try:
+                from pygrib import gaulats
+            except:
+                raise ImportError("pygrib required to compute Gaussian lats/lons")
             lon1, lat1 = self.longitude_first_gridpoint, self.latitude_first_gridpoint
             lon2, lat2 = self.longitude_last_gridpoint, self.latitude_last_gridpoint
             nlats = self.points_in_y_direction
