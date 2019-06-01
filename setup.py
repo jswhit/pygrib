@@ -1,3 +1,4 @@
+import setuptools
 from distutils.core import setup, Extension
 import os, glob, sys
 from os import environ
