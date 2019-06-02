@@ -297,7 +297,7 @@ missingvalue_int = GRIB_MISSING_LONG
 #missingvalue_float = GRIB_MISSING_DOUBLE
 missingvalue_float = -1.e100 # value given in grib_api.h version 1.90
 def _get_grib_api_version():
-    div = lambda v,d: (v/d,v%d)
+    div = lambda v,d: (v//d,v%d)
     v = grib_get_api_version()
     v,revision = div(v,100)
     v,minor = div(v,100)
