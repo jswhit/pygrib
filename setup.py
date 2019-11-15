@@ -157,13 +157,15 @@ if hasattr(sys,'maxsize'):
 else:
     if sys.maxint > 2**31-1: macros.append(('__64BIT__',1))
 
+runtime_libdirs = libdirs if os.name != "nt" else None
 g2clibext = Extension("g2clib",g2clib_deps,include_dirs=incdirs,\
-            library_dirs=libdirs,libraries=libraries,runtime_library_dirs=libdirs,define_macros=macros)
+            library_dirs=libdirs,libraries=libraries,runtime_library_dirs=runtime_libdirs,
+            define_macros=macros)
 redtoregext =\
 Extension("redtoreg",[redtoreg_pyx],include_dirs=[numpy.get_include()])
 pygribext =\
 Extension("pygrib",[pygrib_pyx],include_dirs=incdirs,library_dirs=libdirs,\
-          runtime_library_dirs=libdirs,libraries=libraries)
+          runtime_library_dirs=runtime_libdirs,libraries=libraries)
 
 # man pages installed in man_dir/man1
 if man_dir is not None:
