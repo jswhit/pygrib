@@ -190,6 +190,11 @@ if "ncepgrib2" in packages_to_install:
 # Make sure only 1 instance of redtoregext exists in install_ext_modules
 install_ext_modules = list(set(install_ext_modules))
 
+# Import README.md as PyPi long_description
+this_directory = path.abspath(path.dirname(__file__))
+with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
+
 setup(name = "pygrib",
       version = "2.0.4",
       description       = "Python module for reading/writing GRIB files",
@@ -216,4 +221,6 @@ setup(name = "pygrib",
       ext_modules       = install_ext_modules,
       py_modules        = install_py_modules,
       data_files        = data_files,
-      install_requires  = ["numpy"])
+      install_requires  = ["numpy"],
+      long_description  = long_description,
+      long_description_content_type = 'text/markdown')
