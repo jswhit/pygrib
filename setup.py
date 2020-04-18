@@ -191,8 +191,8 @@ if "ncepgrib2" in packages_to_install:
 install_ext_modules = list(set(install_ext_modules))
 
 # Import README.md as PyPi long_description
-this_directory = path.abspath(path.dirname(__file__))
-with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
+this_directory = os.path.abspath(os.path.dirname(__file__))
+with open(os.path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(name = "pygrib",
