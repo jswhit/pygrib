@@ -1,3 +1,9 @@
+since version 2.0.4
+===================
+* fix error in latlons method for lambert projection when 
+  jScansPositively == 0 (PRe #129).
+* Add README.md as long description for pypi (PR #130).
+
 version 2.0.4 (git tag v2.0.4rel)
 ================================
 * fix error in gaussian latitudes (issue #102)
