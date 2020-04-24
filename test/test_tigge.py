@@ -11,8 +11,7 @@ for grb in pygrib.open('../sampledata/tigge.grb'):
             (grb['centre'], fld.shape, fld.min(), fld.max()))
     fig=plt.figure(figsize=(10,5))
     fig.add_axes([0.1,0.1,0.8,0.8])
-    # setup robinson world map projection.
-    m = Basemap(projection='robin',lon_0=180)
+    m = Basemap(projection='cyl',lon_0=180)
     x, y = m(lons,lats)
     levels = np.arange(475,1101,25)
     CS = m.contourf(x,y,fld,levels,cmap=plt.cm.jet)

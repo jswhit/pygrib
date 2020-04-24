@@ -15,7 +15,7 @@ m.contourf(lons,lats,data,15,cmap=plt.cm.hot_r)
 plt.title('%s Global Lat/Lon Grid' % grb.name)
 fig = plt.figure()
 m.drawcoastlines()
-m.contourf(lons,lats,data2,15,cmap=plt.cm.spectral)
+m.contourf(lons,lats,data2,15)
 plt.title('%s Global Lat/Lon Grid' % grb2.name)
 
 lat1=15; lat2=65; lon1=220; lon2=320
