@@ -1,6 +1,6 @@
 since version 2.0.4
 ===================
-* fix error in latlons method for lambert projection when 
+* fix error in latlons method for lambert projection and polar stereo when 
   jScansPositively == 0 (PRe #129).
 * Add README.md as long description for pypi (PR #130).
 * distinguish between run and build time dependenices in setup.py (PR #112).
