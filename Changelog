@@ -1,5 +1,5 @@
-since version 2.0.4
-===================
+version 2.0.5 (git tag v2.0.5rel)
+==================================
 * fix error in latlons method for lambert projection when 
   jScansPositively == 0 (PRe #129).
 * Add README.md as long description for pypi (PR #130).
