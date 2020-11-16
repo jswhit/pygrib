@@ -443,7 +443,7 @@ cdef class open(object):
             # for a slice, return a list of grib messages.
             beg, end, inc = key.indices(self.messages)
             msg = self.tell()
-            grbs = [self.message(n+1) for n in xrange(beg,end,inc)]
+            grbs = [self.message(n) for n in xrange(beg,end,inc)]
             self.seek(msg) # put iterator back in original position
             return grbs
         elif type(key) == int or type(key) == long:
