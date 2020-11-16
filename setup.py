@@ -209,7 +209,7 @@ except ImportError:
         install_requires.append("pyproj")
 
 setup(name = "pygrib",
-      version = "2.0.4",
+      version = "2.0.5",
       description       = "Python module for reading/writing GRIB files",
       author            = "Jeff Whitaker",
       author_email      = "jeffrey.s.whitaker@noaa.gov",

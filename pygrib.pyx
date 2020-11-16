@@ -169,7 +169,7 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE."""
 __test__ = None
 del __test__ # hack so epydoc doesn't show __test__
-__version__ = '2.0.4'
+__version__ = '2.0.5'
 
 import numpy as np
 import warnings
@@ -443,7 +443,7 @@ cdef class open(object):
             # for a slice, return a list of grib messages.
             beg, end, inc = key.indices(self.messages)
             msg = self.tell()
-            grbs = [self.message(n+1) for n in xrange(beg,end,inc)]
+            grbs = [self.message(n) for n in xrange(beg,end,inc)]
             self.seek(msg) # put iterator back in original position
             return grbs
         elif type(key) == int or type(key) == long:
