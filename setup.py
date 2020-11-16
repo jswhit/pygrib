@@ -1,3 +1,4 @@
+import setuptools
 from distutils.core import setup, Extension
 import os, glob, sys
 from os import environ
@@ -13,29 +14,31 @@ class _ConfigParser(configparser.ConfigParser):
         except:
             return fallback
 
-# pyproj is a runtime dependency
-try:
-    import pyproj
-except ImportError:
-    try:
-        from mpl_toolkits.basemap import pyproj
-    except:
-        raise ImportError("either pyproj or basemap required")
-
 # build time dependancy
 try:
     from Cython.Distutils import build_ext
-    #from Cython.Build import cythonize
-    cmdclass = {'build_ext': build_ext}
     pygrib_pyx = "pygrib.pyx"
     redtoreg_pyx = "redtoreg.pyx"
     g2clib_pyx  = 'g2clib.pyx'
 except ImportError:
-    cmdclass = {}
+    from distutils.command.build_ext import build_ext
     pygrib_pyx = "pygrib.c"
     redtoreg_pyx = "redtoreg.c"
     g2clib_pyx  = 'g2clib.c'
 
+class NumpyBuildExtCommand(build_ext):
+    """
+    build_ext command for use when numpy headers are needed.
+    from https://stackoverflow.com/questions/2379898/
+    and https://stackoverflow.com/questions/48283503/
+    """
+    def run(self):
+        self.distribution.fetch_build_eggs(['numpy'])
+        import numpy
+        self.include_dirs.append(numpy.get_include())
+        build_ext.run(self)
+
+cmdclass = {'build_ext': NumpyBuildExtCommand}
 
 setup_cfg = environ.get('PYGRIBSETUPCFG', 'setup.cfg')
 config = _ConfigParser()
@@ -91,8 +94,7 @@ if "pygrib" in packages_to_install and \
 
 libraries=[]
 libdirs=[]
-import numpy
-incdirs=[numpy.get_include()]
+incdirs=[]
 if "pygrib" in packages_to_install: libraries+=[grib_api_libname]
 
 if grib_api_libdir is None and grib_api_dir is not None:
@@ -162,7 +164,7 @@ g2clibext = Extension("g2clib",g2clib_deps,include_dirs=incdirs,\
             library_dirs=libdirs,libraries=libraries,runtime_library_dirs=runtime_libdirs,
             define_macros=macros)
 redtoregext =\
-Extension("redtoreg",[redtoreg_pyx],include_dirs=[numpy.get_include()])
+Extension("redtoreg",[redtoreg_pyx])
 pygribext =\
 Extension("pygrib",[pygrib_pyx],include_dirs=incdirs,library_dirs=libdirs,\
           runtime_library_dirs=runtime_libdirs,libraries=libraries)
@@ -195,6 +197,17 @@ this_directory = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
+install_requires = ["numpy"]
+
+# pyproj is a runtime dependency
+try:
+    import pyproj
+except ImportError:
+    try:
+        from mpl_toolkits.basemap import pyproj
+    except:
+        install_requires.append("pyproj")
+
 setup(name = "pygrib",
       version = "2.0.5",
       description       = "Python module for reading/writing GRIB files",
@@ -221,6 +234,6 @@ setup(name = "pygrib",
       ext_modules       = install_ext_modules,
       py_modules        = install_py_modules,
       data_files        = data_files,
-      install_requires  = ["numpy"],
       long_description  = long_description,
-      long_description_content_type = 'text/markdown')
+      long_description_content_type = 'text/markdown',
+      install_requires  = install_requires)

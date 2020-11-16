@@ -907,7 +907,7 @@ cdef class gribmessage(object):
                 inventory.append(levstring)
         elif self.valid_key('level'):
             inventory.append(':level %s' % self['level'])
-        if self.has_key('stepRange'):
+        if self.valid_key('stepRange'):
             ftime = self['stepRange'] # computed key, uses stepUnits
             if self.valid_key('stepType') and self['stepType'] != 'instant':
                 inventory.append(':fcst time %s %s (%s)'%\
@@ -1665,6 +1665,11 @@ cdef class gribmessage(object):
                 dy = self['yDirectionGridLengthInMetres']
             pj = pyproj.Proj(self.projparams)
             llcrnrx, llcrnry = pj(lon1,lat1)
+            # Set increment direction here for the grid.
+            # NOTE: some GRIB files are arranged with first gridpoint
+            # in top left, or top right corner for example...
+            if self['iScansPositively'] == 0 and dx > 0: dx = -dx
+            if self['jScansPositively'] == 0 and dy > 0: dy = -dy
             x = llcrnrx+dx*np.arange(nx)
             y = llcrnry+dy*np.arange(ny)
             x, y = np.meshgrid(x, y)
