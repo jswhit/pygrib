@@ -27,6 +27,7 @@ notifications:
   email: false
 
 before_install:
+  - sudo apt-get install libproj-dev proj-bin
   - pip install $DEPENDS
   - sudo apt-get install libeccodes-dev
 
