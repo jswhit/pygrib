@@ -11,7 +11,6 @@ include setup.cfg.template
 include setup.py
 include test.py
 include README.md
-include README.macosx
 include utils/*grib*
 recursive-include docs *
 recursive-include ncepgrib2_docs *
