@@ -151,7 +151,7 @@ Documentation
 
 @contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
 
-@version: 2.0.0
+@version: 2.0.6
 
 @copyright: copyright 2010 by Jeffrey Whitaker.
 
