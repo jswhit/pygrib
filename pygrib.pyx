@@ -7,7 +7,7 @@ GRIB is the World Meterological Organization
 U{standard<http://www.wmo.ch/pages/prog/www/WMOCodes/GRIB.html>} 
 for distributing gridded data. 
 The module is a python interface to the
-U{GRIB API<https://software.ecmwf.int/wiki/display/GRIB/Home>} C library
+U{ECCODES<https://confluence.ecmwf.int/display/ECC>} C library
 from the European Centre for Medium-Range Weather Forecasts
 (U{ECMWF<http://www.ecmwf.int>}).
 
@@ -23,7 +23,7 @@ Required
   transformations B{or} U{matplotlib<http://matplotlib.sf.net>} and
   the U{basemap<http://matplotlib.sf.net/basemap/doc/html>} toolkit.
   Pyproj 1.8.9 is required for Python 3.
-- U{GRIB API<https://software.ecmwf.int/wiki/display/GRIB/Home>} C library
+- U{ECCODES<https://confluence.ecmwf.int/display/ECC>} C library
   for encoding and decoding GRIB messages (edition 1 and edition 2).
   Version 1.8.0 or higher required.
   To be fully functional, the GRIB API library requires
@@ -801,7 +801,7 @@ cdef class gribmessage(object):
     U{GRIB2 <http://www.ecmwf.int/publications/manuals/d/gribapi/fm92/grib2/>}.
     Parameter names are
     are given by the C{name}, C{shortName} and C{paramID}
-    U{keys <http://www.ecmwf.int/publications/manuals/d/gribapi/param/>}.
+    U{keys <https://confluence.ecmwf.int/display/ECC/GRIB+Keys>}.
     pygrib also defines some special attributes which are defined below
     under the heading B{Instance Variables}.
 
@@ -1842,7 +1842,7 @@ However, using L{index.select} is much faster than L{open.select}.
 
 B{Warning}:  Searching for data within multi-field grib messages does not
 work using an index (and is not supported by the 
-U{GRIB API<https://software.ecmwf.int/wiki/display/GRIB/Home>} library).  NCEP
+U{ECCODES<https://confluence.ecmwf.int/display/ECC>} library).  NCEP
 often puts u and v winds together in a single multi-field grib message.  You
 will get incorrect results if you try to use an index to find data in these
 messages.  Use the slower, but more robust L{open.select} in this case.

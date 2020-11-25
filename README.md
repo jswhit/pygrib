@@ -12,10 +12,11 @@ Quickstart:
 
 * Clone the github repository, or download a source release from https://pypi.python.org/pypi/pygrib.
 
-* install dependencies (eccodes library, numpy, pyproj).
+* install dependencies (eccodes library, numpy, pyproj). On linux, this can
+be done via `pip install numpy pyproj; sudo apt-get install libeccodes-dev`.
 
 * Copy setup.cfg.template to setup.cfg, open in text editor, follow instructions in
-comments for editing.  
+comments for editing.
 
 * Run 'python setup.py build'
 

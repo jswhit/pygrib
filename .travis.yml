@@ -21,14 +21,14 @@ python:
   - "3.6"
   - "3.7"
   - "3.8"
+  - "3.9"
 
 notifications:
   email: false
 
 before_install:
-  - pip install pyproj
-  - sudo apt-get install libeccodes-dev
   - pip install $DEPENDS
+  - sudo apt-get install libeccodes-dev
 
 install:
   - python setup.py build

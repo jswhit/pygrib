@@ -24,7 +24,7 @@ pygrib.datetime_to_julian	pygrib-module.html#datetime_to_julian
 pygrib.tolerate_badgrib	pygrib-module.html#tolerate_badgrib
 pygrib.gribmessage	pygrib.gribmessage-class.html
 pygrib.gribmessage.latlons	pygrib.gribmessage-class.html#latlons
-pygrib.gribmessage.__getattribute__	pygrib.gribmessage-class.html#__getattribute__
+pygrib.gribmessage.__reduce__	pygrib.gribmessage-class.html#__reduce__
 pygrib.gribmessage.has_key	pygrib.gribmessage-class.html#has_key
 pygrib.gribmessage._all_keys	pygrib.gribmessage-class.html#_all_keys
 pygrib.gribmessage.__init__	pygrib.gribmessage-class.html#__init__
@@ -42,7 +42,9 @@ pygrib.gribmessage._get_key	pygrib.gribmessage-class.html#_get_key
 pygrib.gribmessage._reshape_mask	pygrib.gribmessage-class.html#_reshape_mask
 pygrib.gribmessage.analDate	pygrib.gribmessage-class.html#analDate
 pygrib.gribmessage.__getitem__	pygrib.gribmessage-class.html#__getitem__
+pygrib.gribmessage.__setstate__	pygrib.gribmessage-class.html#__setstate__
 pygrib.gribmessage.keys	pygrib.gribmessage-class.html#keys
+pygrib.gribmessage.__getattribute__	pygrib.gribmessage-class.html#__getattribute__
 pygrib.gribmessage.validDate	pygrib.gribmessage-class.html#validDate
 pygrib.gribmessage.expand_grid	pygrib.gribmessage-class.html#expand_grid
 pygrib.gribmessage.__setitem__	pygrib.gribmessage-class.html#__setitem__
@@ -56,15 +58,18 @@ pygrib.gribmessage.__repr__	pygrib.gribmessage-class.html#__repr__
 pygrib.gribmessage.expand_reduced	pygrib.gribmessage-class.html#expand_reduced
 pygrib.index	pygrib.index-class.html
 pygrib.index.__new__	pygrib.index-class.html#__new__
+pygrib.index.__setstate__	pygrib.index-class.html#__setstate__
 pygrib.index.keys	pygrib.index-class.html#keys
+pygrib.index.__reduce__	pygrib.index-class.html#__reduce__
 pygrib.index.write	pygrib.index-class.html#write
 pygrib.index.select	pygrib.index-class.html#select
-pygrib.index.types	pygrib.index-class.html#types
+pygrib.index.__init__	pygrib.index-class.html#__init__
 pygrib.index.__call__	pygrib.index-class.html#__call__
 pygrib.index.close	pygrib.index-class.html#close
-pygrib.index.__init__	pygrib.index-class.html#__init__
+pygrib.index.types	pygrib.index-class.html#types
 pygrib.index.name	pygrib.index-class.html#name
 pygrib.open	pygrib.open-class.html
+pygrib.open.__reduce__	pygrib.open-class.html#__reduce__
 pygrib.open.close	pygrib.open-class.html#close
 pygrib.open.message	pygrib.open-class.html#message
 pygrib.open.next	pygrib.open-class.html#next
@@ -81,6 +86,7 @@ pygrib.open.tell	pygrib.open-class.html#tell
 pygrib.open._advance	pygrib.open-class.html#_advance
 pygrib.open.__exit__	pygrib.open-class.html#__exit__
 pygrib.open.__getitem__	pygrib.open-class.html#__getitem__
+pygrib.open.__setstate__	pygrib.open-class.html#__setstate__
 pygrib.open.read	pygrib.open-class.html#read
 pygrib.open.__next__	pygrib.open-class.html#__next__
 pygrib.open.has_multi_field_msgs	pygrib.open-class.html#has_multi_field_msgs
