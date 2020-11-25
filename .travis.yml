@@ -26,7 +26,7 @@ notifications:
   email: false
 
 before_install:
-  - pip install pyproj==1.9.6
+  - pip install pyproj
   - sudo apt-get install libeccodes-dev
   - pip install $DEPENDS
 
