@@ -194,7 +194,7 @@ install_ext_modules = list(set(install_ext_modules))
 
 # Import README.md as PyPi long_description
 this_directory = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(this_directory, 'README.md'), encoding='utf-8') as f:
+with open(os.path.join(this_directory, 'README.md')) as f:
     long_description = f.read()
 
 install_requires = ["numpy"]
@@ -209,7 +209,7 @@ except ImportError:
         install_requires.append("pyproj")
 
 setup(name = "pygrib",
-      version = "2.0.5",
+      version = "2.0.6",
       description       = "Python module for reading/writing GRIB files",
       author            = "Jeff Whitaker",
       author_email      = "jeffrey.s.whitaker@noaa.gov",
