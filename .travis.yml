@@ -21,11 +21,15 @@ env:
 
 python:
  - "2.7"
+   env: PY=2.7
  - "3.5"
  - "3.6"
- - "3.7"
  - "3.8"
  - "3.9"
+ 
+jobs:
+  allow_failures:
+    - env: PY=2.7
 
 notifications:
   email: false
