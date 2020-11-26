@@ -13,7 +13,7 @@ addons:
 
 env:
   global:
-    - DEPENDS="numpy pyproj"
+    - DEPENDS="numpy pyproj==1.9.6"
 
 python:
   - "2.7"
