@@ -9,7 +9,8 @@ sudo: false
 addons:
   apt:
     packages:
-      - libgrib-api-dev
+      - libproj-dev
+      - libeccodes-dev
 
 env:
   global:
@@ -27,12 +28,9 @@ notifications:
   email: false
 
 before_install:
-  - sudo apt-get install libproj-dev proj-bin
   - pip install $DEPENDS
-  - sudo apt-get install libeccodes-dev
 
 install:
-  - python setup.py build
   - python setup.py install
 
 script:
