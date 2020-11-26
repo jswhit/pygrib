@@ -1,5 +1,5 @@
 language: python
-dist: bionic
+dist: focal
 
 arch:
  - amd64
@@ -13,7 +13,7 @@ addons:
 
 env:
   global:
-    - DEPENDS="numpy pyproj==1.9.6"
+    - DEPENDS="numpy pyproj"
 
 python:
   - "2.7"
