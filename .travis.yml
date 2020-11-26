@@ -1,15 +1,16 @@
 language: python
 dist: focal
+sudo: false
 
 arch:
  - amd64
  - ppc64le
-sudo: false
 
 addons:
   apt:
     packages:
       - libproj-dev
+      - proj-bin
       - libeccodes-dev
 
 env:
@@ -20,12 +21,12 @@ env:
 
 python:
   - "3.6"
-#  - "2.7"
-#  - "3.5"
-#  - "3.6"
-#  - "3.7"
-#  - "3.8"
-#  - "3.9"
+# - "2.7"
+# - "3.5"
+# - "3.6"
+# - "3.7"
+# - "3.8"
+# - "3.9"
 
 notifications:
   email: false
