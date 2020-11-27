@@ -3,7 +3,7 @@ Python module for reading and writing GRIB files (edition 1 and edition 2).
 GRIB is the World Meteorological Organization (WMO) standard
 file format for the exchange of weather data.
 
-Provides a interfaces for the ECWMF GRIB_API C library and
+Provides a high-level interfaces for the ECWMF ECCODES C library and
 the NCEP grib2 C library, including 
 command line utilities for listing (grib_list) and repacking (grib_repack)
 GRIB files.
@@ -12,15 +12,17 @@ Quickstart:
 
 * Clone the github repository, or download a source release from https://pypi.python.org/pypi/pygrib.
 
-* Copy setup.cfg.template to setup.cfg, open in text editor, follow instructions in
-comments for editing.  If you are using the old grib_api library instead of the new eccodes
-library, be sure to uncomment the last line setup.cfg.
+* install dependencies (eccodes library, numpy, pyproj). On linux, this can
+be done via `pip install numpy pyproj; sudo apt-get install libeccodes-dev`.
 
-* Run 'python setup.py build'
+* Copy `setup.cfg.template` to `setup.cfg`, open in text editor, follow instructions in
+comments for editing.
 
-* Run 'python setup.py install' (with sudo if necessary)
+* Run `python setup.py build`
 
-* Run 'python test.py' to test your pygrib installation.
+* Run `python setup.py install` (with sudo if necessary)
+
+* Run `python test.py` to test your pygrib installation.
 
 For full installation instructions and API documentation, see https://jswhit.github.io/pygrib.
 

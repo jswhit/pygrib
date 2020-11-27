@@ -48,8 +48,8 @@
     </td>
   </tr>
 </table>
-<!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class index</h1><p class="nomargin-top"></p>
+<!-- ==================== TYPE DESCRIPTION ==================== -->
+<h1 class="epydoc">type index</h1><p class="nomargin-top"></p>
 <pre class="base-tree">
 object --+
          |
@@ -70,12 +70,12 @@ object --+
   href="pygrib.open-class.html#select" class="link">open.select</a>.</p>
   <p><b>Warning</b>:  Searching for data within multi-field grib messages 
   does not work using an index (and is not supported by the <a 
-  href="https://software.ecmwf.int/wiki/display/GRIB/Home" 
-  target="_top">GRIB API</a> library).  NCEP often puts u and v winds 
-  together in a single multi-field grib message.  You will get incorrect 
-  results if you try to use an index to find data in these messages.  Use 
-  the slower, but more robust <a href="pygrib.open-class.html#select" 
-  class="link">open.select</a> in this case.</p>
+  href="https://confluence.ecmwf.int/display/ECC" target="_top">ECCODES</a>
+  library).  NCEP often puts u and v winds together in a single multi-field
+  grib message.  You will get incorrect results if you try to use an index 
+  to find data in these messages.  Use the slower, but more robust <a 
+  href="pygrib.open-class.html#select" class="link">open.select</a> in this
+  case.</p>
   <p>If no key are given (i.e. *args is empty), it is assumed the filename 
   represents a previously saved index (created using the 
   <code>grib_index_build</code> tool or <a 
@@ -173,6 +173,38 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pygrib.index-class.html#__reduce__" class="summary-sig-name">__reduce__</a>(<span class="summary-sig-arg">...</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__setstate__"></a><span class="summary-sig-name">__setstate__</span>(<span class="summary-sig-arg">...</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a name="close"></a><span class="summary-sig-name">close</span>()</span><br />
       deallocate C structures associated with class instance</td>
           <td align="right" valign="top">
@@ -220,23 +252,6 @@ object --+
       
     </td>
   </tr>
-  <tr>
-    <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
-      <code>__delattr__</code>,
-      <code>__format__</code>,
-      <code>__getattribute__</code>,
-      <code>__hash__</code>,
-      <code>__reduce__</code>,
-      <code>__reduce_ex__</code>,
-      <code>__repr__</code>,
-      <code>__setattr__</code>,
-      <code>__sizeof__</code>,
-      <code>__str__</code>,
-      <code>__subclasshook__</code>
-      </p>
-    </td>
-  </tr>
 </table>
 <!-- ==================== INSTANCE VARIABLES ==================== -->
 <a name="section-InstanceVariables"></a>
@@ -277,13 +292,6 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="name"></a><span class="summary-name">name</span>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
-      <code>__class__</code>
-      </p>
     </td>
   </tr>
 </table>
@@ -341,6 +349,29 @@ object --+
     <dt>Returns: a new object with type S, a subtype of T</dt>
     <dt>Overrides:
         object.__new__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__reduce__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__reduce__</span>(<span class="sig-arg">...</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        object.__reduce__
+        <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
   </dl>
 </td></tr></table>
@@ -450,7 +481,8 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Dec 29 14:23:16 2014
+    Generated by Epydoc 3.0.1
+    on Wed Nov 25 08:27:21 2020
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

@@ -1,35 +1,44 @@
 language: python
-dist: bionic
+dist: focal
+sudo: false
 
 arch:
  - amd64
  - ppc64le
-sudo: false
 
 addons:
   apt:
     packages:
-      - libgrib-api-dev
+      - libproj-dev
+      - proj-bin
+      - libeccodes-dev
 
 env:
   global:
-    - DEPENDS="numpy pyproj"
+    - DEPENDS="numpy pyproj<3.0.0"
+    - PROJ_DIR=/usr
+    - PROJ_LIB=/usr/share/proj
 
-python:
-  - "3.5"
-  - "3.6"
-  - "3.8"
+matrix:
+  fast_finish: true
+  include:
+    - name: "python-2.7"
+      env: PY=2.7
+    - name: "python-3.7"
+      env: PY=3.7
+    - name: "python-3.8"
+      env: PY=3.8
+    - name: "python-3.9"
+      env: PY=3.9
 
 notifications:
   email: false
 
 before_install:
-  - pip install pyproj==1.9.6
-  - sudo apt-get install libeccodes-dev
+  - pip install --upgrade pip
   - pip install $DEPENDS
 
 install:
-  - python setup.py build
   - python setup.py install
 
 script:

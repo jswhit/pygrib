@@ -6,7 +6,7 @@
 # IMPORTANT: If installing pygrib, then ncepgrib2 must be installed as well.
 #packages_to_install = []
 [directories]
-# uncomment and set to grib_api install location.
+# uncomment and set to eccodes install location.
 # Include files should be located in grib_api_dir/include and
 # the library should be located in grib_api_dir/lib.
 # If the libraries and include files are installed in separate locations,

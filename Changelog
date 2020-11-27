@@ -1,5 +1,6 @@
-since version 2.0.5
-===================
+version 2.0.6 (git tag v2.0.6rel)
+=================================
+* restore python 2 compatability.
 * distinguish between run and build time dependenices in setup.py (PR #112).
 * Fix problem printing grib messages with NLDAS grib files (PR #141).
 
