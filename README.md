@@ -1,3 +1,8 @@
+[![Linux Build Status](https://travis-ci.org/Unidata/pygrib.svg?branch=master)](https://travis-ci.org/jswhit/pygrib)
+[![PyPI package](https://badge.fury.io/py/pygrib.svg)](http://python.org/pypi/pygrib)
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/pygrib/badges/version.svg)](https://anaconda.org/conda-forge/pygrib)
+[![DOI](https://zenodo.org/badge/28599617.svg)](https://zenodo.org/badge/latestdoi/28599617)
+
 Python module for reading and writing GRIB files (edition 1 and edition 2).
 
 GRIB is the World Meteorological Organization (WMO) standard
