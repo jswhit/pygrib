@@ -24,16 +24,12 @@ matrix:
   include:
     - name: "python-2.7"
       env: PY=2.7
-    - name: "python-3.6"
-      env: PY=3.6
+    - name: "python-3.7"
+      env: PY=3.7
     - name: "python-3.8"
       env: PY=3.8
     - name: "python-3.9"
       env: PY=3.9
-
-jobs:
-  allow_failures:
-    - env: PY=2.7
 
 notifications:
   email: false
