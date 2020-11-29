@@ -1192,23 +1192,13 @@ cdef class gribmessage(object):
         cdef char strdata[1024]
         bytestr = _strencode(key)
         name = bytestr
-        usenceplib = key == 'values' and self.packingType.startswith('grid_complex')
-        # this workaround only needed for grib_api < 1.9.16.
-        if usenceplib:
-            size = self.numberOfValues 
-        else:
-            err = grib_get_size(self._gh, name, &size)
-            if err:
-                if tolerate_badgrib:
-                    return None
-                else:
-                    raise RuntimeError(grib_get_error_message(err))
-        # this workaround only needed for grib_api < 1.9.16.
-        if usenceplib:
-            typ = 2
-            err = 0
-        else:
-            err = grib_get_native_type(self._gh, name, &typ)
+        err = grib_get_size(self._gh, name, &size)
+        if err:
+            if tolerate_badgrib:
+                return None
+            else:
+                raise RuntimeError(grib_get_error_message(err))
+        err = grib_get_native_type(self._gh, name, &typ)
         # force 'paramId' to be size 1 (it returns a size of 7,
         # which is a relic from earlier versions of grib_api in which
         # paramId was a string and not an integer)
@@ -1247,20 +1237,14 @@ cdef class gribmessage(object):
                     storageorder='F'
                 else:
                     storageorder='C'
-                if usenceplib: 
-                    # use ncep lib to decode data (workaround for grib_api
-                    # bug with second-order complex packing).
-                    grb = Grib2Decode(self.tostring(), gribmsg=True)
-                    return grb.data()
+                datarr = np.zeros(size, np.double, order=storageorder)
+                err = grib_get_double_array(self._gh, name, <double *>datarr.data, &size)
+                if err:
+                    raise RuntimeError(grib_get_error_message(err))
+                if key == 'values':
+                    return self._reshape_mask(datarr)
                 else:
-                    datarr = np.zeros(size, np.double, order=storageorder)
-                    err = grib_get_double_array(self._gh, name, <double *>datarr.data, &size)
-                    if err:
-                        raise RuntimeError(grib_get_error_message(err))
-                    if key == 'values':
-                        return self._reshape_mask(datarr)
-                    else:
-                        return datarr
+                    return datarr
         elif typ == GRIB_TYPE_STRING:
             size=1024 # grib_get_size returns 1 ?
             err = grib_get_string(self._gh, name, strdata, &size)
@@ -1313,14 +1297,9 @@ cdef class gribmessage(object):
         cdef FILE *out
         bytestr = b'values'
         name = bytestr
-        usenceplib = self.packingType.startswith('grid_complex')
-        # this workaround only needed for grib_api < 1.9.16.
-        if usenceplib:
-            size = self.numberOfValues
-        else:
-            err = grib_get_size(self._gh, name, &size)
-            if err:
-                raise RuntimeError(grib_get_error_message(err))
+        err = grib_get_size(self._gh, name, &size)
+        if err:
+            raise RuntimeError(grib_get_error_message(err))
         err = grib_get_message(self._gh, &message, &size)
         if err:
             raise RuntimeError(grib_get_error_message(err))
@@ -1403,7 +1382,8 @@ cdef class gribmessage(object):
                datarr[1::2,:] = datsave[1::2,::-1]
            # if there is a missingValue, and some values missing,
            # create a masked array.
-           if self.has_key('missingValue') and self['numberOfMissing']:
+           #if self.has_key('missingValue') and self['numberOfMissing']:
+           if self.has_key('missingValue'):
                datarr = ma.masked_values(datarr, self['missingValue'])
         return datarr
 
