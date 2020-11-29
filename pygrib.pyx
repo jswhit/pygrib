@@ -151,7 +151,7 @@ Documentation
 
 @contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
 
-@version: 2.0.6
+@version: 2.1
 
 @copyright: copyright 2010 by Jeffrey Whitaker.
 
@@ -183,7 +183,6 @@ except ImportError:
         from mpl_toolkits.basemap import pyproj
     except:
         raise ImportError("either pyproj or basemap required")
-from ncepgrib2 import Grib2Decode
 import_array()
 
 cdef extern from "stdlib.h":

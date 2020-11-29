@@ -1,3 +1,8 @@
+version 2.1 (git tag v2.1rel)
+============================
+* split ncepgrib2 module into a separate project. pygrib now only uses
+  eccodes.
+
 version 2.0.6 (git tag v2.0.6rel)
 =================================
 * restore python 2 compatability.
