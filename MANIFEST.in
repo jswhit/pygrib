@@ -2,23 +2,17 @@ include MANIFEST.in
 include COPYING
 include pygrib.pyx
 include pygrib.c
-include g2clib.pyx
-include g2clib.c
 include redtoreg.pyx
 include redtoreg.c
-include ncepgrib2.py
-include setup.cfg.template
 include setup.py
 include test.py
 include README.md
 include utils/*grib*
 recursive-include docs *
-recursive-include ncepgrib2_docs *
 include sampledata/*.grb
 include sampledata/*.grb2
 include sampledata/*.grib*
 include sampledata/*.bin
-recursive-include g2clib_src *
 include test/README
 include test/*py
 include man/*.1
