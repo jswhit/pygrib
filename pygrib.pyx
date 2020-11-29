@@ -303,6 +303,9 @@ def _get_grib_api_version():
     major = v
     return "%d.%d.%d" % (major,minor,revision)
 grib_api_version = _get_grib_api_version()
+if grib_api_version < "2.19.1":
+    msg="Warning: ecCodes 2.19.1 or higher is recommended. You are running"
+    warnings.warn('%s %s.' % (msg,grib_api_version))
 tolerate_badgrib = False
 
 def tolerate_badgrib_on():
