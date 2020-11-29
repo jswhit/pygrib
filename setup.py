@@ -67,7 +67,17 @@ this_directory = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(this_directory, 'README.md')) as f:
     long_description = f.read()
 
+# man pages installed in MAN_DIR/man1
+if os.environ.get('MAN_DIR'):
+    man_dir = os.environ.get('MAN_DIR')
+    manpages = glob.glob(os.path.join('man','*.1'))
+    data_files = [(os.path.join(man_dir,'man1'), manpages)]
+# if MAN_DIR not set, man pages not installed
+else:
+    data_files = None
+
 setuptools.setup(
+      name = "pygrib",
       version = "2.1",
       description       = "Python module for reading/writing GRIB files",
       author            = "Jeff Whitaker",
@@ -93,6 +103,7 @@ setuptools.setup(
       long_description_content_type = 'text/markdown',
       scripts=['utils/grib_list','utils/grib_repack','utils/cnvgrib1to2','utils/cnvgrib2to1'],
       ext_modules=[redtoregext, pygribext],
+      data_files        = data_files,
       install_requires=[
           "pyproj",
           "numpy",
