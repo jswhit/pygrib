@@ -20,6 +20,8 @@ redtoregext = setuptools.Extension(
     "redtoreg", ["redtoreg.pyx"]
 )
 searchdirs = []
+if os.environ.get("GRIBAPI_DIR"):
+    searchdirs.append(os.environ["GRIBAPI_DIR"])
 if os.environ.get("ECCODES_DIR"):
     searchdirs.append(os.environ["ECCODES_DIR"])
 if os.environ.get("CONDA_PREFIX"):
