@@ -5,9 +5,6 @@ grbs = pygrib.open('../sampledata/ds.maxt.bin')
 g = grbs.message(1)
 lats, lons = g.latlons()
 data = g.values
-#from ncepgrib2 import Grib2Decode
-#grbx = Grib2Decode(g.tostring(),gribmsg=True)
-#data = grbx.data()
 llcrnrlon = lons[0,0]
 llcrnrlat = lats[0,0]
 urcrnrlon = lons[-1,-1]
