@@ -8,11 +8,9 @@ class NumpyBuildExtCommand(build_ext):
     from https://stackoverflow.com/questions/2379898/
     and https://stackoverflow.com/questions/48283503/
     """
-
     def run(self):
-        self.distribution.fetch_build_eggs(["numpy"])
         import numpy
-
+        self.distribution.fetch_build_eggs(["numpy"])
         self.include_dirs.append(numpy.get_include())
         build_ext.run(self)
 
@@ -85,16 +83,13 @@ setuptools.setup(
       url               = "https://github.com/jswhit/pygrib",
       download_url      = "http://python.org/pypi/pygrib",
       classifiers       = ["Development Status :: 4 - Beta",
-                           "Programming Language :: Python :: 2",
-                           "Programming Language :: Python :: 2.4",
-                           "Programming Language :: Python :: 2.5",
-                           "Programming Language :: Python :: 2.6",
                            "Programming Language :: Python :: 2.7",
                            "Programming Language :: Python :: 3",
-                           "Programming Language :: Python :: 3.3",
-                           "Programming Language :: Python :: 3.4",
                            "Programming Language :: Python :: 3.5",
                            "Programming Language :: Python :: 3.6",
+                           "Programming Language :: Python :: 3.7",
+                           "Programming Language :: Python :: 3.8",
+                           "Programming Language :: Python :: 3.9",
                            "Intended Audience :: Science/Research",
                            "License :: OSI Approved",
                            "Topic :: Software Development :: Libraries :: Python Modules"],
