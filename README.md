@@ -9,7 +9,6 @@ GRIB is the World Meteorological Organization (WMO) standard
 file format for the exchange of weather data.
 
 Provides a high-level interfaces for the ECWMF ECCODES C library and
-the NCEP grib2 C library, including 
 command line utilities for listing (grib_list) and repacking (grib_repack)
 GRIB files.
 
@@ -20,8 +19,7 @@ Quickstart:
 * install dependencies (eccodes library, numpy, pyproj). On linux, this can
 be done via `sudo apt-get install libeccodes-dev libproj-dev proj-bin; pip install numpy pyproj`.
 
-* Copy `setup.cfg.template` to `setup.cfg`, open in text editor, follow instructions in
-comments for editing.
+* set ECCODES_DIR environment variable to point to where eccodes is installed (`grib_api.h` in `$ECCODE_DIR/include`, `libeccodes` in `$ECCODES_DIR/lib`). If `ECCODES_DIR` not set, some standard locations will be searched.
 
 * Run `python setup.py build`
 
