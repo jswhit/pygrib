@@ -8,6 +8,7 @@ Required dependencies
 - `ECCODES <https://confluence.ecmwf.int/display/ECC>`__ C library version 2.19.1 or higher.
 - `numpy <http://www.numpy.org/>`__ 
 - `pyproj <https://pyproj4.github.io/pyproj/stable>`__ 
+- `cython <https://cython.org>`__ (only needed at build-time)
 
 
 Instructions
