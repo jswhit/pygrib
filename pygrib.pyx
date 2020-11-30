@@ -1383,12 +1383,12 @@ cdef class gribmessage(object):
 
         compute lats and lons (in degrees) of grid.
         Currently handles regular lat/lon, global gaussian, mercator, stereographic,
-        lambert conformal, albers equal-area, space-view, azimuthal 
+        lambert conformal, albers equal-area, space-view, azimuthal
         equidistant, reduced gaussian, reduced lat/lon,
         lambert azimuthal equal-area, rotated lat/lon and rotated gaussian grids.
 
-        :return: ``lats,lons`` numpy arrays 
-        containing latitudes and longitudes of grid (in degrees).
+        :return: ``lats,lons`` numpy arrays
+          containing latitudes and longitudes of grid (in degrees).
         """
 
         if self.projparams is None:
