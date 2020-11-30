@@ -194,24 +194,26 @@ def multi_support_off():
 cdef class open(object):
     """ 
     open(filename)
-    
+
     returns GRIB file iterator object given GRIB filename. When iterated, returns
-    instances of the L{gribmessage} class. Behaves much like a python file
-    object, with L{seek}, L{tell}, L{read} and L{close} methods, 
+    instances of the :py:class:`gribmessage` class. Behaves much like a python file
+    object, with :py:meth:`seek`, :py:meth:`tell`, :py:meth:`read`
+    :py:meth:`readline` and :py:meth:`close` methods
     except that offsets are measured in grib messages instead of bytes.
-    Additional methods include L{rewind} (like C{seek(0)}), L{message}
-    (like C{seek(N-1)}; followed by C{readline()}), and L{select} (filters
-    messages based on specified conditions).  The C{__call__} method forwards
-    to L{select}, and instances can be sliced with C{__getitem__} (returning
-    lists of L{gribmessage} instances).  The position of the iterator is not
-    altered by slicing with C{__getitem__}.
-     
-    @ivar messages: The total number of grib messages in the file.
+    Additional methods include :py:meth:`rewind` (like ``seek(0)``),
+    :py:meth:`message`
+    (like ``seek(N-1)``; followed by ``readline()``), and :py:meth:`select` (filters
+    messages based on specified conditions).  The ``__call__`` method forwards
+    to :py:meth:`select`, and instances can be sliced with ``__getitem__`` (returning
+    lists of :py:class:`gribmessage` instances).  The position of the iterator is not
+    altered by slicing with ``__getitem__``.
 
-    @ivar messagenumber: The grib message number that the iterator currently
-    points to (the value returned by L{tell}).
+    :ivar messages: The total number of grib messages in the file.
 
-    @ivar name: The GRIB file which the instance represents."""
+    :ivar messagenumber: The grib message number that the iterator currently
+      points to (the value returned by :py:meth:`tell`).
+
+    :ivar name: The GRIB file which the instance represents."""
     cdef FILE *_fd
     cdef grib_handle *_gh
     cdef public object name, messagenumber, messages, closed,\
@@ -286,7 +288,7 @@ cdef class open(object):
         else:
             raise KeyError('key must be an integer message number or a slice')
     def __call__(self, **kwargs):
-        """same as L{select}"""
+        """same as :ref:select}"""
         return self.select(**kwargs)
     def __enter__(self):
         return self
@@ -324,7 +326,7 @@ cdef class open(object):
         readline()
 
         read one entire grib message from the file.
-        Returns a L{gribmessage} instance, or None if an EOF is encountered."""
+        Returns a :ref:gribmessage} instance, or None if an EOF is encountered."""
         try:
             if hasattr(self,'next'):
                 grb = self.next()
@@ -340,7 +342,7 @@ cdef class open(object):
         read N messages from current position, returning grib messages instances in a
         list.  If N=None, all the messages to the end of the file are read.
         C{pygrib.open(f).read()} is equivalent to C{list(pygrib.open(f))},
-        both return a list containing L{gribmessage} instances for all the
+        both return a list containing :ref:gribmessage} instances for all the
         grib messages in the file C{f}.
         """
         if msgs is None:
@@ -398,7 +400,7 @@ cdef class open(object):
         """
 select(**kwargs)
 
-return a list of L{gribmessage} instances from iterator filtered by kwargs.
+return a list of :ref:gribmessage} instances from iterator filtered by kwargs.
 If keyword is a container object, each grib message
 in the iterator is searched for membership in the container.
 If keyword is a callable (has a _call__ method), each grib
@@ -514,7 +516,7 @@ def fromstring(gribstring):
     fromstring(string)
 
     Create a gribmessage instance from a python bytes object
-    representing a binary grib message (the reverse of L{gribmessage.tostring}).
+    representing a binary grib message (the reverse of :ref:gribmessage.tostring}).
     """
     cdef char* gribstr
     cdef grib_handle * gh
@@ -1618,21 +1620,21 @@ cdef class index(object):
 index(filename, *args)
     
 returns grib index object given GRIB filename indexed by keys given in
-*args.  The L{select} or L{__call__} method can then be used to selected grib messages
+*args.  The :ref:select} or :ref:__call__} method can then be used to selected grib messages
 based on specified values of indexed keys.
-Unlike L{open.select}, containers or callables cannot be used to 
+Unlike :ref:open.select}, containers or callables cannot be used to 
 select multiple key values.
-However, using L{index.select} is much faster than L{open.select}.
+However, using :ref:index.select} is much faster than :ref:open.select}.
 
 B{Warning}:  Searching for data within multi-field grib messages does not
 work using an index (and is not supported by the 
 U{ECCODES<https://confluence.ecmwf.int/display/ECC>} library).  NCEP
 often puts u and v winds together in a single multi-field grib message.  You
 will get incorrect results if you try to use an index to find data in these
-messages.  Use the slower, but more robust L{open.select} in this case.
+messages.  Use the slower, but more robust :ref:open.select} in this case.
 
 If no key are given (i.e. *args is empty), it is assumed the filename represents a previously
-saved index (created using the C{grib_index_build} tool or L{index.write}) instead of a GRIB file.
+saved index (created using the C{grib_index_build} tool or :ref:index.write}) instead of a GRIB file.
 
 Example usage:
 
@@ -1714,17 +1716,17 @@ messages will not be indexed correctly""" % filename
             self.keys = keys
             self.types = types
     def __call__(self, **kwargs):
-        """same as L{select}"""
+        """same as :ref:select}"""
         return self.select(**kwargs)
     def select(self, **kwargs):
         """
 select(**kwargs)
 
-return a list of L{gribmessage} instances from grib index object 
+return a list of :ref:gribmessage} instances from grib index object 
 corresponding to specific values of indexed keys (given by kwargs).
-Unlike L{open.select}, containers or callables cannot be used to 
+Unlike :ref:open.select}, containers or callables cannot be used to 
 select multiple key values.
-However, using L{index.select} is much faster than L{open.select}.
+However, using :ref:index.select} is much faster than :ref:open.select}.
 
 Example usage:
 
