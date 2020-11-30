@@ -12,6 +12,9 @@
 @import url("basic.css");
 
 /* -- page layout ----------------------------------------------------------- */
+pre {
+	    white-space: pre-wrap;
+    }
 
 body {
     font-family: Arial, sans-serif;
