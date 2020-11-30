@@ -3,12 +3,13 @@
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/pygrib/badges/version.svg)](https://anaconda.org/conda-forge/pygrib)
 [![DOI](https://zenodo.org/badge/28599617.svg)](https://zenodo.org/badge/latestdoi/28599617)
 
-Provides a high-level interface to the ECWMF ECCODES C library for reading GRIB files.
+Provides a high-level interface to the ECWMF [ECCODES](https://confluence.ecmwf.int/display/ECC) C library for reading GRIB files.
 There are limited capabilities for writing GRIB files.
 
-Quickstart:
+Quickstart
+==========
 
-The easiest way to get everything installed is to use the [conda](https://conda.io)` command line tool:
+The easiest way to get everything installed is to use the [conda](https://conda.io):
 
 ```
 conda install -c conda-forge pygrib
@@ -25,7 +26,8 @@ where `$ECCODES_DIR` is the path to the directory containing `include/grib_api.h
 and `lib/libeccodes.so`. If `ECCODES_DIR` is not specified, a few common locations
 such as `$CONDA_PREFIX,/usr,/usr/local,/opt/local` will be searched..
 
-Clone the github repository and run `python test.py` to test your pygrib installation.
+Alternately, clone the github repo and run `python setup.py install` (after setting `$ECCCODES_DIR`).
+Run `python test.py` from the source directory to test your pygrib installation.
 
 For full installation instructions and API documentation, see https://jswhit.github.io/pygrib.
 
