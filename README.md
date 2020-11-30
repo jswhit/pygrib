@@ -3,29 +3,29 @@
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/pygrib/badges/version.svg)](https://anaconda.org/conda-forge/pygrib)
 [![DOI](https://zenodo.org/badge/28599617.svg)](https://zenodo.org/badge/latestdoi/28599617)
 
-Python module for reading and writing GRIB files (edition 1 and edition 2).
-
-GRIB is the World Meteorological Organization (WMO) standard
-file format for the exchange of weather data.
-
-Provides a high-level interfaces for the ECWMF ECCODES C library and
-command line utilities for listing (grib_list) and repacking (grib_repack)
-GRIB files.
+Provides a high-level interface to the ECWMF ECCODES C library for reading GRIB files.
+There are limited capabilities for writing GRIB files.
 
 Quickstart:
 
-* Clone the github repository, or download a source release from https://pypi.python.org/pypi/pygrib.
+The easiest way to get everything installed is to use the [conda](https://conda.io)` command line tool:
 
-* install dependencies (eccodes library, numpy, pyproj). On linux, this can
-be done via `sudo apt-get install libeccodes-dev libproj-dev proj-bin; pip install numpy pyproj`.
+```
+conda install -c conda-forge pygrib
+```
 
-* set ECCODES_DIR environment variable to point to where eccodes is installed (`grib_api.h` in `$ECCODE_DIR/include`, `libeccodes` in `$ECCODES_DIR/lib`). If `ECCODES_DIR` not set, some standard locations will be searched.
+If you don't use conda, be sure you have the required dependencies
+installed first. Then, install cftime with pip:
 
-* Run `python setup.py build`
+```
+ECCODES_DIR=path/to/eccodes pip install pygrib
+```
 
-* Run `python setup.py install` (with sudo if necessary)
+where `$ECCODES_DIR` is the path to the directory containing `include/grib_api.h`
+and `lib/libeccodes.so`. If `ECCODES_DIR` is not specified, a few common locations
+such as `$CONDA_PREFIX,/usr,/usr/local,/opt/local` will be searched..
 
-* Run `python test.py` to test your pygrib installation.
+Clone the github repository and run `python test.py` to test your pygrib installation.
 
 For full installation instructions and API documentation, see https://jswhit.github.io/pygrib.
 
