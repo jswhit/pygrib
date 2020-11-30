@@ -16,7 +16,7 @@ conda install -c conda-forge pygrib
 ```
 
 If you don't use conda, be sure you have the required dependencies
-installed first. Then, install cftime with pip:
+(eccodes,numpy,cython,pyproj) installed first. Then, install pygrib with pip:
 
 ```
 ECCODES_DIR=path/to/eccodes pip install pygrib
