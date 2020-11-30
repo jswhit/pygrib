@@ -3,31 +3,31 @@
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/pygrib/badges/version.svg)](https://anaconda.org/conda-forge/pygrib)
 [![DOI](https://zenodo.org/badge/28599617.svg)](https://zenodo.org/badge/latestdoi/28599617)
 
-Python module for reading and writing GRIB files (edition 1 and edition 2).
+Provides a high-level interface to the ECWMF [ECCODES](https://confluence.ecmwf.int/display/ECC) C library for reading GRIB files.
+There are limited capabilities for writing GRIB files.
 
-GRIB is the World Meteorological Organization (WMO) standard
-file format for the exchange of weather data.
+Quickstart
+==========
 
-Provides a high-level interfaces for the ECWMF ECCODES C library and
-the NCEP grib2 C library, including 
-command line utilities for listing (grib_list) and repacking (grib_repack)
-GRIB files.
+The easiest way to get everything installed is to use the [conda](https://conda.io):
 
-Quickstart:
+```
+conda install -c conda-forge pygrib
+```
 
-* Clone the github repository, or download a source release from https://pypi.python.org/pypi/pygrib.
+If you don't use conda, be sure you have the required dependencies
+installed first. Then, install cftime with pip:
 
-* install dependencies (eccodes library, numpy, pyproj). On linux, this can
-be done via `sudo apt-get install libeccodes-dev libproj-dev proj-bin; pip install numpy pyproj`.
+```
+ECCODES_DIR=path/to/eccodes pip install pygrib
+```
 
-* Copy `setup.cfg.template` to `setup.cfg`, open in text editor, follow instructions in
-comments for editing.
+where `$ECCODES_DIR` is the path to the directory containing `include/grib_api.h`
+and `lib/libeccodes.so`. If `ECCODES_DIR` is not specified, a few common locations
+such as `$CONDA_PREFIX,/usr,/usr/local,/opt/local` will be searched..
 
-* Run `python setup.py build`
-
-* Run `python setup.py install` (with sudo if necessary)
-
-* Run `python test.py` to test your pygrib installation.
+Alternately, clone the github repo and run `python setup.py install` (after setting `$ECCCODES_DIR`).
+Run `python test.py` from the source directory to test your pygrib installation.
 
 For full installation instructions and API documentation, see https://jswhit.github.io/pygrib.
 

@@ -1,175 +1,4 @@
-"""
-Introduction
-============
-
-Python module for reading and writing GRIB (editions 1 and 2) files.
-GRIB is the World Meterological Organization
-U{standard<http://www.wmo.ch/pages/prog/www/WMOCodes/GRIB.html>} 
-for distributing gridded data. 
-The module is a python interface to the
-U{ECCODES<https://confluence.ecmwf.int/display/ECC>} C library
-from the European Centre for Medium-Range Weather Forecasts
-(U{ECMWF<http://www.ecmwf.int>}).
-
-Required
-========
-
-- U{Python<http://python.org>} 2.4 or higher.
-- U{numpy<http://sourceforge.net/project/showfiles.php?group_id=1369>}
-  N-dimensional array object for python. Version 1.2.1 or higher (version
-  1.5.1 required for Python 3).
-- U{pyproj<http://code.google.com/p/pyproj/>} Python interface to 
-  U{PROJ.4<http://trac.osgeo.org/proj>} library for cartographic
-  transformations B{or} U{matplotlib<http://matplotlib.sf.net>} and
-  the U{basemap<http://matplotlib.sf.net/basemap/doc/html>} toolkit.
-  Pyproj 1.8.9 is required for Python 3.
-- U{ECCODES<https://confluence.ecmwf.int/display/ECC>} C library
-  for encoding and decoding GRIB messages (edition 1 and edition 2).
-  Version 1.8.0 or higher required.
-  To be fully functional, the GRIB API library requires
-  U{Jasper<http://www.ece.uvic.ca/~mdadams/jasper>} or 
-  U{OpenJPEG<http://www.openjpeg.org>} for JPEG200 encoding,
-  and U{PNG<http://www.libpng.org/pub/png/libpng.html>} for PNG encoding.
-
-These dependencies are available via the package management system of most
-Linux distributions, and on MacOS X using U{macports<http://macports.org/>}. 
-If you build grib_api yourself as a static library on a 64-bit system
-you may need to set C{CFLAGS} to C{'-O2 -fPIC'} before running the C{configure}
-script.  To use pygrib on Windows, you must use the
-U{Cygwin<http://cygwin.com>} environment, since the grib_api library requires a 
-posix environment.  Cygwin installation instructions are available
-U{here<http://code.google.com/p/pygrib/wiki/CygwinWindowsInstall>}.
-
-Installation
-============
-
- - U{Download<http://code.google.com/p/pygrib/downloads/list>} the source code. 
- - pygrib installation options can either be set with environment variables,
- or specified in a text file (setup.cfg).  To use environment variables,
- set C{$GRIBAPI_DIR}, C{$JASPER_DIR}, C{$OPENJPEG_DIR},
- C{$PNG_DIR} and C{$ZLIB_DIR} so that the include files and libraries for
- GRIB API, Jasper, OpenJPEG, PNG and zlib will be found.  
- For example, the include files for 
- jasper should be found in C{$JASPER_DIR/include} or
- C{$JASPER_DIR/include/jasper}, and the jasper
- library should be found in C{$JASPER_DIR/lib} or C{$JASPER_DIR/lib64}. If any of
- those environment variables are not set, then it is assumed that GRIB API was
- not built with support for that library.
- If the libraries and
- include files are installed in separate locations, the environment variables
- C{$GRIBAPI_INCDIR} and C{$GRIBAPI_LIBDIR} can be used to define the locations
- separately (same goes for C{JASPER}, C{OPENJPEG}, C{PNG} and C{ZLIB}).
- Note that if both C{$GRIBAPI_DIR} and C{$GRIBAPI_INCDIR}/C{$GRIBAPI_LIBDIR}
- are specified, C{$GRIBAPI_DIR} takes precedence.
- To use setup.cfg, copy setup.cfg.template to setup.cfg, open setup.cfg in a 
- text editor and follow the instructions in the comments for editing.
- - Run 'python setup.py build' and then 'python setup.py install', as root if necessary.
- Note that if you are using environment variables to specify the build options,
- you cannot build and install in one step with 'sudo python setup.py install',
- since sudo does not pass environment variables.  Instead, run 'python setup.py
- build' first as a regular user, then run 'sudo python setup.py install' if the
- install directory requires admin or root privileges.
- - Run 'python test.py' to test your installation.
- - Look at examples in C{test} directory (most require 
- U{matplotlib<http://matplotlib.sf.net>} and
- U{basemap<http://matplotlib.sourceforge.net/basemap/doc/html/>}).
- - If you're on MacOS X, see README.macosx
- for special instruction on how to install pygrib and all it's
- dependencies using U{macports<http://macports.org>}.
-
-
-Example usage
-=============
-
- - from the python interpreter prompt, import the package::
-    >>> import pygrib
- - open a GRIB file, create a grib message iterator::
-    >>> grbs = pygrib.open('sampledata/flux.grb')  
- - pygrib open instances behave like regular python file objects, with
- C{seek}, C{tell}, C{read}, C{readline} and C{close} methods, except that offsets
- are measured in grib messages instead of bytes::
-    >>> grbs.seek(2)
-    >>> grbs.tell()
-    2
-    >>> grb = grbs.read(1)[0] # read returns a list with the next N (N=1 in this case) messages.
-    >>> grb # printing a grib message object displays summary info
-    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
-    >>> grbs.tell()
-    3
- - print an inventory of the file::
-    >>> grbs.seek(0)
-    >>> for grb in grbs:
-    >>>     grb 
-    1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs (avg):from 200402291200
-    2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120 hrs:from 200402291200
-    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
-    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
- - find the first grib message with a matching name::
-    >>> grb = grbs.select(name='Maximum temperature')[0]
- - extract the data values using the 'values' key
- (grb.keys() will return a list of the available keys)::
-    # The data is returned as a numpy array, or if missing values or a bitmap
-    # are present, a numpy masked array.  Reduced lat/lon or gaussian grid
-    # data is automatically expanded to a regular grid. Details of the internal
-    # representation of the grib data (such as the scanning mode) are handled
-    # automatically.
-    >>> maxt = grb.values # same as grb['values']
-    >>> maxt.shape, maxt.min(), maxt.max()
-    (94, 192) 223.7 319.9
- - get the latitudes and longitudes of the grid::
-    >>> lats, lons = grb.latlons()
-    >>> lats.shape, lats.min(), lats.max(), lons.shape, lons.min(), lons.max()
-    (94, 192) -88.5419501373 88.5419501373  0.0 358.125
- - get the second grib message::
-    >>> grb = grbs.message(2) # same as grbs.seek(1); grb=grbs.readline()
-    >>> grb
-    2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120 hrs:from 200402291200
- - extract data and get lat/lon values for a subset over North America::
-    >>> data, lats, lons = grb.data(lat1=20,lat2=70,lon1=220,lon2=320)
-    >>> data.shape, lats.min(), lats.max(), lons.min(), lons.max()
-    (26, 53) 21.904439458 69.5216630593 221.25 318.75
- - modify the values associated with existing keys (either via attribute or
- dictionary access)::
-    >>> grb['forecastTime'] = 240
-    >>> grb.dataDate = 20100101
- - get the binary string associated with the coded message::
-    >>> msg = grb.tostring()
-    >>> grbs.close() # close the grib file.
- - write the modified message to a new GRIB file::
-    >>> grbout = open('test.grb','wb')
-    >>> grbout.write(msg)
-    >>> grbout.close()
-    >>> pygrib.open('test.grb').readline() 
-    1:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 240 hrs:from 201001011200
-
-Documentation
-=============
-
- - see below for the full python API documentation.
-  
-@author: Jeffrey Whitaker.
-
-@contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
-
-@version: 2.0.6
-
-@copyright: copyright 2010 by Jeffrey Whitaker.
-
-@license: Permission to use, copy, modify, and distribute this software and its
-documentation for any purpose and without fee is hereby granted,
-provided that the above copyright notice appear in all copies and that
-both that copyright notice and this permission notice appear in
-supporting documentation.
-THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
-INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO
-EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, INDIRECT OR
-CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF
-USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE."""
-__test__ = None
-del __test__ # hack so epydoc doesn't show __test__
-__version__ = '2.0.6'
+__version__ = '2.1'
 
 import numpy as np
 import warnings
@@ -183,7 +12,6 @@ except ImportError:
         from mpl_toolkits.basemap import pyproj
     except:
         raise ImportError("either pyproj or basemap required")
-from ncepgrib2 import Grib2Decode
 import_array()
 
 cdef extern from "stdlib.h":
@@ -304,6 +132,9 @@ def _get_grib_api_version():
     major = v
     return "%d.%d.%d" % (major,minor,revision)
 grib_api_version = _get_grib_api_version()
+if grib_api_version < "2.19.1":
+    msg="Warning: ecCodes 2.19.1 or higher is recommended. You are running"
+    warnings.warn('%s %s.' % (msg,grib_api_version))
 tolerate_badgrib = False
 
 def tolerate_badgrib_on():
@@ -363,24 +194,26 @@ def multi_support_off():
 cdef class open(object):
     """ 
     open(filename)
-    
+
     returns GRIB file iterator object given GRIB filename. When iterated, returns
-    instances of the L{gribmessage} class. Behaves much like a python file
-    object, with L{seek}, L{tell}, L{read} and L{close} methods, 
+    instances of the :py:class:`gribmessage` class. Behaves much like a python file
+    object, with :py:meth:`seek`, :py:meth:`tell`, :py:meth:`read`
+    :py:meth:`readline` and :py:meth:`close` methods
     except that offsets are measured in grib messages instead of bytes.
-    Additional methods include L{rewind} (like C{seek(0)}), L{message}
-    (like C{seek(N-1)}; followed by C{readline()}), and L{select} (filters
-    messages based on specified conditions).  The C{__call__} method forwards
-    to L{select}, and instances can be sliced with C{__getitem__} (returning
-    lists of L{gribmessage} instances).  The position of the iterator is not
-    altered by slicing with C{__getitem__}.
-     
-    @ivar messages: The total number of grib messages in the file.
+    Additional methods include :py:meth:`rewind` (like ``seek(0)``),
+    :py:meth:`message`
+    (like ``seek(N-1)``; followed by ``readline()``), and :py:meth:`select` (filters
+    messages based on specified conditions).  The ``__call__`` method forwards
+    to :py:meth:`select`, and instances can be sliced with ``__getitem__`` (returning
+    lists of :py:class:`gribmessage` instances).  The position of the iterator is not
+    altered by slicing with ``__getitem__``.
 
-    @ivar messagenumber: The grib message number that the iterator currently
-    points to (the value returned by L{tell}).
+    :ivar messages: The total number of grib messages in the file.
 
-    @ivar name: The GRIB file which the instance represents."""
+    :ivar messagenumber: The grib message number that the iterator currently
+      points to (the value returned by :py:meth:`tell`).
+
+    :ivar name: The GRIB file which the instance represents."""
     cdef FILE *_fd
     cdef grib_handle *_gh
     cdef public object name, messagenumber, messages, closed,\
@@ -455,7 +288,7 @@ cdef class open(object):
         else:
             raise KeyError('key must be an integer message number or a slice')
     def __call__(self, **kwargs):
-        """same as L{select}"""
+        """same as :py:meth:`select`"""
         return self.select(**kwargs)
     def __enter__(self):
         return self
@@ -470,8 +303,8 @@ cdef class open(object):
         seek(N,from_what=0)
         
         advance iterator N grib messages from beginning of file 
-        (if C{from_what=0}), from current position (if C{from_what=1})
-        or from the end of file (if C{from_what=2})."""
+        (if ``from_what=0``), from current position (if ``from_what=1``)
+        or from the end of file (if ``from_what=2``)."""
         if from_what not in [0,1,2]:
             raise ValueError('from_what keyword arg to seek must be 0,1 or 2')
         if msg == 0:
@@ -493,7 +326,7 @@ cdef class open(object):
         readline()
 
         read one entire grib message from the file.
-        Returns a L{gribmessage} instance, or None if an EOF is encountered."""
+        Returns a :py:class:`gribmessage` instance, or ``None`` if an ``EOF`` is encountered."""
         try:
             if hasattr(self,'next'):
                 grb = self.next()
@@ -508,9 +341,9 @@ cdef class open(object):
         
         read N messages from current position, returning grib messages instances in a
         list.  If N=None, all the messages to the end of the file are read.
-        C{pygrib.open(f).read()} is equivalent to C{list(pygrib.open(f))},
-        both return a list containing L{gribmessage} instances for all the
-        grib messages in the file C{f}.
+        ``pygrib.open(f).read()`` is equivalent to ``list(pygrib.open(f))``,
+        both return a list containing :py:class:`gribmessage` instances for all the
+        grib messages in the file ``f``.
         """
         if msgs is None:
             grbs = self._advance(self.messages-self.messagenumber,return_msgs=True)
@@ -539,7 +372,7 @@ cdef class open(object):
             fclose(self._fd)
 
     def rewind(self):
-        """rewind iterator (same as seek(0))"""
+        """rewind iterator (same as ``seek(0)``)"""
         # before rewinding, move iterator to end of file
         # to make sure it is not left in a funky state
         # (such as in the middle of a multi-part message, issue 54)
@@ -554,7 +387,7 @@ cdef class open(object):
         message(N)
         
         retrieve N'th message in iterator.
-        same as seek(N-1) followed by readline()."""
+        same as ``seek(N-1)`` followed by ``readline()``."""
         if N < 1:
             raise IOError('grb message numbers start at 1')
         # if iterator positioned past message N, reposition at beginning.
@@ -567,10 +400,10 @@ cdef class open(object):
         """
 select(**kwargs)
 
-return a list of L{gribmessage} instances from iterator filtered by kwargs.
+return a list of :py:class:`gribmessage` instances from iterator filtered by ``kwargs``.
 If keyword is a container object, each grib message
 in the iterator is searched for membership in the container.
-If keyword is a callable (has a _call__ method), each grib
+If keyword is a callable (has a ``_call__`` method), each grib
 message in the iterator is tested using the callable (which should
 return a boolean).
 If keyword is not a container object or a callable, each 
@@ -611,7 +444,7 @@ Example usage:
         return grbs
     def _advance(self,nmsgs,return_msgs=False):
         """advance iterator n messages from current position.
-        if return_msgs==True, grib message instances are returned
+        if ``return_msgs==True``, grib message instances are returned
         in a list"""
         cdef int err
         if nmsgs < 0: 
@@ -641,8 +474,8 @@ def julian_to_datetime(object jd):
     
     convert Julian day number to python datetime instance.
 
-    Used to create validDate and analDate attributes from
-    julianDay and forecastTime keys."""
+    Used to create ``validDate`` and ``analDate`` attributes from
+    ``julianDay`` and ``forecastTime`` keys."""
     cdef double julday
     cdef long year, month, day, hour, minute, second
     cdef int err
@@ -683,7 +516,7 @@ def fromstring(gribstring):
     fromstring(string)
 
     Create a gribmessage instance from a python bytes object
-    representing a binary grib message (the reverse of L{gribmessage.tostring}).
+    representing a binary grib message (the reverse of :py:meth:`gribmessage.tostring`).
     """
     cdef char* gribstr
     cdef grib_handle * gh
@@ -794,38 +627,33 @@ cdef class gribmessage(object):
     """
     Grib message object.
 
-    Each grib message has attributes corresponding to grib message
-    keys for 
-    U{GRIB1 <http://www.ecmwf.int/publications/manuals/d/gribapi/fm92/grib1>}
-    and
-    U{GRIB2 <http://www.ecmwf.int/publications/manuals/d/gribapi/fm92/grib2/>}.
-    Parameter names are
-    are given by the C{name}, C{shortName} and C{paramID}
-    U{keys <https://confluence.ecmwf.int/display/ECC/GRIB+Keys>}.
+    Each grib message has attributes corresponding to GRIB
+    `keys <https://confluence.ecmwf.int/display/ECC/GRIB+Keys>`__.
+    Parameter names are described by the ``name``, ``shortName`` and ``paramID`` keys.
     pygrib also defines some special attributes which are defined below
-    under the heading B{Instance Variables}.
 
-    @ivar messagenumber: The grib message number in the file.
+    :ivar messagenumber: The grib message number in the file.
 
-    @ivar projparams: A dictionary containing proj4 key/value pairs describing 
-    the grid.  Set to C{None} for unsupported grid types.
+    :ivar projparams: A dictionary containing proj4 key/value pairs describing 
+      the grid.  Set to ``None`` for unsupported grid types.
 
-    @ivar expand_reduced:  If True (default), reduced lat/lon and gaussian grids
-    will be expanded to regular grids when data is accessed via "values" key. If
-    False, data is kept on unstructured reduced grid, and is returned in a 1-d
-    array.
+    :ivar expand_reduced:  If True (default), reduced lat/lon and gaussian grids
+      will be expanded to regular grids when data is accessed via ``values`` key. If
+      False, data is kept on unstructured reduced grid, and is returned in a 1-d
+      array.
 
-    @ivar fcstimeunits:  A string representing the forecast time units
-    (an empty string if not defined).
+    :ivar fcstimeunits:  A string representing the forecast time units
+      (an empty string if not defined).
 
-    @ivar analDate:  A python datetime instance describing the analysis date
-    and time for the forecast. Only set if forecastTime and julianDay keys
-    exist.
+    :ivar analDate:  A python datetime instance describing the analysis date
+      and time for the forecast. Only set if forecastTime and julianDay keys
+      exist.
 
-    @ivar validDate:  A python datetime instance describing the valid date
-    and time for the forecast. Only set if forecastTime and julianDay keys
-    exist, and fcstimeunits is defined. If forecast time
-    is a range, then C{validDate} corresponds to the end of the range."""
+    :ivar validDate:  A python datetime instance describing the valid date
+      and time for the forecast. Only set if forecastTime and julianDay keys
+      exist, and fcstimeunits is defined. If forecast time
+      is a range, then ``validDate`` corresponds to the end of the range.
+    """
     cdef grib_handle *_gh
     cdef public messagenumber, projparams, validDate, analDate,\
     expand_reduced, _ro_keys, _all_keys, fcstimeunits
@@ -1177,7 +1005,7 @@ cdef class gribmessage(object):
         """
         access values associated with grib keys.
         
-        The key "values" will return the data associated with the grib message.
+        The key ``values`` will return the data associated with the grib message.
         The data is returned as a numpy array, or if missing values or a bitmap
         are present, a numpy masked array.  Reduced lat/lon or gaussian grid
         data is automatically expanded to a regular grid using linear
@@ -1192,23 +1020,13 @@ cdef class gribmessage(object):
         cdef char strdata[1024]
         bytestr = _strencode(key)
         name = bytestr
-        usenceplib = key == 'values' and self.packingType.startswith('grid_complex')
-        # this workaround only needed for grib_api < 1.9.16.
-        if usenceplib:
-            size = self.numberOfValues 
-        else:
-            err = grib_get_size(self._gh, name, &size)
-            if err:
-                if tolerate_badgrib:
-                    return None
-                else:
-                    raise RuntimeError(grib_get_error_message(err))
-        # this workaround only needed for grib_api < 1.9.16.
-        if usenceplib:
-            typ = 2
-            err = 0
-        else:
-            err = grib_get_native_type(self._gh, name, &typ)
+        err = grib_get_size(self._gh, name, &size)
+        if err:
+            if tolerate_badgrib:
+                return None
+            else:
+                raise RuntimeError(grib_get_error_message(err))
+        err = grib_get_native_type(self._gh, name, &typ)
         # force 'paramId' to be size 1 (it returns a size of 7,
         # which is a relic from earlier versions of grib_api in which
         # paramId was a string and not an integer)
@@ -1247,20 +1065,14 @@ cdef class gribmessage(object):
                     storageorder='F'
                 else:
                     storageorder='C'
-                if usenceplib: 
-                    # use ncep lib to decode data (workaround for grib_api
-                    # bug with second-order complex packing).
-                    grb = Grib2Decode(self.tostring(), gribmsg=True)
-                    return grb.data()
+                datarr = np.zeros(size, np.double, order=storageorder)
+                err = grib_get_double_array(self._gh, name, <double *>datarr.data, &size)
+                if err:
+                    raise RuntimeError(grib_get_error_message(err))
+                if key == 'values':
+                    return self._reshape_mask(datarr)
                 else:
-                    datarr = np.zeros(size, np.double, order=storageorder)
-                    err = grib_get_double_array(self._gh, name, <double *>datarr.data, &size)
-                    if err:
-                        raise RuntimeError(grib_get_error_message(err))
-                    if key == 'values':
-                        return self._reshape_mask(datarr)
-                    else:
-                        return datarr
+                    return datarr
         elif typ == GRIB_TYPE_STRING:
             size=1024 # grib_get_size returns 1 ?
             err = grib_get_string(self._gh, name, strdata, &size)
@@ -1313,14 +1125,9 @@ cdef class gribmessage(object):
         cdef FILE *out
         bytestr = b'values'
         name = bytestr
-        usenceplib = self.packingType.startswith('grid_complex')
-        # this workaround only needed for grib_api < 1.9.16.
-        if usenceplib:
-            size = self.numberOfValues
-        else:
-            err = grib_get_size(self._gh, name, &size)
-            if err:
-                raise RuntimeError(grib_get_error_message(err))
+        err = grib_get_size(self._gh, name, &size)
+        if err:
+            raise RuntimeError(grib_get_error_message(err))
         err = grib_get_message(self._gh, &message, &size)
         if err:
             raise RuntimeError(grib_get_error_message(err))
@@ -1403,13 +1210,16 @@ cdef class gribmessage(object):
                datarr[1::2,:] = datsave[1::2,::-1]
            # if there is a missingValue, and some values missing,
            # create a masked array.
-           if self.has_key('missingValue') and self['numberOfMissing']:
+           #if self.has_key('missingValue') and self['numberOfMissing']:
+           # don't trust numberOfMissing
+           if self.has_key('missingValue') and\
+           np.count_nonzero(datarr==self['missingValue']):
                datarr = ma.masked_values(datarr, self['missingValue'])
         return datarr
 
     def _set_projparams(self):
         """
-        sets the C{projparams} instance variable to a dictionary containing 
+        sets the ``projparams`` instance variable to a dictionary containing 
         proj4 key/value pairs describing the grid.
         """
         projparams = {}
@@ -1572,12 +1382,12 @@ cdef class gribmessage(object):
         latlons()
 
         compute lats and lons (in degrees) of grid.
-        Currently handles reg. lat/lon, global gaussian, mercator, stereographic,
+        Currently handles regular lat/lon, global gaussian, mercator, stereographic,
         lambert conformal, albers equal-area, space-view, azimuthal 
         equidistant, reduced gaussian, reduced lat/lon,
         lambert azimuthal equal-area, rotated lat/lon and rotated gaussian grids.
 
-        @return: C{B{lats},B{lons}}, numpy arrays 
+        :return: ``lats,lons`` numpy arrays 
         containing latitudes and longitudes of grid (in degrees).
         """
 
@@ -1585,35 +1395,11 @@ cdef class gribmessage(object):
             raise ValueError('unsupported grid %s' % self['gridType'])
 
         if self['gridType'] in ['regular_gg','regular_ll']: # regular lat/lon grid
-            #nx = self['Ni']
-            #ny = self['Nj']
-            #lon1 = self['longitudeOfFirstGridPointInDegrees']
-            #lon2 = self['longitudeOfLastGridPointInDegrees']
-            #if lon1 >= 0 and lon2 < 0 and self.iDirectionIncrement > 0:
-            #    lon2 = 360+lon2
-            #if lon1 >= 0 and lon2 < lon1 and self.iDirectionIncrement > 0:
-            #    lon1 = lon1-360
             lat1 = self['latitudeOfFirstGridPointInDegrees']
             lat2 = self['latitudeOfLastGridPointInDegrees']
-            # workaround for grib_api bug with complex packing.
-            # (distinctLongitudes, distinctLatitudes throws error,
-            #  so use np.linspace to define values)
-            #if self.packingType.startswith('grid_complex'):
-            #    # this is not strictly correct for gaussian grids,
-            #    # but the error is very small.
-            #    lats = np.linspace(lat1,lat2,ny)
-            #    lons = np.linspace(lon1,lon2,nx)
-            #else:
-            # this workaround no longer needed (issue #102)
             lats = self['distinctLatitudes']
             if lat2 < lat1 and lats[-1] > lats[0]: lats = lats[::-1]
             lons = self['distinctLongitudes']
-            # don't trust distinctLongitudes 
-            # when longitudeOfLastGridPointInDegrees < 0
-            # (bug in grib_api 1.9.16)
-            # this workaround no longer neede (issue #102)
-            #if lon2 < 0:
-            #    lons = np.linspace(lon1,lon2,nx)
             lons,lats = np.meshgrid(lons,lats) 
         elif self['gridType'] == 'reduced_gg': # reduced global gaussian grid
             if self.expand_reduced:
@@ -1817,12 +1603,7 @@ cdef class gribmessage(object):
             x, y = np.meshgrid(x, y)
             lons, lats = pj(x, y, inverse=True)
         elif self['gridType'] in ['rotated_ll','rotated_gg']:
-            #rotatedlats = self['distinctLatitudes']
-            #rotatedlons = self['distinctLongitudes']
-            #d2r = np.pi/180.
-            #lonsr, latsr = np.meshgrid(rotatedlons*d2r, rotatedlats*d2r)
             pj = pyproj.Proj(self.projparams)
-            #lons,lats = pj(lonsr,latsr,inverse=True)
             lons = self['longitudes'].reshape(self.Nj,self.Ni)
             lats = self['latitudes'].reshape(self.Nj,self.Ni)
         else:
@@ -1834,21 +1615,20 @@ cdef class index(object):
 index(filename, *args)
     
 returns grib index object given GRIB filename indexed by keys given in
-*args.  The L{select} or L{__call__} method can then be used to selected grib messages
+*args.  The :py:class:`select` or ``__call__`` method can then be used to selected grib messages
 based on specified values of indexed keys.
-Unlike L{open.select}, containers or callables cannot be used to 
+Unlike :py:meth:`open.select`, containers or callables cannot be used to 
 select multiple key values.
-However, using L{index.select} is much faster than L{open.select}.
+However, using :py:meth:`index.select` is much faster than :py:meth:`open.select`.
 
-B{Warning}:  Searching for data within multi-field grib messages does not
-work using an index (and is not supported by the 
-U{ECCODES<https://confluence.ecmwf.int/display/ECC>} library).  NCEP
+**Warning**:  Searching for data within multi-field grib messages does not
+work using an index and is not supported by ECCODES library. NCEP
 often puts u and v winds together in a single multi-field grib message.  You
 will get incorrect results if you try to use an index to find data in these
-messages.  Use the slower, but more robust L{open.select} in this case.
+messages.  Use the slower, but more robust :py:meth:`open.select` in this case.
 
 If no key are given (i.e. *args is empty), it is assumed the filename represents a previously
-saved index (created using the C{grib_index_build} tool or L{index.write}) instead of a GRIB file.
+saved index (created using the ``grib_index_build`` tool or :py:meth:`index.write`) instead of a GRIB file.
 
 Example usage:
 
@@ -1874,13 +1654,13 @@ None
 >>>     grb
 1:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 250 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst
 
-@ivar keys: list of strings containing keys used in the index.  Set to C{None}
-when opening a previously saved grib index file.
+:ivar keys: list of strings containing keys used in the index.  Set to ``None``
+  when opening a previously saved grib index file.
 
-@ivar types: if keys are typed, this list contains the type declarations
-(C{l}, C{s} or C{d}). Type declarations are specified by appending to the key
-name (i.e. C{level:l} will search for values of C{level} that are longs). Set
-to C{None} when opening a previously saved grib index file.
+:ivar types: if keys are typed, this list contains the type declarations
+  (``l``, ``s`` or ``d``). Type declarations are specified by appending to the key
+  name (i.e. ``level:l`` will search for values of ``level`` that are longs). Set
+  to ``None`` when opening a previously saved grib index file.
 """
     cdef grib_index *_gi
     cdef public object keys, types, name
@@ -1930,17 +1710,17 @@ messages will not be indexed correctly""" % filename
             self.keys = keys
             self.types = types
     def __call__(self, **kwargs):
-        """same as L{select}"""
+        """same as :py:meth:`select`"""
         return self.select(**kwargs)
     def select(self, **kwargs):
         """
 select(**kwargs)
 
-return a list of L{gribmessage} instances from grib index object 
+return a list of :py:class:`gribmessage` instances from grib index object 
 corresponding to specific values of indexed keys (given by kwargs).
-Unlike L{open.select}, containers or callables cannot be used to 
+Unlike :py:meth:`open.select`, containers or callables cannot be used to 
 select multiple key values.
-However, using L{index.select} is much faster than L{open.select}.
+However, using :py:meth:`index.select` is much faster than :py:meth:`open.select`.
 
 Example usage:
 

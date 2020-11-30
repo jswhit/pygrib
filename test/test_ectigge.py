@@ -9,12 +9,6 @@ grbs = pygrib.open('../sampledata/ecmwf_tigge.grb')
 grb = grbs.select(parameterName='Soil moisture')[0]
 fld = grb.values; lats,lons = grb.latlons()
 
-#from ncepgrib2 import Grib2Decode
-#grbs = Grib2Decode('../sampledata/ecmwf_tigge.grb')
-#grbx = grbs[14]
-#fld = grbx.data()
-#lats,lons = grbx.grid()
-
 m = Basemap(lon_0=180)
 CS = m.contourf(lons,lats,fld,15,cmap=plt.cm.jet)
 plt.colorbar(shrink=0.6)
