@@ -1,10 +1,10 @@
 include MANIFEST.in
 include COPYING
+include pyproject.toml
 include pygrib.pyx
-include pygrib.c
 include redtoreg.pyx
-include redtoreg.c
 include setup.py
+include .travis.yml
 include test.py
 include README.md
 include utils/*grib*
