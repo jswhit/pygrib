@@ -5,7 +5,7 @@ Required dependencies
 ---------------------
 
 - Python >= 2.7
-- `ECCODES <https://confluence.ecmwf.int/display/ECC>`__ C library.
+- `ECCODES <https://confluence.ecmwf.int/display/ECC>`__ C library version 2.19.1 or higher.
 - `numpy <http://www.numpy.org/>`__ 
 - `pyproj <https://pyproj4.github.io/pyproj/stable>`__ 
 
