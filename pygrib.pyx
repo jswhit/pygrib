@@ -1,175 +1,4 @@
-"""
-Introduction
-============
-
-Python module for reading and writing GRIB (editions 1 and 2) files.
-GRIB is the World Meterological Organization
-U{standard<http://www.wmo.ch/pages/prog/www/WMOCodes/GRIB.html>} 
-for distributing gridded data. 
-The module is a python interface to the
-U{ECCODES<https://confluence.ecmwf.int/display/ECC>} C library
-from the European Centre for Medium-Range Weather Forecasts
-(U{ECMWF<http://www.ecmwf.int>}).
-
-Required
-========
-
-- U{Python<http://python.org>} 2.4 or higher.
-- U{numpy<http://sourceforge.net/project/showfiles.php?group_id=1369>}
-  N-dimensional array object for python. Version 1.2.1 or higher (version
-  1.5.1 required for Python 3).
-- U{pyproj<http://code.google.com/p/pyproj/>} Python interface to 
-  U{PROJ.4<http://trac.osgeo.org/proj>} library for cartographic
-  transformations B{or} U{matplotlib<http://matplotlib.sf.net>} and
-  the U{basemap<http://matplotlib.sf.net/basemap/doc/html>} toolkit.
-  Pyproj 1.8.9 is required for Python 3.
-- U{ECCODES<https://confluence.ecmwf.int/display/ECC>} C library
-  for encoding and decoding GRIB messages (edition 1 and edition 2).
-  Version 1.8.0 or higher required.
-  To be fully functional, the GRIB API library requires
-  U{Jasper<http://www.ece.uvic.ca/~mdadams/jasper>} or 
-  U{OpenJPEG<http://www.openjpeg.org>} for JPEG200 encoding,
-  and U{PNG<http://www.libpng.org/pub/png/libpng.html>} for PNG encoding.
-
-These dependencies are available via the package management system of most
-Linux distributions, and on MacOS X using U{macports<http://macports.org/>}. 
-If you build grib_api yourself as a static library on a 64-bit system
-you may need to set C{CFLAGS} to C{'-O2 -fPIC'} before running the C{configure}
-script.  To use pygrib on Windows, you must use the
-U{Cygwin<http://cygwin.com>} environment, since the grib_api library requires a 
-posix environment.  Cygwin installation instructions are available
-U{here<http://code.google.com/p/pygrib/wiki/CygwinWindowsInstall>}.
-
-Installation
-============
-
- - U{Download<http://code.google.com/p/pygrib/downloads/list>} the source code. 
- - pygrib installation options can either be set with environment variables,
- or specified in a text file (setup.cfg).  To use environment variables,
- set C{$GRIBAPI_DIR}, C{$JASPER_DIR}, C{$OPENJPEG_DIR},
- C{$PNG_DIR} and C{$ZLIB_DIR} so that the include files and libraries for
- GRIB API, Jasper, OpenJPEG, PNG and zlib will be found.  
- For example, the include files for 
- jasper should be found in C{$JASPER_DIR/include} or
- C{$JASPER_DIR/include/jasper}, and the jasper
- library should be found in C{$JASPER_DIR/lib} or C{$JASPER_DIR/lib64}. If any of
- those environment variables are not set, then it is assumed that GRIB API was
- not built with support for that library.
- If the libraries and
- include files are installed in separate locations, the environment variables
- C{$GRIBAPI_INCDIR} and C{$GRIBAPI_LIBDIR} can be used to define the locations
- separately (same goes for C{JASPER}, C{OPENJPEG}, C{PNG} and C{ZLIB}).
- Note that if both C{$GRIBAPI_DIR} and C{$GRIBAPI_INCDIR}/C{$GRIBAPI_LIBDIR}
- are specified, C{$GRIBAPI_DIR} takes precedence.
- To use setup.cfg, copy setup.cfg.template to setup.cfg, open setup.cfg in a 
- text editor and follow the instructions in the comments for editing.
- - Run 'python setup.py build' and then 'python setup.py install', as root if necessary.
- Note that if you are using environment variables to specify the build options,
- you cannot build and install in one step with 'sudo python setup.py install',
- since sudo does not pass environment variables.  Instead, run 'python setup.py
- build' first as a regular user, then run 'sudo python setup.py install' if the
- install directory requires admin or root privileges.
- - Run 'python test.py' to test your installation.
- - Look at examples in C{test} directory (most require 
- U{matplotlib<http://matplotlib.sf.net>} and
- U{basemap<http://matplotlib.sourceforge.net/basemap/doc/html/>}).
- - If you're on MacOS X, see README.macosx
- for special instruction on how to install pygrib and all it's
- dependencies using U{macports<http://macports.org>}.
-
-
-Example usage
-=============
-
- - from the python interpreter prompt, import the package::
-    >>> import pygrib
- - open a GRIB file, create a grib message iterator::
-    >>> grbs = pygrib.open('sampledata/flux.grb')  
- - pygrib open instances behave like regular python file objects, with
- C{seek}, C{tell}, C{read}, C{readline} and C{close} methods, except that offsets
- are measured in grib messages instead of bytes::
-    >>> grbs.seek(2)
-    >>> grbs.tell()
-    2
-    >>> grb = grbs.read(1)[0] # read returns a list with the next N (N=1 in this case) messages.
-    >>> grb # printing a grib message object displays summary info
-    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
-    >>> grbs.tell()
-    3
- - print an inventory of the file::
-    >>> grbs.seek(0)
-    >>> for grb in grbs:
-    >>>     grb 
-    1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs (avg):from 200402291200
-    2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120 hrs:from 200402291200
-    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
-    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
- - find the first grib message with a matching name::
-    >>> grb = grbs.select(name='Maximum temperature')[0]
- - extract the data values using the 'values' key
- (grb.keys() will return a list of the available keys)::
-    # The data is returned as a numpy array, or if missing values or a bitmap
-    # are present, a numpy masked array.  Reduced lat/lon or gaussian grid
-    # data is automatically expanded to a regular grid. Details of the internal
-    # representation of the grib data (such as the scanning mode) are handled
-    # automatically.
-    >>> maxt = grb.values # same as grb['values']
-    >>> maxt.shape, maxt.min(), maxt.max()
-    (94, 192) 223.7 319.9
- - get the latitudes and longitudes of the grid::
-    >>> lats, lons = grb.latlons()
-    >>> lats.shape, lats.min(), lats.max(), lons.shape, lons.min(), lons.max()
-    (94, 192) -88.5419501373 88.5419501373  0.0 358.125
- - get the second grib message::
-    >>> grb = grbs.message(2) # same as grbs.seek(1); grb=grbs.readline()
-    >>> grb
-    2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120 hrs:from 200402291200
- - extract data and get lat/lon values for a subset over North America::
-    >>> data, lats, lons = grb.data(lat1=20,lat2=70,lon1=220,lon2=320)
-    >>> data.shape, lats.min(), lats.max(), lons.min(), lons.max()
-    (26, 53) 21.904439458 69.5216630593 221.25 318.75
- - modify the values associated with existing keys (either via attribute or
- dictionary access)::
-    >>> grb['forecastTime'] = 240
-    >>> grb.dataDate = 20100101
- - get the binary string associated with the coded message::
-    >>> msg = grb.tostring()
-    >>> grbs.close() # close the grib file.
- - write the modified message to a new GRIB file::
-    >>> grbout = open('test.grb','wb')
-    >>> grbout.write(msg)
-    >>> grbout.close()
-    >>> pygrib.open('test.grb').readline() 
-    1:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 240 hrs:from 201001011200
-
-Documentation
-=============
-
- - see below for the full python API documentation.
-  
-@author: Jeffrey Whitaker.
-
-@contact: U{Jeff Whitaker<mailto:jeffrey.s.whitaker@noaa.gov>}
-
-@version: 2.1
-
-@copyright: copyright 2010 by Jeffrey Whitaker.
-
-@license: Permission to use, copy, modify, and distribute this software and its
-documentation for any purpose and without fee is hereby granted,
-provided that the above copyright notice appear in all copies and that
-both that copyright notice and this permission notice appear in
-supporting documentation.
-THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
-INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO
-EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, INDIRECT OR
-CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF
-USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE."""
-__test__ = None
-del __test__ # hack so epydoc doesn't show __test__
-__version__ = '2.0.6'
+__version__ = '2.1'
 
 import numpy as np
 import warnings
@@ -1385,6 +1214,7 @@ cdef class gribmessage(object):
            # if there is a missingValue, and some values missing,
            # create a masked array.
            #if self.has_key('missingValue') and self['numberOfMissing']:
+           # don't trust numberOfMissing
            if self.has_key('missingValue') and\
            np.count_nonzero(datarr==self['missingValue']):
                datarr = ma.masked_values(datarr, self['missingValue'])
@@ -1568,35 +1398,11 @@ cdef class gribmessage(object):
             raise ValueError('unsupported grid %s' % self['gridType'])
 
         if self['gridType'] in ['regular_gg','regular_ll']: # regular lat/lon grid
-            #nx = self['Ni']
-            #ny = self['Nj']
-            #lon1 = self['longitudeOfFirstGridPointInDegrees']
-            #lon2 = self['longitudeOfLastGridPointInDegrees']
-            #if lon1 >= 0 and lon2 < 0 and self.iDirectionIncrement > 0:
-            #    lon2 = 360+lon2
-            #if lon1 >= 0 and lon2 < lon1 and self.iDirectionIncrement > 0:
-            #    lon1 = lon1-360
             lat1 = self['latitudeOfFirstGridPointInDegrees']
             lat2 = self['latitudeOfLastGridPointInDegrees']
-            # workaround for grib_api bug with complex packing.
-            # (distinctLongitudes, distinctLatitudes throws error,
-            #  so use np.linspace to define values)
-            #if self.packingType.startswith('grid_complex'):
-            #    # this is not strictly correct for gaussian grids,
-            #    # but the error is very small.
-            #    lats = np.linspace(lat1,lat2,ny)
-            #    lons = np.linspace(lon1,lon2,nx)
-            #else:
-            # this workaround no longer needed (issue #102)
             lats = self['distinctLatitudes']
             if lat2 < lat1 and lats[-1] > lats[0]: lats = lats[::-1]
             lons = self['distinctLongitudes']
-            # don't trust distinctLongitudes 
-            # when longitudeOfLastGridPointInDegrees < 0
-            # (bug in grib_api 1.9.16)
-            # this workaround no longer neede (issue #102)
-            #if lon2 < 0:
-            #    lons = np.linspace(lon1,lon2,nx)
             lons,lats = np.meshgrid(lons,lats) 
         elif self['gridType'] == 'reduced_gg': # reduced global gaussian grid
             if self.expand_reduced:
@@ -1800,12 +1606,7 @@ cdef class gribmessage(object):
             x, y = np.meshgrid(x, y)
             lons, lats = pj(x, y, inverse=True)
         elif self['gridType'] in ['rotated_ll','rotated_gg']:
-            #rotatedlats = self['distinctLatitudes']
-            #rotatedlons = self['distinctLongitudes']
-            #d2r = np.pi/180.
-            #lonsr, latsr = np.meshgrid(rotatedlons*d2r, rotatedlats*d2r)
             pj = pyproj.Proj(self.projparams)
-            #lons,lats = pj(lonsr,latsr,inverse=True)
             lons = self['longitudes'].reshape(self.Nj,self.Ni)
             lats = self['latitudes'].reshape(self.Nj,self.Ni)
         else:
