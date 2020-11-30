@@ -68,6 +68,8 @@ extract data and get lat/lon values for a subset over North America:
     >>> data.shape, lats.min(), lats.max(), lons.min(), lons.max()
     (26, 53) 21.904439458 69.5216630593 221.25 318.75
 
+Documentation from code docstrings below:
+
 .. automodule:: pygrib
    :members: open, gribmessage, index, gaulats, julian_to_datetime, reload, setdates, fromstring, multi_support_off,multi_support_on, tolerate_badgrib_off, tolerate_badgrib_on
    :show-inheritance:
