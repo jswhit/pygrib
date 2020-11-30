@@ -14,6 +14,16 @@ class NumpyBuildExtCommand(build_ext):
         self.include_dirs.append(numpy.get_include())
         build_ext.run(self)
 
+def extract_version(CYTHON_FNAME):
+    version = None
+    with open(CYTHON_FNAME) as fi:
+        for line in fi:
+            if (line.startswith('__version__')):
+                _, version = line.split('=')
+                version = version.strip()[1:-1]  # Remove quotation characters.
+                break
+    return version
+
 cmdclass = {"build_ext": NumpyBuildExtCommand}
 
 redtoregext = setuptools.Extension(
@@ -78,7 +88,7 @@ else:
 
 setuptools.setup(
       name = "pygrib",
-      version = "2.1",
+      version=extract_version('pygrib.pyx'),
       description       = "Python module for reading/writing GRIB files",
       author            = "Jeff Whitaker",
       author_email      = "jeffrey.s.whitaker@noaa.gov",
