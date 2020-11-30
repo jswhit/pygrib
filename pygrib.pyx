@@ -288,7 +288,7 @@ cdef class open(object):
         else:
             raise KeyError('key must be an integer message number or a slice')
     def __call__(self, **kwargs):
-        """same as :ref:select}"""
+        """same as :py:meth:`select`"""
         return self.select(**kwargs)
     def __enter__(self):
         return self
@@ -303,8 +303,8 @@ cdef class open(object):
         seek(N,from_what=0)
         
         advance iterator N grib messages from beginning of file 
-        (if C{from_what=0}), from current position (if C{from_what=1})
-        or from the end of file (if C{from_what=2})."""
+        (if ``from_what=0``), from current position (if ``from_what=1``)
+        or from the end of file (if ``from_what=2``)."""
         if from_what not in [0,1,2]:
             raise ValueError('from_what keyword arg to seek must be 0,1 or 2')
         if msg == 0:
@@ -326,7 +326,7 @@ cdef class open(object):
         readline()
 
         read one entire grib message from the file.
-        Returns a :ref:gribmessage} instance, or None if an EOF is encountered."""
+        Returns a :py:class:`gribmessage` instance, or ``None`` if an ``EOF`` is encountered."""
         try:
             if hasattr(self,'next'):
                 grb = self.next()
@@ -341,9 +341,9 @@ cdef class open(object):
         
         read N messages from current position, returning grib messages instances in a
         list.  If N=None, all the messages to the end of the file are read.
-        C{pygrib.open(f).read()} is equivalent to C{list(pygrib.open(f))},
-        both return a list containing :ref:gribmessage} instances for all the
-        grib messages in the file C{f}.
+        ``pygrib.open(f).read()`` is equivalent to ``list(pygrib.open(f))``,
+        both return a list containing :py:class:`gribmessage` instances for all the
+        grib messages in the file ``f``.
         """
         if msgs is None:
             grbs = self._advance(self.messages-self.messagenumber,return_msgs=True)
@@ -372,7 +372,7 @@ cdef class open(object):
             fclose(self._fd)
 
     def rewind(self):
-        """rewind iterator (same as seek(0))"""
+        """rewind iterator (same as ``seek(0)``)"""
         # before rewinding, move iterator to end of file
         # to make sure it is not left in a funky state
         # (such as in the middle of a multi-part message, issue 54)
@@ -387,7 +387,7 @@ cdef class open(object):
         message(N)
         
         retrieve N'th message in iterator.
-        same as seek(N-1) followed by readline()."""
+        same as ``seek(N-1)`` followed by ``readline()``."""
         if N < 1:
             raise IOError('grb message numbers start at 1')
         # if iterator positioned past message N, reposition at beginning.
@@ -400,10 +400,10 @@ cdef class open(object):
         """
 select(**kwargs)
 
-return a list of :ref:gribmessage} instances from iterator filtered by kwargs.
+return a list of :py:class:`gribmessage` instances from iterator filtered by ``kwargs``.
 If keyword is a container object, each grib message
 in the iterator is searched for membership in the container.
-If keyword is a callable (has a _call__ method), each grib
+If keyword is a callable (has a ``_call__`` method), each grib
 message in the iterator is tested using the callable (which should
 return a boolean).
 If keyword is not a container object or a callable, each 
@@ -444,7 +444,7 @@ Example usage:
         return grbs
     def _advance(self,nmsgs,return_msgs=False):
         """advance iterator n messages from current position.
-        if return_msgs==True, grib message instances are returned
+        if ``return_msgs==True``, grib message instances are returned
         in a list"""
         cdef int err
         if nmsgs < 0: 
@@ -474,8 +474,8 @@ def julian_to_datetime(object jd):
     
     convert Julian day number to python datetime instance.
 
-    Used to create validDate and analDate attributes from
-    julianDay and forecastTime keys."""
+    Used to create ``validDate`` and ``analDate`` attributes from
+    ``julianDay`` and ``forecastTime`` keys."""
     cdef double julday
     cdef long year, month, day, hour, minute, second
     cdef int err
@@ -516,7 +516,7 @@ def fromstring(gribstring):
     fromstring(string)
 
     Create a gribmessage instance from a python bytes object
-    representing a binary grib message (the reverse of :ref:gribmessage.tostring}).
+    representing a binary grib message (the reverse of :py:meth:`gribmessage.tostring`).
     """
     cdef char* gribstr
     cdef grib_handle * gh
@@ -627,38 +627,33 @@ cdef class gribmessage(object):
     """
     Grib message object.
 
-    Each grib message has attributes corresponding to grib message
-    keys for 
-    U{GRIB1 <http://www.ecmwf.int/publications/manuals/d/gribapi/fm92/grib1>}
-    and
-    U{GRIB2 <http://www.ecmwf.int/publications/manuals/d/gribapi/fm92/grib2/>}.
-    Parameter names are
-    are given by the C{name}, C{shortName} and C{paramID}
-    U{keys <https://confluence.ecmwf.int/display/ECC/GRIB+Keys>}.
+    Each grib message has attributes corresponding to GRIB
+    `keys <https://confluence.ecmwf.int/display/ECC/GRIB+Keys>`__.
+    Parameter names are described by the ``name``, ``shortName`` and ``paramID`` keys.
     pygrib also defines some special attributes which are defined below
-    under the heading B{Instance Variables}.
 
-    @ivar messagenumber: The grib message number in the file.
+    :ivar messagenumber: The grib message number in the file.
 
-    @ivar projparams: A dictionary containing proj4 key/value pairs describing 
-    the grid.  Set to C{None} for unsupported grid types.
+    :ivar projparams: A dictionary containing proj4 key/value pairs describing 
+      the grid.  Set to ``None`` for unsupported grid types.
 
-    @ivar expand_reduced:  If True (default), reduced lat/lon and gaussian grids
-    will be expanded to regular grids when data is accessed via "values" key. If
-    False, data is kept on unstructured reduced grid, and is returned in a 1-d
-    array.
+    :ivar expand_reduced:  If True (default), reduced lat/lon and gaussian grids
+      will be expanded to regular grids when data is accessed via ``values`` key. If
+      False, data is kept on unstructured reduced grid, and is returned in a 1-d
+      array.
 
-    @ivar fcstimeunits:  A string representing the forecast time units
-    (an empty string if not defined).
+    :ivar fcstimeunits:  A string representing the forecast time units
+      (an empty string if not defined).
 
-    @ivar analDate:  A python datetime instance describing the analysis date
-    and time for the forecast. Only set if forecastTime and julianDay keys
-    exist.
+    :ivar analDate:  A python datetime instance describing the analysis date
+      and time for the forecast. Only set if forecastTime and julianDay keys
+      exist.
 
-    @ivar validDate:  A python datetime instance describing the valid date
-    and time for the forecast. Only set if forecastTime and julianDay keys
-    exist, and fcstimeunits is defined. If forecast time
-    is a range, then C{validDate} corresponds to the end of the range."""
+    :ivar validDate:  A python datetime instance describing the valid date
+      and time for the forecast. Only set if forecastTime and julianDay keys
+      exist, and fcstimeunits is defined. If forecast time
+      is a range, then ``validDate`` corresponds to the end of the range.
+    """
     cdef grib_handle *_gh
     cdef public messagenumber, projparams, validDate, analDate,\
     expand_reduced, _ro_keys, _all_keys, fcstimeunits
@@ -1010,7 +1005,7 @@ cdef class gribmessage(object):
         """
         access values associated with grib keys.
         
-        The key "values" will return the data associated with the grib message.
+        The key ``values`` will return the data associated with the grib message.
         The data is returned as a numpy array, or if missing values or a bitmap
         are present, a numpy masked array.  Reduced lat/lon or gaussian grid
         data is automatically expanded to a regular grid using linear
@@ -1224,7 +1219,7 @@ cdef class gribmessage(object):
 
     def _set_projparams(self):
         """
-        sets the C{projparams} instance variable to a dictionary containing 
+        sets the ``projparams`` instance variable to a dictionary containing 
         proj4 key/value pairs describing the grid.
         """
         projparams = {}
@@ -1387,12 +1382,12 @@ cdef class gribmessage(object):
         latlons()
 
         compute lats and lons (in degrees) of grid.
-        Currently handles reg. lat/lon, global gaussian, mercator, stereographic,
+        Currently handles regular lat/lon, global gaussian, mercator, stereographic,
         lambert conformal, albers equal-area, space-view, azimuthal 
         equidistant, reduced gaussian, reduced lat/lon,
         lambert azimuthal equal-area, rotated lat/lon and rotated gaussian grids.
 
-        @return: C{B{lats},B{lons}}, numpy arrays 
+        :return: ``lats,lons`` numpy arrays 
         containing latitudes and longitudes of grid (in degrees).
         """
 
@@ -1620,21 +1615,20 @@ cdef class index(object):
 index(filename, *args)
     
 returns grib index object given GRIB filename indexed by keys given in
-*args.  The :ref:select} or :ref:__call__} method can then be used to selected grib messages
+*args.  The :py:class:`select` or ``__call__`` method can then be used to selected grib messages
 based on specified values of indexed keys.
-Unlike :ref:open.select}, containers or callables cannot be used to 
+Unlike :py:meth:`open.select`, containers or callables cannot be used to 
 select multiple key values.
-However, using :ref:index.select} is much faster than :ref:open.select}.
+However, using :py:meth:`index.select` is much faster than :py:meth:`open.select`.
 
-B{Warning}:  Searching for data within multi-field grib messages does not
-work using an index (and is not supported by the 
-U{ECCODES<https://confluence.ecmwf.int/display/ECC>} library).  NCEP
+**Warning**:  Searching for data within multi-field grib messages does not
+work using an index and is not supported by ECCODES library. NCEP
 often puts u and v winds together in a single multi-field grib message.  You
 will get incorrect results if you try to use an index to find data in these
-messages.  Use the slower, but more robust :ref:open.select} in this case.
+messages.  Use the slower, but more robust :py:meth:`open.select` in this case.
 
 If no key are given (i.e. *args is empty), it is assumed the filename represents a previously
-saved index (created using the C{grib_index_build} tool or :ref:index.write}) instead of a GRIB file.
+saved index (created using the ``grib_index_build`` tool or :py:meth:`index.write`) instead of a GRIB file.
 
 Example usage:
 
@@ -1660,13 +1654,13 @@ None
 >>>     grb
 1:u-component of wind:m s**-1 (instant):regular_ll:isobaricInhPa:level 250 Pa:fcst time 72 hrs:from 200412091200:lo res cntl fcst
 
-@ivar keys: list of strings containing keys used in the index.  Set to C{None}
-when opening a previously saved grib index file.
+:ivar keys: list of strings containing keys used in the index.  Set to ``None``
+  when opening a previously saved grib index file.
 
-@ivar types: if keys are typed, this list contains the type declarations
-(C{l}, C{s} or C{d}). Type declarations are specified by appending to the key
-name (i.e. C{level:l} will search for values of C{level} that are longs). Set
-to C{None} when opening a previously saved grib index file.
+:ivar types: if keys are typed, this list contains the type declarations
+  (``l``, ``s`` or ``d``). Type declarations are specified by appending to the key
+  name (i.e. ``level:l`` will search for values of ``level`` that are longs). Set
+  to ``None`` when opening a previously saved grib index file.
 """
     cdef grib_index *_gi
     cdef public object keys, types, name
@@ -1716,17 +1710,17 @@ messages will not be indexed correctly""" % filename
             self.keys = keys
             self.types = types
     def __call__(self, **kwargs):
-        """same as :ref:select}"""
+        """same as :py:meth:`select`"""
         return self.select(**kwargs)
     def select(self, **kwargs):
         """
 select(**kwargs)
 
-return a list of :ref:gribmessage} instances from grib index object 
+return a list of :py:class:`gribmessage` instances from grib index object 
 corresponding to specific values of indexed keys (given by kwargs).
-Unlike :ref:open.select}, containers or callables cannot be used to 
+Unlike :py:meth:`open.select`, containers or callables cannot be used to 
 select multiple key values.
-However, using :ref:index.select} is much faster than :ref:open.select}.
+However, using :py:meth:`index.select` is much faster than :py:meth:`open.select`.
 
 Example usage:
 

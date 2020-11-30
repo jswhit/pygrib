@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Installation &#8212; pygrib 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API" href="api.html" />
+    <link rel="prev" title="pygrib" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api.html" title="API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="pygrib"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pygrib 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="required-dependencies">
+<h2>Required dependencies<a class="headerlink" href="#required-dependencies" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Python &gt;= 2.7</p></li>
+<li><p><a class="reference external" href="https://confluence.ecmwf.int/display/ECC">ECCODES</a> C library.</p></li>
+<li><p><a class="reference external" href="http://www.numpy.org/">numpy</a></p></li>
+<li><p><a class="reference external" href="https://pyproj4.github.io/pyproj/stable">pyproj</a></p></li>
+</ul>
+</div>
+<div class="section" id="instructions">
+<h2>Instructions<a class="headerlink" href="#instructions" title="Permalink to this headline">¶</a></h2>
+<p>The easiest way to get everything installed is to use <a class="reference external" href="http://conda.io/">conda</a> command line tool:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ conda install -c conda-forge pygrib
+</pre></div>
+</div>
+<p>If you don’t use conda, be sure you have the required dependencies
+installed first. Then, install cftime with pip:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ECCODES_DIR=path/to/eccodes pip install pygrib
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">$ECCODES_DIR</span></code> is the path to the directory containing <code class="docutils literal notranslate"><span class="pre">include/grib_api.h</span></code>
+and <code class="docutils literal notranslate"><span class="pre">lib/libeccodes.so</span></code>. If <code class="docutils literal notranslate"><span class="pre">ECCODES_DIR</span></code> is not specified, a few common locations
+such as <code class="docutils literal notranslate"><span class="pre">$CONDA_PREFIX,/usr,/usr/local,/opt/local</span></code> will be searched..</p>
+</div>
+<div class="section" id="developing">
+<h2>Developing<a class="headerlink" href="#developing" title="Permalink to this headline">¶</a></h2>
+<p>When developing we recommend cloning the GitHub repository,
+building the extension in-place with <a class="reference external" href="http://cython.org/">cython</a> 0.19 or later
+<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">build_ext</span> <span class="pre">--inplace</span></code></p>
+<p>and running the test script to check if the changes are passing the tests
+<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">test.py</span></code></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Installation</a><ul>
+<li><a class="reference internal" href="#required-dependencies">Required dependencies</a></li>
+<li><a class="reference internal" href="#instructions">Instructions</a></li>
+<li><a class="reference internal" href="#developing">Developing</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">pygrib</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api.html"
+                        title="next chapter">API</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/installing.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api.html" title="API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="pygrib"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pygrib 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Jeff Whitaker.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.
+    </div>
+  </body>
+</html>
