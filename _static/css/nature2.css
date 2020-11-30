@@ -1,0 +1,5 @@
+/** css/nature2.css **/
+@import '../nature.css';  
+pre {
+	    white-space: pre-wrap;
+    }
