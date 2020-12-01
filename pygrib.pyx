@@ -509,7 +509,7 @@ def fromstring(gribstring):
     """
     fromstring(string)
 
-    Create a gribmessage instance from a python bytes object
+    Create a :py:class:`gribmessage` instance from a python bytes object
     representing a binary grib message (the reverse of :py:meth:`gribmessage.tostring`).
     """
     cdef char* gribstr
@@ -530,10 +530,10 @@ def setdates(gribmessage grb):
     """
     setdates(grb)
     
-    set fcstimeunits, analDate and validDate attributes using
-    julianDay, forecastTime and indicatorOfUnitOfTimeRange.
-    Called automatically when gribmessage instance created,
-    but can be called manually to update keys if one of 
+    set ``fcstimeunits``, ``analDate`` and ``validDate`` attributes using
+    the ``julianDay``, ``forecastTime`` and ``indicatorOfUnitOfTimeRange`` keys.
+    Called automatically when :py:class:`gribmessage` instance created,
+    but can be called manually to update keys if one of
     them is modified after instance creation.
     """
     grb.fcstimeunits = ""
@@ -610,11 +610,11 @@ def reload(gribmessage grb):
     reload(grb)
 
     Recreate gribmessage object, updating all the keys to be consistent
-    with each other.  For example, if the forecastTime key is changed,
-    recreating the gribmessage object with this function will cause
-    the analDate and verifDate keys to be updated accordingly.
+    with each other.  For example, if the ``forecastTime`` key is changed,
+    recreating the :py:class:`gribmessage` object with this function will cause
+    the ``analDate`` and ``verifDate`` keys to be updated accordingly.
 
-    Equivalent to fromstring(grb.tostring())"""
+    Equivalent to ``fromstring(grb.tostring())``"""
     return fromstring(grb.tostring())
 
 cdef class gribmessage(object):

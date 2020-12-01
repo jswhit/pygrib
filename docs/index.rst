@@ -3,7 +3,7 @@ pygrib
 
 High-level python interface to 
 `ECCODES <https://confluence.ecmwf.int/display/ECC>`__ library for
-reading `GRIB <https://weather.gc.ca/grib/what_is_GRIB_e.html>`__ files.
+`GRIB <https://weather.gc.ca/grib/what_is_GRIB_e.html>`__ file IO.
 
 Contents
 --------
