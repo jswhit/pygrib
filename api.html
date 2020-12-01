@@ -79,7 +79,7 @@ that offsets are measured in grib messages instead of bytes:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">grb</span> <span class="o">=</span> <span class="n">grbs</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Maximum temperature&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>extract the data values using the ‘values’ key grb.keys() will return a list of the available keys):</p>
+<p>extract the data values using the <code class="docutils literal notranslate"><span class="pre">values</span></code> key (<code class="docutils literal notranslate"><span class="pre">grb.keys()</span></code> will return a list of the available keys):</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">maxt</span> <span class="o">=</span> <span class="n">grb</span><span class="o">.</span><span class="n">values</span> <span class="c1"># same as grb[&#39;values&#39;]</span>
 <span class="go"># The data is returned as a numpy array, or if missing values or a bitmap</span>
 <span class="go"># are present, a numpy masked array.  Reduced lat/lon or gaussian grid</span>
@@ -106,6 +106,24 @@ that offsets are measured in grib messages instead of bytes:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">,</span> <span class="n">lats</span><span class="p">,</span> <span class="n">lons</span> <span class="o">=</span> <span class="n">grb</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">lat1</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">lat2</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span><span class="n">lon1</span><span class="o">=</span><span class="mi">220</span><span class="p">,</span><span class="n">lon2</span><span class="o">=</span><span class="mi">320</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">lats</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">lats</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">lons</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">lons</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
 <span class="go">(26, 53) 21.904439458 69.5216630593 221.25 318.75</span>
+</pre></div>
+</div>
+<p>modify the values associated with existing keys:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">grb</span><span class="p">[</span><span class="s1">&#39;forecastTime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">240</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grb</span><span class="o">.</span><span class="n">dataDate</span> <span class="o">=</span> <span class="mi">20100101</span>
+</pre></div>
+</div>
+<p>get the binary string associated with the coded message:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">msg</span> <span class="o">=</span> <span class="n">grb</span><span class="o">.</span><span class="n">tostring</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grbs</span><span class="o">.</span><span class="n">close</span><span class="p">()</span> <span class="c1"># close the grib file.</span>
+</pre></div>
+</div>
+<p>write the modified message to a new GRIB file:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">grbout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;test.grb&#39;</span><span class="p">,</span><span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grbout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grbout</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pygrib</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;test.grb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+<span class="go">1:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 240 hrs:from 201001011200</span>
 </pre></div>
 </div>
 </div>
