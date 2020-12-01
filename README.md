@@ -4,7 +4,8 @@
 [![DOI](https://zenodo.org/badge/28599617.svg)](https://zenodo.org/badge/latestdoi/28599617)
 
 Provides a high-level interface to the ECWMF [ECCODES](https://confluence.ecmwf.int/display/ECC) C library for reading GRIB files.
-There are limited capabilities for writing GRIB files (you can modify the contents of an existing file, but you can't create one from scratch).
+There are limited capabilities for writing GRIB files (you can modify the contents of an existing file, but you can't create one from scratch).  See the online docs for 
+[example usage](https://jswhit.github.io/pygrib/api.html#example-usage).
 
 Quickstart
 ==========
