@@ -5,13 +5,7 @@ import warnings
 from datetime import datetime
 from pkg_resources import parse_version
 from numpy import ma
-try:
-    import pyproj
-except ImportError:
-    try:
-        from mpl_toolkits.basemap import pyproj
-    except:
-        raise ImportError("either pyproj or basemap required")
+import pyproj
 import_array()
 
 cdef extern from "stdlib.h":
