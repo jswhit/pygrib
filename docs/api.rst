@@ -39,7 +39,7 @@ find the first grib message with a matching name:
 
     >>> grb = grbs.select(name='Maximum temperature')[0]
 
-extract the data values using the 'values' key grb.keys() will return a list of the available keys):
+extract the data values using the ``values`` key (``grb.keys()`` will return a list of the available keys):
 
     >>> maxt = grb.values # same as grb['values']
     # The data is returned as a numpy array, or if missing values or a bitmap
@@ -67,6 +67,24 @@ extract data and get lat/lon values for a subset over North America:
     >>> data, lats, lons = grb.data(lat1=20,lat2=70,lon1=220,lon2=320)
     >>> data.shape, lats.min(), lats.max(), lons.min(), lons.max()
     (26, 53) 21.904439458 69.5216630593 221.25 318.75
+
+modify the values associated with existing keys:
+
+    >>> grb['forecastTime'] = 240
+    >>> grb.dataDate = 20100101
+
+get the binary string associated with the coded message:
+
+    >>> msg = grb.tostring()
+    >>> grbs.close() # close the grib file.
+
+write the modified message to a new GRIB file:
+
+    >>> grbout = open('test.grb','wb')
+    >>> grbout.write(msg)
+    >>> grbout.close()
+    >>> pygrib.open('test.grb').readline() 
+    1:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 240 hrs:from 201001011200
 
 Module docstrings
 -----------------
