@@ -1,3 +1,7 @@
+since version 2.1
+=================
+* migrate examples in 'test' directory from basemap to cartopy.
+
 version 2.1 (git tag v2.1rel)
 ============================
 * split ncepgrib2 module into a separate project
