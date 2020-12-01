@@ -21,7 +21,7 @@ The easiest way to get everything installed is to use conda_ command line tool::
 .. _conda: http://conda.io/
 
 If you don't use conda, be sure you have the required dependencies
-installed first. Then, install cftime with pip::
+installed first. Then, install pygrib with pip::
 
     $ ECCODES_DIR=path/to/eccodes pip install pygrib
 
