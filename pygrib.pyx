@@ -1,5 +1,5 @@
 """
-High-level python interface to 
+High-level python interface to
 `ECCODES <https://confluence.ecmwf.int/display/ECC>`__ library for
 reading `GRIB <https://weather.gc.ca/grib/what_is_GRIB_e.html>`__ files.
 
@@ -12,7 +12,7 @@ from the python interpreter prompt, import the package:
 
 open a GRIB file, create a grib message iterator:
 
-    >>> grbs = pygrib.open('sampledata/flux.grb')  
+    >>> grbs = pygrib.open('sampledata/flux.grb')
 
 pygrib open instances behave like regular python file objects, with
 ``seek``, ``tell``, ``read``, ``readline`` and ``close`` methods, except
@@ -31,7 +31,7 @@ print an inventory of the file:
 
     >>> grbs.seek(0)
     >>> for grb in grbs:
-    >>>     grb 
+    >>>     grb
     1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs (avg):from 200402291200
     2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120 hrs:from 200402291200
     3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
@@ -882,7 +882,11 @@ cdef class gribmessage(object):
             return default
 
     def expand_grid(self,expand_reduced):
-        """toggle expansion of 1D reduced grid data to a regular (2D) grid"""
+        """
+        expand_grid(True or False)
+
+        toggle expansion of 1D reduced grid data to a regular (2D) grid (on
+        by default)."""
         self.expand_reduced = expand_reduced
 
     def is_missing(self,key):
@@ -904,7 +908,7 @@ cdef class gribmessage(object):
         """
         keys()
 
-        return keys associated with a grib message (a dictionary-like object)
+        return keys associated with a grib message in a list
         """
         cdef grib_keys_iterator* gi
         cdef int err, typ
@@ -940,7 +944,7 @@ cdef class gribmessage(object):
         """
         _read_only_keys()
 
-        return read-only keys associated with a grib message (a dictionary-like object)
+        return read-only keys associated with a grib message in a list
         """
         cdef grib_keys_iterator* gi
         cdef int err, typ
