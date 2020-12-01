@@ -26,9 +26,10 @@ data = grb['values']
 lats,lons = grb.latlons()
 grbs.close()
 # should be a hole in the middle of the plot
-from mpl_toolkits.basemap import Basemap
+from cartopy.util import add_cyclic_point
+import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
-m = Basemap(llcrnrlon=lons.min(),urcrnrlon=lons.max(),llcrnrlat=lats.min(),urcrnrlat=lats.max(),projection='cyl')
-m.drawcoastlines()
-m.contourf(lons,lats,data,15)
+ax = plt.axes(projection=ccrs.PlateCarree(central_longitude=0))
+ax.coastlines()
+cs = ax.contourf(lons,lats,data,15)
 plt.show()
