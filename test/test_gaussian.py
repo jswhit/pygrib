@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from cartopy.util import add_cyclic_point
 import cartopy.crs as ccrs
-import cartopy.feature as cfeature
 grbs = pygrib.open('../sampledata/flux.grb')
 grb = grbs.message(2)
 lats, lons = grb.latlons()

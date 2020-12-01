@@ -1,11 +1,8 @@
 import numpy as np
-from numpy import ma
 import pygrib, sys
 import matplotlib.pyplot as plt
 from cartopy.util import add_cyclic_point
 import cartopy.crs as ccrs
-import cartopy.feature as cfeature
-import matplotlib.ticker as mticker
 
 for grb in pygrib.open('../sampledata/tigge.grb'):
     fld = 0.01*grb.values # convert to hPa

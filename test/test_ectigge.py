@@ -1,12 +1,8 @@
 import pygrib
 import matplotlib.pyplot as plt
 import numpy as np
-from numpy import ma
 from cartopy.util import add_cyclic_point
 import cartopy.crs as ccrs
-import cartopy.feature as cfeature
-import matplotlib.ticker as mticker
-
 
 grbs = pygrib.open('../sampledata/ecmwf_tigge.grb')
 grb = grbs.select(parameterName='Soil moisture')[0]
