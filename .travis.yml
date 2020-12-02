@@ -15,7 +15,7 @@ addons:
 
 env:
   global:
-    - DEPENDS="numpy pyproj<3.0.0"
+    - DEPENDS="cython numpy pyproj<3.0.0"
     - PROJ_DIR=/usr
     - PROJ_LIB=/usr/share/proj
 
