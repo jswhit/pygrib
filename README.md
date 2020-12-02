@@ -16,8 +16,8 @@ The easiest way to get everything installed is to use the [conda](https://conda.
 conda install -c conda-forge pygrib
 ```
 
-If you don't use conda, be sure you have the required dependencies
-(eccodes,numpy,cython,pyproj) installed first. Then, install pygrib with pip:
+If you don't use conda, be sure you have the ECCODES library installed first.
+Then you can install pygrib with pip:
 
 ```
 ECCODES_DIR=path/to/eccodes pip install pygrib
