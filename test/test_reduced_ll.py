@@ -1,14 +1,18 @@
 import pygrib
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.basemap import Basemap
+from cartopy.util import add_cyclic_point
+import cartopy.crs as ccrs
 grbs = pygrib.open('../sampledata/reduced_latlon_surface.grib2')
 grb = grbs.readline()
-data = grb['values']
+data = grb.values
 lats, lons = grb.latlons()
-m = Basemap(lon_0=180)
-x,y = m(lons,lats)
-m.drawcoastlines()
-m.contourf(x,y,data,15)
-plt.title(grb['name'])
+lons1 = lons[0,:]; lats1 = lats[:,0]
+# add cyclic (wrap-around) point to global grid
+data,lons1 = add_cyclic_point(data, coord=lons1)
+lons,lats = np.meshgrid(lons1,lats1)
+ax = plt.axes(projection=ccrs.PlateCarree(central_longitude=0))
+cs = ax.contourf(lons,lats,data,15)
+ax.coastlines()
+plt.title(grb.name)
 plt.show()
