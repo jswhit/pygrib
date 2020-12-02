@@ -2,6 +2,7 @@ version 2.1.1 (git tag v2.1.1rel)
 =================================
 * clean up docs.
 * migrate examples in 'test' directory from basemap to cartopy.
+* enable github actions for CI (PR #159).
 
 version 2.1 (git tag v2.1rel)
 ============================
