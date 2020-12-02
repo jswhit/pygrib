@@ -50,5 +50,5 @@ ax.coastlines()
 coords = pj.transform_points(ccrs.PlateCarree(), lons, lats)
 cs = ax.contourf(coords[:,:,0],coords[:,:,1],data,15)
 plt.title('Stereographic Model Grid (CMC)')
-
+plt.savefig('stere_baseline.png')
 plt.show()
