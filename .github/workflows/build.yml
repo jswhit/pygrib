@@ -1,0 +1,41 @@
+name: Install and Test
+on: [push, pull_request]
+jobs:
+  build-linux:
+    name: Python (${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    env:
+      PROJ_DIR: /usr
+      PROJ_LIB: /usr/share/proj
+    strategy:
+      matrix:
+        python-version: ["2.7", "3.7", "3.8"]
+    steps:
+
+    - uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Ubuntu Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install libproj-dev proj-bin libeccodes-dev
+
+    - name: Update Pip
+      run: |
+        python -m pip install --upgrade pip
+
+    - name: Install pygrib dependencies via pip
+      run: |
+        python -m pip install cython numpy "pyproj<3.0.0"
+
+    - name: Install pygrib
+      run: |
+        python setup.py install
+
+    - name: Test
+      run: |
+        python test.py
