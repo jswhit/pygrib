@@ -121,7 +121,7 @@ setuptools.setup(
     ],
     ext_modules=[redtoregext, pygribext],
     data_files=data_files,
-    setup_requires=["setuptools, cython"],
+    setup_requires=["setuptools", "cython"],
     install_requires=[
         "pyproj",
         "numpy",
