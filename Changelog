@@ -1,5 +1,6 @@
-since version 2.1
-=================
+version 2.1.1 (git tag v2.1.1rel)
+=================================
+* clean up docs.
 * migrate examples in 'test' directory from basemap to cartopy.
 
 version 2.1 (git tag v2.1rel)
