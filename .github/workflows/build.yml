@@ -23,7 +23,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install libproj-dev proj-bin libeccodes-dev
-#       sudo apt-get install libgeos-dev
+        sudo apt-get install libgeos-dev
 
     - name: Update Pip
       run: |
@@ -34,13 +34,14 @@ jobs:
         python -m pip install "numpy>1.10"
         python -m pip install cython
         python -m pip install "pyproj<3.0.0"
-#       python -m pip install wheel
-#       python -m pip install pyshp
-#       python -m pip install six
-#       python -m pip install shapely --no-binary shapely
-#       python -m pip install matplotlib
-#       python -m pip install cartopy
-#       python -m pip install scipy
+        python -m pip install wheel
+        python -m pip install pyshp
+        python -m pip install six
+        python -m pip install shapely --no-binary shapely
+        python -m pip install matplotlib
+        python -m pip install cartopy
+        python -m pip install scipy
+        python -m pip install pytest pytest-mpl
 
     - name: Install pygrib
       run: |
@@ -49,4 +50,5 @@ jobs:
     - name: Test
       run: |
         python test.py
-#       cd test; python run_tests.py
+        cd test
+        pytest test*py --mpl --mpl-baseline-path=baseline_images
