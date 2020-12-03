@@ -8,7 +8,7 @@ import cartopy.crs as ccrs
 
 nplots = 10
 
-@pytest.mark.mpl_image_compare(tolerance=20,remove_text=False)
+@pytest.mark.mpl_image_compare(tolerance=20,remove_text=True)
 def test_tigge():
     fig=plt.figure(figsize=(10,50),dpi=20)
     nplot = 1
