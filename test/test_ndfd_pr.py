@@ -32,7 +32,6 @@ gl.ylabels_top = False; gl.xlabels_top = False
 gl.ylabels_right = False; gl.xlabels_right = False
 plt.title('NDFD Temp Puerto Rico %d-h fcst from %d' %\
         (grb.forecastTime,grb.dataDate),fontsize=12)
-plt.savefig('ndfd_pr_baseline.png')
 # raise exception if generated image doesn't match baseline 
 plt.savefig('ndfd_pr.png')
 assert( compare_images('ndfd_pr_baseline.png','ndfd_pr.png',10) is None )
