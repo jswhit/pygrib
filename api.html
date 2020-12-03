@@ -132,7 +132,7 @@ that offsets are measured in grib messages instead of bytes:</p>
 <dl class="py function">
 <dt id="pygrib.fromstring">
 <code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">fromstring</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">string</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.fromstring" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a gribmessage instance from a python bytes object
+<dd><p>Create a <a class="reference internal" href="#pygrib.gribmessage" title="pygrib.gribmessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">gribmessage</span></code></a> instance from a python bytes object
 representing a binary grib message (the reverse of <a class="reference internal" href="#pygrib.gribmessage.tostring" title="pygrib.gribmessage.tostring"><code class="xref py py-meth docutils literal notranslate"><span class="pre">gribmessage.tostring()</span></code></a>).</p>
 </dd></dl>
 
@@ -477,19 +477,19 @@ is positioned at beginning of file).</p>
 <dt id="pygrib.reload">
 <code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">reload</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">grb</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.reload" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recreate gribmessage object, updating all the keys to be consistent
-with each other.  For example, if the forecastTime key is changed,
-recreating the gribmessage object with this function will cause
-the analDate and verifDate keys to be updated accordingly.</p>
-<p>Equivalent to fromstring(grb.tostring())</p>
+with each other.  For example, if the <code class="docutils literal notranslate"><span class="pre">forecastTime</span></code> key is changed,
+recreating the <a class="reference internal" href="#pygrib.gribmessage" title="pygrib.gribmessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">gribmessage</span></code></a> object with this function will cause
+the <code class="docutils literal notranslate"><span class="pre">analDate</span></code> and <code class="docutils literal notranslate"><span class="pre">verifDate</span></code> keys to be updated accordingly.</p>
+<p>Equivalent to <code class="docutils literal notranslate"><span class="pre">fromstring(grb.tostring())</span></code></p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="pygrib.setdates">
 <code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">setdates</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">grb</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.setdates" title="Permalink to this definition">¶</a></dt>
-<dd><p>set fcstimeunits, analDate and validDate attributes using
-julianDay, forecastTime and indicatorOfUnitOfTimeRange.
-Called automatically when gribmessage instance created,
-but can be called manually to update keys if one of 
+<dd><p>set <code class="docutils literal notranslate"><span class="pre">fcstimeunits</span></code>, <code class="docutils literal notranslate"><span class="pre">analDate</span></code> and <code class="docutils literal notranslate"><span class="pre">validDate</span></code> attributes using
+the <code class="docutils literal notranslate"><span class="pre">julianDay</span></code>, <code class="docutils literal notranslate"><span class="pre">forecastTime</span></code> and <code class="docutils literal notranslate"><span class="pre">indicatorOfUnitOfTimeRange</span></code> keys.
+Called automatically when <a class="reference internal" href="#pygrib.gribmessage" title="pygrib.gribmessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">gribmessage</span></code></a> instance created,
+but can be called manually to update keys if one of
 them is modified after instance creation.</p>
 </dd></dl>
 
