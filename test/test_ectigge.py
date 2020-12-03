@@ -1,4 +1,5 @@
 import pygrib
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 from cartopy.util import add_cyclic_point
@@ -22,7 +23,8 @@ gl = ax.gridlines(draw_labels=True)
 gl.ylabels_top = False; gl.xlabels_top = False
 gl.ylabels_right = False; gl.xlabels_right = False
 plt.title(grb.parameterName+' on ECMWF Reduced Gaussian Grid')
-# raise exception if generated image doesn't match baseline 
-plt.savefig('ectigge.png')
-assert( compare_images('ectigge_baseline.png','ectigge.png',10) is None )
+if matplotlib.get_backend().lower() == 'agg':
+    # raise exception if generated image doesn't match baseline 
+    plt.savefig('ectigge.png')
+    assert( compare_images('ectigge_baseline.png','ectigge.png',10) is None )
 plt.show()

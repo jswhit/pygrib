@@ -1,5 +1,6 @@
 import pygrib
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 from cartopy.util import add_cyclic_point
 import cartopy.crs as ccrs
@@ -44,8 +45,9 @@ ax.set_extent([lon1,lon2,lat1,lat2],crs=ccrs.PlateCarree())
 ax.coastlines()
 ax.contourf(lonsubset,latsubset,datsubset,15,cmap=plt.cm.hot_r)
 plt.title('%s Regional Lat/Lon Grid' % grb.name)
-# raise exception if generated image doesn't match baseline 
-plt.savefig('reglatlon.png')
-assert( compare_images('reglatlon_baseline3.png','reglatlon.png',10) is None )
+if matplotlib.get_backend().lower() == 'agg':
+    # raise exception if generated image doesn't match baseline 
+    plt.savefig('reglatlon.png')
+    assert( compare_images('reglatlon_baseline3.png','reglatlon.png',10) is None )
 
 plt.show()

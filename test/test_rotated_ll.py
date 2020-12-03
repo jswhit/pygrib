@@ -1,5 +1,6 @@
 import pygrib
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 import sys
@@ -23,7 +24,8 @@ cs = ax.contourf(coords[:,:,0],coords[:,:,1],data,15)
 gl = ax.gridlines(draw_labels=False)
 ax.coastlines()
 plt.title(grb.name+' Rotated Lat/Lon grid')
-# raise exception if generated image doesn't match baseline 
-plt.savefig('rotated_ll.png')
-assert( compare_images('rotated_ll_baseline.png','rotated_ll.png',10) is None )
+if matplotlib.get_backend().lower() == 'agg':
+    # raise exception if generated image doesn't match baseline 
+    plt.savefig('rotated_ll.png')
+    assert( compare_images('rotated_ll_baseline.png','rotated_ll.png',10) is None )
 plt.show()

@@ -28,12 +28,14 @@ grbs.close()
 # should be a hole in the middle of the plot
 from cartopy.util import add_cyclic_point
 import cartopy.crs as ccrs
+import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.testing.compare import compare_images
 ax = plt.axes(projection=ccrs.PlateCarree(central_longitude=0))
 ax.coastlines()
 cs = ax.contourf(lons,lats,data,15)
-# raise exception if generated image doesn't match baseline 
-plt.savefig('set_bitmap.png')
-assert( compare_images('set_bitmap_baseline.png','set_bitmap.png',10) is None )
+if matplotlib.get_backend().lower() == 'agg':
+    # raise exception if generated image doesn't match baseline 
+    plt.savefig('set_bitmap.png')
+    assert( compare_images('set_bitmap_baseline.png','set_bitmap.png',10) is None )
 plt.show()

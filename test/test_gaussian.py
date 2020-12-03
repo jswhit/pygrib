@@ -1,5 +1,6 @@
 import pygrib
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 from cartopy.util import add_cyclic_point
 from matplotlib.testing.compare import compare_images
@@ -19,7 +20,8 @@ ax.contourf(lons,lats,data,15)
 # plot location of every 4th grid point
 plt.scatter(lons[::4,::4].ravel(),lats[::4,::4].ravel(),1,marker='o',color='k',zorder=10)
 plt.title('Global Gaussian Grid')
-# raise exception if generated image doesn't match baseline 
-plt.savefig('gaussian.png')
-assert( compare_images('gaussian_baseline.png','gaussian.png',10) is None )
+if matplotlib.get_backend().lower() == 'agg':
+    # raise exception if generated image doesn't match baseline 
+    plt.savefig('gaussian.png')
+    assert( compare_images('gaussian_baseline.png','gaussian.png',10) is None )
 plt.show()

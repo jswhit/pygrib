@@ -1,3 +1,4 @@
+import matplotlib
 import matplotlib.pyplot as plt
 import pygrib
 import numpy as np
@@ -40,7 +41,8 @@ gl.ylabels_top = False; gl.xlabels_top = False
 gl.ylabels_right = False; gl.xlabels_right = False
 plt.colorbar(cs,shrink=0.9)
 plt.title(repr(g.level)+' '+g.typeOfLevel+' '+g.name+' from Spherical Harmonic Coeffs',fontsize=9)
-# raise exception if generated image doesn't match baseline 
-plt.savefig('spectral.png')
-assert( compare_images('spectral_baseline.png','spectral.png',10) is None )
+if matplotlib.get_backend().lower() == 'agg':
+    # raise exception if generated image doesn't match baseline 
+    plt.savefig('spectral.png')
+    assert( compare_images('spectral_baseline.png','spectral.png',10) is None )
 plt.show()

@@ -1,5 +1,6 @@
 import pygrib, sys
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
@@ -29,7 +30,8 @@ cax = plt.axes([0.875, 0.15, 0.03, 0.65])
 plt.colorbar(cs, cax, format='%g') # draw colorbar
 plt.axes(ax)  # make the original axes current again
 plt.title('NDFD Temp CONUS %d-h forecast'% grb.forecastTime,fontsize=12)
-# raise exception if generated image doesn't match baseline 
-plt.savefig('ndfd_conus.png')
-assert( compare_images('ndfd_conus_baseline.png','ndfd_conus.png',10) is None )
+if matplotlib.get_backend().lower() == 'agg':
+    # raise exception if generated image doesn't match baseline 
+    plt.savefig('ndfd_conus.png')
+    assert( compare_images('ndfd_conus_baseline.png','ndfd_conus.png',10) is None )
 plt.show()
