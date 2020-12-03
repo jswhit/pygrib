@@ -30,6 +30,7 @@ jobs:
 
     - name: Install pygrib dependencies via pip
       run: |
+        python -m pip install wheel
         python -m pip install "numpy>1.10"
         python -m pip install cython
         python -m pip install "pyproj<3.0.0"
@@ -38,6 +39,7 @@ jobs:
         python -m pip install shapely --no-binary shapely
         python -m pip install matplotlib
         python -m pip install cartopy
+        python -m pip install scipy
 
     - name: Install pygrib
       run: |
