@@ -9,3 +9,5 @@ to run all the tests, run 'python run_tests.py'
 to run all the tests and compare
 images to archived baselines install pytest-mpl and
 run 'pytest test*py --mpl --mpl-baseline-path=baseline_images'
+
+to regenerate baseline image 'pytest <script> --mpl-generate-path=baseline_images'
