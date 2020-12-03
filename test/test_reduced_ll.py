@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from cartopy.util import add_cyclic_point
 import cartopy.crs as ccrs
+from matplotlib.testing.compare import compare_images
 grbs = pygrib.open('../sampledata/reduced_latlon_surface.grib2')
 grb = grbs.readline()
 data = grb.values
@@ -15,4 +16,7 @@ ax = plt.axes(projection=ccrs.PlateCarree(central_longitude=0))
 cs = ax.contourf(lons,lats,data,15)
 ax.coastlines()
 plt.title(grb.name)
+# raise exception if generated image doesn't match baseline 
+plt.savefig('reduced_ll.png')
+assert( compare_images('reduced_ll_baseline.png','reduced_ll.png',10) is None )
 plt.show()

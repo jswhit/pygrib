@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
+from matplotlib.testing.compare import compare_images
 
 grbs = pygrib.open('../sampledata/ngm.grb')
 grb = grbs.select(parameterName='Pressure',typeOfLevel='surface')[0]
@@ -25,6 +26,9 @@ ax.coastlines()
 coords = pj.transform_points(ccrs.PlateCarree(), lons, lats)
 cs = ax.contourf(coords[:,:,0],coords[:,:,1],data,15)
 plt.title('Stereographic Model Grid (NCEP)')
+# raise exception if generated image doesn't match baseline 
+plt.savefig('stere.png')
+assert( compare_images('stere_baseline.png','stere.png',10) is None )
 
 plt.figure()
 grbs = pygrib.open('../sampledata/CMC_reg_WIND_ISBL_300_ps60km_2010052400_P012.grib')
@@ -50,5 +54,7 @@ ax.coastlines()
 coords = pj.transform_points(ccrs.PlateCarree(), lons, lats)
 cs = ax.contourf(coords[:,:,0],coords[:,:,1],data,15)
 plt.title('Stereographic Model Grid (CMC)')
-plt.savefig('stere_baseline.png')
+# raise exception if generated image doesn't match baseline 
+plt.savefig('stere.png')
+assert( compare_images('stere_baseline2.png','stere.png',10) is None )
 plt.show()

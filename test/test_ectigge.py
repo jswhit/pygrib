@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from cartopy.util import add_cyclic_point
 import cartopy.crs as ccrs
+from matplotlib.testing.compare import compare_images
 
 grbs = pygrib.open('../sampledata/ecmwf_tigge.grb')
 grb = grbs.select(parameterName='Soil moisture')[0]
@@ -20,4 +21,7 @@ gl = ax.gridlines(draw_labels=True)
 gl.ylabels_top = False; gl.xlabels_top = False
 gl.ylabels_right = False; gl.xlabels_right = False
 plt.title(grb.parameterName+' on ECMWF Reduced Gaussian Grid')
+# raise exception if generated image doesn't match baseline 
+plt.savefig('ectigge.png')
+assert( compare_images('ectigge_baseline.png','ectigge.png',10) is None )
 plt.show()

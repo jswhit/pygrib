@@ -2,6 +2,7 @@ import pygrib
 import numpy as np
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
+from matplotlib.testing.compare import compare_images
 
 grbs = pygrib.open('../sampledata/eta.grb')
 grb = grbs.select(parameterName='Pressure',typeOfLevel='surface')[0]
@@ -21,4 +22,7 @@ ax.coastlines()
 coords = pj.transform_points(ccrs.PlateCarree(), lons, lats)
 cs = ax.contourf(coords[:,:,0],coords[:,:,1],data,15)
 plt.title('Lambert Conformal Model Grid')
+# raise exception if generated image doesn't match baseline 
+plt.savefig('lambert.png')
+assert( compare_images('lambert_baseline.png','lambert.png',10) is None )
 plt.show()

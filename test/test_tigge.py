@@ -3,6 +3,7 @@ import pygrib, sys
 import matplotlib.pyplot as plt
 from cartopy.util import add_cyclic_point
 import cartopy.crs as ccrs
+from matplotlib.testing.compare import compare_images
 
 for grb in pygrib.open('../sampledata/tigge.grb'):
     fld = 0.01*grb.values # convert to hPa
@@ -23,4 +24,7 @@ for grb in pygrib.open('../sampledata/tigge.grb'):
     gl.ylabels_top = False; gl.xlabels_top = False
     gl.ylabels_right = False; gl.xlabels_right = False
     plt.title(grb.name+': '+grb.centre.upper(),fontsize=12)
+    # raise exception if generated image doesn't match baseline 
+    plt.savefig('tigge_%s.png' % grb.centre.upper())
+    assert( compare_images('tigge_%s_baseline.png'%grb.centre.upper(),'tigge_%s.png'%grb.centre.upper(),10) is None )
 plt.show()
