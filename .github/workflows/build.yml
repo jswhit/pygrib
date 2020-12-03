@@ -22,7 +22,7 @@ jobs:
     - name: Install Ubuntu Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install libproj-dev proj-bin libeccodes-dev
+        sudo apt-get install libproj-dev proj-bin libeccodes-dev libgeos-dev
 
     - name: Update Pip
       run: |
@@ -33,6 +33,9 @@ jobs:
         python -m pip install "numpy>1.10"
         python -m pip install cython
         python -m pip install "pyproj<3.0.0"
+        python -m pip install pyshp
+        python -m pip install six
+        python -m pip install shapely --no-binary shapely
         python -m pip install cartopy
 
     - name: Install pygrib
