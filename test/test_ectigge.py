@@ -13,6 +13,7 @@ lons1 = lons[0,:]; lats1 = lats[:,0]
 fld,lons1 = add_cyclic_point(fld, coord=lons1)
 lons,lats = np.meshgrid(lons1,lats1)
 
+plt.figure()
 ax = plt.axes(projection=ccrs.PlateCarree(central_longitude=0))
 cs = ax.contourf(lons,lats,fld,15,cmap=plt.cm.jet)
 plt.colorbar(cs, shrink=0.6)

@@ -17,6 +17,7 @@ data,lons1 = add_cyclic_point(data, coord=lons1d)
 data2,lons1 = add_cyclic_point(data2, coord=lons1d)
 lons,lats = np.meshgrid(lons1,lats1d)
 
+plt.figure()
 ax = plt.axes(projection=ccrs.PlateCarree(central_longitude=0))
 ax.coastlines()
 ax.contourf(lons,lats,data,15,cmap=plt.cm.hot_r)

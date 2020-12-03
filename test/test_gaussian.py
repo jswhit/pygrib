@@ -12,6 +12,7 @@ data = grb.values
 # add cyclic (wrap-around) point to global grid
 data,lons1 = add_cyclic_point(data, coord=lons1)
 lons,lats = np.meshgrid(lons1,lats1)
+plt.figure()
 ax = plt.axes(projection=ccrs.PlateCarree(central_longitude=0))
 ax.coastlines()
 ax.contourf(lons,lats,data,15)

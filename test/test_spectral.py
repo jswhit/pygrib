@@ -31,6 +31,7 @@ data,lons = add_cyclic_point(data, coord=lons)
 lons,lats = np.meshgrid(lons, lats)
 
 # setup mercator map projection.
+plt.figure()
 ax = plt.axes(projection=ccrs.Mercator(central_longitude=0))
 cs = ax.contourf(lons,lats,data,15,cmap=plt.cm.jet,transform=ccrs.PlateCarree())
 ax.coastlines()

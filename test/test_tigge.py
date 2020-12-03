@@ -12,8 +12,8 @@ for grb in pygrib.open('../sampledata/tigge.grb'):
     # add cyclic (wrap-around) point to global grid
     fld,lons1 = add_cyclic_point(fld, coord=lons1)
     lons,lats = np.meshgrid(lons1,lats1)
-    sys.stdout.write('%s %s %s %s' % \
-            (grb.centre, fld.shape, fld.min(), fld.max()))
+    #print('%s %s %s %s' % \
+    #     (grb.centre, fld.shape, fld.min(), fld.max()))
     fig=plt.figure(figsize=(10,5))
     ax = plt.axes(projection=ccrs.PlateCarree(central_longitude=0))
     levels = np.arange(475,1101,25)
@@ -27,4 +27,4 @@ for grb in pygrib.open('../sampledata/tigge.grb'):
     # raise exception if generated image doesn't match baseline 
     plt.savefig('tigge_%s.png' % grb.centre.upper())
     assert( compare_images('tigge_%s_baseline.png'%grb.centre.upper(),'tigge_%s.png'%grb.centre.upper(),10) is None )
-plt.show()
+#plt.show()
