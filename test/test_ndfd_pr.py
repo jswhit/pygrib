@@ -24,7 +24,6 @@ def test_ndfd_pr():
     ax.set_extent([coords[0, 0], coords[1, 0], coords[0, 1], coords[1, 1]], crs=pj)
     ax.coastlines(resolution='50m')
     ax.add_feature(cfeature.BORDERS, linestyle='-');
-    ax.add_feature(cfeature.STATES, linestyle='-');
     coords = pj.transform_points(ccrs.PlateCarree(), lons, lats)
     cs = ax.contourf(coords[:,:,0],coords[:,:,1],data,20,cmap=plt.cm.jet)
     # new axis for colorbar.
