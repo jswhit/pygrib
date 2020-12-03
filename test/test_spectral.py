@@ -8,7 +8,8 @@ import cartopy.crs as ccrs
 try:
     import spharm
 except:
-    raise ImportError("requires pyspharm (python spherical harmonic module) from http://code.google.com/p/pyspharm")
+    print("skipping test that requires pyspharm (python spherical harmonic module) from http://code.google.com/p/pyspharm")
+    raise SystemExit(0)
 
 grbs = pygrib.open('../sampledata/spherical_pressure_level.grib1')
 g = grbs[1]
