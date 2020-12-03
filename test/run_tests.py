@@ -4,6 +4,7 @@ import matplotlib
 matplotlib.use('Agg')
 # Find all test files.
 test_files = glob.glob('test_*.py')
+test_files.remove('test_spectral.py') # skip spectral transform test
 for f in test_files:
     print('running %s...' % f)
     exec(open(f).read())
