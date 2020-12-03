@@ -36,6 +36,7 @@ jobs:
         python -m pip install pyshp
         python -m pip install six
         python -m pip install shapely --no-binary shapely
+        python -m pip install matplotlib
         python -m pip install cartopy
 
     - name: Install pygrib
