@@ -41,7 +41,6 @@ jobs:
         python -m pip install matplotlib
         python -m pip install cartopy
         python -m pip install scipy
-        python -m pip install pyspharm
         python -m pip install pytest pytest-mpl
 
     - name: Install pygrib
