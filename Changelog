@@ -1,3 +1,7 @@
+since version 2.1.1
+===================
+* use pytest-mpl for image comparison tests.
+
 version 2.1.1 (git tag v2.1.1rel)
 =================================
 * clean up docs.
