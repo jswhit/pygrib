@@ -15,7 +15,7 @@ fld,lons1 = add_cyclic_point(fld, coord=lons1)
 lons,lats = np.meshgrid(lons1,lats1)
 
 @pytest.mark.mpl_image_compare(tolerance=20,remove_text=True)
-def test_ectigge():
+def test_reduced_gg():
     fig = plt.figure()
     ax = plt.axes(projection=ccrs.PlateCarree(central_longitude=0))
     cs = ax.contourf(lons,lats,fld,15,cmap=plt.cm.jet)
@@ -29,5 +29,5 @@ def test_ectigge():
 
 # if running with GUI backend, show plot.
 if matplotlib.get_backend().lower() != 'agg':
-    test_ectigge()
+    test_reduced_gg()
     plt.show()
