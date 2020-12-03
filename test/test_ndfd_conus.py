@@ -14,6 +14,7 @@ globe = ccrs.Globe(ellipse='sphere', semimajor_axis=grb.projparams['a'], semimin
 pj = ccrs.LambertConformal(globe=globe,central_longitude=grb.projparams['lon_0'],
      central_latitude=grb.projparams['lat_0'],
      standard_parallels =(grb.projparams['lat_1'],grb.projparams['lat_2']))
+plt.figure()
 ax = plt.axes([0.1,0.1,0.75,0.75],projection=pj)
 coords = pj.transform_points(                                                                
          ccrs.PlateCarree(), np.asarray([lons[0,0],lons[-1,-1]]), np.asarray([lats[0,0],lats[-1,-1]]))
