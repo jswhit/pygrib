@@ -1,4 +1,5 @@
 import pygrib
+import pytest
 
 grib1 = False
 if grib1:
@@ -30,12 +31,16 @@ from cartopy.util import add_cyclic_point
 import cartopy.crs as ccrs
 import matplotlib
 import matplotlib.pyplot as plt
-from matplotlib.testing.compare import compare_images
-ax = plt.axes(projection=ccrs.PlateCarree(central_longitude=0))
-ax.coastlines()
-cs = ax.contourf(lons,lats,data,15)
-if matplotlib.get_backend().lower() == 'agg':
-    # raise exception if generated image doesn't match baseline 
-    plt.savefig('set_bitmap.png')
-    assert( compare_images('set_bitmap_baseline.png','set_bitmap.png',10) is None )
-plt.show()
+
+@pytest.mark.mpl_image_compare(tolerance=20,remove_text=True)
+def test_set_bitmap():
+    fig = plt.figure()
+    ax = plt.axes(projection=ccrs.PlateCarree(central_longitude=0))
+    ax.coastlines()
+    cs = ax.contourf(lons,lats,data,15)
+    return fig
+
+# if running with GUI backend, show plot.
+if matplotlib.get_backend().lower() != 'agg':
+    test_set_bitmap()
+    plt.show()
