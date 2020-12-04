@@ -22,17 +22,18 @@ def test_ndfd_pr():
     coords = pj.transform_points(
              ccrs.PlateCarree(), np.asarray([lons[0,0],lons[-1,-1]]), np.asarray([lats[0,0],lats[-1,-1]]))
     ax.set_extent([coords[0, 0], coords[1, 0], coords[0, 1], coords[1, 1]], crs=pj)
-    ax.coastlines(resolution='50m')
-    ax.add_feature(cfeature.BORDERS, linestyle='-');
     coords = pj.transform_points(ccrs.PlateCarree(), lons, lats)
     cs = ax.contourf(coords[:,:,0],coords[:,:,1],data,20,cmap=plt.cm.jet)
     # new axis for colorbar.
     cax = plt.axes([0.875, 0.15, 0.03, 0.65])
     plt.colorbar(cs, cax, format='%g') # draw colorbar
     plt.axes(ax)  # make the original axes current again
-    gl = ax.gridlines(draw_labels=True)
-    gl.ylabels_top = False; gl.xlabels_top = False
-    gl.ylabels_right = False; gl.xlabels_right = False
+    if matplotlib.get_backend().lower() != 'agg':
+        # don't plot coastlines or gridlines for image comparison
+        ax.coastlines(resolution='50m')
+        gl = ax.gridlines(draw_labels=True)
+        gl.ylabels_top = False; gl.xlabels_top = False
+        gl.ylabels_right = False; gl.xlabels_right = False
     plt.title('NDFD Temp Puerto Rico %d-h fcst from %d' %\
             (grb.forecastTime,grb.dataDate),fontsize=12)
     return fig

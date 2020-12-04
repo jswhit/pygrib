@@ -23,9 +23,11 @@ def test_ndfd_conus():
     coords = pj.transform_points(                                                                
              ccrs.PlateCarree(), np.asarray([lons[0,0],lons[-1,-1]]), np.asarray([lats[0,0],lats[-1,-1]]))
     ax.set_extent([coords[0, 0], coords[1, 0], coords[0, 1], coords[1, 1]], crs=pj)
-    ax.coastlines()
-    ax.add_feature(cfeature.BORDERS, linestyle='-');
-    ax.add_feature(cfeature.STATES, linestyle='-');
+    if matplotlib.get_backend().lower() != 'agg':
+        # don't plot borders for image comparison
+        ax.coastlines()
+        ax.add_feature(cfeature.BORDERS, linestyle='-');
+        ax.add_feature(cfeature.STATES, linestyle='-');
     coords = pj.transform_points(ccrs.PlateCarree(), lons, lats)
     cs = ax.contourf(coords[:,:,0],coords[:,:,1],data,20,cmap=plt.cm.jet)
     # new axis for colorbar.

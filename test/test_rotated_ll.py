@@ -19,14 +19,16 @@ pj = ccrs.Stereographic(globe=globe,central_longitude=10,central_latitude=55)
 def test_rotated_ll():
     fig = plt.figure()
     ax = plt.axes(projection=pj)
-    coords = pj.transform_points(                                                                
+    coords = pj.transform_points(
              ccrs.PlateCarree(), np.asarray([-14.75,72]), np.asarray([29.5,65.6]))
     ax.set_extent([coords[0, 0], coords[1, 0], coords[0, 1], coords[1, 1]], crs=pj)
     ax.scatter(lons[::5,::5].flat,lats[::5,::5].flat,1,marker='o',color='k',zorder=10,transform=ccrs.PlateCarree())
     coords = pj.transform_points(ccrs.PlateCarree(), lons, lats)
     cs = ax.contourf(coords[:,:,0],coords[:,:,1],data,15)
-    gl = ax.gridlines(draw_labels=False)
-    ax.coastlines()
+    if matplotlib.get_backend().lower() != 'agg':
+        # don't plot coastlines for image comparison
+        gl = ax.gridlines(draw_labels=False)
+        ax.coastlines()
     plt.title(grb.name+' Rotated Lat/Lon grid')
     return fig
 
