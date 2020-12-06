@@ -4,5 +4,12 @@ plots of the data using matplotlib and cartopy
 test_spectral.py also uses pyspharm, available from 
 http://github.com/jswhit/pyspharm
 
-to run all the tests with a non-gui backend (Agg) and compare
-images to archived baselines, run 'python run_tests.py'.
+to run all the tests, run 'python run_tests.py'
+
+to run all the tests and compare
+images to archived baselines install pytest-mpl, set
+MPLBACKEND to 'agg' and run
+'pytest test*py --mpl --mpl-baseline-path=baseline_images'
+
+to regenerate baseline image 'pytest <script> --mpl-generate-path=baseline_images'
+(using agg matplotlib backend)

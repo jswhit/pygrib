@@ -9,7 +9,7 @@ jobs:
       PROJ_LIB: /usr/share/proj
     strategy:
       matrix:
-        python-version: ["2.7", "3.7", "3.8"]
+        python-version: ["3.7", "3.8"]
     steps:
 
     - uses: actions/checkout@v2
@@ -23,7 +23,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install libproj-dev proj-bin libeccodes-dev
-#       sudo apt-get install libgeos-dev
+        sudo apt-get install libgeos-dev
 
     - name: Update Pip
       run: |
@@ -34,13 +34,15 @@ jobs:
         python -m pip install "numpy>1.10"
         python -m pip install cython
         python -m pip install "pyproj<3.0.0"
-#       python -m pip install wheel
-#       python -m pip install pyshp
-#       python -m pip install six
-#       python -m pip install shapely --no-binary shapely
-#       python -m pip install matplotlib
-#       python -m pip install cartopy
-#       python -m pip install scipy
+        python -m pip install wheel
+        python -m pip install pyshp
+        python -m pip install six
+        python -m pip install shapely --no-binary shapely
+        python -m pip install matplotlib
+        python -m pip install cartopy
+        python -m pip install scipy
+        python -m pip install pyspharm
+        python -m pip install pytest pytest-mpl
 
     - name: Install pygrib
       run: |
@@ -49,4 +51,6 @@ jobs:
     - name: Test
       run: |
         python test.py
-#       cd test; python run_tests.py
+        cd test
+        export MPLBACKEND=agg
+        pytest test*py --mpl --mpl-baseline-path=baseline_images
