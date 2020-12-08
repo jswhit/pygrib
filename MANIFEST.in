@@ -1,5 +1,5 @@
 include MANIFEST.in
-include COPYING
+include LICENSE
 include pyproject.toml
 include pygrib.pyx
 include redtoreg.pyx

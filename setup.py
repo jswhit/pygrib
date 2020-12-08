@@ -98,6 +98,7 @@ setuptools.setup(
     author_email="jeffrey.s.whitaker@noaa.gov",
     url="https://github.com/jswhit/pygrib",
     download_url="http://python.org/pypi/pygrib",
+    license='License :: OSI Approved :: MIT License',
     classifiers=[
         "Development Status :: 4 - Beta",
         "Programming Language :: Python :: 2.7",
@@ -108,7 +109,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Intended Audience :: Science/Research",
-        "License :: OSI Approved",
+        "License :: OSI Approved :: MIT License",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     cmdclass=cmdclass,
