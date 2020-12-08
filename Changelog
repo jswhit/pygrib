@@ -1,6 +1,7 @@
-since version 2.1.1
-===================
+version 2.1.2 (not yet released)
+================================
 * use pytest-mpl for image comparison tests.
+* change license to MIT.
 
 version 2.1.1 (git tag v2.1.1rel)
 =================================
