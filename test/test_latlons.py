@@ -38,6 +38,27 @@ import numpy as np
             [173.746409, 44.287971],
             [-23.74651083940669,44.288441]
         ]),
+        # gridType='regular_gg'
+        ("flux.grb", [
+           [0.0, 88.54195],
+           [358.125, 88.541950],
+           [0.0, -88.54195],
+           [358.125, -88.54195]
+        ]),
+        # gridType='reduced_gg'
+        ("ecmwf_tigge.grb", [
+           [0.0, 89.655964],
+           [359.55, 89.655964],
+           [0.0,-89.655964],
+           [359.55, -89.655964]
+        ]),
+        # gridType='mercator'
+        ("dspr.temp.bin", [
+          [-68.027832, 16.977484],
+          [-63.9843, 16.97748],
+          [-68.02783299999994, 19.54449],
+          [-63.9843, 19.54449]
+        ])
     ])
 def test_latlons_corners(samplegribfile, expected):
     """Test the resulting grid data."""
@@ -58,7 +79,10 @@ def test_latlons_corners(samplegribfile, expected):
         ("cl00010000_ecoclimap_rot.grib1", [20, 17], [-6.549827, 36.674752]),
         ("gfs.grb", [37, 24], [60., -2.5]),
         ("eta.grb", [32, 31], [-114.320061, 39.636536]),
-        ("ngm.grb", [22, 17], [-124.093697, 42.418053])
+        ("ngm.grb", [22, 17], [-124.093697, 42.418053]),
+        ("flux.grb", [47, 64], [120.0, -0.952367]),
+        ("ecmwf_tigge.grb", [200, 266], [119.7, -0.224718]),
+        ("dspr.temp.bin", [112, 113], [-66.676034, 18.2714926])
     ])
 def test_latlons_randpoint(samplegribfile, pt_ji, expected):
     """Test the resulting grid data."""
