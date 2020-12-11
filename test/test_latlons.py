@@ -31,7 +31,7 @@ import numpy as np
             [-152.855459, 54.535803],
             [-49.385097, 57.289403]
         ]),
-        # gridType='stere'
+        # gridType='polar_stereographic'
         ("ngm.grb", [
             [-133.443, 7.647],
             [-76.557281, 7.647150],
