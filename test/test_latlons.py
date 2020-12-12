@@ -36,7 +36,7 @@ import numpy as np
             [-133.443, 7.647],
             [-76.557281, 7.647150],
             [173.746409, 44.287971],
-            [-23.746510, 44.288441]
+            [-23.74651083940669,44.288441]
         ]),
         # gridType='regular_gg'
         ("flux.grb", [
@@ -56,8 +56,15 @@ import numpy as np
         ("dspr.temp.bin", [
           [-68.027832, 16.977484],
           [-63.9843, 16.97748],
-          [-68.027832, 19.54449],
+          [-68.02783299999994, 19.54449],
           [-63.9843, 19.54449]
+        ]),
+        ("reduced_latlon_surface.grib2", [
+        # gridType='reduced_ll'
+          [0.0, 90.0],
+          [359.64, 90.0],
+          [0.0, -90.0],
+          [359.64, -90.0]
         ])
     ])
 def test_latlons_corners(samplegribfile, expected):
@@ -82,7 +89,8 @@ def test_latlons_corners(samplegribfile, expected):
         ("ngm.grb", [22, 17], [-124.093697, 42.418053]),
         ("flux.grb", [47, 64], [120.0, -0.952367]),
         ("ecmwf_tigge.grb", [200, 266], [119.7, -0.224718]),
-        ("dspr.temp.bin", [112, 113], [-66.676034, 18.2714926])
+        ("dspr.temp.bin", [112, 113], [-66.676034, 18.2714926]),
+        ("reduced_latlon_surface.grib2", [250, 334], [119.99976, 0.0])
     ])
 def test_latlons_randpoint(samplegribfile, pt_ji, expected):
     """Test the resulting grid data."""
