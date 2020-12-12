@@ -59,13 +59,16 @@ import numpy as np
           [-68.02783299999994, 19.54449],
           [-63.9843, 19.54449]
         ]),
-        ("reduced_latlon_surface.grib2", [
         # gridType='reduced_ll'
+        ("reduced_latlon_surface.grib2", [
           [0.0, 90.0],
           [359.64, 90.0],
           [0.0, -90.0],
           [359.64, -90.0]
         ])
+        # no coverage for gridType = 'rotated_gg', 'albers', 'space_view',
+        # 'equatorial_azimuthal_equidistant','lambert_azimuthal_equal_area'
+        # (no sample grib files that use those grids)
     ])
 def test_latlons_corners(samplegribfile, expected):
     """Test the resulting grid data."""
