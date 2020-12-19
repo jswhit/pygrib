@@ -2,6 +2,8 @@ version 2.1.2 (not yet released)
 ================================
 * use pytest-mpl for image comparison tests.
 * change license to MIT.
+* changes gribmessage.projparams['proj'] from 'cyl' to 'longlat'
+  for non-projection projections (e.g. 'regular_ll'). Issue #167.
 
 version 2.1.1 (git tag v2.1.1rel)
 =================================

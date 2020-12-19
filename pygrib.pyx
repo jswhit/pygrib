@@ -563,6 +563,7 @@ def setdates(gribmessage grb):
             return grb
         if grb.fcstimeunits == 'hrs':
             try:
+                print(julian_to_datetime(grb.julianDay), ftime)
                 grb.validDate =\
                 julian_to_datetime(grb.julianDay+ftime/24.)
             except ValueError:
@@ -1288,7 +1289,7 @@ cdef class gribmessage(object):
                 if not tolerate_badgrib: raise ValueError('unknown shape of the earth flag')
 
         if self['gridType'] in ['reduced_gg','reduced_ll','regular_gg','regular_ll']: # regular lat/lon grid
-            projparams['proj']='cyl'
+            projparams['proj']='longlat'
         elif self['gridType'] == 'polar_stereographic':
             projparams['proj']='stere'
             projparams['lat_ts']=self['latitudeWhereDxAndDyAreSpecifiedInDegrees']
