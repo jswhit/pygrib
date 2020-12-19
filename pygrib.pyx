@@ -563,7 +563,6 @@ def setdates(gribmessage grb):
             return grb
         if grb.fcstimeunits == 'hrs':
             try:
-                print(julian_to_datetime(grb.julianDay), ftime)
                 grb.validDate =\
                 julian_to_datetime(grb.julianDay+ftime/24.)
             except ValueError:
