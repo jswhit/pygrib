@@ -9,7 +9,6 @@ include test.py
 include README.md
 include utils/*grib*
 recursive-include docs *
-recursive-include eccodes *
 include sampledata/*.grb
 include sampledata/*.grb2
 include sampledata/*.grib*

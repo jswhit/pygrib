@@ -30,9 +30,18 @@ def extract_version(CYTHON_FNAME):
     return version
 
 
+def package_files(directory):
+    paths = []
+    for (path, directories, filenames) in os.walk(directory):
+        for filename in filenames:
+            paths.append(os.path.join('..', path, filename))
+    return paths
+
+package_data={}
+package_data[""] = package_files("eccodes")
+
 cmdclass = {"build_ext": NumpyBuildExtCommand}
 
-redtoregext = setuptools.Extension("redtoreg", ["redtoreg.pyx"])
 searchdirs = []
 if os.environ.get("GRIBAPI_DIR"):
     searchdirs.append(os.environ["GRIBAPI_DIR"])
@@ -67,14 +76,14 @@ else:
     incdirs = []
     libdirs = []
 pygribext = setuptools.Extension(
-    "pygrib",
-    ["pygrib.pyx"],
+    "pygrib._pygrib",
+    ["pygrib/_pygrib.pyx"],
     include_dirs=incdirs,
     library_dirs=libdirs,
     runtime_library_dirs=libdirs,
     libraries=["eccodes"],
 )
-ext_modules = [redtoregext, pygribext]
+ext_modules = [pygribext]
 
 # Import README.md as PyPi long_description
 this_directory = os.path.abspath(os.path.dirname(__file__))
@@ -92,7 +101,7 @@ else:
 
 setuptools.setup(
     name="pygrib",
-    version=extract_version("pygrib.pyx"),
+    version=extract_version("pygrib/_pygrib.pyx"),
     description="Python module for reading/writing GRIB files",
     author="Jeff Whitaker",
     author_email="jeffrey.s.whitaker@noaa.gov",
@@ -121,8 +130,10 @@ setuptools.setup(
         "utils/cnvgrib1to2",
         "utils/cnvgrib2to1",
     ],
-    ext_modules=[redtoregext, pygribext],
+    ext_modules=[pygribext],
     data_files=data_files,
+    packages=['pygrib'],
+    package_data=package_data,
     setup_requires=["setuptools", "cython"],
     install_requires=[
         "pyproj",
