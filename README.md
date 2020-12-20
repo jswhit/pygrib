@@ -28,7 +28,7 @@ and `lib/libeccodes.so`. If `ECCODES_DIR` is not specified, a few common locatio
 such as `$CONDA_PREFIX,/usr,/usr/local,/opt/local` will be searched.
 
 Alternately, clone the github repo and run `python setup.py install` (after setting `$ECCCODES_DIR`).
-Run `python test.py` from the source directory to test your pygrib installation.
+Run `cd test; python test.py` from the source directory to test your pygrib installation.
 
 For full installation instructions and API documentation, see https://jswhit.github.io/pygrib.
 

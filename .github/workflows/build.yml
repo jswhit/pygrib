@@ -50,7 +50,6 @@ jobs:
 
     - name: Test
       run: |
-        python test.py
         cd test
         export MPLBACKEND=agg
         pytest test*py --mpl --mpl-baseline-path=baseline_images
