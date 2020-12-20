@@ -34,10 +34,11 @@ def package_files(directory):
     paths = []
     for (path, directories, filenames) in os.walk(directory):
         for filename in filenames:
-            paths.append(os.path.join('..', path, filename))
+            paths.append(os.path.join("..", path, filename))
     return paths
 
-package_data={}
+
+package_data = {}
 package_data[""] = package_files("eccodes")
 
 cmdclass = {"build_ext": NumpyBuildExtCommand}
@@ -75,15 +76,16 @@ else:
     print("eccodes not found, build may fail...")
     incdirs = []
     libdirs = []
-pygribext = setuptools.Extension(
-    "pygrib._pygrib",
-    ["pygrib/_pygrib.pyx"],
-    include_dirs=incdirs,
-    library_dirs=libdirs,
-    runtime_library_dirs=libdirs,
-    libraries=["eccodes"],
-)
-ext_modules = [pygribext]
+ext_modules = [
+    setuptools.Extension(
+        "pygrib._pygrib",
+        ["pygrib/_pygrib.pyx"],
+        include_dirs=incdirs,
+        library_dirs=libdirs,
+        runtime_library_dirs=libdirs,
+        libraries=["eccodes"],
+    )
+]
 
 # Import README.md as PyPi long_description
 this_directory = os.path.abspath(os.path.dirname(__file__))
@@ -107,7 +109,7 @@ setuptools.setup(
     author_email="jeffrey.s.whitaker@noaa.gov",
     url="https://github.com/jswhit/pygrib",
     download_url="http://python.org/pypi/pygrib",
-    license='License :: OSI Approved :: MIT License',
+    license="License :: OSI Approved :: MIT License",
     classifiers=[
         "Development Status :: 4 - Beta",
         "Programming Language :: Python :: 2.7",
@@ -130,9 +132,9 @@ setuptools.setup(
         "utils/cnvgrib1to2",
         "utils/cnvgrib2to1",
     ],
-    ext_modules=[pygribext],
+    ext_modules=ext_modules,
     data_files=data_files,
-    packages=['pygrib'],
+    packages=["pygrib"],
     package_data=package_data,
     setup_requires=["setuptools", "cython"],
     install_requires=[
