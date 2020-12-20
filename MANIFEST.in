@@ -4,6 +4,8 @@ include pyproject.toml
 include setup.py
 include test.py
 include README.md
+include pygrib/__init__.py
+include pygrib/_pygrib.pyx
 include utils/*grib*
 recursive-include docs *
 include sampledata/*.grb
