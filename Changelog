@@ -9,6 +9,8 @@ version 2.1.2 (git tag v2.1.2rel)
   get/reset ECCODES_DEFINITION_PATH
   (default is either ECCODES_DEFINITION_PATH if it is set in the
   environment, or if not pygrib.__file__/../ecodes/definitions).
+* include binary wheels for linux in pypi release.
+* add template definition for RAP grib files (issue #134).
 
 version 2.1.1 (git tag v2.1.1rel)
 =================================
