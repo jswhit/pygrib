@@ -34,6 +34,8 @@ jobs:
         python -m pip install numpy
         python -m pip install cython
         python -m pip install pyproj
+        python -m pip install pytest
+        #python -m pip install pytest pytest-mpl
         #python -m pip install wheel
         #python -m pip install pyshp
         #python -m pip install six
@@ -42,7 +44,6 @@ jobs:
         #python -m pip install cartopy
         #python -m pip install scipy
         #python -m pip install pyspharm
-        #python -m pip install pytest pytest-mpl
 
     - name: Install pygrib
       run: |
