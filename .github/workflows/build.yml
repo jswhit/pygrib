@@ -35,15 +35,15 @@ jobs:
         python -m pip install cython
         python -m pip install pyproj
         python -m pip install pytest
-        #python -m pip install pytest pytest-mpl
-        #python -m pip install wheel
-        #python -m pip install pyshp
-        #python -m pip install six
-        #python -m pip install shapely --no-binary shapely
-        #python -m pip install matplotlib
-        #python -m pip install cartopy
-        #python -m pip install scipy
-        #python -m pip install pyspharm
+        python -m pip install pytest-mpl
+        python -m pip install wheel
+        python -m pip install pyshp
+        python -m pip install six
+        python -m pip install shapely --no-binary shapely
+        python -m pip install matplotlib
+        python -m pip install cartopy
+        python -m pip install scipy
+        python -m pip install pyspharm
 
     - name: Install pygrib
       run: |
@@ -51,12 +51,12 @@ jobs:
 
     - name: Test
       run: |
-        cd test
-        python test.py
-        python test_latlons.py
-        #cp -r test/ /tmp
-        #cp -r sampledata/ /tmp
-        #cp conftest.py /tmp
-        #cd /tmp/test
-        #export MPLBACKEND=agg
-        #pytest test*py --mpl --mpl-baseline-path=baseline_images
+        #cd test
+        #python test.py
+        #python test_latlons.py
+        cp -r test/ /tmp
+        cp -r sampledata/ /tmp
+        cp conftest.py /tmp
+        cd /tmp/test
+        export MPLBACKEND=agg
+        pytest test*py --mpl --mpl-baseline-path=baseline_images
