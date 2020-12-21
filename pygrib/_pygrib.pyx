@@ -5,6 +5,7 @@ __version__ = '2.1.2'
 import numpy as np
 cimport numpy as npc
 import warnings
+import os
 from datetime import datetime
 from pkg_resources import parse_version
 from numpy import ma
@@ -243,6 +244,28 @@ def multi_support_off():
     """turn off support for multi-field grib messages"""
     grib_multi_support_off(NULL)
 
+def set_definitions_path(eccodes_definition_path):
+    """
+    set_definition_path(ECCODES_DEFINITION_PATH)
+
+    set path to eccodes definition files (grib tables)."""
+    cdef char *definition_path
+    global _eccodes_datadir
+    bytestr = _strencode(eccodes_definition_path)
+    definition_path = bytestr
+    grib_context_set_definitions_path(NULL, definition_path)
+    _eccodes_datadir = eccodes_definition_path
+
+if 'ECCODES_DEFINITION_PATH' in os.environ:
+    _datadir = os.environ['ECCODES_DEFINITION_PATH']
+else:
+    _datadir = os.sep.join([os.path.join(os.path.dirname(__file__),'..'),
+        'eccodes/definitions'])
+set_definitions_path(_datadir)
+def get_definitions_path():
+    global _eccodes_datadir
+    return _eccodes_datadir 
+
 cdef class open(object):
     """ 
     open(filename)
@@ -303,15 +326,6 @@ cdef class open(object):
             self.has_multi_field_msgs=True
         else:
             self.has_multi_field_msgs=False
-    def set_datadir(self, path_to_definition_files):
-        """
-        set_datadir(ECCODES_DEFINITION_PATH)
-        
-        set path to eccodes definition files (grib tables)."""
-        cdef char *definition_path
-        bytestr = _strencode(path_to_definition_files)
-        definition_path = bytestr
-        grib_context_set_definitions_path(NULL, definition_path)
     def __iter__(self):
         return self
     def __next__(self):
