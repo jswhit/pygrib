@@ -164,6 +164,7 @@ cdef extern from "grib_api.h":
     grib_handle* grib_handle_new_from_message_copy(grib_context * c, void * data,\
                              size_t data_len)
     int grib_julian_to_datetime(double jd, long *year, long *month, long *day, long *hour, long *minute, long *second)
+    void grib_context_set_definitions_path(grib_context* c, char* path)
     int grib_datetime_to_julian(long year, long month, long day, long hour, long minute, long second, double *jd)
     int grib_get_gaussian_latitudes(long truncation,double* latitudes)
     int grib_index_write(grib_index *index, char *filename)
@@ -302,6 +303,12 @@ cdef class open(object):
             self.has_multi_field_msgs=True
         else:
             self.has_multi_field_msgs=False
+    def set_datadir(self, path_to_definition_files):
+        """set ECCODES_DEFINITION_PATH"""
+        cdef char *definition_path
+        bytestr = _strencode(path_to_definition_files)
+        definition_path = bytestr
+        grib_context_set_definitions_path(NULL, definition_path)
     def __iter__(self):
         return self
     def __next__(self):
