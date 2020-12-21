@@ -3,7 +3,7 @@ on: [push, pull_request]
 jobs:
   build-linux:
     name: Python (${{ matrix.python-version }})
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     env:
       PROJ_DIR: /usr
       PROJ_LIB: /usr/share/proj
