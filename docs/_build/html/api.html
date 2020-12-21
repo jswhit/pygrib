@@ -8,6 +8,7 @@
     <title>API &#8212; pygrib  documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/nature2.css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
@@ -78,7 +79,7 @@ that offsets are measured in grib messages instead of bytes:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">grb</span> <span class="o">=</span> <span class="n">grbs</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Maximum temperature&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>extract the data values using the ‘values’ key grb.keys() will return a list of the available keys):</p>
+<p>extract the data values using the <code class="docutils literal notranslate"><span class="pre">values</span></code> key (<code class="docutils literal notranslate"><span class="pre">grb.keys()</span></code> will return a list of the available keys):</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">maxt</span> <span class="o">=</span> <span class="n">grb</span><span class="o">.</span><span class="n">values</span> <span class="c1"># same as grb[&#39;values&#39;]</span>
 <span class="go"># The data is returned as a numpy array, or if missing values or a bitmap</span>
 <span class="go"># are present, a numpy masked array.  Reduced lat/lon or gaussian grid</span>
@@ -107,13 +108,32 @@ that offsets are measured in grib messages instead of bytes:</p>
 <span class="go">(26, 53) 21.904439458 69.5216630593 221.25 318.75</span>
 </pre></div>
 </div>
+<p>modify the values associated with existing keys:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">grb</span><span class="p">[</span><span class="s1">&#39;forecastTime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">240</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grb</span><span class="o">.</span><span class="n">dataDate</span> <span class="o">=</span> <span class="mi">20100101</span>
+</pre></div>
+</div>
+<p>get the binary string associated with the coded message:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">msg</span> <span class="o">=</span> <span class="n">grb</span><span class="o">.</span><span class="n">tostring</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grbs</span><span class="o">.</span><span class="n">close</span><span class="p">()</span> <span class="c1"># close the grib file.</span>
+</pre></div>
+</div>
+<p>write the modified message to a new GRIB file:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">grbout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;test.grb&#39;</span><span class="p">,</span><span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grbout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grbout</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pygrib</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;test.grb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+<span class="go">1:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 240 hrs:from 201001011200</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="module-pygrib">
 <span id="module-docstrings"></span><h2>Module docstrings<a class="headerlink" href="#module-pygrib" title="Permalink to this headline">¶</a></h2>
+<p>pygrib module</p>
 <dl class="py function">
 <dt id="pygrib.fromstring">
 <code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">fromstring</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">string</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.fromstring" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a gribmessage instance from a python bytes object
+<dd><p>Create a <a class="reference internal" href="#pygrib.gribmessage" title="pygrib.gribmessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">gribmessage</span></code></a> instance from a python bytes object
 representing a binary grib message (the reverse of <a class="reference internal" href="#pygrib.gribmessage.tostring" title="pygrib.gribmessage.tostring"><code class="xref py py-meth docutils literal notranslate"><span class="pre">gribmessage.tostring()</span></code></a>).</p>
 </dd></dl>
 
@@ -169,8 +189,9 @@ then 2-d arrays are returned, otherwise 1-d arrays are returned.</p>
 
 <dl class="py method">
 <dt id="pygrib.gribmessage.expand_grid">
-<code class="sig-name descname">expand_grid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.gribmessage.expand_grid" title="Permalink to this definition">¶</a></dt>
-<dd><p>toggle expansion of 1D reduced grid data to a regular (2D) grid</p>
+<code class="sig-name descname">expand_grid</code><span class="sig-paren">(</span><em class="sig-param">True or False</em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.gribmessage.expand_grid" title="Permalink to this definition">¶</a></dt>
+<dd><p>toggle expansion of 1D reduced grid data to a regular (2D) grid (on
+by default).</p>
 </dd></dl>
 
 <dl class="py method">
@@ -189,7 +210,7 @@ to grib missing value flag (False otherwise)</p>
 <dl class="py method">
 <dt id="pygrib.gribmessage.keys">
 <code class="sig-name descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.gribmessage.keys" title="Permalink to this definition">¶</a></dt>
-<dd><p>return keys associated with a grib message (a dictionary-like object)</p>
+<dd><p>return keys associated with a grib message in a list</p>
 </dd></dl>
 
 <dl class="py method">
@@ -197,15 +218,15 @@ to grib missing value flag (False otherwise)</p>
 <code class="sig-name descname">latlons</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.gribmessage.latlons" title="Permalink to this definition">¶</a></dt>
 <dd><p>compute lats and lons (in degrees) of grid.
 Currently handles regular lat/lon, global gaussian, mercator, stereographic,
-lambert conformal, albers equal-area, space-view, azimuthal 
+lambert conformal, albers equal-area, space-view, azimuthal
 equidistant, reduced gaussian, reduced lat/lon,
 lambert azimuthal equal-area, rotated lat/lon and rotated gaussian grids.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">lats,lons</span></code> numpy arrays</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">lats,lons</span></code> numpy arrays
+containing latitudes and longitudes of grid (in degrees).</p>
 </dd>
 </dl>
-<p>containing latitudes and longitudes of grid (in degrees).</p>
 </dd></dl>
 
 <dl class="py method">
@@ -457,19 +478,19 @@ is positioned at beginning of file).</p>
 <dt id="pygrib.reload">
 <code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">reload</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">grb</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.reload" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recreate gribmessage object, updating all the keys to be consistent
-with each other.  For example, if the forecastTime key is changed,
-recreating the gribmessage object with this function will cause
-the analDate and verifDate keys to be updated accordingly.</p>
-<p>Equivalent to fromstring(grb.tostring())</p>
+with each other.  For example, if the <code class="docutils literal notranslate"><span class="pre">forecastTime</span></code> key is changed,
+recreating the <a class="reference internal" href="#pygrib.gribmessage" title="pygrib.gribmessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">gribmessage</span></code></a> object with this function will cause
+the <code class="docutils literal notranslate"><span class="pre">analDate</span></code> and <code class="docutils literal notranslate"><span class="pre">verifDate</span></code> keys to be updated accordingly.</p>
+<p>Equivalent to <code class="docutils literal notranslate"><span class="pre">fromstring(grb.tostring())</span></code></p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="pygrib.setdates">
 <code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">setdates</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">grb</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.setdates" title="Permalink to this definition">¶</a></dt>
-<dd><p>set fcstimeunits, analDate and validDate attributes using
-julianDay, forecastTime and indicatorOfUnitOfTimeRange.
-Called automatically when gribmessage instance created,
-but can be called manually to update keys if one of 
+<dd><p>set <code class="docutils literal notranslate"><span class="pre">fcstimeunits</span></code>, <code class="docutils literal notranslate"><span class="pre">analDate</span></code> and <code class="docutils literal notranslate"><span class="pre">validDate</span></code> attributes using
+the <code class="docutils literal notranslate"><span class="pre">julianDay</span></code>, <code class="docutils literal notranslate"><span class="pre">forecastTime</span></code> and <code class="docutils literal notranslate"><span class="pre">indicatorOfUnitOfTimeRange</span></code> keys.
+Called automatically when <a class="reference internal" href="#pygrib.gribmessage" title="pygrib.gribmessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">gribmessage</span></code></a> instance created,
+but can be called manually to update keys if one of
 them is modified after instance creation.</p>
 </dd></dl>
 

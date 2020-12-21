@@ -8,6 +8,7 @@ Required dependencies
 - `ECCODES <https://confluence.ecmwf.int/display/ECC>`__ C library version 2.19.1 or higher.
 - `numpy <http://www.numpy.org/>`__ 
 - `pyproj <https://pyproj4.github.io/pyproj/stable>`__ 
+- `cython <https://cython.org>`__ (only needed at build-time)
 
 
 Instructions
@@ -20,7 +21,7 @@ The easiest way to get everything installed is to use conda_ command line tool::
 .. _conda: http://conda.io/
 
 If you don't use conda, be sure you have the required dependencies
-installed first. Then, install cftime with pip::
+installed first. Then, install pygrib with pip::
 
     $ ECCODES_DIR=path/to/eccodes pip install pygrib
 
