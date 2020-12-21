@@ -5,13 +5,12 @@ version 2.1.2 (git tag v2.1.2rel)
 * changes gribmessage.projparams['proj'] from 'cyl' to 'longlat'
   for non-projection projections (e.g. 'regular_ll'). Issue #167.
 * reorganize to include eccodes definitions inside package. 
+  when wheels are build (PYGRIB_WHEEL env var is set).
   Add set_definitions_path/get_defintions_path module functions
-  get/reset ECCODES_DEFINITION_PATH
-  (default is either ECCODES_DEFINITION_PATH if it is set in the
-  environment, or if not pygrib.__file__/../ecodes/definitions).
+  to get/reset ECCODES_DEFINITION_PATH.
 * include binary wheels for linux in pypi release.
-* add template definition for RAP grib files (issue #134).  Not fully
-  implemented, but at least file can be read (gridType=unknown, latlons 
+* add grid template definition for RAP grib files in binary wheels (issue #134).
+  Not fully implemented, but at least file can be read (gridType=unknown, latlons 
   method doesn't yet work)..
 
 version 2.1.1 (git tag v2.1.1rel)
