@@ -9,7 +9,7 @@ jobs:
       PROJ_LIB: /usr/share/proj
     strategy:
       matrix:
-        python-version: ["3.7", "3.8", "3.9"]
+        python-version: ["3.6", "3.7", "3.8", "3.9"]
     steps:
 
     - uses: actions/checkout@v2
@@ -50,7 +50,9 @@ jobs:
 
     - name: Test
       run: |
-        cp -R test sampledata conftest.py /tmp
+        cp -r test/ /tmp
+        cp -r sampledata/ /tmp
+        cp conftest.py /tmp
         cd /tmp/test
         export MPLBACKEND=agg
         pytest test*py --mpl --mpl-baseline-path=baseline_images
