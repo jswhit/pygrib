@@ -304,7 +304,10 @@ cdef class open(object):
         else:
             self.has_multi_field_msgs=False
     def set_datadir(self, path_to_definition_files):
-        """set ECCODES_DEFINITION_PATH"""
+        """
+        set_datadir(ECCODES_DEFINITION_PATH)
+        
+        set path to eccodes definition files (grib tables)."""
         cdef char *definition_path
         bytestr = _strencode(path_to_definition_files)
         definition_path = bytestr
