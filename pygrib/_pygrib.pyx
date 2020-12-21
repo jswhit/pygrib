@@ -256,12 +256,21 @@ def set_definitions_path(eccodes_definition_path):
     grib_context_set_definitions_path(NULL, definition_path)
     _eccodes_datadir = eccodes_definition_path
 
+# if ECCODES_DEFINITION_PATH set in environment, use it.
+# check to see if definitions path is in installation path (binary wheel installation), if so use it.
+# otherwise do not set (use definitions installed with linked library(
 if 'ECCODES_DEFINITION_PATH' in os.environ:
     _datadir = os.environ['ECCODES_DEFINITION_PATH']
 else:
-    _datadir = os.sep.join([os.path.join(os.path.dirname(__file__),'..'),
-        'eccodes/definitions'])
-set_definitions_path(_datadir)
+    _tmp_path = os.path.join('eccodes','definitions')
+    _definitions_path = os.path.join(os.path.join(os.path.dirname(__file__),'..'),_tmp_path)
+    if os.path.isdir(_definitions_path):
+        _datadir = os.sep.join([_definitions_path])
+    else:
+        _datadir = None
+if _datadir is not None:
+    set_definitions_path(_datadir)
+
 def get_definitions_path():
     global _eccodes_datadir
     return _eccodes_datadir 
