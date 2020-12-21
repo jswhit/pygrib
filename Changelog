@@ -4,10 +4,11 @@ version 2.1.2 (git tag v2.1.2rel)
 * change license to MIT.
 * changes gribmessage.projparams['proj'] from 'cyl' to 'longlat'
   for non-projection projections (e.g. 'regular_ll'). Issue #167.
-* reorganize to include eccodes definitions inside package, 
-  add set_datadir pygrib.open method to reset ECCODES_DEFINITION_PATH.
-  (set on import to either ECCODES_DEFINITION_PATH if it is set in the
-  environment, or if not to pygrib.__file__/../ecodes/definitions).
+* reorganize to include eccodes definitions inside package. 
+  Add set_definitions_path/get_defintions_path module functions
+  get/reset ECCODES_DEFINITION_PATH
+  (default is either ECCODES_DEFINITION_PATH if it is set in the
+  environment, or if not pygrib.__file__/../ecodes/definitions).
 
 version 2.1.1 (git tag v2.1.1rel)
 =================================
