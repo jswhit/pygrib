@@ -1,0 +1,5 @@
+# Code Table 0.0 - GRIB master tables version number
+0 0 Experimental
+1 1 Version implemented on DAY MONTH YEAR
+# 2-254 Future versions
+255 255 Missing. Local tables in use. Valid local tables version number shall be coded

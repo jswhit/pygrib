@@ -1,0 +1,42 @@
+# Overlay Template Component 9.0 - Bitmap
+
+# TODO: Is there a Bit-map indicator???
+
+
+#  Bit-map indicator
+codetable[1] bitMapIndicator ('6.0.table',masterDir,localDir) = 255 : dump;
+
+meta geography.bitmapPresent g2bitmap_present(bitMapIndicator): dump;
+transient missingValuesPresent = bitmapPresent : hidden;
+
+# Bitmap...
+if(bitMapIndicator == 0)
+{
+  if(dataRepresentationTemplateNumber == 1)
+  {
+    if(matrixBitmapsPresent == 1)
+    {
+      meta primaryBitmap g2bitmap( tableReference,
+          missingValue,
+          offsetBSection9,
+          section9Length,
+          numberOfDataMatrices) : read_only;
+    }
+    else
+    {
+      meta geography.bitmap g2bitmap( tableReference,
+          missingValue,
+          offsetBSection9,
+          section9Length,
+          numberOfDataPoints) : read_only;
+    }
+  }
+  else
+  {
+    meta geography.bitmap g2bitmap( tableReference,
+        missingValue,
+        offsetBSection9,
+        section9Length,
+        numberOfDataPoints) : read_only;
+  }
+}

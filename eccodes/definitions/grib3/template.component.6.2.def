@@ -1,0 +1,9 @@
+# Generating Process Template Component 6.2 - Ensemble member
+
+# Type of ensemble member
+codetable[1] typeOfEnsembleMember ('6.2.table',masterDir,localDir) = 255 : dump;
+
+# Member (Perturbation) number
+unsigned[2] memberNumber : dump;
+alias perturbationNumber=memberNumber;
+alias number=memberNumber;

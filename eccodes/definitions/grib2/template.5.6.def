@@ -1,0 +1,8 @@
+# (C) Copyright 2005- ECMWF.
+
+# Grid point data - Simple packing with preprocessing
+
+include "grib2/template.5.packing.def";
+
+codetable[1] typeOfPreProcessing   ('5.9.table',masterDir,localDir)  :edition_specific;
+ieeefloat   preProcessingParameter  : read_only;

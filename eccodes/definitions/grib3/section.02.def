@@ -1,0 +1,65 @@
+# (C) Copyright 2005- ECMWF.
+#
+# This software is licensed under the terms of the Apache Licence Version 2.0
+# which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
+# 
+# In applying this licence, ECMWF does not waive the privileges and immunities granted to it by
+# virtue of its status as an intergovernmental organisation nor does it submit to any jurisdiction.
+#
+
+# Section 2 - Repetitions and Index Section
+
+position offsetSection2;
+section_length[4] section2Length ;
+meta section2Pointer section_pointer(offsetSection2,section2Length,2);
+unsigned[1] numberOfSection = 2 :read_only;
+
+# Note 1: A message with only one field shall have the total number of repetitions and
+# each of the number of distinct sections set to 1
+unsigned[2] totalNumberOfRepetitions = 1 : dump;
+
+# Note 2: Two repeated sections shall never be identical.
+# If two sections are identical because they have the same content, one of the two shall be coded
+# with only 7 bytes (empty section with reference) and the SUI shall be coded with the same value
+# of the identical section to which this section refers. Each section  will therefore have content
+# in it or refer to another section of the same section number. In the latter case, it will be made
+# only of 7 bytes comprising section length (4 bytes), number of section (1 byte) and
+# Section Unique Identifier - SUI (2 bytes)
+unsigned[2] numberOfDistinctSection3s = 1: dump;
+unsigned[2] numberOfDistinctSection4s = 1: dump;
+unsigned[2] numberOfDistinctSection5s = 1: dump;
+unsigned[2] numberOfDistinctSection6s = 1: dump;
+unsigned[2] numberOfDistinctSection7s = 1: dump;
+unsigned[2] numberOfDistinctSection8s = 1: dump;
+unsigned[2] numberOfDistinctSection9s = 1: dump;
+
+# Note 3: The inclusion of an Index template is optional. If index template is not present,
+# the index template number shall be set to missing and the length of index template shall be set to 0
+unsigned[2] indexTemplateNumber = missing() : dump,can_be_missing;
+unsigned[4] lengthOfIndexTemplate = 0: dump,edition_specific;
+template_nofail indexTemplate "grib3/template.2.[indexTemplateNumber:i].def";
+
+#if ( addEmptySection2 == 0 ) {
+#    if ( grib2LocalSectionPresent==1 or ( section2Length>5 or new() ) ) {
+#        alias section2Used=one;
+#
+#        if(productionStatusOfProcessedData == 4 || productionStatusOfProcessedData == 5) {
+#            # This is TIGGE-LAM because of the productionStatusOfProcessedData and the non-empty section 2
+#            codetable[2] tiggeLocalVersion 'grib3/tiggeLocalVersion.table' = 1 : dump;
+#            template  tiggeSection "grib3/local.tigge.[tiggeLocalVersion:l].def";
+#        }
+#
+#        codetable[2] grib2LocalSectionNumber 'grib3/grib2LocalSectionNumber.[centreForLocal:l].table' = 1 : dump;
+#
+#        if (grib2LocalSectionNumber!=0) {
+#            template_nofail local "grib3/local.[centreForLocal:l].def";
+#        } else {
+#            constant deleteLocalDefinition=1;
+#        }
+#        position offsetAfterCentreLocalSection;
+#    }
+#}
+
+#section_padding section2Padding : read_only;
+
+meta md5Section2 md5(offsetSection2,section2Length);

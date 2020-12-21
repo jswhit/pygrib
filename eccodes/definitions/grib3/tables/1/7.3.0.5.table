@@ -1,0 +1,13 @@
+# CODE TABLE 7.3 - Parameter number by product discipline and parameter category
+# Product discipline 0 - Meteorological products, parameter category 5: long-wave radiation
+# 0 Reserved
+# 1 Reserved
+# 2 Reserved
+3 3 Downward long-wave radiation flux (W m-2)
+4 4 Upward long-wave radiation flux (W m-2)
+5 5 Net long-wave radiation flux (W m-2)
+6 6 Net long-wave radiation flux, clear sky (W m-2)
+7 7 Brightness temperature (K)
+# 8-191 Reserved 
+# 192-254 Reserved for local use 
+255 255 Missing 

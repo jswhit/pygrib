@@ -1,0 +1,12 @@
+# Local definition 300: Multi-dimensional parameters
+
+codetable[1] dimensionType "grib2/dimensionType.table"=0;
+
+# The n-th dimension (out of total number of dimensions)
+unsigned[2] dimensionNumber;
+alias dimension=dimensionNumber;
+
+# Total number of dimensions
+unsigned[2] totalNumberOfdimensions;
+
+alias extraDimensionPresent=one;

@@ -1,0 +1,10 @@
+# (C) Copyright 2005- ECMWF.
+
+# TEMPLATE 4.54, Individual ensemble forecast, control and perturbed, at a horizontal level or in a horizontal layer at a point in time for partitioned parameters
+
+include "grib2/template.4.53.def"
+include "grib2/template.4.eps.def"
+
+constant cat="cat";
+alias mars.levtype=cat;
+alias mars.levelist=partitionNumber;

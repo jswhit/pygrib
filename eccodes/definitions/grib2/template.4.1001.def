@@ -1,0 +1,6 @@
+# (C) Copyright 2005- ECMWF.
+
+# TEMPLATE 4.1001, Cross section of averaged or otherwise statistically processed analysis or forecast over a range of time
+
+include "grib2/template.4.parameter.def"
+include "grib2/template.4.statistical.def"

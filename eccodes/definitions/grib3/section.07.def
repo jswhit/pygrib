@@ -1,0 +1,22 @@
+# (C) Copyright 2005- ECMWF.
+#
+# This software is licensed under the terms of the Apache Licence Version 2.0
+# which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
+# 
+# In applying this licence, ECMWF does not waive the privileges and immunities granted to it by
+# virtue of its status as an intergovernmental organisation nor does it submit to any jurisdiction.
+#
+
+# Section 7 - Observable Property Section
+
+position offsetSection7;
+section_length[4] section7Length;
+meta section7Pointer section_pointer(offsetSection7,section7Length,7);
+unsigned[1] numberOfSection = 7: read_only;
+
+unsigned[2] section7UniqueIdentifier; # SUI
+
+codetable[2] observablePropertyTemplateNumber ('7.0.table',masterDir,localDir) =0 : dump,edition_specific;
+template observablePropertyTemplate "grib3/template.7.[observablePropertyTemplateNumber:i].def";
+
+meta md5Section7 md5(offsetSection7, section7Length);

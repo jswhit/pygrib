@@ -1,0 +1,10 @@
+# CODE TABLE 7.3 - Parameter number by product discipline and parameter category
+# Product discipline 0 - Meteorological products, parameter category 1: moisture
+0 0 Specific humidity (kg kg-1)
+1 1 Relative humidity (%)
+2 2 Humidity mixing ratio (kg kg-1)
+3 3 Precipitable water (kg m-2)
+4 4 Vapour pressure (Pa)
+# 5-191 Reserved
+# 192-254 Reserved for local use
+255 255 Missing

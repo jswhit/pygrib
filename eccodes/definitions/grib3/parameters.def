@@ -1,0 +1,38 @@
+# (C) Copyright 2005- ECMWF.
+#
+# This software is licensed under the terms of the Apache Licence Version 2.0
+# which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
+# 
+# In applying this licence, ECMWF does not waive the privileges and immunities granted to it by
+# virtue of its status as an intergovernmental organisation nor does it submit to any jurisdiction.
+#
+
+transient dummyc=0: hidden;
+constant conceptsMasterDir="grib3" : hidden;
+constant conceptsLocalDirAll="grib3/localConcepts/[centre:s]" : hidden;
+constant conceptsLocalDirECMF="grib3/localConcepts/ecmf" : hidden;
+
+concept paramIdECMF (defaultParameter,"paramId.def",conceptsMasterDir,conceptsLocalDirECMF): long_type,no_copy;
+concept paramId (paramIdECMF,"paramId.def",conceptsMasterDir,conceptsLocalDirAll): long_type;
+
+concept shortNameECMF (defaultShortName,"shortName.def",conceptsMasterDir,conceptsLocalDirECMF) : no_copy,dump;
+concept ls.shortName (shortNameECMF,"shortName.def",conceptsMasterDir,conceptsLocalDirAll) : no_copy,dump;
+
+concept unitsECMF (defaultName,"units.def",conceptsMasterDir,conceptsLocalDirECMF) : no_copy;
+concept units (unitsECMF,"units.def",conceptsMasterDir,conceptsLocalDirAll) : no_copy;
+
+concept nameECMF (defaultName,"name.def",conceptsMasterDir,conceptsLocalDirECMF) : no_copy,dump;
+concept name (nameECMF,"name.def",conceptsMasterDir,conceptsLocalDirAll) : no_copy,dump;
+
+concept cfNameECMF (defaultShortName,"cfName.def",conceptsMasterDir,conceptsLocalDirECMF) : no_copy,dump;
+concept cfName (cfNameECMF,"cfName.def",conceptsMasterDir,conceptsLocalDirAll) : no_copy,dump;
+
+concept cfVarNameECMF (defaultShortName,"cfVarName.def",conceptsMasterDir,conceptsLocalDirECMF) : no_copy,dump;
+concept cfVarName (cfVarNameECMF,"cfVarName.def",conceptsMasterDir,conceptsLocalDirAll) : no_copy,dump;
+
+# modelName: Contribution from Daniel Lee @ DWD
+concept modelName (defaultName,"modelName.def",conceptsMasterDir,conceptsLocalDirAll): no_copy,dump,read_only;
+
+template_nofail names "grib3/products_[productionStatusOfProcessedData].def";
+
+meta ifsParam ifs_param(paramId,type);

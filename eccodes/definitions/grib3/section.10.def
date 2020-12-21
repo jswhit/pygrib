@@ -1,0 +1,35 @@
+# (C) Copyright 2005- ECMWF.
+#
+# This software is licensed under the terms of the Apache Licence Version 2.0
+# which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
+# 
+# In applying this licence, ECMWF does not waive the privileges and immunities granted to it by
+# virtue of its status as an intergovernmental organisation nor does it submit to any jurisdiction.
+#
+
+# Section 10 - Data Section
+
+position offsetSection10;
+section_length[4] section10Length;
+meta section10Pointer section_pointer(offsetSection10,section10Length,10);
+unsigned[1] numberOfSection = 10: read_only;
+
+# Data in a format described by data template 10.X,
+# where X is the Data Template number given in bytes 12-13 of Section 8
+position offsetBeforeData;
+template dataValues "grib3/template.10.[dataRepresentationTemplateNumber:i].def";
+
+meta changeDecimalPrecision decimal_precision(bitsPerValue,decimalScaleFactor,changingPrecision,values): edition_specific;
+meta decimalPrecision decimal_precision(bitsPerValue,decimalScaleFactor,changingPrecision): edition_specific;
+alias setDecimalPrecision=changeDecimalPrecision;
+
+meta setBitsPerValue bits_per_value(values,bitsPerValue)  : edition_specific;
+
+meta getNumberOfValues size(values) : edition_specific,dump ;
+
+meta scaleValuesBy scale_values(values,missingValue)  : edition_specific;
+meta offsetValuesBy offset_values(values,missingValue)  : edition_specific;
+
+position offsetAfterData;
+meta md5Section10 md5(offsetSection10, section10Length);
+alias md5DataSection = md5Section10;

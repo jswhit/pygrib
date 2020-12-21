@@ -1,0 +1,17 @@
+# Time Domain Template Component 3.0 - Forecast point in time
+
+# Hours of observational data cut-off after reference time
+# Note: Hours greater than 65534 will be coded as 65534
+unsigned[2] hoursAfterDataCutoff =missing() : edition_specific,can_be_missing;
+alias hoursAfterReferenceTimeOfDataCutoff=hoursAfterDataCutoff;
+
+# Minutes of observational data cut-off after reference time
+unsigned[1]  minutesAfterDataCutoff = missing() : edition_specific,can_be_missing;
+alias minutesAfterReferenceTimeOfDataCutoff=minutesAfterDataCutoff;
+
+# Indicator of unit of time range
+codetable[1] indicatorOfUnitOfTimeRange ('3.3.table',masterDir,localDir)  : dump;
+codetable[1] stepUnits 'stepUnits.table' = 1 : transient,dump,no_copy;
+
+# Forecast time in units defined by previous octet (GRIB-29: supports negative forecast time)
+signed[4] forecastTime  : dump;

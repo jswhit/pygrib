@@ -1,0 +1,6 @@
+# Product Discipline 10: Oceanographic products, Parameter Category 3: Surface Properties
+0 0 Water temperature (K)
+1 1 Deviation of sea level from mean (m)
+# 2-191 Reserved
+#192-254 Reserved for local use
+255 255 Missing

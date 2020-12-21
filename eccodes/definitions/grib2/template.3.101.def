@@ -1,0 +1,14 @@
+# (C) Copyright 2005- ECMWF.
+
+# TEMPLATE 3.101, General Unstructured Grid
+
+codetable[1] shapeOfTheEarth ('3.2.table',masterDir,localDir) : dump;
+
+unsigned[3] numberOfGridUsed : dump;
+
+unsigned[1] numberOfGridInReference : dump;
+
+# UUID of horizontal grid
+byte[16] uuidOfHGrid : dump;
+
+template_nofail unstructuredGrid "grib2/localConcepts/[centre:s]/unstructuredGrid.def";

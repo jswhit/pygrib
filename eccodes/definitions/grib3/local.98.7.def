@@ -1,0 +1,24 @@
+# (C) Copyright 2005- ECMWF.
+#
+# This software is licensed under the terms of the Apache Licence Version 2.0
+# which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
+# 
+# In applying this licence, ECMWF does not waive the privileges and immunities granted to it by
+# virtue of its status as an intergovernmental organisation nor does it submit to any jurisdiction.
+#
+
+unsigned[1] iterationNumber  : dump;
+alias number=iterationNumber;
+unsigned[1] numberOfForecastsInEnsemble  : dump;
+alias totalNumber=numberOfForecastsInEnsemble;
+unsigned[1] sensitiveAreaDomain  : dump;
+unsigned[1] diagnosticNumber  : dump;
+
+alias local.iterationNumber=iterationNumber;
+alias local.numberOfForecastsInEnsemble=numberOfForecastsInEnsemble;
+alias local.sensitiveAreaDomain=sensitiveAreaDomain;
+alias local.diagnosticNumber=diagnosticNumber;
+
+alias iteration = iterationNumber;
+alias diagnostic = diagnosticNumber;
+

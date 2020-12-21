@@ -1,0 +1,27 @@
+# (C) Copyright 2005- ECMWF.
+
+# For grib2 to grib1 conversion
+constant dataRepresentationType = 90;
+
+# TEMPLATE 4.30, Satellite Product
+
+# Note: This template is deprecated. Template 4.31 should be used instead.
+
+codetable[1] parameterCategory ('4.1.[discipline:l].table',masterDir,localDir) : dump;
+codetable[1] parameterNumber ('4.2.[discipline:l].[parameterCategory:l].table',masterDir,localDir)  : dump;
+meta parameterUnits codetable_units(parameterNumber) : dump;
+meta parameterName  codetable_title(parameterNumber) : dump;
+codetable[1] typeOfGeneratingProcess 'grib2/tables/[tablesVersion]/4.3.table' : dump;
+unsigned[1] observationGeneratingProcessIdentifier  : dump;
+unsigned[1]  NB : dump;
+alias numberOfContributingSpectralBands=NB;
+
+if (new() || section4Length>14) {
+  listOfContributingSpectralBands list(numberOfContributingSpectralBands){
+      unsigned[2] satelliteSeries;
+      unsigned[2] satelliteNumber;
+      unsigned[1] instrumentType;
+      unsigned[1] scaleFactorOfCentralWaveNumber = missing() : can_be_missing ;
+      unsigned[4] scaledValueOfCentralWaveNumber = missing() : can_be_missing ;
+  }
+}

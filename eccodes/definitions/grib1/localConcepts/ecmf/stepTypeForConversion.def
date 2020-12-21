@@ -1,0 +1,28 @@
+# Concept stepTypeForConversion for ECMWF
+# set uses the FIRST one
+# get returns the LAST match
+
+# ECC-457: ECMWF Total Precipitation
+"accum" = {timeRangeIndicator=0;indicatorOfParameter=228;gribTablesVersionNo=128;centre=98;}
+"accum" = {timeRangeIndicator=1;indicatorOfParameter=228;gribTablesVersionNo=128;centre=98;}
+"accum" = {timeRangeIndicator=10;indicatorOfParameter=228;gribTablesVersionNo=128;centre=98;}
+
+# sshf
+"accum" = {indicatorOfParameter=146;gribTablesVersionNo=128;centre=98;}
+# slhf
+"accum" = {indicatorOfParameter=147;gribTablesVersionNo=128;centre=98;}
+
+# ssrd
+"accum" = {indicatorOfParameter=169;gribTablesVersionNo=128;centre=98;}
+
+# strd
+"accum" = {indicatorOfParameter=175;gribTablesVersionNo=128;centre=98;}
+# ssr
+"accum" = {indicatorOfParameter=176;gribTablesVersionNo=128;centre=98;}
+# str
+"accum" = {indicatorOfParameter=177;gribTablesVersionNo=128;centre=98;}
+# ttr
+"accum" = {indicatorOfParameter=179;gribTablesVersionNo=128;centre=98;}
+
+# sund
+"accum" = {indicatorOfParameter=189;gribTablesVersionNo=128;centre=98;}

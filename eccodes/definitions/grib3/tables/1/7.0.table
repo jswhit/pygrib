@@ -1,0 +1,9 @@
+# CODE TABLE 7.0 - Observable property template number
+0 0 Observable property by discipline, category and number
+1 1 Observable property with units conversion
+2 2 Atmospheric chemical or physical constituent
+3 3 Aerosol physical property
+4 4 Aerosol optical property
+# 5-32767 Reserved
+# 32768-65534 Reserved for local use
+65535 65535 Missing

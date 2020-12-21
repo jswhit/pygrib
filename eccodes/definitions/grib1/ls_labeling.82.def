@@ -1,0 +1,19 @@
+#########################
+#
+# author: Sebastien Villaume <Sebastien.Villaume@smhi.se>
+# created: 6 Oct 2011
+# modified: 13 Sep 2013
+#
+#########################
+
+alias ls.dataType   = marsType;
+
+if (localDefinitionNumber == 83 ) {
+
+  concept_nofail ls.timerepres (unknown,"timeRepresConcept.def",conceptsLocalDirAll,conceptsMasterDir);
+  concept_nofail ls.sort (unknown,"sortConcept.def",conceptsLocalDirAll,conceptsMasterDir);
+  concept_nofail ls.landtype (unknown,"landTypeConcept.def",conceptsLocalDirAll,conceptsMasterDir);
+  concept_nofail ls.aerosolbinnumber (unknown,"aerosolConcept.def",conceptsLocalDirAll,conceptsMasterDir);
+
+}
+

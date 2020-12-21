@@ -1,0 +1,41 @@
+# (C) Copyright 2005- ECMWF.
+#
+# This software is licensed under the terms of the Apache Licence Version 2.0
+# which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
+# 
+# In applying this licence, ECMWF does not waive the privileges and immunities granted to it by
+# virtue of its status as an intergovernmental organisation nor does it submit to any jurisdiction.
+#
+
+# TEMPLATE 10.0, Grid point data - simple packing
+# Octets 6-nn : Binary data values - binary string, with each
+# (scaled)
+
+meta codedValues data_g2simple_packing(
+      section10Length,
+      offsetBeforeData,
+      offsetSection10,
+      unitsFactor,
+      unitsBias,
+      changingPrecision,
+      numberOfValues,
+      bitsPerValue,
+      referenceValue,
+      binaryScaleFactor,
+      decimalScaleFactor,
+      optimizeScaleFactor
+): read_only;
+
+meta values data_apply_bitmap(codedValues,
+                                bitmap,
+                                missingValue,
+                                binaryScaleFactor,
+                                numberOfDataPoints,
+                                numberOfValues) : dump;
+
+meta packingError  simple_packing_error(bitsPerValue,binaryScaleFactor,decimalScaleFactor,referenceValue,ieee) : no_copy;
+meta unpackedError simple_packing_error(zero,binaryScaleFactor,decimalScaleFactor,referenceValue,ieee) : no_copy;
+
+alias data.packedValues=codedValues;
+
+template statistics "common/statistics_grid.def";

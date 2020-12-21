@@ -1,0 +1,10 @@
+# Observable Property Template Component 7.4 - Radiation wavelength interval
+
+codetable[1] typeOfWavelengthInterval ('7.4.table',masterDir,localDir) : dump;
+alias typeOfIntervalForFirstAndSecondWavelength=typeOfWavelengthInterval;
+
+# wavelengths in metres
+signed[1] scaleFactorOfFirstWavelength : dump;
+signed[4] scaledValueOfFirstWavelength : dump; # in metres
+signed[1] scaleFactorOfSecondWavelength = missing(): can_be_missing,dump;
+signed[4] scaledValueOfSecondWavelength = missing(): can_be_missing,dump; # in metres

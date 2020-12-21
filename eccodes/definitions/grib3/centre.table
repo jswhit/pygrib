@@ -1,0 +1,150 @@
+# COMMON CODE TABLE C-11: Originating/generating centres
+0 0 WMO Secretariat
+1 ammc Melbourne (WMC)
+2 2 Melbourne (WMC)
+4 rums Moscow (WMC)
+5 5 Moscow (WMC)
+7 kwbc US National Weather Service - NCEP (WMC)
+8 8 US National Weather Service - NWSTG (WMC)
+9 9 US National Weather Service - Other (WMC)
+10 10 Cairo (RSMC/RAFC)
+12 12 Dakar (RSMC/RAFC)
+14 14 Nairobi (RSMC/RAFC)
+16 16 Atananarivo (RSMC)
+18 18 Tunis-Casablanca (RSMC)
+20 20 Las Palmas (RAFC)
+21 21 Algiers (RSMC)
+22 22 Lagos (RSMC)
+24 fapr Pretoria (RSMC)
+26 26 Khabarovsk (RSMC)
+28 28 New Delhi (RSMC/RAFC)
+30 30 Novosibirsk (RSMC)
+32 32 Tashkent (RSMC)
+33 33 Jeddah (RSMC)
+34 rjtd Japanese Meteorological Agency - Tokyo (RSMC)
+36 36 Bankok
+37 37 Ulan Bator
+38 babj Beijing (RSMC)
+40 rksl Seoul
+41 sabm Buenos Aires (RSMC/RAFC)
+43 43 Brasilia (RSMC/RAFC)
+45 45 Santiago
+46 sbsj Brasilian Space Agency - INPE
+51 51 Miami (RSMC/RAFC)
+52 52 National Hurricane Center, Miami
+53 53 Canadian Meteorological Service - Montreal (RSMC)
+54 cwao Canadian Meteorological Service - Montreal (RSMC)
+55 55 San Francisco
+57 57 U.S. Air Force - Global Weather Center
+58 fnmo US Navy - Fleet Numerical Oceanography Center
+59 59 NOAA Forecast Systems Lab, Boulder CO
+60 60 National Center for Atmospheric Research (NCAR), Boulder, CO
+64 64 Honolulu
+65 65 Darwin (RSMC)
+67 67 Melbourne (RSMC)
+69 nzkl Wellington (RSMC/RAFC)
+74 egrr U.K. Met Office - Exeter
+76 76 Moscow (RSMC/RAFC)
+78 edzw Offenbach (RSMC)
+80 cnmc Rome (RSMC)
+82 eswi Norrkoping
+84 lfpw French Weather Service - Toulouse
+85 lfpw French Weather Service - Toulouse
+86 efkl Helsinki
+87 87 Belgrade
+88 enmi Oslo
+89 89 Prague
+90 90 Episkopi
+91 91 Ankara
+92 92 Frankfurt/Main (RAFC)
+93 93 London (WAFC)
+94 ekmi Copenhagen
+95 95 Rota
+96 96 Athens
+97 97 European Space Agency (ESA)
+98 ecmf European Centre for Medium-Range Weather Forecasts
+99 99 DeBilt, Netherlands
+#100 to 109 Reserved for centres in Region I which are not in the list above
+110 110 Hong-Kong
+#111 to 133 Reserved for centres in Region II which are not in the list above
+#134 to 153 Reserved for centres in Region I which are not listed above
+#154 to 159 Reserved for centres in Region III which are not in the list above
+160 160 US NOAA/NESDIS
+# 161 to 185 Reserved for centres in Region IV which are not in the list above
+# 186 to 198 Reserved for centres in Region I which are not listed above
+# 199 to 209 Reserved for centres in Region V which are not in the list above
+195 wiix Indonesia (NMC)
+204 niwa National Institute of Water and Atmospheric Research (NIWA - New Zealand)
+210 210  Frascati (ESA/ESRIN)
+211 211  Lannion
+212 212  Lisboa
+213 213  Reykjavik
+214 lemm INM
+215 lssw Zurich
+216 216  Service ARGOS Toulouse
+217 217 Bratislava
+218 habp Budapest
+219 219 Ljubljana
+220 220 Warsaw
+221 221 Zagreb
+222 222 Albania (NMC)
+223 223 Armenia (NMC)
+224 lowm Austria
+227 ebum Belgium (NMC)
+228 228 Bosnia and Herzegovina (NMC)
+229 229 Bulgaria (NMC)
+230 230 Cyprus (NMC)
+231 231 Estonia (NMC)
+232 232 Georgia (NMC)
+233 eidb Dublin
+234 234 Israel (NMC)
+235 ingv INGV
+239 crfc CERFAX
+240 240 Malta (NMC)
+241 241 Monaco
+242 242 Romania (NMC)
+244 vuwien VUWien
+245 knmi KNMI
+246 ifmk IfM-Kiel
+247 hadc Hadley Centre
+250 cosmo COnsortium for Small scale MOdelling (COSMO)
+251 251 Meteorological Cooperation on Operational NWP (MetCoOp)
+252 mpim Max Planck Institute for Meteorology (MPI-M)
+254 eums EUMETSAT Operation Centre
+255 consensus Consensus
+256 256 Angola (NMC)
+257 257 Benin (NMC)
+258 258 Botswana (NMC)
+259 259 Burkina Faso (NMC)
+260 260 Burundi (NMC)
+261 261 Cameroon (NMC)
+262 262 Cabo Verde (NMC)
+263 263 Central African Republic (NMC)
+264 264 Chad (NMC)
+265 265 Comoros (NMC)
+266 266 Democratic Republic of the Congo (NMC)
+267 267 Djibouti (NMC)
+268 268 Eritrea (NMC)
+269 269 Ethiopia (NMC)
+270 270 Gabon (NMC)
+271 271 Gambia (NMC)
+272 272 Ghana (NMC)
+273 273 Guinea (NMC)
+274 274 Guinea-Bissau (NMC)
+275 275 Lesotho (NMC)
+276 276 Liberia (NMC)
+277 277 Malawi (NMC)
+278 278 Mali (NMC)
+279 279 Mauritania (NMC)
+280 280 Namibia (NMC)
+281 281 Nigeria (NMC)
+282 282 Rwanda (NMC)
+283 283 Sao Tome and Principe (NMC)
+284 284 Sierra Leone (NMC)
+285 285 Somalia (NMC)
+286 286 Sudan (NMC)
+287 287 Swaziland (NMC)
+288 288 Togo (NMC)
+289 289 Zambia (NMC)
+
+65535 65535 Missing value

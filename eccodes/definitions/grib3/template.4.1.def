@@ -1,0 +1,19 @@
+# (C) Copyright 2005- ECMWF.
+#
+# This software is licensed under the terms of the Apache Licence Version 2.0
+# which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
+# 
+# In applying this licence, ECMWF does not waive the privileges and immunities granted to it by
+# virtue of its status as an intergovernmental organisation nor does it submit to any jurisdiction.
+#
+
+# TEMPLATE 4.1, Rotated latitude/longitude regular grid on ellipsoidal planet 
+
+# Ellipsoid of revolution defined with axis lengths
+include "grib3/template.component.4.0.def"
+
+# Latitude/longitude regular grid
+include "grib3/template.component.4.1.def"
+
+# Rotation of latitude/longitude coordinate system
+include "grib3/template.component.4.2.def"

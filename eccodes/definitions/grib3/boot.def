@@ -1,0 +1,31 @@
+# (C) Copyright 2005- ECMWF.
+#
+# This software is licensed under the terms of the Apache Licence Version 2.0
+# which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
+# 
+# In applying this licence, ECMWF does not waive the privileges and immunities granted to it by
+# virtue of its status as an intergovernmental organisation nor does it submit to any jurisdiction.
+#
+
+constant one = 1 : hidden ;
+constant million = 1000000 : hidden;
+constant grib3divider   = 1000000;
+alias extraDimensionPresent=zero;
+alias is_tigge = zero;
+alias is_s2s = zero;
+transient angleSubdivisions=grib3divider;  # micro degrees
+
+meta gts_header gts_header() : no_copy,hidden,read_only;
+meta gts_TTAAii gts_header(20,6) : no_copy,hidden,read_only;
+meta gts_CCCC gts_header(27,4) : no_copy,hidden,read_only;
+meta gts_ddhh00 gts_header(32,6) : no_copy,hidden,read_only;
+
+transient missingValue   = 9999;
+constant ieeeFloats = 1 : edition_specific;
+constant isHindcast = 0;
+
+include "grib3/section.00.def"; #Indicator Section
+
+template core "grib3/sections.def";
+
+template section_11 "grib3/section.11.def"; #End Section

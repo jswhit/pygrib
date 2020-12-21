@@ -1,0 +1,6 @@
+# CODE TABLE 5.0 - Vertical domain template number
+0 0 Vertical level
+1 1 Vertical layer
+# 2-32767 Reserved
+# 32768-65534 Reserved for local use
+65535 65535 Missing

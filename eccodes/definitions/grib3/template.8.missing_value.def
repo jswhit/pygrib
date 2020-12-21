@@ -1,0 +1,15 @@
+# Missing value management
+
+# Management of explicitly missing values is an alternative to bit-map use
+# within the Overlay Section.
+# It is intended to reduce the whole GRIB message size and to provide better
+# performance when decoding data with missing values
+
+# default = 0 means No explicit missing values included within data values
+codetable[1] missingValueManagementUsed ('8.2.table',masterDir,localDir)=0;
+
+#  Primary missing value substitute
+unsigned[4] primaryMissingValueSubstitute;
+
+#  Secondary missing value substitute
+unsigned[4] secondaryMissingValueSubstitute;

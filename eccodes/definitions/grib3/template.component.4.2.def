@@ -1,0 +1,21 @@
+# Horizontal Domain Template Component 4.2 - Rotation of latitude/longitude coordinates system
+
+# Latitude of the southern pole of projection
+signed[4] latitudeOfSouthernPole : no_copy;
+alias latitudeOfTheSouthernPoleOfProjection=latitudeOfSouthernPole;
+
+# Longitude of the southern pole of projection
+unsigned[4] longitudeOfSouthernPole : no_copy;
+alias longitudeOfTheSouthernPoleOfProjection=longitudeOfSouthernPole;
+
+meta  geography.latitudeOfSouthernPoleInDegrees  scale(latitudeOfSouthernPole,
+                                                       one,grib3divider,truncateDegrees) : dump;
+meta  geography.longitudeOfSouthernPoleInDegrees g2lon(longitudeOfSouthernPole) : dump;
+
+# Angle of rotation of projection
+ieeefloat angleOfRotation : dump,edition_specific ;
+alias geography.angleOfRotationInDegrees=angleOfRotation;
+
+alias angleOfRotationOfProjection=angleOfRotation;
+
+alias isRotatedGrid=one;

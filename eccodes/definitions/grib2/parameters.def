@@ -1,0 +1,35 @@
+# (C) Copyright 2005- ECMWF.
+
+transient dummyc=0: hidden;
+
+
+concept paramIdLegacyECMF(defaultParameter,"paramId.legacy.def",conceptsMasterDir,conceptsLocalDirECMF): long_type,no_copy,hidden;
+concept paramIdECMF (paramIdLegacyECMF,"paramId.def",conceptsMasterDir,conceptsLocalDirECMF): long_type,no_copy;
+concept paramId (paramIdECMF,"paramId.def",conceptsDir2,conceptsDir1): long_type;
+
+concept shortNameLegacyECMF(defaultShortName,"shortName.legacy.def",conceptsMasterDir,conceptsLocalDirECMF): no_copy,dump,hidden;
+concept shortNameECMF (shortNameLegacyECMF,"shortName.def",conceptsMasterDir,conceptsLocalDirECMF): no_copy,dump;
+concept ls.shortName (shortNameECMF,"shortName.def",conceptsDir2,conceptsDir1): no_copy,dump;
+
+concept unitsLegacyECMF(defaultName,"units.legacy.def",conceptsMasterDir,conceptsLocalDirECMF): no_copy,hidden;
+concept unitsECMF (unitsLegacyECMF,"units.def",conceptsMasterDir,conceptsLocalDirECMF): no_copy;
+concept units (unitsECMF,"units.def",conceptsDir2,conceptsDir1): no_copy;
+
+concept nameLegacyECMF(defaultName,"name.legacy.def",conceptsMasterDir,conceptsLocalDirECMF): no_copy,dump,hidden;
+concept nameECMF(nameLegacyECMF,"name.def",conceptsMasterDir,conceptsLocalDirECMF): no_copy,dump;
+concept name(nameECMF,"name.def",conceptsDir2,conceptsDir1): no_copy,dump;
+
+concept cfNameLegacyECMF(defaultShortName,"cfName.legacy.def",conceptsMasterDir,conceptsLocalDirECMF): no_copy,dump,hidden;
+concept cfNameECMF(cfNameLegacyECMF,"cfName.def",conceptsMasterDir,conceptsLocalDirECMF) : no_copy,dump;
+concept cfName(cfNameECMF,"cfName.def",conceptsDir2,conceptsDir1) : no_copy,dump;
+
+concept cfVarNameLegacyECMF(defaultShortName,"cfVarName.legacy.def",conceptsMasterDir,conceptsLocalDirECMF): no_copy,dump,hidden;
+concept cfVarNameECMF (cfVarNameLegacyECMF,"cfVarName.def",conceptsMasterDir,conceptsLocalDirECMF): no_copy,dump;
+concept cfVarName (cfVarNameECMF,"cfVarName.def",conceptsDir2,conceptsDir1): no_copy,dump;
+
+# modelName: Contribution from Daniel Lee @ DWD
+concept modelName (defaultName,"modelName.def",conceptsDir2,conceptsDir1): no_copy,dump,read_only;
+
+template_nofail names "grib2/products_[productionStatusOfProcessedData].def";
+
+meta ifsParam ifs_param(paramId,type);

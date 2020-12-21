@@ -1,0 +1,17 @@
+# modelName: Contribution from Daniel Lee @ DWD
+# definitions for Zurich
+'cosmo-1' = {
+    generatingProcessIdentifier=101;
+}
+'cosmo-2' = {
+    generatingProcessIdentifier=102;
+}
+'cosmo-7' = {
+    generatingProcessIdentifier=107;
+}
+'cosmo-e' = {
+    generatingProcessIdentifier=103;
+}
+'cosmo-e' = {
+    generatingProcessIdentifier=130;
+}

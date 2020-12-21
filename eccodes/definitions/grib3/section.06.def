@@ -1,0 +1,22 @@
+# (C) Copyright 2005- ECMWF.
+#
+# This software is licensed under the terms of the Apache Licence Version 2.0
+# which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
+# 
+# In applying this licence, ECMWF does not waive the privileges and immunities granted to it by
+# virtue of its status as an intergovernmental organisation nor does it submit to any jurisdiction.
+#
+
+# Section 6 - Generating Process Section
+
+position offsetSection6;
+section_length[4] section6Length;
+meta section6Pointer section_pointer(offsetSection6,section6Length,6);
+unsigned[1] numberOfSection = 6: read_only;
+
+unsigned[2] section6UniqueIdentifier; # SUI
+
+codetable[2] generatingProcessTemplateNumber ('6.0.table',masterDir,localDir) =0 : dump,edition_specific;
+template generatingProcessTemplate "grib3/template.6.[generatingProcessTemplateNumber:i].def";
+
+meta md5Section6 md5(offsetSection6, section6Length);

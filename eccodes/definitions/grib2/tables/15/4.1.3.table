@@ -1,0 +1,6 @@
+# Code table 4.1 - Parameter category by product discipline
+0 0 Image format products 
+1 1 Quantitative products 
+# 2-191 Reserved 
+# 192-254 Reserved for local use 
+255 255 Missing 

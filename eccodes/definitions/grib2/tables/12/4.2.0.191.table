@@ -1,0 +1,7 @@
+# Code table 4.2 - Parameter number by product discipline and parameter category
+0 0 Seconds prior to initial reference time (defined in Section 1) (s)
+1 1 Geographical latitude (deg N)
+2 2 Geographical longitude (deg E)
+# 3-191 Reserved 
+# 192-254 Reserved for local use 
+255 255 Missing 

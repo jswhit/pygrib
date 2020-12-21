@@ -1,0 +1,5 @@
+# CODE TABLE 3.2 - Time domain template number
+0 0 Forecast point in time
+# 1-32767 Reserved
+# 32768-65534 Reserved for local use
+65535 65535 Missing

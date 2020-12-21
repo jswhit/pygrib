@@ -1,0 +1,8 @@
+# (C) Copyright 2005- ECMWF.
+
+# Grid point data - Simple packing with logarithmic preprocessing
+constant typeOfPreProcessing=1;
+
+include "grib2/template.5.packing.def";
+
+ieeefloat   preProcessingParameter  : read_only;

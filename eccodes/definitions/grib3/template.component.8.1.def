@@ -1,0 +1,10 @@
+# Data Representation Template Component 8.1 - Grid point data - IEEE floating point data
+
+transient bitsPerValue=0 : hidden;
+transient referenceValue=0  : hidden;
+transient binaryScaleFactor=0 : hidden;
+transient decimalScaleFactor=0 : hidden;
+alias numberOfBits = bitsPerValue;
+alias numberOfBitsContainingEachPackedValue = bitsPerValue;
+
+codetable[1] precision ('8.3.table',masterDir,localDir) = 1 : edition_specific;

@@ -1,0 +1,20 @@
+# CODE TABLE 7.3 - Parameter number by product discipline and parameter category
+# Product discipline 0 - Meteorological products, parameter category 0: temperature
+0 0 Temperature (K)
+1 1 Virtual temperature (K)
+2 2 Potential temperature (K)
+3 3 Pseudo-adiabatic potential temperature or equivalent potential temperature (K)
+# 4-5 Reserved
+6 6 Dewpoint temperature (K)
+7 7 Dewpoint depression (or deficit) (K)
+8 8 Lapse rate (K m-1)
+9 9 Temperature anomaly (K)
+10 10 Latent heat net flux (W m-2)
+11 11 Sensible heat net flux (W m-2)
+12 12 Heat index (K)
+13 13 Wind chill factor (K)
+# 14 Reserved
+15 15 Virtual potential temperature (K)
+# 16-191 Reserved
+# 192-254 Reserved for local use
+255 255 Missing

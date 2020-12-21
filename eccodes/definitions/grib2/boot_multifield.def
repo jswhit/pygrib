@@ -1,0 +1,31 @@
+# (C) Copyright 2005- ECMWF.
+#
+# This software is licensed under the terms of the Apache Licence Version 2.0
+# which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
+# 
+# In applying this licence, ECMWF does not waive the privileges and immunities granted to it by
+# virtue of its status as an intergovernmental organisation nor does it submit to any jurisdiction.
+#
+
+constant grib2divider   = 1000000;
+transient  missingValue =  9999;
+constant ieeeFloats   = 1 : edition_specific;
+
+
+ascii[4]     identifier;
+ascii[2]     reserved : hidden;
+codetable[1] discipline 'grib2/0.0.table';
+unsigned[1]  editionNumber : edition_specific;
+section_length[8]    totalLength;
+
+
+template     core "grib2/sections.def";
+
+lookup[4] endOfProduct(0);
+
+  if(endOfProduct != `7777`){
+      template     core "grib2/sections.def";
+  }
+
+  template     section8 "grib2/section.8.def";
+

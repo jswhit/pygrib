@@ -1,0 +1,91 @@
+# Vertical Coordinate Template Component 5.0 - Vertical level
+
+#  Type of first fixed surface
+codetable[1] typeOfFirstFixedSurface ('5.1.table',masterDir,localDir) : dump,no_copy,edition_specific,string_type;
+meta unitsOfFirstFixedSurface codetable_units(typeOfFirstFixedSurface) : dump;
+meta nameOfFirstFixedSurface codetable_title(typeOfFirstFixedSurface) : dump;
+
+#  Scale factor of first fixed surface
+signed[1] scaleFactorOfFirstFixedSurface = missing()  : can_be_missing,dump,no_copy,edition_specific;
+
+#  Scaled value of first fixed surface
+unsigned[4] scaledValueOfFirstFixedSurface = missing()  : can_be_missing,dump,no_copy,edition_specific;
+
+####
+transient pressureUnits="hPa";
+
+concept_nofail vertical.typeOfLevel (unknown) {
+#set uses the last one
+#get returns the first match
+  'surface'       = { typeOfFirstFixedSurface=1; }
+  'cloudBase'     = { typeOfFirstFixedSurface=2; }
+  'cloudTop'      = { typeOfFirstFixedSurface=3; }
+  'isothermZero'  = { typeOfFirstFixedSurface=4; }
+  'adiabaticCondensation' = {typeOfFirstFixedSurface=5; }
+  'maxWind' = {typeOfFirstFixedSurface=6; }
+  'tropopause' = {typeOfFirstFixedSurface=7;  }
+  'nominalTop' = {typeOfFirstFixedSurface=8;  }
+  'seaBottom' = {typeOfFirstFixedSurface=9;   }
+  'isothermal' = {typeOfFirstFixedSurface=20; }
+  'isobaricInPa' = {typeOfFirstFixedSurface=100; pressureUnits='Pa'; }
+  'isobaricInhPa' = {typeOfFirstFixedSurface=100; pressureUnits='hPa'; }
+  # 'isobaricLayer' = {typeOfFirstFixedSurface=100; typeOfSecondFixedSurface=100;}
+  'meanSea' = { typeOfFirstFixedSurface=101; }
+  'heightAboveSea' = {typeOfFirstFixedSurface=102; }
+  # 'heightAboveSeaLayer' = {typeOfFirstFixedSurface=102; typeOfSecondFixedSurface=102;}
+  'heightAboveGround' = {typeOfFirstFixedSurface=103; }
+  # 'heightAboveGroundLayer' = {typeOfFirstFixedSurface=103; typeOfSecondFixedSurface=103;}
+  'sigma' = {typeOfFirstFixedSurface=104; }
+  # 'sigmaLayer' = {typeOfFirstFixedSurface=104; typeOfSecondFixedSurface=104;}
+  'hybrid' = {typeOfFirstFixedSurface=105; }
+  'hybridHeight' = {typeOfFirstFixedSurface=118; }
+  # 'hybridLayer' = {typeOfFirstFixedSurface=105; typeOfSecondFixedSurface=105; }
+  'depthBelowLand' = {typeOfFirstFixedSurface=106;  }
+  # 'depthBelowLandLayer' = {typeOfFirstFixedSurface=106; typeOfSecondFixedSurface=106;}
+  'theta' = {typeOfFirstFixedSurface=107; }
+  # 'thetaLayer' = {typeOfFirstFixedSurface=107;typeOfSecondFixedSurface=107;}
+  'pressureFromGround' = {typeOfFirstFixedSurface=108; }
+  # 'pressureFromGroundLayer' = {typeOfFirstFixedSurface=108; typeOfSecondFixedSurface=108;}
+  'potentialVorticity' = {typeOfFirstFixedSurface=109; }
+  'eta' = {typeOfFirstFixedSurface=111; }
+# In the case of Generalized vertical height coordinates, NV must be 6
+  # 'generalVertical' = {genVertHeightCoords=1; typeOfFirstFixedSurface=150; NV=6;}
+  # 'generalVerticalLayer' = {genVertHeightCoords=1; typeOfFirstFixedSurface=150; typeOfSecondFixedSurface=150; NV=6;}
+  'depthBelowSea' = {typeOfFirstFixedSurface=160; }
+  # 'entireAtmosphere' = {typeOfFirstFixedSurface=1;typeOfSecondFixedSurface=8;}
+  # 'entireOcean' = {typeOfFirstFixedSurface=1;typeOfSecondFixedSurface=9;}
+  'snow' = {typeOfFirstFixedSurface=114; }
+  # 'snowLayer' = {typeOfFirstFixedSurface=114; typeOfSecondFixedSurface=114;}
+}
+alias levelType=typeOfFirstFixedSurface;
+
+# Only one surface
+meta level g2level(typeOfFirstFixedSurface,
+    scaleFactorOfFirstFixedSurface,
+    scaledValueOfFirstFixedSurface,
+    pressureUnits)  :dump;
+transient bottomLevel=level; # Do not use alias (see GRIB-725)
+transient topLevel=level;
+
+alias ls.level=level;
+alias vertical.level=level;
+alias vertical.bottomLevel=bottomLevel;
+alias vertical.topLevel=topLevel;
+
+# See GRIB-74 why we store the pressureUnits in a transient
+transient tempPressureUnits=pressureUnits;
+if (!(typeOfLevel is "surface")) {
+    if (tempPressureUnits is "Pa") {
+        meta marsLevel scale(level,one,hundred) : read_only;
+        alias mars.levelist=marsLevel;
+    } else {
+        alias mars.levelist = level;
+    }
+}
+alias mars.levtype  = typeOfFirstFixedSurface;
+# GRIB-372: levelist alias does not pertain to surface parameters
+if (levtype is "sfc") {
+    unalias mars.levelist;
+}
+
+alias ls.typeOfLevel=typeOfLevel;

@@ -1,0 +1,12 @@
+# CODE TABLE 7.3 - Parameter number by product discipline and parameter category
+# Product discipline 0 - Meteorological products, parameter category 2: momentum
+0 0 Wind direction (from which blowing) (degree true)
+1 1 Wind speed (m/s)
+2 2 u-component of wind (m/s)
+3 3 v-component of wind (m/s)
+4 4 Stream function (m2/s)
+5 5 Velocity potential (m2/s)
+6 6 Montgomery stream function (m2 s-2)
+# 7-191 Reserved 
+# 192-254 Reserved for local use 
+255 255 Missing 

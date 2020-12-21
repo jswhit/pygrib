@@ -1,0 +1,9 @@
+# Observable Property Template Component 7.3 - Aerosol size
+
+codetable[1] typeOfSizeInterval ('7.4.table',masterDir,localDir) : dump;
+alias typeOfIntervalForFirstAndSecondSize=typeOfSizeInterval;
+
+signed[1] scaleFactorOfFirstSize : dump;
+signed[4] scaledValueOfFirstSize :dump; # in metres
+signed[1] scaleFactorOfSecondSize = missing() : can_be_missing,dump;
+signed[4] scaledValueOfSecondSize = missing() : can_be_missing,dump; # in metres

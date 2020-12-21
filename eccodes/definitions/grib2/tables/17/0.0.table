@@ -1,0 +1,10 @@
+# Code table 0.0 - Discipline of processed data in the GRIB message, number of GRIB Master table
+0 0 Meteorological products 
+1 1 Hydrological products 
+2 2 Land surface products 
+3 3 Space products 
+# 4-9 Reserved 
+10 10 Oceanographic products 
+# 11-191 Reserved 
+# 192-254 Reserved for local use 
+255 255 Missing 

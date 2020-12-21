@@ -1,0 +1,2 @@
+# Type of original field values
+codetable[1] typeOfOriginalFieldValues ('8.1.table',masterDir,localDir) = 0; # Default set to floating

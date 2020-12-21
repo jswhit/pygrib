@@ -1,0 +1,4 @@
+# Code table 7.3 - Parameter number by product discipline and parameter category
+# Product discipline 0 - Meteorological products, parameter category 17: electrodynamics
+0 0 Lightning strike density (m-2 s-1)
+1 1 Lightning potential index (LPI) (J kg-1)

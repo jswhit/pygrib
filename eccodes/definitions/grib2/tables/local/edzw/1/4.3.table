@@ -1,0 +1,17 @@
+192 192 bias corrected ensemble forecast
+193 193 calibrated forecast
+194 194 calibrated ensemble f.
+195 195 interpolated analysis/forecast
+196 196 invariant data
+197 197 smoothed forecast
+198 198 smoothed and calibrated forecast
+199 199 probability forecast derived by neighbourhood method
+201 201 diff. analysis - first guess
+200 200 diff. init. analysis - analysis*
+202 202 nudging
+203 203 nudgecast
+204 204 product derived by statistical model
+205 205 deterministic forecast on ensemble mean(DOM)
+206 206 time filtered bias
+220 220 postprocessing
+255 255  Missing

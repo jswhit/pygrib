@@ -1,0 +1,25 @@
+# (C) Copyright 2005- ECMWF.
+
+# TEMPLATE 7.4, Grid point data - simple packing
+# Octets 6-nn : Binary data values - binary string, with each
+# (scaled)
+# ????          data_values__binary_string_with_each
+
+meta   codedValues data_raw_packing(
+              section7Length,
+              offsetBeforeData,
+              offsetSection7,
+              numberOfValues,
+              precision
+            ): read_only;
+            
+meta values data_apply_bitmap(codedValues,
+                                bitmap,
+                                missingValue,
+                                binaryScaleFactor,
+                                numberOfDataPoints,
+                                numberOfValues) : dump;
+
+alias data.packedValues = codedValues; 
+                                
+template statistics "common/statistics_grid.def";

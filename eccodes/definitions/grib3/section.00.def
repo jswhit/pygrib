@@ -1,0 +1,26 @@
+# (C) Copyright 2005- ECMWF.
+#
+# This software is licensed under the terms of the Apache Licence Version 2.0
+# which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
+# 
+# In applying this licence, ECMWF does not waive the privileges and immunities granted to it by
+# virtue of its status as an intergovernmental organisation nor does it submit to any jurisdiction.
+#
+
+# Section 0 - Indicator Section
+
+position     offsetSection0;
+constant     section0Length = 16;
+ascii[4]     identifier = "GRIB"     : read_only;
+unsigned[2]  reserved  = missing()   : can_be_missing,hidden,read_only,edition_specific;
+
+codetable[1] tablesVersion 'grib3/tables/0.0.table' = 1 : edition_specific;
+alias gribMasterTablesVersionNumber=tablesVersion;
+
+unsigned[1]  editionNumber = 3 : edition_specific,dump;
+alias ls.edition = editionNumber;
+
+section_length[8]  totalLength;
+position startOfHeaders; # See later for endOfHeadersMarker
+
+meta section0Pointer section_pointer(offsetSection0,section0Length,0);

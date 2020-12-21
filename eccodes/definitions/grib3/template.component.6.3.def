@@ -1,0 +1,3 @@
+# Generating Process Template Component 6.3 - Statistical post-processing of all ensemble members
+
+codetable[1] typeOfStatisticalPostProcessingOfEnsembleMembers ('6.3.table',masterDir,localDir) = 255 : dump;

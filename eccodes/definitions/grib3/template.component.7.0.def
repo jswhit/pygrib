@@ -1,0 +1,13 @@
+# Observable Property Template Component 7.0 - Observable property by discipline, category and number
+
+# Parameter discipline
+codetable[1] parameterDiscipline('7.1.table',masterDir,localDir) : dump;
+alias discipline = parameterDiscipline;
+
+# Parameter category
+codetable[1] parameterCategory ('7.2.[discipline:i].table',masterDir,localDir) : dump;
+
+# Parameter number
+codetable[2] parameterNumber ('7.3.[discipline:i].[parameterCategory:i].table',masterDir,localDir) : dump;
+meta parameterUnits codetable_units(parameterNumber) : dump;
+meta parameterName  codetable_title(parameterNumber) : dump;

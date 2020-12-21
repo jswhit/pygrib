@@ -1,0 +1,22 @@
+# (C) Copyright 2005- ECMWF.
+
+template mars_labeling "grib1/mars_labeling.def";
+
+# zeroes
+
+pad padding_loc6_1(2);
+
+unsigned[3] dateSSTFieldUsed  : dump;
+
+unsigned[1] typeOfSSTFieldUsed  : dump;
+
+unsigned[1] countOfICEFieldsUsed  : dump;
+
+
+ICEFieldsUsed list(countOfICEFieldsUsed)
+{
+  unsigned[3] dateOfIceFieldUsed : dump ;
+  unsigned[1] satelliteNumber : dump ;
+}
+
+constant GRIBEXSection1Problem = 56 + countOfICEFieldsUsed * 3 - section1Length ;

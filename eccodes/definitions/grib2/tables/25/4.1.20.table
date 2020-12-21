@@ -1,0 +1,7 @@
+# Code table 4.1 - Parameter category by product discipline
+0 0 Health indicators 
+1 1 Epidemiology 
+2 2 Socioeconomic indicators 
+# 3-191 Reserved 
+# 192-254 Reserved for local use 
+255 255 Missing 

@@ -1,0 +1,6 @@
+# (C) Copyright 2005- ECMWF.
+
+# TEMPLATE 4.1000, Cross section of analysis and forecast at a point in time
+
+include "grib2/template.4.parameter.def"
+include "grib2/template.4.point_in_time.def";

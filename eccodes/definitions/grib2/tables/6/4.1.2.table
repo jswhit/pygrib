@@ -1,0 +1,11 @@
+#Discipline 2: Land Surface Products
+#Category Description
+0 0 Vegetation/Biomass
+1 1 Agri-/aquacultural Special Products
+2 2 Transportation-related Products
+3 3 Soil Products
+# 4-191 Reserved
+#192-254 Reserved for local use
+255 255 Missing
+
+

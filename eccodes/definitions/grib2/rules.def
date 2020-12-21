@@ -1,0 +1,12 @@
+# (C) Copyright 2005- ECMWF.
+
+# Experimental stuff
+
+transient isAccumulation = 0 ;
+transient isEPS          = 0 ;
+
+when(isAccumulation and !isEPS)
+	set productDefinitionTemplateNumber = 8;
+
+when(isAccumulation and  isEPS)
+	set productDefinitionTemplateNumber = 11;

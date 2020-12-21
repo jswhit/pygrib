@@ -1,0 +1,6 @@
+# CODE TABLE 7.3 - Parameter number by product discipline and parameter category
+# Product discipline 0 - Meteorological products, parameter category 13: aerosols
+0 0 Aerosol type
+# 1-191 Reserved 
+# 192-254 Reserved for local use 
+255 255 Missing 

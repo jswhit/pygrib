@@ -1,0 +1,8 @@
+# CODE TABLE 4.0 - Grid definition template number
+0 0 Latitude/longitude regular grid on an ellipsoidal planet
+1 1 Rotated latitude/longitude regular grid on an ellipsoidal planet
+2 2 Stretched latitude/longitude regular grid on an ellipsoidal planet
+3 3 Stretched and rotated latitude/longitude regular grid on an ellipsoidal planet
+# 4-32767 Reserved
+# 32768-65534 Reserved for local use
+65335 65535 Missing

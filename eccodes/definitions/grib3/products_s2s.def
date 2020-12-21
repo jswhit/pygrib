@@ -1,0 +1,106 @@
+# (C) Copyright 2005- ECMWF.
+#
+# This software is licensed under the terms of the Apache Licence Version 2.0
+# which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
+# 
+# In applying this licence, ECMWF does not waive the privileges and immunities granted to it by
+# virtue of its status as an intergovernmental organisation nor does it submit to any jurisdiction.
+#
+
+# S2S
+constant marsClass  = 's2';
+constant marsModel  = 'glob';
+alias is_s2s = one;
+
+alias parameter.paramId=paramId;
+alias parameter.shortName=shortName;
+alias parameter.units=units;
+alias parameter.name=name;
+
+alias mars.expver = marsExpver;
+alias mars.class  = marsClass;
+alias mars.param = paramId;
+alias mars.model = marsModel;
+
+# See GRIB-761. For Italy, subCentre 102 is ISAC-CNR
+if (centre is "cnmc" && subCentre == 102) {
+    constant cnmc_isac = 'isac';
+    alias mars.origin = cnmc_isac;
+} else {
+    alias mars.origin = centre;
+}
+
+unalias mars.domain;
+
+concept marsType {
+
+   fc = {
+     typeOfProcessedData = 2;
+   }
+   "9" = {
+     typeOfProcessedData = 2;
+   }
+
+   cf = {
+     typeOfProcessedData = 3;
+   }
+   "10" = {
+     typeOfProcessedData = 3;
+   }
+
+   pf = {
+     typeOfProcessedData = 4;
+   }
+   "11" = {
+     typeOfProcessedData = 4;
+   }
+
+   "default" = {
+     dummyc = 0;
+   }
+}
+
+# See GRIB-205 re no_copy
+concept marsStream {
+
+    oper = {
+      typeOfProcessedData = 0;
+    }
+
+    oper = {
+      typeOfProcessedData = 2;
+    }
+
+    enfo = {
+      typeOfProcessedData = 3;
+    }
+
+    enfo = {
+      typeOfProcessedData = 4;
+    }
+
+    enfo = {
+      typeOfProcessedData = 8;
+    }
+
+    "default" = {
+      dummyc = 0;
+    }
+} : no_copy;
+
+alias mars.stream = marsStream;
+alias mars.type   = marsType;
+
+# Normally MARS step is endStep but for monthly means we want stepRange
+if (stepType is "avg") {
+   alias mars.step = stepRange;
+}
+
+if (isHindcast == 1) {
+   # S2S reforecasts
+   constant theHindcastMarsStream = "enfh";
+   alias mars.stream = theHindcastMarsStream;
+   alias mars.hdate = dataDate;
+   alias mars.date  = modelVersionDate;
+   alias mars.time  = modelVersionTime;
+}

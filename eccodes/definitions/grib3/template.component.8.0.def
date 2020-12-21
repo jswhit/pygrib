@@ -1,0 +1,6 @@
+# Data Representation Template Component 8.0 - Grid point data - Simple packing
+
+include "grib3/template.8.packing.def";
+include "grib3/template.8.original_values.def";
+include "grib3/template.8.missing_value.def";
+label 'Template Component 8.0';

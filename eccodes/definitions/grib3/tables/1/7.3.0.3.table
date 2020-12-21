@@ -1,0 +1,16 @@
+# CODE TABLE 7.3 - Parameter number by product discipline and parameter category
+# Product discipline 0 - Meteorological products, parameter category 3: mass
+0 0 Pressure (Pa)
+1 1 Pressure reduced to MSL (Pa)
+2 2 Pressure tendency (Pa/s)
+3 3 ICAO Standard Atmosphere Reference Height (m)
+4 4 Geopotential (m2 s-2)
+5 5 Geopotential height (gpm)
+6 6 Geometric height (m)
+7 7 Standard deviation of height (m)
+8 8 Pressure anomaly (Pa)
+9 9 Geopotential height anomaly (gpm)
+10 10 Density (kg m-3)
+# 11-191 Reserved 
+# 192-254 Reserved for local use 
+255 255 Missing 

@@ -1,0 +1,45 @@
+# (C) Copyright 2005- ECMWF.
+#
+# This software is licensed under the terms of the Apache Licence Version 2.0
+# which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
+# 
+# In applying this licence, ECMWF does not waive the privileges and immunities granted to it by
+# virtue of its status as an intergovernmental organisation nor does it submit to any jurisdiction.
+#
+
+# Section 3 - Time Domain Section
+
+position offsetSection3;
+section_length[4] section3Length ;
+meta section3Pointer section_pointer(offsetSection3,section3Length,3);
+unsigned[1] numberOfSection = 3 :read_only;
+
+unsigned[2] section3UniqueIdentifier; # SUI
+
+codetable[1] significanceOfReferenceDateAndTime ('3.0.table',masterDir,localDir) = 1 : dump;
+
+# The type of calendar used applies to the entire section including the Time Domain Template
+codetable[1] typeOfCalendar ('3.1.table',masterDir,localDir) = 255 : dump,no_copy,edition_specific;
+
+# Year, month, day etc form the Reference date and time
+# Note: year is SIGNED integer (according to Reg. 92.1.5) to represent large negative dates (BC).
+#       This was a requirement for the climate.
+signed[4]   year ;
+unsigned[1] month ;
+unsigned[1] day ;
+unsigned[1] hour ;
+unsigned[1] minute ;
+unsigned[1] second ;
+
+meta  dataDate g2date(year,month,day) : dump;
+alias mars.date = dataDate;
+alias ls.date = dataDate;
+meta  julianDay julian_day(dataDate,hour,minute,second) : edition_specific;
+meta  dataTime  time(hour,minute,second) : dump;
+alias mars.time = dataTime;
+
+codetable[2] timeDomainTemplateNumber ('3.2.table',masterDir,localDir) =0 : dump,edition_specific;
+template timeDomainTemplate "grib3/template.3.[timeDomainTemplateNumber:l].def";
+
+meta md5Section3 md5(offsetSection3,section3Length);
+alias md5TimeDomainSection = md5Section3;

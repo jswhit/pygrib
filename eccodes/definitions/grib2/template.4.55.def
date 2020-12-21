@@ -1,0 +1,7 @@
+# (C) Copyright 2005- ECMWF.
+
+# TEMPLATE 4.55, Spatio-temporal changing tiles at a horizontal level or horizontal layer at a point in time
+
+include "grib2/template.4.parameter_tile.def"
+include "grib2/template.4.point_in_time.def"
+include "grib2/template.4.horizontal.def"

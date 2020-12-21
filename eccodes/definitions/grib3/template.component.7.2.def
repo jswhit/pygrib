@@ -1,0 +1,5 @@
+# Observable Property Template Component 7.2 - Chemical or physical constituents
+
+# Common code table C-14
+codetable[2] atmosphericChemicalOrPhysicalConstituentType ('7.230.table',masterDir,localDir) : dump;
+alias constituentType=atmosphericChemicalOrPhysicalConstituentType;

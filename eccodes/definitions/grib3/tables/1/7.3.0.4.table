@@ -1,0 +1,10 @@
+# CODE TABLE 7.3 - Parameter number by product discipline and parameter category
+# Product discipline 0 - Meteorological products, parameter category 4: short-wave radiation
+0 0 Net short-wave radiation flux (surface) (W m-2)
+1 1 Net short-wave radiation flux (top of atmosphere) (W m-2)
+2 2 Short-wave radiation flux (W m-2)
+3 3 Global radiation flux (W m-2)
+4 4 Brightness temperature (K)
+# 5-191 Reserved 
+# 192-254 Reserved for local use 
+255 255 Missing 

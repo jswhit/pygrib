@@ -1,0 +1,133 @@
+# Horizontal Domain Template Component 4.1 - Latitude/longitude regular grid
+
+# Ni - number of points along a parallel
+unsigned[4] Ni : dump; # Note: This is for a REGULAR GRID so Ni cannot be missing
+alias numberOfPointsAlongAParallel=Ni;
+alias Nx = Ni;
+alias geography.Ni=Ni;
+
+# Nj - number of points along a meridian
+unsigned[4] Nj : dump;
+alias numberOfPointsAlongAMeridian=Nj;
+alias Ny = Nj ;
+alias geography.Nj=Nj;
+
+# Basic angle of the initial production domain
+unsigned[4] basicAngleOfTheInitialProductionDomain = 0;
+transient mBasicAngle=basicAngleOfTheInitialProductionDomain*oneMillionConstant;
+
+transient angleMultiplier  = 1;
+transient mAngleMultiplier = 1000000;
+when (basicAngleOfTheInitialProductionDomain == 0) {
+  set angleMultiplier  = 1;
+  set mAngleMultiplier = 1000000;
+} else {
+  set angleMultiplier  = basicAngleOfTheInitialProductionDomain;
+  set mAngleMultiplier = mBasicAngle;
+}
+
+# Subdivisions of basic angle used to define extreme longitudes and latitudes, and direction increments
+unsigned[4] subdivisionsOfBasicAngle = missing() : can_be_missing;
+
+transient angleDivisor = 1000000;
+when (missing(subdivisionsOfBasicAngle) || subdivisionsOfBasicAngle == 0) {
+  set angleDivisor  = 1000000;
+} else {
+  set angleDivisor  = subdivisionsOfBasicAngle;
+}
+
+# Note: Basic angle of the initial production domain and subdivisions of this basic angle are
+# provided to manage cases where the recommended unit of 10^-6 degrees is not applicable
+# to describe the extreme longitudes and latitudes, and direction increments.
+# For these descriptors, the unit is equal to the ratio of the basic angle and the subdivisions number.
+# For ordinary cases, zero and missing values should be coded, equivalent to respective values
+# of 1 and 10^6 (10^-6 degrees unit)
+
+# La1 - latitude of first grid point
+signed[4] latitudeOfFirstGridPoint : edition_specific;
+alias La1  = latitudeOfFirstGridPoint;
+
+# Lo1 - longitude of first grid point
+signed[4] longitudeOfFirstGridPoint ;
+alias Lo1  = longitudeOfFirstGridPoint;
+
+include "grib3/template.4.resolution_flags.def"
+
+# La2 - latitude of last grid point
+signed[4] latitudeOfLastGridPoint :  edition_specific;
+alias La2 =  latitudeOfLastGridPoint;
+
+# Lo2 - longitude of last grid point
+signed[4] longitudeOfLastGridPoint :  edition_specific;
+alias Lo2 =  longitudeOfLastGridPoint;
+
+# Di - i direction increment
+# Direction increments are unsigned and direction of increment is represented in the scanning mode
+unsigned[4] iDirectionIncrement : can_be_missing,edition_specific;
+alias Di =  iDirectionIncrement;
+alias Dx =  iDirectionIncrement;
+
+# Dj - j direction increment
+# Direction increments are unsigned and direction of increment is represented in the scanning mode
+unsigned[4] jDirectionIncrement : can_be_missing,edition_specific;
+alias Dj =  jDirectionIncrement;
+alias Dy =  jDirectionIncrement;
+
+include "grib3/template.4.scanning_mode.def";
+
+
+meta g2grid g2grid(
+  latitudeOfFirstGridPoint,
+  longitudeOfFirstGridPoint,
+  latitudeOfLastGridPoint,
+  longitudeOfLastGridPoint,
+  iDirectionIncrement,
+  jDirectionIncrement,
+  basicAngleOfTheInitialProductionDomain,
+  subdivisionsOfBasicAngle
+  );
+
+meta      geography.latitudeOfFirstGridPointInDegrees    g2latlon(g2grid,0) : dump;
+meta      geography.longitudeOfFirstGridPointInDegrees   g2latlon(g2grid,1) : dump;
+meta      geography.latitudeOfLastGridPointInDegrees     g2latlon(g2grid,2) : dump;
+meta      geography.longitudeOfLastGridPointInDegrees    g2latlon(g2grid,3) : dump;
+
+alias xFirst=longitudeOfFirstGridPointInDegrees;
+alias yFirst=latitudeOfFirstGridPointInDegrees;
+alias xLast=longitudeOfLastGridPointInDegrees;
+alias yLast=latitudeOfLastGridPointInDegrees;
+
+meta geography.iDirectionIncrementInDegrees    g2latlon(g2grid,4,
+  iDirectionIncrementGiven) : can_be_missing,dump;
+
+meta geography.jDirectionIncrementInDegrees    g2latlon(g2grid,5,
+  jDirectionIncrementGiven) : can_be_missing,dump;
+
+alias latitudeFirstInDegrees  = latitudeOfFirstGridPointInDegrees;
+alias longitudeFirstInDegrees = longitudeOfFirstGridPointInDegrees;
+alias latitudeLastInDegrees   = latitudeOfLastGridPointInDegrees;
+alias longitudeLastInDegrees  = longitudeOfLastGridPointInDegrees;
+alias DiInDegrees = iDirectionIncrementInDegrees;
+alias DxInDegrees = iDirectionIncrementInDegrees;
+alias DjInDegrees = jDirectionIncrementInDegrees;
+alias DyInDegrees = jDirectionIncrementInDegrees;
+
+#_if ( missing(Ni) && PLPresent == 1 ) {
+#  iterator latlon_reduced(numberOfPoints,missingValue,values,
+#      latitudeFirstInDegrees,longitudeFirstInDegrees,
+#      latitudeLastInDegrees,longitudeLastInDegrees,
+#      Nj,DjInDegrees,pl);
+#  nearest latlon_reduced(values,radius,Nj,pl,longitudeFirstInDegrees,longitudeLastInDegrees);
+#} else {
+#  iterator latlon(numberOfPoints,missingValue,values,
+#                  longitudeFirstInDegrees,DiInDegrees  ,
+#                  Ni,Nj,iScansNegatively,
+#                  latitudeFirstInDegrees, DjInDegrees,jScansPositively,jPointsAreConsecutive);
+#  nearest regular(values,radius,Ni,Nj);
+#}
+meta latLonValues latlonvalues(values);
+alias latitudeLongitudeValues=latLonValues;
+meta latitudes latitudes(values,0);
+meta longitudes longitudes(values,0);
+meta distinctLatitudes latitudes(values,1);
+meta distinctLongitudes longitudes(values,1);

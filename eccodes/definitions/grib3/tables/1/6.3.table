@@ -1,0 +1,11 @@
+# CODE TABLE 6.3 - Type of statistical post-processing of ensemble members
+0 0 Unweighted mean
+1 1 Weighted mean
+2 2 Spread
+3 3 Large anomaly index
+4 4 Interquartile range (range between the 25th and 75th quantile)
+5 5 Minimum
+6 6 Maximum
+# 7-191 Reserved
+# 192-254 Reserved for local use
+255 255 Missing

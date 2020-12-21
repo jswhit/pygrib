@@ -1,0 +1,7 @@
+# modelName: Contribution from Daniel Lee @ DWD
+
+# defintions for Roma (COSMO LEPS)
+'cosmo-leps' = {
+    subCentre=98;
+    grib2LocalSectionNumber=28;
+}

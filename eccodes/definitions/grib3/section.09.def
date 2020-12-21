@@ -1,0 +1,24 @@
+# (C) Copyright 2005- ECMWF.
+#
+# This software is licensed under the terms of the Apache Licence Version 2.0
+# which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
+# 
+# In applying this licence, ECMWF does not waive the privileges and immunities granted to it by
+# virtue of its status as an intergovernmental organisation nor does it submit to any jurisdiction.
+#
+
+# Section 9 - Overlay Section
+
+position offsetSection9;
+position offsetBSection9;
+
+section_length[4] section9Length;
+meta section9Pointer section_pointer(offsetSection9,section9Length,9);
+unsigned[1] numberOfSection = 9: read_only;
+
+unsigned[2] section9UniqueIdentifier; # SUI
+
+codetable[2] overlayTemplateNumber ('9.0.table',masterDir,localDir) =0 : dump,edition_specific;
+template overlayTemplate "grib3/template.9.[overlayTemplateNumber:i].def";
+
+meta md5Section9 md5(offsetSection9, section9Length);

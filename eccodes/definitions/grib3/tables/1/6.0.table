@@ -1,0 +1,7 @@
+# CODE TABLE 6.0 - Generating process template number
+0 0 Forecast, analysis or observation
+1 1 Individual ensemble forecast or analysis, control and perturbed
+2 2 Statistical post-processing of all ensemble members
+# 3-32767 Reserved
+# 32768-65534 Reserved for local use
+65535 65535 Missing

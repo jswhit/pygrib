@@ -1,0 +1,51 @@
+# (C) Copyright 2005- ECMWF.
+
+#  Parameter category
+codetable[1] parameterCategory ('4.1.[discipline:l].table',masterDir,localDir) : dump;
+
+#  Parameter number
+codetable[1] parameterNumber ('4.2.[discipline:l].[parameterCategory:l].table',masterDir,localDir)  : dump;
+meta parameterUnits codetable_units(parameterNumber) : dump;
+meta parameterName  codetable_title(parameterNumber) : dump;
+
+# Tile specifications
+codetable[1] tileClassification ('4.242.table',masterDir,localDir) : dump;
+unsigned[1]  totalNumberOfTileAttributePairs=1 : dump;
+unsigned[1]  numberOfUsedSpatialTiles=1 : dump;
+unsigned[1]  tileIndex : dump;
+unsigned[1]  numberOfUsedTileAttributes=1 : dump;
+codetable[1] attributeOfTile ('4.241.table',masterDir,localDir) : dump;
+alias NT=totalNumberOfTileAttributePairs;
+alias NUT=numberOfUsedSpatialTiles;
+alias ITN=tileIndex;
+alias NAT=numberOfUsedTileAttributes;
+
+#  Type of generating process
+codetable[1] typeOfGeneratingProcess ('4.3.table',masterDir,localDir) : dump;
+
+#  Background generating process identifier
+# (defined by originating centre)
+unsigned[1] backgroundProcess = 255 : edition_specific;
+alias backgroundGeneratingProcessIdentifier=backgroundProcess;
+
+
+#  Analysis or forecast generating processes identifier
+# (defined by originating centre)
+unsigned[1] generatingProcessIdentifier  : dump;
+
+#  Hours of observational data cut-off after reference time
+unsigned[2] hoursAfterDataCutoff =missing() : edition_specific,can_be_missing;
+alias hoursAfterReferenceTimeOfDataCutoff=hoursAfterDataCutoff;
+
+#  Minutes of observational data cut-off after reference time
+unsigned[1]  minutesAfterDataCutoff = missing() : edition_specific,can_be_missing;
+alias minutesAfterReferenceTimeOfDataCutoff=minutesAfterDataCutoff;
+
+#  Indicator of unit of time range
+codetable[1] indicatorOfUnitOfTimeRange ('4.4.table',masterDir,localDir)  : dump;
+alias defaultStepUnits = one; # 1 means Hour. See code table 4.4
+template_nofail default_step_units "grib2/localConcepts/[centre:s]/default_step_units.def";
+codetable[1] stepUnits 'stepUnits.table' = defaultStepUnits : transient,dump,no_copy;
+
+#  Forecast time in units defined by octet 24
+signed[4] forecastTime  : dump;

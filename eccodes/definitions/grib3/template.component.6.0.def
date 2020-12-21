@@ -1,0 +1,7 @@
+# Generating Process Template Component 6.0 - Process type and identifier
+
+#  Type of generating process
+codetable[1] typeOfGeneratingProcess ('6.1.table',masterDir,localDir) : dump;
+
+#  Generating processes identifier (managed by the originating centre)
+unsigned[1] generatingProcessIdentifier : dump;

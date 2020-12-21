@@ -1,0 +1,13 @@
+# Observable Property Template Component 7.1 - Units conversion
+
+ieeefloat unitsConversionScaleFactor : dump, edition_specific,no_copy;
+ieeefloat unitsConversionOffset : dump, edition_specific,no_copy;
+
+alias ucs = unitsConversionScaleFactor;
+alias uco = unitsConversionOffset;
+
+# Notes:
+# Units conversion scale factor (ucs) and offset (uco) shall be used to encode fields in units different
+# from the units reported in table 7.3.
+# If the values encoded in the GRIB message are 've', then the values 'v' in the units provided in table 7.3
+# shall be: v = ucs*ve + uco

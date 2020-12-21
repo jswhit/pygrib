@@ -1,0 +1,11 @@
+# (C) Copyright 2005- ECMWF.
+
+# TEMPLATE 4.34, Individual ensemble forecast, control and perturbed, at a horizontal level or in a horizontal layer, in a continuous or non-continuous interval for simulated (synthetic) satellite data
+
+include "grib2/template.4.32.def"
+include "grib2/template.4.eps.def"
+include "grib2/template.4.statistical.def"
+
+alias instrument = instrumentType;
+alias ident = satelliteNumber;
+

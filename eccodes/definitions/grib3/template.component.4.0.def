@@ -1,0 +1,25 @@
+# Horizontal Domain Template Component 4.0 - Ellipsoid of revolution defined with axis lengths
+
+# Scale factor of length of semi-major axis
+unsigned[1] scaleFactorOfLengthOfSemiMajorAxis = missing() : can_be_missing, edition_specific;
+
+# Scaled value of length of semi-major axis (equatorial radius)
+unsigned[4] scaledValueOfLengthOfSemiMajorAxis = missing(): can_be_missing, edition_specific;
+
+# Scale factor of prime meridian offset
+unsigned[1] scaleFactorOfPrimeMeridianOffset = missing(): can_be_missing, edition_specific;
+
+# Scaled value of prime meridian offset
+# Note: Basic angle of the initial production domain and subdivisions of this basic angle are
+# provided to manage cases where the recommended unit of 10^-6 degrees is not applicable
+# to describe the extreme longitudes and latitudes, and direction increments.
+# For these descriptors, the unit is equal to the ratio of the basic angle and the subdivisions number.
+# For ordinary cases, zero and missing values should be coded, equivalent to respective values
+# of 1 and 10^6 (10^-6 degrees unit)
+unsigned[4] scaledValueOfPrimeMeridianOffset = missing(): can_be_missing, edition_specific;
+
+# Scale factor of length of semi-minor axis
+unsigned[1] scaleFactorOfLengthOfSemiMinorAxis = missing() : can_be_missing, edition_specific;
+
+# Scaled value of length of semi-minor axis (distance from ellipsoid centre to pole)
+unsigned[4] scaledValueOfLengthOfSemiMinorAxis = missing() : can_be_missing, edition_specific;

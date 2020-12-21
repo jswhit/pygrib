@@ -1,0 +1,2 @@
+# Note: This template is deprecated. Template 4.0 should be used instead.
+include "grib2/template.4.0.def"

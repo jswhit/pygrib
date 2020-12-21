@@ -1,0 +1,22 @@
+# (C) Copyright 2005- ECMWF.
+#
+# This software is licensed under the terms of the Apache Licence Version 2.0
+# which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
+# 
+# In applying this licence, ECMWF does not waive the privileges and immunities granted to it by
+# virtue of its status as an intergovernmental organisation nor does it submit to any jurisdiction.
+#
+
+# Section 5 - Vertical Domain Section
+
+position offsetSection5;
+section_length[4] section5Length;
+meta section5Pointer section_pointer(offsetSection5,section5Length,5);
+unsigned[1] numberOfSection = 5: read_only;
+
+unsigned[2] section5UniqueIdentifier; # SUI
+
+codetable[2] verticalDomainTemplateNumber ('5.0.table',masterDir,localDir) =0 : dump,edition_specific;
+template verticalDomainTemplate "grib3/template.5.[verticalDomainTemplateNumber:i].def";
+
+meta md5Section5 md5(offsetSection5, section5Length);

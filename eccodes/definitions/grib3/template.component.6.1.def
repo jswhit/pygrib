@@ -1,0 +1,5 @@
+# Generating Process Template Component 6.1 - Ensemble size
+
+# Number of members in ensemble
+unsigned[2] numberOfMembersInEnsemble : dump;
+alias totalNumber=numberOfMembersInEnsemble;
