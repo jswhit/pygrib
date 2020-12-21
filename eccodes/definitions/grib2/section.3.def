@@ -64,6 +64,7 @@ concept gridType {
  "regular_ll"            = { gridDefinitionTemplateNumber=0;  PLPresent=0;  }
  "reduced_ll"            = { gridDefinitionTemplateNumber=0;  PLPresent=1;  }
  "rotated_ll"            = { gridDefinitionTemplateNumber=1;  PLPresent=0;  }
+ "rotated_ll_nceprap"    = { gridDefinitionTemplateNumber=32679; PLPresent=0; }
  "stretched_ll"          = { gridDefinitionTemplateNumber=2;  PLPresent=0;  }
  "stretched_rotated_ll"  = { gridDefinitionTemplateNumber=3;  PLPresent=0;  }
  "mercator"              = { gridDefinitionTemplateNumber=10; PLPresent=0;  }
@@ -111,7 +112,6 @@ concept gridType {
  "polar_stereographic_bf"  = { gridDefinitionTemplateNumber=62; PLPresent=0;  }
  "unknown"               = {PLPresent=0;}
  "unknown_PLPresent"     = {PLPresent=1;}
- "rotated_arakawa_none_staggered" = { gridDefinitionTemplateNumber=32679; PLPresent=0; }
 } : dump;
 
 alias ls.gridType=gridType;
