@@ -90,5 +90,5 @@ Module docstrings
 -----------------
 
 .. automodule:: pygrib
-   :members: open, gribmessage, index, gaulats, julian_to_datetime, reload, setdates, fromstring, multi_support_off,multi_support_on, tolerate_badgrib_off, tolerate_badgrib_on
+   :members: open, gribmessage, index, gaulats, julian_to_datetime, reload, setdates, fromstring, multi_support_off,multi_support_on, tolerate_badgrib_off, tolerate_badgrib_on, set_definitions_path, get_definitions_path
    :show-inheritance:

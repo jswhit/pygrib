@@ -244,9 +244,9 @@ def multi_support_off():
     """turn off support for multi-field grib messages"""
     grib_multi_support_off(NULL)
 
-def set_definitions_path(eccodes_definition_path):
+def set_definitions_path(object eccodes_definition_path):
     """
-    set_definition_path(ECCODES_DEFINITION_PATH)
+    set_definitions_path(eccodes_definition_path)
 
     set path to eccodes definition files (grib tables)."""
     cdef char *definition_path
@@ -272,6 +272,13 @@ if _datadir is not None:
     set_definitions_path(_datadir)
 
 def get_definitions_path():
+    """
+    get_definitions_path()
+
+    return eccodes_definitions_path currently in use.
+
+    If empty, then definitions installed with linked eccodes lib are begin used.
+    """
     global _eccodes_datadir
     return _eccodes_datadir 
 

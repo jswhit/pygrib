@@ -144,6 +144,13 @@ representing a binary grib message (the reverse of <a class="reference internal"
 north to south.  nlats must be even.</p>
 </dd></dl>
 
+<dl class="py function">
+<dt id="pygrib.get_definitions_path">
+<code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">get_definitions_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.get_definitions_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>return eccodes_definitions_path currently in use.</p>
+<p>If empty, then definitions installed with linked eccodes lib are begin used.</p>
+</dd></dl>
+
 <dl class="py class">
 <dt id="pygrib.gribmessage">
 <em class="property">class </em><code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">gribmessage</code><a class="headerlink" href="#pygrib.gribmessage" title="Permalink to this definition">¶</a></dt>
@@ -482,6 +489,12 @@ with each other.  For example, if the <code class="docutils literal notranslate"
 recreating the <a class="reference internal" href="#pygrib.gribmessage" title="pygrib.gribmessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">gribmessage</span></code></a> object with this function will cause
 the <code class="docutils literal notranslate"><span class="pre">analDate</span></code> and <code class="docutils literal notranslate"><span class="pre">verifDate</span></code> keys to be updated accordingly.</p>
 <p>Equivalent to <code class="docutils literal notranslate"><span class="pre">fromstring(grb.tostring())</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pygrib.set_definitions_path">
+<code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">set_definitions_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">eccodes_definition_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.set_definitions_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>set path to eccodes definition files (grib tables).</p>
 </dd></dl>
 
 <dl class="py function">
