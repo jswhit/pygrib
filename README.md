@@ -10,19 +10,19 @@ There are limited capabilities for writing GRIB files (you can modify the conten
 Quickstart
 ==========
 
-The easiest way to get everything installed is to use the [pip](https://py.pypa.io):
+The easiest way to get everything installed is to use [pip](https://py.pypa.io):
 
 ```
 pip install pygrib
 ```
 
-You can also use [conda](https://docs.conda.io/en/latest/) 
+You can also use [conda](https://docs.conda.io/en/latest/):
 
 ```
 conda install -c conda-forge pygrib
 ```
 
-Alternately, clone the github repo and run `python setup.py install` (after setting `$ECCCODES_DIR`).
+Alternately, clone the github repo and run `python setup.py install` (after setting `$ECCCODES_DIR`)
 where `$ECCODES_DIR` is the path to the directory containing `include/grib_api.h`
 and `lib/libeccodes.so`. If `ECCODES_DIR` is not specified, a few common locations
 such as `$CONDA_PREFIX,/usr,/usr/local,/opt/local` will be searched.
