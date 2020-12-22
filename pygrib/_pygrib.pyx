@@ -258,18 +258,20 @@ def set_definitions_path(object eccodes_definition_path):
 
 # if ECCODES_DEFINITION_PATH set in environment, use it.
 # check to see if definitions path is in installation path (binary wheel installation), if so use it.
-# otherwise do not set (use definitions installed with linked library(
+# otherwise do not set (use definitions installed with linked library).
 if 'ECCODES_DEFINITION_PATH' in os.environ:
-    _datadir = os.environ['ECCODES_DEFINITION_PATH']
+    _eccodes_datadir = os.environ['ECCODES_DEFINITION_PATH']
 else:
     _tmp_path = os.path.join('eccodes','definitions')
     _definitions_path = os.path.join(os.path.join(os.path.dirname(__file__),'..'),_tmp_path)
+    # if definitions path exists inside pygrib installation (as it does when installed
+    # via a binary wheel) tell eccodes to use internal eccodes definitions.
     if os.path.isdir(_definitions_path):
-        _datadir = os.sep.join([_definitions_path])
+        _eccodes_datadir = os.sep.join([_definitions_path])
     else:
-        _datadir = None
-if _datadir is not None:
-    set_definitions_path(_datadir)
+        _eccodes_datadir = None
+if _eccodes_datadir is not None:
+    set_definitions_path(_eccodes_datadir)
 
 def get_definitions_path():
     """
@@ -277,7 +279,7 @@ def get_definitions_path():
 
     return eccodes_definitions_path currently in use.
 
-    If empty, then definitions installed with linked eccodes lib are begin used.
+    If None, then definitions installed with linked eccodes lib are begin used.
     """
     global _eccodes_datadir
     return _eccodes_datadir 
