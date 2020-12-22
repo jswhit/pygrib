@@ -30,8 +30,10 @@ If you're using Anaconda python, use conda_:
 Developing
 ----------
 
-To build from source, clone the GitHub repository and run
+To build from source, clone the github repository and run setup.py:
 
+    >>> git clone https://github.com/jswhit/pygrib
+    >>> cd pygrib
     >>> ECCODES_DIR=path/to/eccodes python setup.py install
 
 where ``$ECCODES_DIR`` is the path to the directory containing ``include/grib_api.h``
