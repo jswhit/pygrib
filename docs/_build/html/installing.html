@@ -8,6 +8,7 @@
     <title>Installation &#8212; pygrib  documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/nature2.css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
@@ -45,37 +46,40 @@
             
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="required-dependencies">
-<h2>Required dependencies<a class="headerlink" href="#required-dependencies" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Python &gt;= 2.7</p></li>
-<li><p><a class="reference external" href="https://confluence.ecmwf.int/display/ECC">ECCODES</a> C library version 2.19.1 or higher.</p></li>
+<li><p><a class="reference external" href="https://confluence.ecmwf.int/display/ECC/">ECCODES</a> C library.</p></li>
 <li><p><a class="reference external" href="http://www.numpy.org/">numpy</a></p></li>
 <li><p><a class="reference external" href="https://pyproj4.github.io/pyproj/stable">pyproj</a></p></li>
+<li><p><a class="reference external" href="https://cython.org">cython</a> (only needed at build-time)</p></li>
 </ul>
 </div>
 <div class="section" id="instructions">
 <h2>Instructions<a class="headerlink" href="#instructions" title="Permalink to this headline">¶</a></h2>
-<p>The easiest way to get everything installed is to use <a class="reference external" href="http://conda.io/">conda</a> command line tool:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ conda install -c conda-forge pygrib
+<p>The easiest way to get everything installed is to use <a class="reference external" href="http://pip.pypa.io/">pip</a>:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pip</span> <span class="n">install</span> <span class="n">pygrib</span>
 </pre></div>
 </div>
-<p>If you don’t use conda, be sure you have the required dependencies
-installed first. Then, install cftime with pip:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ECCODES_DIR=path/to/eccodes pip install pygrib
+<p>This will install all the dependencies for you (including the <a class="reference external" href="https://confluence.ecmwf.int/display/ECC/">ECCODES</a> C lib).</p>
+<p>If you’re using Anaconda python, use <a class="reference external" href="http://conda.io/">conda</a>:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">pygrib</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="developing">
+<h2>Developing<a class="headerlink" href="#developing" title="Permalink to this headline">¶</a></h2>
+<p>To build from source, clone the github repository and run setup.py:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">jswhit</span><span class="o">/</span><span class="n">pygrib</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cd</span> <span class="n">pygrib</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ECCODES_DIR</span><span class="o">=</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">eccodes</span> <span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
 <p>where <code class="docutils literal notranslate"><span class="pre">$ECCODES_DIR</span></code> is the path to the directory containing <code class="docutils literal notranslate"><span class="pre">include/grib_api.h</span></code>
 and <code class="docutils literal notranslate"><span class="pre">lib/libeccodes.so</span></code>. If <code class="docutils literal notranslate"><span class="pre">ECCODES_DIR</span></code> is not specified, a few common locations
-such as <code class="docutils literal notranslate"><span class="pre">$CONDA_PREFIX,/usr,/usr/local,/opt/local</span></code> will be searched..</p>
-</div>
-<div class="section" id="developing">
-<h2>Developing<a class="headerlink" href="#developing" title="Permalink to this headline">¶</a></h2>
-<p>When developing we recommend cloning the GitHub repository,
-building the extension in-place with <a class="reference external" href="http://cython.org/">cython</a> 0.19 or later
-<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">build_ext</span> <span class="pre">--inplace</span></code></p>
-<p>and running the test script to check if the changes are passing the tests
-<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">test.py</span></code></p>
+such as <code class="docutils literal notranslate"><span class="pre">$CONDA_PREFIX,/usr,/usr/local,/opt/local</span></code> will be searched..
+Then run a test script to check if things are working
+<code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">test;</span> <span class="pre">python</span> <span class="pre">test.py</span></code></p>
 </div>
 </div>
 
@@ -89,7 +93,7 @@ building the extension in-place with <a class="reference external" href="http://
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Installation</a><ul>
-<li><a class="reference internal" href="#required-dependencies">Required dependencies</a></li>
+<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
 <li><a class="reference internal" href="#instructions">Instructions</a></li>
 <li><a class="reference internal" href="#developing">Developing</a></li>
 </ul>

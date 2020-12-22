@@ -1,12 +1,11 @@
 include MANIFEST.in
 include LICENSE
 include pyproject.toml
-include pygrib.pyx
-include redtoreg.pyx
 include setup.py
-include .travis.yml
 include test.py
 include README.md
+include pygrib/__init__.py
+include pygrib/_pygrib.pyx
 include utils/*grib*
 recursive-include docs *
 include sampledata/*.grb

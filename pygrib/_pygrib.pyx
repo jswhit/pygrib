@@ -1,12 +1,70 @@
-__version__ = '2.1.1'
+"""pygrib module"""
+
+__version__ = '2.1.2'
 
 import numpy as np
+cimport numpy as npc
 import warnings
+import os
 from datetime import datetime
 from pkg_resources import parse_version
 from numpy import ma
 import pyproj
 import_array()
+
+cdef _redtoreg(object nlonsin, npc.ndarray lonsperlat, npc.ndarray redgrid, \
+              object missval):
+    """
+    convert data on global reduced gaussian to global
+    full gaussian grid using linear interpolation.
+    """
+    cdef long i, j, n, im, ip, indx, ilons, nlats, npts
+    cdef double zxi, zdx, flons, missvl
+    cdef npc.ndarray reggrid
+    cdef double *redgrdptr
+    cdef double *reggrdptr
+    cdef long *lonsptr
+    nlons = nlonsin
+    nlats = len(lonsperlat)
+    npts = len(redgrid)
+    if lonsperlat.sum() != npts:
+        msg='size of reduced grid does not match number of data values'
+        raise ValueError(msg)
+    reggrid = missval*np.ones((nlats,nlons),np.double)
+    # get data buffers and cast to desired type.
+    lonsptr = <long *>lonsperlat.data
+    redgrdptr = <double *>redgrid.data
+    reggrdptr = <double *>reggrid.data
+    missvl = <double>missval
+    # iterate over full grid, do linear interpolation.
+    n = 0
+    indx = 0
+    for j from 0 <= j < nlats:
+        ilons = lonsptr[j]
+        flons = <double>ilons
+        for i from 0 <= i < nlons:
+            # zxi is the grid index (relative to the reduced grid)
+            # of the i'th point on the full grid. 
+            zxi = i * flons / nlons # goes from 0 to ilons
+            im = <long>zxi
+            zdx = zxi - <double>im
+            if ilons != 0:
+                im = (im + ilons)%ilons
+                ip = (im + 1 + ilons)%ilons
+                # if one of the nearest values is missing, use nearest
+                # neighbor interpolation.
+                if redgrdptr[indx+im] == missvl or\
+                   redgrdptr[indx+ip] == missvl: 
+                    if zdx < 0.5:
+                        reggrdptr[n] = redgrdptr[indx+im]
+                    else:
+                        reggrdptr[n] = redgrdptr[indx+ip]
+                else: # linear interpolation.
+                    reggrdptr[n] = redgrdptr[indx+im]*(1.-zdx) +\
+                                   redgrdptr[indx+ip]*zdx
+            n = n + 1
+        indx = indx + ilons
+    return reggrid
 
 cdef extern from "stdlib.h":
     ctypedef long size_t
@@ -107,6 +165,7 @@ cdef extern from "grib_api.h":
     grib_handle* grib_handle_new_from_message_copy(grib_context * c, void * data,\
                              size_t data_len)
     int grib_julian_to_datetime(double jd, long *year, long *month, long *day, long *hour, long *minute, long *second)
+    void grib_context_set_definitions_path(grib_context* c, char* path)
     int grib_datetime_to_julian(long year, long month, long day, long hour, long minute, long second, double *jd)
     int grib_get_gaussian_latitudes(long truncation,double* latitudes)
     int grib_index_write(grib_index *index, char *filename)
@@ -184,6 +243,37 @@ def multi_support_on():
 def multi_support_off():
     """turn off support for multi-field grib messages"""
     grib_multi_support_off(NULL)
+
+def set_definitions_path(eccodes_definition_path):
+    """
+    set_definition_path(ECCODES_DEFINITION_PATH)
+
+    set path to eccodes definition files (grib tables)."""
+    cdef char *definition_path
+    global _eccodes_datadir
+    bytestr = _strencode(eccodes_definition_path)
+    definition_path = bytestr
+    grib_context_set_definitions_path(NULL, definition_path)
+    _eccodes_datadir = eccodes_definition_path
+
+# if ECCODES_DEFINITION_PATH set in environment, use it.
+# check to see if definitions path is in installation path (binary wheel installation), if so use it.
+# otherwise do not set (use definitions installed with linked library(
+if 'ECCODES_DEFINITION_PATH' in os.environ:
+    _datadir = os.environ['ECCODES_DEFINITION_PATH']
+else:
+    _tmp_path = os.path.join('eccodes','definitions')
+    _definitions_path = os.path.join(os.path.join(os.path.dirname(__file__),'..'),_tmp_path)
+    if os.path.isdir(_definitions_path):
+        _datadir = os.sep.join([_definitions_path])
+    else:
+        _datadir = None
+if _datadir is not None:
+    set_definitions_path(_datadir)
+
+def get_definitions_path():
+    global _eccodes_datadir
+    return _eccodes_datadir 
 
 cdef class open(object):
     """ 
@@ -1161,7 +1251,6 @@ cdef class gribmessage(object):
     def _reshape_mask(self, datarr):
         """private method for reshaping and adding mask to "values" array"""
         cdef double missval
-        from redtoreg import _redtoreg
         if datarr.ndim > 2:
             raise ValueError('array must be 1d or 2d')
         # reduced grid.

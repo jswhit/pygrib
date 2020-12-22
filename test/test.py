@@ -4,11 +4,11 @@ def test():
 
     open a grib file, create an iterator.
     >>> import pygrib
-    >>> list(pygrib.open('sampledata/flux.grb'))
+    >>> list(pygrib.open('../sampledata/flux.grb'))
     [1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs (avg):from 200402291200, 2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120 hrs:from 200402291200, 3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200, 4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200]
-    >>> pygrib.open('sampledata/flux.grb').read()
+    >>> pygrib.open('../sampledata/flux.grb').read()
     [1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs (avg):from 200402291200, 2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120 hrs:from 200402291200, 3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200, 4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200]
-    >>> grbs = pygrib.open('sampledata/flux.grb')
+    >>> grbs = pygrib.open('../sampledata/flux.grb')
 
     acts like a file object
     >>> grbs.tell()
@@ -90,7 +90,7 @@ def test():
     4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
 
     or create grib index instance for faster searching
-    >>> grbindx = pygrib.index('sampledata/flux.grb','name','typeOfLevel','level')
+    >>> grbindx = pygrib.index('../sampledata/flux.grb','name','typeOfLevel','level')
     >>> selgrbs = grbindx(name='Minimum temperature',level=2,typeOfLevel='heightAboveGround')
     >>> for grb in selgrbs: grb
     1:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
@@ -175,7 +175,7 @@ def test():
     >>> grbs.close()
 
     test open.select with scalars, sequences and functions.
-    >>> grbs = pygrib.open('sampledata/gfs.grb')
+    >>> grbs = pygrib.open('../sampledata/gfs.grb')
     >>> sel_grbs = grbs.select(shortName='t',level=500)
     >>> for grb in sel_grbs: grb
     101:Temperature:K (instant):regular_ll:isobaricInhPa:level 50000 Pa:fcst time 72 hrs:from 201110080000
@@ -214,14 +214,14 @@ def test():
     >>> grb2.validDate
     datetime.datetime(2011, 10, 11, 0, 0)
     >>> grbs.close()
-    >>> grbs = pygrib.open('sampledata/gfs.t12z.pgrbf120.2p5deg.grib2')
+    >>> grbs = pygrib.open('../sampledata/gfs.t12z.pgrbf120.2p5deg.grib2')
     >>> # see if multi-part grib messages are counted properly
     >>> grbs.messages
     343
     >>> grbs.close()
 
     test ndfd file with 'grid_complex_spatial_differencing' encoding
-    >>> grbs = pygrib.open('sampledata/dspr.temp.bin')
+    >>> grbs = pygrib.open('../sampledata/dspr.temp.bin')
     >>> for grb in grbs: grb
     1:Maximum temperature:K (max):mercator:surface:level 0:fcst time 2-14 hrs (max):from 201109292200
     2:Maximum temperature:K (max):mercator:surface:level 0:fcst time 26-38 hrs (max):from 201109292200
@@ -233,7 +233,7 @@ def test():
     >>> grbs.close()
     >>> str('min/max %5.2f %5.2f' % (data.min(), data.max()))
     'min/max 295.40 308.10'
-    >>> grbs = pygrib.open('sampledata/no-radius-shapeOfEarth-7.grb2')
+    >>> grbs = pygrib.open('../sampledata/no-radius-shapeOfEarth-7.grb2')
     >>> for grb in grbs: print(grb)
     1:Total precipitation:kg m-2 (accum):lambert:surface:level 0:fcst time 15-30 mins (accum):from 201804100000
     >>> str(grb.packingType)
