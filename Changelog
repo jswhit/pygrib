@@ -4,7 +4,7 @@ version 2.1.2 (git tag v2.1.2rel)
 * change license to MIT.
 * changes gribmessage.projparams['proj'] from 'cyl' to 'longlat'
   for non-projection projections (e.g. 'regular_ll'). Issue #167.
-* reorganize to include eccodes definitions inside package. 
+* reorganize to include eccodes definitions inside package 
   when wheels are build (PYGRIB_WHEEL env var is set).
   Add set_definitions_path/get_defintions_path module functions
   to get/reset ECCODES_DEFINITION_PATH.
