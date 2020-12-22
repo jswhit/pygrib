@@ -1,6 +1,0 @@
-# (C) Copyright 2005- ECMWF.
-
-# TEMPLATE 4.78, Average, accumulation and/or extreme values or other statistically processed values at a horizontal level or in a horizontal layer in a continuous or non-continuous time interval for atmospheric chemical constituents with source/sink
-include "grib2/template.4.parameter_chemical_source.def"
-include "grib2/template.4.horizontal.def"
-include "grib2/template.4.statistical.def"

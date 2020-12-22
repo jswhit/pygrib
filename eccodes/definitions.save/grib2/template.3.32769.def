@@ -1,5 +1,0 @@
-# TEMPLATE 3.32769, Rotated Latitude/longitude (Arakawa Non-E Staggered)
-
-include "grib2/template.3.shape_of_the_earth.def";
-include "grib2/template.3.latlon.def";
-include "grib2/template.3.rotation.def";
