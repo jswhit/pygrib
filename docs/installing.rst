@@ -1,11 +1,10 @@
 Installation
 ============
 
-Required dependencies
----------------------
+Dependencies
+------------
 
-- Python >= 2.7
-- `ECCODES <https://confluence.ecmwf.int/display/ECC>`__ C library version 2.19.1 or higher.
+- ECCODES_ C library.
 - `numpy <http://www.numpy.org/>`__ 
 - `pyproj <https://pyproj4.github.io/pyproj/stable>`__ 
 - `cython <https://cython.org>`__ (only needed at build-time)
@@ -14,28 +13,29 @@ Required dependencies
 Instructions
 ------------
 
-The easiest way to get everything installed is to use conda_ command line tool::
+The easiest way to get everything installed is to use pip_:
 
-    $ conda install -c conda-forge pygrib
+    >>> pip install pygrib
 
+This will install all the dependencies for you (including the ECCODES_ C lib).
+
+If you're using Anaconda python, use conda_:
+
+    >>> conda install -c conda-forge pygrib
+
+.. _pip: http://pip.pypa.io/
 .. _conda: http://conda.io/
-
-If you don't use conda, be sure you have the required dependencies
-installed first. Then, install pygrib with pip::
-
-    $ ECCODES_DIR=path/to/eccodes pip install pygrib
-
-where ``$ECCODES_DIR`` is the path to the directory containing ``include/grib_api.h``
-and ``lib/libeccodes.so``. If ``ECCODES_DIR`` is not specified, a few common locations
-such as ``$CONDA_PREFIX,/usr,/usr/local,/opt/local`` will be searched..
-
+.. _ECCODES: https://confluence.ecmwf.int/display/ECC/
 
 Developing
 ----------
 
-When developing we recommend cloning the GitHub repository,
-building the extension in-place with `cython <http://cython.org/>`__ 0.19 or later
-``python setup.py build_ext --inplace``
+To build from source, clone the GitHub repository and run
 
-and running the test script to check if the changes are passing the tests
-``python test.py``
+    >>> ECCODES_DIR=path/to/eccodes python setup.py install
+
+where ``$ECCODES_DIR`` is the path to the directory containing ``include/grib_api.h``
+and ``lib/libeccodes.so``. If ``ECCODES_DIR`` is not specified, a few common locations
+such as ``$CONDA_PREFIX,/usr,/usr/local,/opt/local`` will be searched..
+Then run a test script to check if things are working
+``cd test; python test.py``
