@@ -1,3 +1,7 @@
+since version 2.1.2 release
+================================
+* fix pygrib.get_definitions_path() so it works if set_definitions_path has not been called.
+
 version 2.1.2 (git tag v2.1.2rel)
 ================================
 * use pytest-mpl for image comparison tests.
