@@ -1,6 +1,7 @@
 since version 2.1.2 release
 ================================
 * fix pygrib.get_definitions_path() so it works if set_definitions_path has not been called.
+* add conftest.py to MANIFEST.in (issue #171)
 
 version 2.1.2 (git tag v2.1.2rel)
 ================================

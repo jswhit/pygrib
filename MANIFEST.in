@@ -7,6 +7,7 @@ include README.md
 include pygrib/__init__.py
 include pygrib/_pygrib.pyx
 include utils/*grib*
+include conftest.py
 recursive-include docs *
 include sampledata/*.grb
 include sampledata/*.grb2
