@@ -1,6 +1,6 @@
 """pygrib module"""
 
-__version__ = '2.1.2'
+__version__ = '2.1.3'
 
 import numpy as np
 cimport numpy as npc
