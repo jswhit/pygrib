@@ -32,8 +32,7 @@ def test_ndfd_pr():
         # don't plot coastlines or gridlines for image comparison
         ax.coastlines(resolution='50m')
         gl = ax.gridlines(draw_labels=True)
-        gl.ylabels_top = False; gl.xlabels_top = False
-        gl.ylabels_right = False; gl.xlabels_right = False
+        gl.right_labels = False; gl.top_labels = False
     plt.title('NDFD Temp Puerto Rico %d-h fcst from %d' %\
             (grb.forecastTime,grb.dataDate),fontsize=12)
     return fig

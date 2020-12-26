@@ -40,8 +40,7 @@ def test_spectral():
     cs = ax.contourf(lons,lats,data,15,cmap=plt.cm.jet,transform=ccrs.PlateCarree())
     ax.coastlines()
     gl = ax.gridlines(draw_labels=True)
-    gl.ylabels_top = False; gl.xlabels_top = False
-    gl.ylabels_right = False; gl.xlabels_right = False
+    gl.right_labels = False; gl.top_labels = False
     plt.colorbar(cs,shrink=0.9)
     plt.title(repr(g.level)+' '+g.typeOfLevel+' '+g.name+' from Spherical Harmonic Coeffs',fontsize=9)
     return fig
