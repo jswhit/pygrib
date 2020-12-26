@@ -35,10 +35,11 @@ jobs:
         python -m pip install cython
         python -m pip install pyproj
         python -m pip install pytest
-        python -m pip install pytest-mpl
         python -m pip install check-manifest
         python -m pip install twine
         python -m pip install wheel
+        # below here only needed for mpl/cartopy based tests
+        python -m pip install pytest-mpl
         python -m pip install pyshp
         python -m pip install six
         python -m pip install shapely --no-binary shapely
@@ -55,6 +56,8 @@ jobs:
         export MPLBACKEND=agg
         cd test
         pytest test*py --mpl --mpl-baseline-path=baseline_images
+        # if no mpl/cartopy run this
+        #pytest test.py test_latlons.py
 
     - name: Tarball
       run: |
