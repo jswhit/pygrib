@@ -6,7 +6,6 @@ include README.md
 include pygrib/__init__.py
 include pygrib/_pygrib.pyx
 include utils/*grib*
-include conftest.py
 include Changelog
 recursive-include docs *
 recursive-include eccodes *.def
