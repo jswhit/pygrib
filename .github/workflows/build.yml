@@ -50,12 +50,10 @@ jobs:
     - name: Install pygrib
       run: |
         python setup.py install
-        # this allows tests to be run from source dir
-        python setup.py build_ext --inplace
     - name: Test
       run: |
-        cd test
         export MPLBACKEND=agg
+        cd test
         pytest test*py --mpl --mpl-baseline-path=baseline_images
 
     - name: Tarball
