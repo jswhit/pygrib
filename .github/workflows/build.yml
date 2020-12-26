@@ -36,6 +36,7 @@ jobs:
         python -m pip install pyproj
         python -m pip install pytest
         python -m pip install pytest-mpl
+        python -m pip install check-manifest
         python -m pip install twine
         python -m pip install wheel
         python -m pip install pyshp
@@ -54,12 +55,6 @@ jobs:
     - name: Test
       run: |
         cd test
-        #python test.py
-        #python test_latlons.py
-        #cp -r test/ /tmp
-        #cp -r sampledata/ /tmp
-        #cp conftest.py /tmp
-        #cd /tmp/test
         export MPLBACKEND=agg
         pytest test*py --mpl --mpl-baseline-path=baseline_images
 
