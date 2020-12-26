@@ -36,6 +36,7 @@ jobs:
         python -m pip install pyproj
         python -m pip install pytest
         python -m pip install pytest-mpl
+        python -m pip install twine
         python -m pip install wheel
         python -m pip install pyshp
         python -m pip install six
@@ -48,15 +49,23 @@ jobs:
     - name: Install pygrib
       run: |
         python setup.py install
-
+        # this allows tests to be run from source dir
+        python setup.py build_ext --inplace
     - name: Test
       run: |
-        #cd test
+        cd test
         #python test.py
         #python test_latlons.py
-        cp -r test/ /tmp
-        cp -r sampledata/ /tmp
-        cp conftest.py /tmp
-        cd /tmp/test
+        #cp -r test/ /tmp
+        #cp -r sampledata/ /tmp
+        #cp conftest.py /tmp
+        #cd /tmp/test
         export MPLBACKEND=agg
         pytest test*py --mpl --mpl-baseline-path=baseline_images
+
+    - name: Tarball
+      run: |
+        python setup.py --version ; 
+        pip wheel . -w dist --no-deps ;
+        check-manifest --verbose ;
+        twine check dist/* ;
