@@ -7,12 +7,14 @@ include pygrib/__init__.py
 include pygrib/_pygrib.pyx
 include utils/*grib*
 include conftest.py
+include Changelog
 recursive-include docs *
+recursive-include eccodes *.def
+recursive-include test *.py
 include sampledata/*.grb
 include sampledata/*.grb2
 include sampledata/*.grib*
 include sampledata/*.bin
 include test/README
-include test/*py
 include test/baseline_images/*png
 include man/*.1
