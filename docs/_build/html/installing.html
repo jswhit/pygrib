@@ -78,8 +78,16 @@
 <p>where <code class="docutils literal notranslate"><span class="pre">$ECCODES_DIR</span></code> is the path to the directory containing <code class="docutils literal notranslate"><span class="pre">include/grib_api.h</span></code>
 and <code class="docutils literal notranslate"><span class="pre">lib/libeccodes.so</span></code>. If <code class="docutils literal notranslate"><span class="pre">ECCODES_DIR</span></code> is not specified, a few common locations
 such as <code class="docutils literal notranslate"><span class="pre">$CONDA_PREFIX,/usr,/usr/local,/opt/local</span></code> will be searched..
-Then run a test script to check if things are working
-<code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">test;</span> <span class="pre">python</span> <span class="pre">test.py</span></code></p>
+Then run the simple test script to check if things are working
+<code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">test;</span> <span class="pre">python</span> <span class="pre">test.py</span></code>.</p>
+<p>To be able to run all the tests, install <a class="reference external" href="http://pytest.org">pytest</a> and run</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">export</span> <span class="n">MPLBACKEND</span><span class="o">=</span><span class="n">agg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cd</span> <span class="n">test</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pytest</span> <span class="n">test</span><span class="o">*</span><span class="n">py</span> <span class="o">--</span><span class="n">mpl</span> <span class="o">--</span><span class="n">mpl</span><span class="o">-</span><span class="n">baseline</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">baseline_images</span>
+</pre></div>
+</div>
+<p>Many tests require <a class="reference external" href="https://matplotlib.org">matplotlib</a>, <a class="reference external" href="https://pypi.org/project/pytest-mpl/">pytest-mpl</a> and <a class="reference external" href="https://scitools.org.uk/cartopy/docs/latest/">cartopy</a>.  If you don’t want to install
+those, just run <code class="docutils literal notranslate"><span class="pre">test.py</span></code> and <code class="docutils literal notranslate"><span class="pre">test_latlons.py</span></code>.</p>
 </div>
 </div>
 

@@ -39,5 +39,19 @@ To build from source, clone the github repository and run setup.py:
 where ``$ECCODES_DIR`` is the path to the directory containing ``include/grib_api.h``
 and ``lib/libeccodes.so``. If ``ECCODES_DIR`` is not specified, a few common locations
 such as ``$CONDA_PREFIX,/usr,/usr/local,/opt/local`` will be searched..
-Then run a test script to check if things are working
-``cd test; python test.py``
+Then run the simple test script to check if things are working
+``cd test; python test.py``.  
+
+To be able to run all the tests, install pytest_ and run
+
+    >>> export MPLBACKEND=agg
+    >>> cd test
+    >>> pytest test*py --mpl --mpl-baseline-path=baseline_images
+
+Many tests require matplotlib_, pytest-mpl_ and cartopy_.  If you don't want to install
+those, just run ``test.py`` and ``test_latlons.py``.
+
+.. _pytest: http://pytest.org
+.. _pytest-mpl: https://pypi.org/project/pytest-mpl/
+.. _matplotlib: https://matplotlib.org
+.. _cartopy: https://scitools.org.uk/cartopy/docs/latest/

@@ -1,3 +1,9 @@
+since version 2.1.3
+===================
+* move conftest.py to test dir (so tests can be run from there)
+* add check-manifest test to github actions workflow.
+* update some cartopy test scripts to remove deprecation warnings.
+
 version 2.1.3 (git tag v2.1.3rel)
 ================================
 * fix pygrib.get_definitions_path() so it works if set_definitions_path has not been called.

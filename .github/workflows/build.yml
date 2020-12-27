@@ -35,8 +35,11 @@ jobs:
         python -m pip install cython
         python -m pip install pyproj
         python -m pip install pytest
-        python -m pip install pytest-mpl
+        python -m pip install check-manifest
+        python -m pip install twine
         python -m pip install wheel
+        # below here only needed for mpl/cartopy based tests
+        python -m pip install pytest-mpl
         python -m pip install pyshp
         python -m pip install six
         python -m pip install shapely --no-binary shapely
@@ -48,15 +51,17 @@ jobs:
     - name: Install pygrib
       run: |
         python setup.py install
-
     - name: Test
       run: |
-        #cd test
-        #python test.py
-        #python test_latlons.py
-        cp -r test/ /tmp
-        cp -r sampledata/ /tmp
-        cp conftest.py /tmp
-        cd /tmp/test
         export MPLBACKEND=agg
+        cd test
         pytest test*py --mpl --mpl-baseline-path=baseline_images
+        # if no mpl/cartopy run this
+        #pytest test.py test_latlons.py
+
+    - name: Tarball
+      run: |
+        python setup.py --version ; 
+        pip wheel . -w dist --no-deps ;
+        check-manifest --verbose ;
+        twine check dist/* ;

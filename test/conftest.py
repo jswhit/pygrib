@@ -14,6 +14,6 @@ def samplegribfile(filename):
     """Open a grib file from the sampledata folder."""
     sampledir = os.path.join(
         os.path.dirname(os.path.abspath(__file__)),
-        "sampledata"
+        "../sampledata"
     )
     return pygrib.open(os.path.join(sampledir, filename))
