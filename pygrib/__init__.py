@@ -1,7 +1,7 @@
 # When importing from the root of the unpacked tarball or git checkout,
 # Python sees the "pygrib" source directory and tries to load it, which fails.
-# (unless the package was build in-place using "python setup.py build_ext
-# --inplace" so that _pygrib.so exists in the pygrib source dir).
+# (unless the package was built using "python setup.py build_ext --inplace"
+# so that _pygrib.so exists in the pygrib source dir).
 try:
     # init for pygrib package
     from ._pygrib import *

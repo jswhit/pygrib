@@ -1,5 +1,5 @@
-since version 2.1.3
-===================
+version 2.1.4 (not yet released)
+================================
 * move conftest.py to test dir (so tests can be run from there)
 * add check-manifest test to github actions workflow.
 * update some cartopy test scripts to remove deprecation warnings.
