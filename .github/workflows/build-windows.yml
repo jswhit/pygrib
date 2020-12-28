@@ -10,13 +10,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-#       python-version: [ "3.7", "3.8", "3.9"]
-#       os: [windows-latest, macosx-latest]
-#       platform: [x64, x32]
+        python-version: [ "3.7", "3.8", "3.9"]
+        os: [windows-latest, macos-latest]
+        platform: [x64, x32]
 #  debug on a single os/platform/python version
-        python-version: [ "3.9"]
-        os: [macosx-latest]
-        platform: [x64]
+#       python-version: [ "3.9"]
+#       os: [macosx-latest]
+#       platform: [x64]
         exclude:
           - os: macos-latest  
             platform: x32
