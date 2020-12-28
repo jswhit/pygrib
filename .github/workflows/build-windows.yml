@@ -10,11 +10,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        #python-version: [ "3.7", "3.8", "3.9"]
-        python-version: [  "3.8" ]
-        os: [windows-latest]
-        #platform: [x64, x32]
-        platform: [x64]
+        python-version: [ "3.7", "3.8", "3.9"]
+        os: [windows-latest, macosx-latest]
+        platform: [x64, x32]
         exclude:
           - os: macos-latest  
             platform: x32
@@ -40,8 +38,9 @@ jobs:
       shell: bash -l {0}
       run: |
         source activate TEST
-        find ./ -name boot.def -print
-        export ECCODES_DEFINITION_PATH=$CONDA_PREFIX/Library/share/eccodes/definitions
+        if [ "windows-latest" == "${{ matrix.os }}" ]; then 
+           export ECCODES_DEFINITION_PATH=$CONDA_PREFIX/Library/share/eccodes/definitions
+        fi
         cd test
         python test.py
         pytest -vv test_latlons.py
