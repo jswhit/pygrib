@@ -3,10 +3,10 @@ include LICENSE
 include pyproject.toml
 include setup.py
 include README.md
-include pygrib/__init__.py
-include pygrib/_pygrib.pyx
 include utils/*grib*
 include Changelog
+recursive-include src *pyx
+recursive-include src *py
 recursive-include docs *
 recursive-include eccodes *.def
 recursive-include test *.py
