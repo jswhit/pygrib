@@ -40,4 +40,6 @@ jobs:
       shell: bash -l {0}
       run: |
         source activate TEST
-        cd test && pytest test.py test_latlons.py
+        cd test
+        python test.py
+        pytest -vv test_latlons.py
