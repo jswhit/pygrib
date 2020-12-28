@@ -85,7 +85,7 @@ else:
 ext_modules = [
     setuptools.Extension(
         "pygrib._pygrib",
-        ["pygrib/_pygrib.pyx"],
+        ["src/pygrib/_pygrib.pyx"],
         include_dirs=incdirs,
         library_dirs=libdirs,
         runtime_library_dirs=runtime_lib_dirs,
@@ -109,7 +109,7 @@ else:
 
 setuptools.setup(
     name="pygrib",
-    version=extract_version("pygrib/_pygrib.pyx"),
+    version=extract_version("src/pygrib/_pygrib.pyx"),
     description="Python module for reading/writing GRIB files",
     author="Jeff Whitaker",
     author_email="jeffrey.s.whitaker@noaa.gov",
@@ -141,6 +141,7 @@ setuptools.setup(
     ext_modules=ext_modules,
     data_files=data_files,
     packages=["pygrib"],
+    package_dir={'':'src'},
     package_data=package_data,
     setup_requires=["setuptools", "cython"],
     install_requires=[
