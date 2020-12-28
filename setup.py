@@ -51,6 +51,7 @@ if os.environ.get("ECCODES_DIR"):
     searchdirs.append(os.environ["ECCODES_DIR"])
 if os.environ.get("CONDA_PREFIX"):
     searchdirs.append(os.environ["CONDA_PREFIX"])
+    searchdirs.append(os.path.join(os.environ["CONDA_PREFIX"],'Library')) # windows
 searchdirs += [
     os.path.expanduser("~"),
     "/usr",
