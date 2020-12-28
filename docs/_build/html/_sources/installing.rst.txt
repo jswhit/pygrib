@@ -13,15 +13,19 @@ Dependencies
 Instructions
 ------------
 
-The easiest way to get everything installed is to use pip_:
+The easiest way to get everything installed (on macosx and linux) is to use pip_:
 
     >>> pip install pygrib
 
 This will install all the dependencies for you (including the ECCODES_ C lib).
 
-If you're using Anaconda python, use conda_:
+If you're using Anaconda python (recommended for Windows), use conda_:
 
     >>> conda install -c conda-forge pygrib
+
+If using conda on windows, you may also need to set the ``ECCODES_DEFINITION_PATH`` 
+environment variable to ``$CONDA_PREFIX/Library/share/eccodes/definitions`` if you see
+an error saying ``boot.def`` cannot be found.
 
 .. _pip: http://pip.pypa.io/
 .. _conda: http://conda.io/

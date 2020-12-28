@@ -57,15 +57,18 @@
 </div>
 <div class="section" id="instructions">
 <h2>Instructions<a class="headerlink" href="#instructions" title="Permalink to this headline">¶</a></h2>
-<p>The easiest way to get everything installed is to use <a class="reference external" href="http://pip.pypa.io/">pip</a>:</p>
+<p>The easiest way to get everything installed (on macosx and linux) is to use <a class="reference external" href="http://pip.pypa.io/">pip</a>:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pip</span> <span class="n">install</span> <span class="n">pygrib</span>
 </pre></div>
 </div>
 <p>This will install all the dependencies for you (including the <a class="reference external" href="https://confluence.ecmwf.int/display/ECC/">ECCODES</a> C lib).</p>
-<p>If you’re using Anaconda python, use <a class="reference external" href="http://conda.io/">conda</a>:</p>
+<p>If you’re using Anaconda python (recommended for Windows), use <a class="reference external" href="http://conda.io/">conda</a>:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">pygrib</span>
 </pre></div>
 </div>
+<p>If using conda on windows, you may also need to set the <code class="docutils literal notranslate"><span class="pre">ECCODES_DEFINITION_PATH</span></code>
+environment variable to <code class="docutils literal notranslate"><span class="pre">$CONDA_PREFIX/Library/share/eccodes/definitions</span></code> if you see
+an error saying <code class="docutils literal notranslate"><span class="pre">boot.def</span></code> cannot be found.</p>
 </div>
 <div class="section" id="developing">
 <h2>Developing<a class="headerlink" href="#developing" title="Permalink to this headline">¶</a></h2>

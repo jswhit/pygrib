@@ -144,13 +144,6 @@ representing a binary grib message (the reverse of <a class="reference internal"
 north to south.  nlats must be even.</p>
 </dd></dl>
 
-<dl class="py function">
-<dt id="pygrib.get_definitions_path">
-<code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">get_definitions_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.get_definitions_path" title="Permalink to this definition">¶</a></dt>
-<dd><p>return eccodes_definitions_path currently in use.</p>
-<p>If None, then definitions installed with linked eccodes lib are begin used.</p>
-</dd></dl>
-
 <dl class="py class">
 <dt id="pygrib.gribmessage">
 <em class="property">class </em><code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">gribmessage</code><a class="headerlink" href="#pygrib.gribmessage" title="Permalink to this definition">¶</a></dt>
@@ -493,8 +486,9 @@ the <code class="docutils literal notranslate"><span class="pre">analDate</span>
 
 <dl class="py function">
 <dt id="pygrib.set_definitions_path">
-<code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">set_definitions_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">eccodes_definition_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.set_definitions_path" title="Permalink to this definition">¶</a></dt>
-<dd><p>set path to eccodes definition files (grib tables).</p>
+<code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">set_definitions_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.set_definitions_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>set_definition_path(ECCODES_DEFINITION_PATH)</p>
+<p>set path to eccodes definition files (grib tables).</p>
 </dd></dl>
 
 <dl class="py function">
