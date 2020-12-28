@@ -1,4 +1,4 @@
-import os
+import os, sys
 import glob
 import setuptools
 from Cython.Distutils import build_ext
