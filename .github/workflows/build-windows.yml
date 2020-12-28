@@ -40,6 +40,8 @@ jobs:
       shell: bash -l {0}
       run: |
         source activate TEST
+        echo $ECCODES_DEFINITION_PATH 
+        unset $ECCODES_DEFINITION_PATH 
         cd test
         python test.py
         pytest -vv test_latlons.py

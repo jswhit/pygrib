@@ -16,4 +16,5 @@ def samplegribfile(filename):
         os.path.dirname(os.path.abspath(__file__)),
         "../sampledata"
     )
+    print(os.path.join(sampledir, filename))
     return pygrib.open(os.path.join(sampledir, filename))
