@@ -40,8 +40,9 @@ jobs:
       shell: bash -l {0}
       run: |
         source activate TEST
-        echo $ECCODES_DEFINITION_PATH 
-        unset $ECCODES_DEFINITION_PATH 
+        ls -l $CONDA_PREFIX/Library
+        ls -l $CONDA_PREFIX/Library/eccodes/share/definitions
+        export ECCODES_DEFINITION_PATH=$CONDA_PREFIX/Library/eccodes/share/definitions
         cd test
         python test.py
         pytest -vv test_latlons.py
