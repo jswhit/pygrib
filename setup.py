@@ -78,13 +78,17 @@ else:
     print("eccodes not found, build may fail...")
     incdirs = []
     libdirs = []
+if sys.platform == 'win32':
+    runtime_lib_dirs = []
+else:
+    runtime_lib_dirs = libdirs
 ext_modules = [
     setuptools.Extension(
         "pygrib._pygrib",
         ["pygrib/_pygrib.pyx"],
         include_dirs=incdirs,
         library_dirs=libdirs,
-        runtime_library_dirs=libdirs,
+        runtime_library_dirs=runtime_lib_dirs,
         libraries=["eccodes"],
     )
 ]
