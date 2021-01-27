@@ -5,6 +5,8 @@ version 2.1.4 (not yet released)
 * update some cartopy test scripts to remove deprecation warnings.
 * move package under 'src' dir so import pygrib works in install dir.
 * add windows and macos x tests.
+* make sure gribmessage.__repr__ doesn't fail is shapeOfTheEarth parameter
+  is missing (issue #177).
 
 version 2.1.3 (git tag v2.1.3rel)
 ================================
