@@ -1325,7 +1325,7 @@ cdef class gribmessage(object):
         if self.has_key('radius'):
             projparams['a'] = self['radius']
             projparams['b'] = self['radius']
-        else:
+        elif self.has_key('shapeOfTheEarth'):
             if self['shapeOfTheEarth'] == 6:
                 projparams['a']=6371229.0
                 projparams['b']=6371229.0
