@@ -29,7 +29,7 @@ such as `$CONDA_PREFIX,/usr,/usr/local,/opt/local` will be searched.
 
 For full installation instructions and API documentation, see https://jswhit.github.io/pygrib.
 
-Sample [iPython](http://ipython.org/) notebooks illustrating pygrib usage: 
+Sample [IPython](http://ipython.org/) notebooks illustrating pygrib usage: 
 * http://nbviewer.jupyter.org/gist/jswhit/8635665
 * https://github.com/scollis/HRRR/blob/master/notebooks/HRRR%20Grib.ipynb
 
