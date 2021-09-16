@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, shutil
 import glob
 import setuptools
 from Cython.Distutils import build_ext
@@ -31,10 +31,11 @@ def extract_version(CYTHON_FNAME):
 
 
 def package_files(directory):
+    shutil.copytree(directory, os.path.join("src", "pygrib", directory), dirs_exist_ok=True)
     paths = []
     for (path, directories, filenames) in os.walk(directory):
         for filename in filenames:
-            paths.append(os.path.join("..", path, filename))
+            paths.append(os.path.join(path, filename))
     return paths
 
 
