@@ -5,7 +5,7 @@ include setup.py
 include README.md
 include utils/*grib*
 include Changelog
-exclude eccodes
+exclude share
 recursive-include src *pyx
 recursive-include src *py
 recursive-include docs *
