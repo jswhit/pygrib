@@ -262,7 +262,7 @@ def set_definitions_path(object eccodes_definition_path):
 if 'ECCODES_DEFINITION_PATH' in os.environ:
     _eccodes_datadir = os.environ['ECCODES_DEFINITION_PATH']
 else:
-    _tmp_path = os.path.join('eccodes','definitions')
+    _tmp_path = os.path.join('share',os.path.join('eccodes','definitions'))
     _definitions_path = os.path.join(os.path.join(os.path.dirname(__file__),'..'),_tmp_path)
     # if definitions path exists inside pygrib installation (as it does when installed
     # via a binary wheel) tell eccodes to use internal eccodes definitions.
