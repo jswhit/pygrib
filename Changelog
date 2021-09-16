@@ -1,4 +1,4 @@
-version 2.1.4 (not yet released)
+version 2.1.4 (git tag v2.1.4rel)(
 ================================
 * move conftest.py to test dir (so tests can be run from there)
 * add check-manifest test to github actions workflow.
