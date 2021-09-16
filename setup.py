@@ -40,7 +40,7 @@ def package_files(directory):
 
 package_data = {}
 if os.environ.get("PYGRIB_WHEEL") is not None:
-    package_data[""] = package_files("eccodes")
+    package_data[""] = package_files("share")
 
 cmdclass = {"build_ext": NumpyBuildExtCommand}
 
