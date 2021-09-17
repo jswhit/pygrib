@@ -31,6 +31,7 @@ def extract_version(CYTHON_FNAME):
 
 
 def package_files(directory):
+    shutil.rmtree(os.path.join("src", "pygrib", directory))
     shutil.copytree(directory, os.path.join("src", "pygrib", directory))
     paths = []
     for (path, directories, filenames) in os.walk(directory):
