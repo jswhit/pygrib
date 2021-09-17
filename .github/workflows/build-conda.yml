@@ -20,10 +20,8 @@ jobs:
         exclude:
           - os: macos-latest  
             platform: x32
-        exclude:
           - os: macos-latest  
             python-version: "3.6"
-        exclude:
           - os: windows-latest  
             python-version: "3.6"
     steps:
@@ -48,9 +46,9 @@ jobs:
       shell: bash -l {0}
       run: |
         source activate TEST
-        if [ "windows-latest" == "${{ matrix.os }}" ]; then 
-           export ECCODES_DEFINITION_PATH=$CONDA_PREFIX/Library/share/eccodes/definitions
-        fi
+        #if [ "windows-latest" == "${{ matrix.os }}" ]; then 
+        #   export ECCODES_DEFINITION_PATH=$CONDA_PREFIX/Library/share/eccodes/definitions
+        #fi
         cd test
         python test.py
         pytest -vv test_latlons.py
