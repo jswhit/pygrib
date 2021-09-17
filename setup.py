@@ -31,13 +31,14 @@ def extract_version(CYTHON_FNAME):
 
 
 def package_files(directory):
+    owd = os.getcwd()
+    os.chdir(os.path.join('src','pygrib'))
     paths = []
     for (path, directories, filenames) in os.walk(directory):
         for filename in filenames:
-            paths.append(os.path.join("..", path, filename))
-            #paths.append(os.path.join(path, filename))
+            paths.append(os.path.join(path, filename))
+    os.chdir(owd)
     return paths
-
 
 if os.environ.get("PYGRIB_WHEEL") is not None:
     package_data={'':package_files('share')}
