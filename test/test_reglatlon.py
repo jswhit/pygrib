@@ -22,7 +22,7 @@ lons,lats = np.meshgrid(lons1,lats1d)
 def test_reglatlon1():
     fig = plt.figure()
     ax = plt.axes(projection=ccrs.PlateCarree(central_longitude=0))
-    ax.coastlines()
+    ax.coastlines(zorder=2)
     ax.contourf(lons,lats,data,15,cmap=plt.cm.hot_r)
     plt.title('%s Global Lat/Lon Grid' % grb.name)
     return fig
@@ -31,7 +31,7 @@ def test_reglatlon1():
 def test_reglatlon2():
     fig = plt.figure()
     ax = plt.axes(projection=ccrs.PlateCarree(central_longitude=0))
-    ax.coastlines()
+    ax.coastlines(zorder=2)
     ax.contourf(lons,lats,data2,15)
     plt.title('%s Global Lat/Lon Grid' % grb2.name)
     return fig
@@ -44,7 +44,7 @@ def test_reglatlon3():
     fig = plt.figure()
     ax = plt.axes(projection=ccrs.PlateCarree(central_longitude=0))
     ax.set_extent([lon1,lon2,lat1,lat2],crs=ccrs.PlateCarree())
-    ax.coastlines()
+    ax.coastlines(zorder=2)
     ax.contourf(lonsubset,latsubset,datsubset,15,cmap=plt.cm.hot_r)
     plt.title('%s Regional Lat/Lon Grid' % grb.name)
     return fig

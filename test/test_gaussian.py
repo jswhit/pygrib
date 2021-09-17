@@ -19,7 +19,7 @@ lons,lats = np.meshgrid(lons1,lats1)
 def test_gaussian():
     fig = plt.figure()
     ax = plt.axes(projection=ccrs.PlateCarree(central_longitude=0))
-    ax.coastlines()
+    ax.coastlines(zorder=2)
     ax.contourf(lons,lats,data,15)
     # plot location of every 4th grid point
     plt.scatter(lons[::4,::4].ravel(),lats[::4,::4].ravel(),1,marker='o',color='k',zorder=10)
