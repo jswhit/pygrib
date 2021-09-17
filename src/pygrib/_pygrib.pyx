@@ -1053,7 +1053,7 @@ cdef class gribmessage(object):
             raise RuntimeError(grib_get_error_message(err))
         elif typ == GRIB_TYPE_LONG:
             # is value an array or a scalar?
-            datarr = np.asarray(value, np.int)
+            datarr = np.asarray(value, int)
             is_array = False
             if datarr.shape:
                 is_array = True
@@ -1073,7 +1073,7 @@ cdef class gribmessage(object):
                     raise RuntimeError(grib_get_error_message(err))
         elif typ == GRIB_TYPE_DOUBLE:
             # is value an array or a scalar?
-            datarr = np.asarray(value, np.float)
+            datarr = np.asarray(value, float)
             is_array = False
             if datarr.shape:
                 is_array = True
@@ -1144,7 +1144,7 @@ cdef class gribmessage(object):
                     storageorder='F'
                 else:
                     storageorder='C'
-                datarr = np.zeros(size, np.int, order=storageorder)
+                datarr = np.zeros(size, int, order=storageorder)
                 err = grib_get_long_array(self._gh, name, <long *>datarr.data, &size)
                 if err:
                     raise RuntimeError(grib_get_error_message(err))
