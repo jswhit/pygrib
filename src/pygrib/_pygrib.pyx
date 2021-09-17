@@ -273,7 +273,6 @@ else:
         _eccodes_datadir = None
 
 if _eccodes_datadir is not None:
-    print('setting definitions path to %s' % _eccodes_datadir)
     set_definitions_path(_eccodes_datadir)
 
 def get_definitions_path():

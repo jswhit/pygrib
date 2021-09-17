@@ -3,8 +3,7 @@ def test():
     demonstrates basic pygrib functionality.
 
     open a grib file, create an iterator.
-    >>> import pygrib #doctest: +ELLIPSIS
-    ...
+    >>> import pygrib
     >>> list(pygrib.open('../sampledata/flux.grb'))
     [1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs (avg):from 200402291200, 2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120 hrs:from 200402291200, 3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200, 4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200]
     >>> pygrib.open('../sampledata/flux.grb').read()
