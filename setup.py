@@ -1,4 +1,4 @@
-import os, sys, shutil
+import os, sys
 import glob
 import setuptools
 from Cython.Distutils import build_ext
@@ -31,8 +31,6 @@ def extract_version(CYTHON_FNAME):
 
 
 def package_files(directory):
-    shutil.rmtree(os.path.join("src", "pygrib", directory))
-    shutil.copytree(directory, os.path.join("src", "pygrib", directory))
     paths = []
     for (path, directories, filenames) in os.walk(directory):
         for filename in filenames:
@@ -40,9 +38,10 @@ def package_files(directory):
     return paths
 
 
-package_data = {}
 if os.environ.get("PYGRIB_WHEEL") is not None:
-    package_data[""] = package_files("share")
+    package_data={'':package_files('share')}
+else:
+    package_data={}
 
 cmdclass = {"build_ext": NumpyBuildExtCommand}
 
