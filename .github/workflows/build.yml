@@ -9,7 +9,8 @@ jobs:
       PROJ_LIB: /usr/share/proj
     strategy:
       matrix:
-        python-version: ["3.6", "3.7", "3.8", "3.9"]
+        #python-version: ["3.6", "3.7", "3.8", "3.9"]
+        python-version: ["3.9"]
     steps:
 
     - uses: actions/checkout@v2
@@ -39,14 +40,14 @@ jobs:
         python -m pip install twine
         python -m pip install wheel
         # below here only needed for mpl/cartopy based tests
-        #python -m pip install pytest-mpl
-        #python -m pip install pyshp
-        #python -m pip install six
-        #python -m pip install shapely --no-binary shapely
-        #python -m pip install matplotlib
-        #python -m pip install cartopy
-        #python -m pip install scipy
-        #python -m pip install pyspharm
+        python -m pip install pytest-mpl
+        python -m pip install pyshp
+        python -m pip install six
+        python -m pip install shapely --no-binary shapely
+        python -m pip install matplotlib
+        python -m pip install cartopy
+        python -m pip install scipy
+        python -m pip install pyspharm
 
     - name: Install pygrib
       run: |
@@ -57,10 +58,10 @@ jobs:
     - name: Test
       run: |
         cd test
-        #export MPLBACKEND=agg
-        #pytest test*py --mpl --mpl-baseline-path=baseline_images
+        export MPLBACKEND=agg
+        pytest test*py --mpl --mpl-baseline-path=baseline_images
         # if no mpl/cartopy run this
-        pytest test.py test_latlons.py
+        #pytest test.py test_latlons.py
 
     - name: Tarball
       run: |
