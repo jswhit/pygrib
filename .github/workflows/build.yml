@@ -50,6 +50,9 @@ jobs:
 
     - name: Install pygrib
       run: |
+        pushd /usr
+        find ./ -name grib_api.h -print
+        popd
         python setup.py install
     - name: Test
       run: |
