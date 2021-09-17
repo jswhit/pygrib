@@ -9,7 +9,8 @@ jobs:
       PROJ_LIB: /usr/share/proj
     strategy:
       matrix:
-        python-version: ["3.6", "3.7", "3.8", "3.9"]
+        #python-version: ["3.6", "3.7", "3.8", "3.9"]
+        python-version: ["3.9"]
     steps:
 
     - uses: actions/checkout@v2
@@ -53,8 +54,8 @@ jobs:
         python setup.py install
     - name: Test
       run: |
-        export MPLBACKEND=agg
         cd test
+        export MPLBACKEND=agg
         pytest test*py --mpl --mpl-baseline-path=baseline_images
         # if no mpl/cartopy run this
         #pytest test.py test_latlons.py
