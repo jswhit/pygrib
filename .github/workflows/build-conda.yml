@@ -1,4 +1,4 @@
-name: Build and Test Windows/MacOSX
+name: Build and Test Linux/Windows/MacOSX
 
 on:
   pull_request:
