@@ -53,8 +53,8 @@ jobs:
         python setup.py install
     - name: Test
       run: |
-        export MPLBACKEND=agg
         cd test
+        #export MPLBACKEND=agg
         #pytest test*py --mpl --mpl-baseline-path=baseline_images
         # if no mpl/cartopy run this
         pytest test.py test_latlons.py
