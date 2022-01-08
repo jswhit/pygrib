@@ -896,6 +896,15 @@ cdef class gribmessage(object):
             elif lowerlim is not None:
                 inventory.append(" (< %s)" % lowerlim)
         return ''.join(inventory)
+    def __dir__(self):
+        """
+        return attributes and grib keys
+        """
+        try:
+            atts = dir(type(self))
+        except RuntimeError:
+            atts = []
+        return atts + self.keys()
 
     def _get_key(self, key, default=None):
         """get key if it exists, otherwise return default value (default None)"""

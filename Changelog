@@ -1,4 +1,8 @@
-version 2.1.4 (git tag v2.1.4rel)(
+since version 2.1.4 release
+===========================
+* add __dir__ method so dir(grb) returns grib keys.
+
+version 2.1.4 (git tag v2.1.4rel)
 ================================
 * move conftest.py to test dir (so tests can be run from there)
 * add check-manifest test to github actions workflow.
