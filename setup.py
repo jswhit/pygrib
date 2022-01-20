@@ -60,6 +60,7 @@ searchdirs += [
     "/usr",
     "/usr/local",
     "/opt/local",
+    "/opt/homebrew",
     "/opt",
     "/sw",
 ]
