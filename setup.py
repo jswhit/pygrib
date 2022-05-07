@@ -29,21 +29,21 @@ def extract_version(CYTHON_FNAME):
                 break
     return version
 
-
+sub_files = ["*.pyi"]
 def package_files(directory):
     owd = os.getcwd()
     os.chdir(os.path.join('src','pygrib'))
-    paths = [["*.pyi"]]
+    paths = []
     for (path, directories, filenames) in os.walk(directory):
         for filename in filenames:
             paths.append(os.path.join(path, filename))
     os.chdir(owd)
-    return paths + ["*.pyi"]
-
+    return paths + sub_files
+    
 if os.environ.get("PYGRIB_WHEEL") is not None:
     package_data={'':package_files('share')}
 else:
-    package_data={'':["*.pyi"]}
+    package_data={'':sub_files}
 
 cmdclass = {"build_ext": NumpyBuildExtCommand}
 
