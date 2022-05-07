@@ -1,5 +1,5 @@
 """pygrib context manager"""
-__all__=[ "read"]
+__all__ = [ "read" ]
 
 from typing import Iterator
 from contextlib import contextmanager
