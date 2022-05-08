@@ -39,7 +39,7 @@ def package_files(directory):
             paths.append(os.path.join(path, filename))
     os.chdir(owd)
     return paths + sub_files
-    
+
 if os.environ.get("PYGRIB_WHEEL") is not None:
     package_data={'':package_files('share')}
 else:
