@@ -1,5 +1,0 @@
-__pycache__/
-build/
-*.egg
-.gitignore
-main.py
