@@ -7,6 +7,7 @@ cimport numpy as npc
 import warnings
 import os
 from datetime import datetime
+from pathlib import Path
 from pkg_resources import parse_version
 from numpy import ma
 import pyproj
@@ -288,9 +289,9 @@ def get_definitions_path():
 
 cdef class open(object):
     """ 
-    open(filename)
+    open(filename_or_path)
 
-    returns GRIB file iterator object given GRIB filename. When iterated, returns
+    returns GRIB file iterator object given GRIB filename or a Path object. When iterated, returns
     instances of the :py:class:`gribmessage` class. Behaves much like a python file
     object, with :py:meth:`seek`, :py:meth:`tell`, :py:meth:`read`
     :py:meth:`readline` and :py:meth:`close` methods
@@ -317,6 +318,8 @@ cdef class open(object):
         # initialize C level objects.
         cdef grib_handle *gh
         cdef FILE *_fd
+        if isinstance(filename, Path):
+            filename = str(filename)
         bytestr = _strencode(filename)
         self._fd = fopen(bytestr, "rb") 
         if self._fd == NULL:
@@ -326,7 +329,10 @@ cdef class open(object):
         cdef int err, ncount
         cdef grib_handle *gh
         # initalize Python level objects
-        self.name = filename
+        if isinstance(filename, Path):
+            self.name = str(filename)
+        else:
+            self.name = filename
         self.closed = False
         self.messagenumber = 0
         # count number of messages in file.
