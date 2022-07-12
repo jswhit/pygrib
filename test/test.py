@@ -239,6 +239,11 @@ def test():
     >>> str(grb.packingType)
     'grid_simple'
     >>> grbs.close()
+
+    test opening a file specified by a pathlib.Path object
+    >>> from pathlib import Path
+    >>> grbs = pygrib.open(Path.cwd().parent / 'sampledata' / 'flux.grb')
+    >>> assert type(grbs.name) == str
     """
 
 if __name__ == "__main__":
