@@ -244,6 +244,27 @@ def test():
     >>> from pathlib import Path
     >>> grbs = pygrib.open(Path.cwd().parent / 'sampledata' / 'flux.grb')
     >>> assert type(grbs.name) == str
+
+    test opening a file from a file object
+    >>> f = open('../sampledata/flux.grb', 'rb')
+    >>> grbs = pygrib.open(f)
+    >>> for grb in grbs: print(grb)
+    1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs (avg):from 200402291200
+    2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120 hrs:from 200402291200
+    3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
+    4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200
+    >>> print(grbs.name)
+    ../sampledata/flux.grb
+    >>> grbs.close()
+    >>> f.close()
+
+    test opening a file from a BytesIO object
+    >>> from io import BytesIO
+    >>> with open('../sampledata/flux.grb', 'rb') as f: data = f.read()
+    >>> f = BytesIO(data)
+    >>> grbs = pygrib.open(f)
+    Traceback (most recent call last):
+    TypeError: expected bytes, _io.BytesIO found
     """
 
 if __name__ == "__main__":
