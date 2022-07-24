@@ -7,6 +7,7 @@ cimport numpy as npc
 import warnings
 import os
 from datetime import datetime
+from io import BufferedReader
 from pathlib import Path
 from pkg_resources import parse_version
 from numpy import ma
@@ -75,9 +76,13 @@ cdef extern from "stdlib.h":
 cdef extern from "stdio.h":
     ctypedef struct FILE
     FILE *fopen(char *path, char *mode)
+    FILE *fdopen(int, char *mode)
     int	fclose(FILE *)
     size_t fwrite(void *ptr, size_t size, size_t nitems, FILE *stream)
     void rewind (FILE *)
+
+cdef extern from "unistd.h":
+    int dup(int)
 
 cdef extern from "Python.h":
     object PyBytes_FromStringAndSize(char *s, size_t size)
@@ -318,10 +323,14 @@ cdef class open(object):
         # initialize C level objects.
         cdef grib_handle *gh
         cdef FILE *_fd
-        if isinstance(filename, Path):
-            filename = str(filename)
-        bytestr = _strencode(filename)
-        self._fd = fopen(bytestr, "rb") 
+        if isinstance(filename, BufferedReader):
+            fileno = dup(filename.fileno())
+            self._fd = fdopen(fileno, "rb")
+        else:
+            if isinstance(filename, Path):
+                filename = str(filename)
+            bytestr = _strencode(filename)
+            self._fd = fopen(bytestr, "rb")
         if self._fd == NULL:
             raise IOError("could not open %s", filename)
         self._gh = NULL
@@ -329,7 +338,9 @@ cdef class open(object):
         cdef int err, ncount
         cdef grib_handle *gh
         # initalize Python level objects
-        if isinstance(filename, Path):
+        if isinstance(filename, BufferedReader):
+            self.name = filename.name
+        elif isinstance(filename, Path):
             self.name = str(filename)
         else:
             self.name = filename
