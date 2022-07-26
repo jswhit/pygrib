@@ -102,12 +102,7 @@ def reread_end_section_using_raw_file_access(f):
 @pytest.mark.parametrize(
     "preprocess, print_result_expected, postprocess",
     [
-        pytest.param(
-            read_indicator,
-            print_result_expected_for_data_with_offset,
-            None,
-            marks=pytest.mark.xfail(reason="bug"),
-        ),
+        (read_indicator, print_result_expected_for_data_with_offset, None,),
         pytest.param(
             read_indicator_and_seek_to_starting_point,
             print_result_expected_for_messages,

@@ -79,7 +79,8 @@ cdef extern from "stdio.h":
     FILE *fdopen(int, char *mode)
     int	fclose(FILE *)
     size_t fwrite(void *ptr, size_t size, size_t nitems, FILE *stream)
-    void rewind (FILE *)
+    int fseek(FILE *, long, int)
+    int SEEK_SET
 
 cdef extern from "unistd.h":
     int dup(int)
@@ -317,6 +318,7 @@ cdef class open(object):
     :ivar name: The GRIB file which the instance represents."""
     cdef FILE *_fd
     cdef grib_handle *_gh
+    cdef long _offset
     cdef public object name, messagenumber, messages, closed,\
                        has_multi_field_msgs
     def __cinit__(self, filename):
@@ -326,11 +328,13 @@ cdef class open(object):
         if isinstance(filename, BufferedReader):
             fileno = dup(filename.fileno())
             self._fd = fdopen(fileno, "rb")
+            self._offset = filename.tell()
         else:
             if isinstance(filename, Path):
                 filename = str(filename)
             bytestr = _strencode(filename)
             self._fd = fopen(bytestr, "rb")
+            self._offset = 0
         if self._fd == NULL:
             raise IOError("could not open %s", filename)
         self._gh = NULL
@@ -353,7 +357,7 @@ cdef class open(object):
             err = grib_handle_delete(gh)
             if gh == NULL: break
             nmsgs = nmsgs + 1
-        rewind(self._fd)
+        fseek(self._fd, self._offset, SEEK_SET)
         self.messages = nmsgs 
         err =  grib_count_in_file(NULL, self._fd, &ncount)
         # if number of messages returned by grib_count_in_file
@@ -363,6 +367,7 @@ cdef class open(object):
             self.has_multi_field_msgs=True
         else:
             self.has_multi_field_msgs=False
+        fseek(self._fd, self._offset, SEEK_SET)
     def __iter__(self):
         return self
     def __next__(self):
@@ -492,7 +497,7 @@ cdef class open(object):
             gh = grib_handle_new_from_file(NULL, self._fd, &err)
             err = grib_handle_delete(gh)
             if gh == NULL: break
-        rewind(self._fd)
+        fseek(self._fd, self._offset, SEEK_SET)
         self.messagenumber = 0
     def message(self, N):
         """
