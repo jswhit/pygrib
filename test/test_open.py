@@ -103,11 +103,10 @@ def reread_end_section_using_raw_file_access(f):
     "preprocess, print_result_expected, postprocess",
     [
         (read_indicator, print_result_expected_for_data_with_offset, None,),
-        pytest.param(
+        (
             read_indicator_and_seek_to_starting_point,
             print_result_expected_for_messages,
             None,
-            marks=pytest.mark.xfail(reason="bug"),
         ),
         (
             None,

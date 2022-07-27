@@ -329,6 +329,12 @@ cdef class open(object):
             fileno = dup(filename.fileno())
             self._fd = fdopen(fileno, "rb")
             self._offset = filename.tell()
+            # since BufferedReader has its own read buffer,
+            # BufferedReader.seek() sometimes just changes its
+            # internal position and BufferedReader.tell() returns
+            # a calculated value, we need to ensure the actual
+            # position by fseek().
+            fseek(self._fd, self._offset, SEEK_SET)
         else:
             if isinstance(filename, Path):
                 filename = str(filename)
