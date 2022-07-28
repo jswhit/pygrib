@@ -80,6 +80,7 @@ cdef extern from "stdio.h":
     int	fclose(FILE *)
     size_t fwrite(void *ptr, size_t size, size_t nitems, FILE *stream)
     int fseek(FILE *, long, int)
+    long ftell(FILE *)
     int SEEK_SET
 
 cdef extern from "unistd.h":
@@ -319,6 +320,7 @@ cdef class open(object):
     cdef FILE *_fd
     cdef grib_handle *_gh
     cdef long _offset
+    cdef object _inner
     cdef public object name, messagenumber, messages, closed,\
                        has_multi_field_msgs
     def __cinit__(self, filename):
@@ -329,6 +331,7 @@ cdef class open(object):
             fileno = dup(filename.fileno())
             self._fd = fdopen(fileno, "rb")
             self._offset = filename.tell()
+            self._inner = filename
             # since BufferedReader has its own read buffer,
             # BufferedReader.seek() sometimes just changes its
             # internal position and BufferedReader.tell() returns
@@ -341,6 +344,7 @@ cdef class open(object):
             bytestr = _strencode(filename)
             self._fd = fopen(bytestr, "rb")
             self._offset = 0
+            self._inner = None
         if self._fd == NULL:
             raise IOError("could not open %s", filename)
         self._gh = NULL
@@ -479,6 +483,9 @@ cdef class open(object):
 
         close GRIB file, deallocate C structures associated with class instance"""
         cdef int err
+        if self._inner is not None:
+            self._inner.seek(ftell(self._fd))
+            self._inner = None
         fclose(self._fd)
         if self._gh != NULL:
             err = grib_handle_delete(self._gh)

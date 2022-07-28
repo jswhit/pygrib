@@ -126,11 +126,10 @@ def reread_end_section_using_raw_file_access(f):
             message_lines_expected_for_data_with_zero_offset,
             reread_end_section_using_raw_file_access,
         ),
-        pytest.param(
+        (
             read_indicator_and_seek_to_starting_point,
             message_lines_expected_for_data_with_zero_offset,
             reread_end_section_using_raw_file_access,
-            marks=pytest.mark.xfail(reason="bug"),
         ),
     ],
 )
