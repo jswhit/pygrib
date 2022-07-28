@@ -296,9 +296,11 @@ def get_definitions_path():
 
 cdef class open(object):
     """ 
-    open(filename_or_path)
+    open(filepath_or_buffer)
 
-    returns GRIB file iterator object given GRIB filename or a Path object. When iterated, returns
+    returns GRIB file iterator object given GRIB file path (:py:class:`str` or
+    :py:class:`pathlib.Path` object) or buffer (:py:class:`io.BufferedReader` object).
+    When iterated, returns
     instances of the :py:class:`gribmessage` class. Behaves much like a python file
     object, with :py:meth:`seek`, :py:meth:`tell`, :py:meth:`read`
     :py:meth:`readline` and :py:meth:`close` methods

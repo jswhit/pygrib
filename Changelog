@@ -1,8 +1,10 @@
 since version 2.1.4 release
 ===========================
 * add __dir__ method so dir(grb) returns grib keys.
-* allow pygrib.open() to open the path specified by the pathlib.Path object
+* allow pygrib.open to open a path specified by a pathlib.Path object
   (issue #193, PR #204)
+* allow pygrib.open to take an io.BufferedReader object as an argument
+  (issue #83, PR #206)
 
 version 2.1.4 (git tag v2.1.4rel)
 ================================
