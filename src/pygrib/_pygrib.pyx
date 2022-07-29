@@ -83,8 +83,8 @@ cdef extern from "stdio.h":
     long ftell(FILE *)
     int SEEK_SET
 
-cdef extern from "unistd.h":
-    int dup(int)
+cdef extern from "./portable.h":
+    int wrap_dup(int)
 
 cdef extern from "Python.h":
     object PyBytes_FromStringAndSize(char *s, size_t size)
@@ -330,7 +330,7 @@ cdef class open(object):
         cdef grib_handle *gh
         cdef FILE *_fd
         if isinstance(filename, BufferedReader):
-            fileno = dup(filename.fileno())
+            fileno = wrap_dup(filename.fileno())
             self._fd = fdopen(fileno, "rb")
             self._offset = filename.tell()
             self._inner = filename
