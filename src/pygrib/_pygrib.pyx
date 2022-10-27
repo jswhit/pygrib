@@ -390,10 +390,10 @@ cdef class open(object):
         if self._gh is not NULL:
             err = grib_handle_delete(self._gh)
             if err:
-                raise RuntimeError(grib_get_error_message(err))
+                raise RuntimeError(_get_error_message(err))
         gh = grib_handle_new_from_file(NULL, self._fd, &err)
         if err:
-            raise RuntimeError(grib_get_error_message(err))
+            raise RuntimeError(_get_error_message(err))
         if gh == NULL:
             raise StopIteration
         else:
@@ -492,7 +492,7 @@ cdef class open(object):
         if self._gh != NULL:
             err = grib_handle_delete(self._gh)
             if err:
-                raise RuntimeError(grib_get_error_message(err))
+                raise RuntimeError(_get_error_message(err))
         self.closed = True
         self._fd = NULL
 
@@ -585,10 +585,10 @@ Example usage:
         for n in range(self.messagenumber,self.messagenumber+nmsgs):
             err = grib_handle_delete(self._gh)
             if err:
-                raise RuntimeError(grib_get_error_message(err))
+                raise RuntimeError(_get_error_message(err))
             self._gh = grib_handle_new_from_file(NULL, self._fd, &err)
             if err:
-                raise RuntimeError(grib_get_error_message(err))
+                raise RuntimeError(_get_error_message(err))
             if self._gh == NULL:
                 raise IOError('not that many messages in file')
             self.messagenumber = self.messagenumber + 1
@@ -614,7 +614,7 @@ def julian_to_datetime(object jd):
     julday = jd
     err = grib_julian_to_datetime(julday, &year, &month, &day, &hour, &minute, &second)
     if err:
-        raise RuntimeError(grib_get_error_message(err))
+        raise RuntimeError(_get_error_message(err))
     return datetime(year, month, day, hour, minute, second)
 
 def datetime_to_julian(object d):
@@ -629,7 +629,7 @@ def datetime_to_julian(object d):
     minute = d.minute; second = d.second
     err = grib_datetime_to_julian(year,month,day,hour,minute,second,&julday)
     if err:
-        raise RuntimeError(grib_get_error_message(err))
+        raise RuntimeError(_get_error_message(err))
     return julday
 
 cdef _create_gribmessage(grib_handle *gh, object messagenumber):
@@ -1004,7 +1004,7 @@ cdef class gribmessage(object):
                 keys.append(key)
         err = grib_keys_iterator_delete(gi)
         if err:
-            raise RuntimeError(grib_get_error_message(err))
+            raise RuntimeError(_get_error_message(err))
         # add extra python keys.
         if hasattr(self,'analDate'): keys.append('analDate')
         if hasattr(self,'validDate'): keys.append('validDate')
@@ -1029,7 +1029,7 @@ cdef class gribmessage(object):
             keys_noro.append(key)
         err = grib_keys_iterator_delete(gi)
         if err:
-            raise RuntimeError(grib_get_error_message(err))
+            raise RuntimeError(_get_error_message(err))
         keys_ro = []
         for key in self._all_keys:
             if key not in keys_noro:
@@ -1096,7 +1096,7 @@ cdef class gribmessage(object):
         name = bytestr
         err = grib_get_native_type(self._gh, name, &typ)
         if err:
-            raise RuntimeError(grib_get_error_message(err))
+            raise RuntimeError(_get_error_message(err))
         elif typ == GRIB_TYPE_LONG:
             # is value an array or a scalar?
             datarr = np.asarray(value, int)
@@ -1107,7 +1107,7 @@ cdef class gribmessage(object):
                 longval = value
                 err = grib_set_long(self._gh, name, longval)
                 if err:
-                    raise RuntimeError(grib_get_error_message(err))
+                    raise RuntimeError(_get_error_message(err))
             else:
                 if key == 'values':
                     datarr = self._unshape_mask(datarr)
@@ -1116,7 +1116,7 @@ cdef class gribmessage(object):
                 size = datarr.size
                 err = grib_set_long_array(self._gh, name, <long *>datarr.data, size)
                 if err:
-                    raise RuntimeError(grib_get_error_message(err))
+                    raise RuntimeError(_get_error_message(err))
         elif typ == GRIB_TYPE_DOUBLE:
             # is value an array or a scalar?
             datarr = np.asarray(value, float)
@@ -1127,7 +1127,7 @@ cdef class gribmessage(object):
                 doubleval = value
                 err = grib_set_double(self._gh, name, doubleval)
                 if err:
-                    raise RuntimeError(grib_get_error_message(err))
+                    raise RuntimeError(_get_error_message(err))
             else:
                 if key == 'values':
                     datarr = self._unshape_mask(datarr)
@@ -1136,14 +1136,14 @@ cdef class gribmessage(object):
                 size = datarr.size
                 err = grib_set_double_array(self._gh, name, <double *>datarr.data, size)
                 if err:
-                    raise RuntimeError(grib_get_error_message(err))
+                    raise RuntimeError(_get_error_message(err))
         elif typ == GRIB_TYPE_STRING:
             size=len(value)
             bytestr = _strencode(value)
             strdata = bytestr
             err = grib_set_string(self._gh, name, strdata, &size)
             if err:
-                raise RuntimeError(grib_get_error_message(err))
+                raise RuntimeError(_get_error_message(err))
         else:
             raise ValueError("unrecognized grib type % d" % typ)
     def __getitem__(self, key):
@@ -1170,19 +1170,19 @@ cdef class gribmessage(object):
             if tolerate_badgrib:
                 return None
             else:
-                raise RuntimeError(grib_get_error_message(err))
+                raise RuntimeError(_get_error_message(err))
         err = grib_get_native_type(self._gh, name, &typ)
         # force 'paramId' to be size 1 (it returns a size of 7,
         # which is a relic from earlier versions of grib_api in which
         # paramId was a string and not an integer)
         if key=='paramId' and typ == GRIB_TYPE_LONG: size=1
         if err:
-            raise RuntimeError(grib_get_error_message(err))
+            raise RuntimeError(_get_error_message(err))
         elif typ == GRIB_TYPE_LONG:
             if size == 1: # scalar
                 err = grib_get_long(self._gh, name, &longval)
                 if err:
-                    raise RuntimeError(grib_get_error_message(err))
+                    raise RuntimeError(_get_error_message(err))
                 return longval
             else: # array
                 if self.has_key('jPointsAreConsecutive') and\
@@ -1193,7 +1193,7 @@ cdef class gribmessage(object):
                 datarr = np.zeros(size, int, order=storageorder)
                 err = grib_get_long_array(self._gh, name, <long *>datarr.data, &size)
                 if err:
-                    raise RuntimeError(grib_get_error_message(err))
+                    raise RuntimeError(_get_error_message(err))
                 if key == 'values':
                     return self._reshape_mask(datarr)
                 else:
@@ -1202,7 +1202,7 @@ cdef class gribmessage(object):
             if size == 1: # scalar
                 err = grib_get_double(self._gh, name, &doubleval)
                 if err:
-                    raise RuntimeError(grib_get_error_message(err))
+                    raise RuntimeError(_get_error_message(err))
                 return doubleval
             else: # array
                 if self.has_key('jPointsAreConsecutive') and\
@@ -1213,7 +1213,7 @@ cdef class gribmessage(object):
                 datarr = np.zeros(size, np.double, order=storageorder)
                 err = grib_get_double_array(self._gh, name, <double *>datarr.data, &size)
                 if err:
-                    raise RuntimeError(grib_get_error_message(err))
+                    raise RuntimeError(_get_error_message(err))
                 if key == 'values':
                     return self._reshape_mask(datarr)
                 else:
@@ -1222,7 +1222,7 @@ cdef class gribmessage(object):
             size=1024 # grib_get_size returns 1 ?
             err = grib_get_string(self._gh, name, strdata, &size)
             if err:
-                raise RuntimeError(grib_get_error_message(err))
+                raise RuntimeError(_get_error_message(err))
             msg = strdata.decode(default_encoding)
             return msg.rstrip()
         else:
@@ -1272,10 +1272,10 @@ cdef class gribmessage(object):
         name = bytestr
         err = grib_get_size(self._gh, name, &size)
         if err:
-            raise RuntimeError(grib_get_error_message(err))
+            raise RuntimeError(_get_error_message(err))
         err = grib_get_message(self._gh, &message, &size)
         if err:
-            raise RuntimeError(grib_get_error_message(err))
+            raise RuntimeError(_get_error_message(err))
         msg = PyBytes_FromStringAndSize(<char *>message, size)
         return msg
     def _unshape_mask(self, datarr):
@@ -1821,13 +1821,13 @@ None
             # assume filename is a saved index.
             self._gi = grib_index_read(NULL, filenamec, &err)
             if err:
-                raise RuntimeError(grib_get_error_message(err))
+                raise RuntimeError(_get_error_message(err))
         else:
             bytestr = _strencode(','.join(args))
             keys = bytestr
             self._gi = grib_index_new_from_file (NULL, filenamec, keys, &err)
             if err:
-                raise RuntimeError(grib_get_error_message(err))
+                raise RuntimeError(_get_error_message(err))
             grbs = open(filename)
             if grbs.has_multi_field_msgs:
                 msg="""
@@ -1902,7 +1902,7 @@ Example usage:
             key = bytestr
             err = grib_index_get_size(self._gi, key, &size)
             if err:
-                raise RuntimeError(grib_get_error_message(err))
+                raise RuntimeError(_get_error_message(err))
             sizetot = sizetot + size
             # if there are no matches for this key, just skip it
             if not size:
@@ -1911,18 +1911,18 @@ Example usage:
                 longval = long(v)
                 err = grib_index_select_long(self._gi, key, longval)
                 if err:
-                    raise RuntimeError(grib_get_error_message(err))
+                    raise RuntimeError(_get_error_message(err))
             elif typ == 'd' or type(v) == float:
                 doubval = float(v)
                 err = grib_index_select_double(self._gi, key, doubval)
                 if err:
-                    raise RuntimeError(grib_get_error_message(err))
+                    raise RuntimeError(_get_error_message(err))
             elif typ == 's' or _is_stringlike(v):
                 bytestr = _strencode(v)
                 strval = bytestr
                 err = grib_index_select_string(self._gi, key, strval)
                 if err:
-                    raise RuntimeError(grib_get_error_message(err))
+                    raise RuntimeError(_get_error_message(err))
             else:
                 raise TypeError('value must be float, int or string')
         # if no matches found, raise an error.
@@ -1939,7 +1939,7 @@ Example usage:
             grbs.append(_create_gribmessage(gh, messagenumber))
             err = grib_handle_delete(gh)
             if err:
-                raise RuntimeError(grib_get_error_message(err))
+                raise RuntimeError(_get_error_message(err))
         if not grbs:
             raise ValueError('no matches found')
         # return the list of grib messages.
@@ -1954,7 +1954,7 @@ Example usage:
         filenamec = bytestr
         err = grib_index_write(self._gi, filenamec);
         if err:
-            raise RuntimeError(grib_get_error_message(err))
+            raise RuntimeError(_get_error_message(err))
     def close(self):
         """
         close()
@@ -2015,3 +2015,7 @@ cdef _strencode(pystr,encoding=None):
         return pystr.encode(encoding)
     except AttributeError:
         return pystr # already bytes?
+
+cdef unicode _get_error_message(int code):
+    bytes_ = grib_get_error_message(code)
+    return bytes_.decode('ascii', 'strict')
