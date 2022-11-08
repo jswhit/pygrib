@@ -6,6 +6,7 @@ since version 2.1.4 release
 * allow pygrib.open to take an io.BufferedReader object as an argument
   (issue #83, PR #206)
 * ensure that RuntimeError contains a message of type `str` (PR #212)
+* fix an issue that the 3rd bit of scanning mode does not affect processing (PR #213)
 
 version 2.1.4 (git tag v2.1.4rel)
 ================================

@@ -1185,12 +1185,7 @@ cdef class gribmessage(object):
                     raise RuntimeError(_get_error_message(err))
                 return longval
             else: # array
-                if self.has_key('jPointsAreConsecutive') and\
-                   self['jPointsAreConsecutive']:
-                    storageorder='F'
-                else:
-                    storageorder='C'
-                datarr = np.zeros(size, int, order=storageorder)
+                datarr = np.zeros(size, int)
                 err = grib_get_long_array(self._gh, name, <long *>datarr.data, &size)
                 if err:
                     raise RuntimeError(_get_error_message(err))
@@ -1205,12 +1200,7 @@ cdef class gribmessage(object):
                     raise RuntimeError(_get_error_message(err))
                 return doubleval
             else: # array
-                if self.has_key('jPointsAreConsecutive') and\
-                   self['jPointsAreConsecutive']:
-                    storageorder='F'
-                else:
-                    storageorder='C'
-                datarr = np.zeros(size, np.double, order=storageorder)
+                datarr = np.zeros(size, np.double)
                 err = grib_get_double_array(self._gh, name, <double *>datarr.data, &size)
                 if err:
                     raise RuntimeError(_get_error_message(err))
@@ -1336,7 +1326,12 @@ cdef class gribmessage(object):
             return datarr
         if ny != GRIB_MISSING_LONG and nx != GRIB_MISSING_LONG and\
            self.expand_reduced:
-            datarr.shape = (ny,nx)
+            if self.has_key('jPointsAreConsecutive') and\
+                self['jPointsAreConsecutive']:
+                storageorder='F'
+            else:
+                storageorder='C'
+            datarr = datarr.reshape(ny, nx, order=storageorder)
         # check scan modes for rect grids.
         if datarr.ndim == 2:
            # columns scan in the -y direction (so flip)
