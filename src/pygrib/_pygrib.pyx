@@ -12,7 +12,7 @@ from pathlib import Path
 from pkg_resources import parse_version
 from numpy import ma
 import pyproj
-import_array()
+npc.import_array()
 
 cdef _redtoreg(object nlonsin, npc.ndarray lonsperlat, npc.ndarray redgrid, \
               object missval):
@@ -99,10 +99,8 @@ cdef extern from "numpy/arrayobject.h":
         cdef npy_intp *strides
         cdef object base
         cdef int flags
-    npy_intp PyArray_SIZE(ndarray arr)
     npy_intp PyArray_ISCONTIGUOUS(ndarray arr)
     npy_intp PyArray_ISALIGNED(ndarray arr)
-    void import_array()
 
 cdef extern from "grib_api.h":
     ctypedef struct grib_handle
