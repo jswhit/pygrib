@@ -22,7 +22,7 @@ You can also use [conda](https://docs.conda.io/en/latest/):
 conda install -c conda-forge pygrib
 ```
 
-Alternately, clone the github repo and run `python setup.py install` (after setting `$ECCCODES_DIR`)
+Alternately, clone the github repo and run `pip install -e .` (after setting `$ECCCODES_DIR`)
 where `$ECCODES_DIR` is the path to the directory containing `include/grib_api.h`
 and `lib/libeccodes.so`. If `ECCODES_DIR` is not specified, a few common locations
 such as `$CONDA_PREFIX,/usr,/usr/local,/opt/local` will be searched.

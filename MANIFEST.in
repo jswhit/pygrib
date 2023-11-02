@@ -9,7 +9,7 @@ recursive-include src *pyx
 recursive-include src *py
 recursive-include src *h
 recursive-include docs *
-recursive-include eccodes *.def
+recursive-include src/pygrib/share/eccodes *.def
 recursive-include test *.py
 include sampledata/*.grb
 include sampledata/*.grb2
