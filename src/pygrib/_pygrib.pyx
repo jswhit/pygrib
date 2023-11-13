@@ -8,7 +8,7 @@ import warnings
 import os
 from datetime import datetime
 from io import BufferedReader
-from pathlib import Path
+from os import PathLike
 from pkg_resources import parse_version
 from numpy import ma
 import pyproj
@@ -297,7 +297,7 @@ cdef class open(object):
     open(filepath_or_buffer)
 
     returns GRIB file iterator object given GRIB file path (:py:class:`str` or
-    :py:class:`pathlib.Path` object) or buffer (:py:class:`io.BufferedReader` object).
+    :py:class:`os.PathLike` object) or buffer (:py:class:`io.BufferedReader` object).
     When iterated, returns
     instances of the :py:class:`gribmessage` class. Behaves much like a python file
     object, with :py:meth:`seek`, :py:meth:`tell`, :py:meth:`read`
@@ -339,14 +339,16 @@ cdef class open(object):
             # position by fseek().
             fseek(self._fd, self._offset, SEEK_SET)
         else:
-            if isinstance(filename, Path):
-                filename = str(filename)
-            bytestr = _strencode(filename)
+            if isinstance(filename, PathLike):
+                bytestr = os.fsencode(filename)
+            else:
+                bytestr = _strencode(filename)
             self._fd = fopen(bytestr, "rb")
             self._offset = 0
             self._inner = None
         if self._fd == NULL:
             raise IOError("could not open %s", filename)
+            raise OSError("could not open {}".format(filename))
         self._gh = NULL
     def __init__(self, filename):
         cdef int err, ncount
@@ -354,7 +356,7 @@ cdef class open(object):
         # initalize Python level objects
         if isinstance(filename, BufferedReader):
             self.name = filename.name
-        elif isinstance(filename, Path):
+        elif isinstance(filename, PathLike):
             self.name = str(filename)
         else:
             self.name = filename
