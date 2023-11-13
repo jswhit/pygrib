@@ -12,7 +12,7 @@ from pathlib import Path
 from pkg_resources import parse_version
 from numpy import ma
 import pyproj
-import_array()
+npc.import_array()
 
 cdef _redtoreg(object nlonsin, npc.ndarray lonsperlat, npc.ndarray redgrid, \
               object missval):
@@ -99,10 +99,8 @@ cdef extern from "numpy/arrayobject.h":
         cdef npy_intp *strides
         cdef object base
         cdef int flags
-    npy_intp PyArray_SIZE(ndarray arr)
     npy_intp PyArray_ISCONTIGUOUS(ndarray arr)
     npy_intp PyArray_ISALIGNED(ndarray arr)
-    void import_array()
 
 cdef extern from "grib_api.h":
     ctypedef struct grib_handle
@@ -142,14 +140,14 @@ cdef extern from "grib_api.h":
     int grib_set_string(grib_handle *h, char *name, char *mesg, size_t *size)
     grib_keys_iterator* grib_keys_iterator_new(grib_handle* h,unsigned long filter_flags, char* name_space)
     int grib_keys_iterator_next(grib_keys_iterator *kiter)
-    char* grib_keys_iterator_get_name(grib_keys_iterator *kiter)
+    const char* grib_keys_iterator_get_name(grib_keys_iterator *kiter)
     int grib_handle_delete(grib_handle* h)
     grib_handle* grib_handle_new_from_file(grib_context* c, FILE* f, int* error)        
-    char* grib_get_error_message(int code)
+    const char* grib_get_error_message(int code)
     int grib_keys_iterator_delete( grib_keys_iterator* kiter)
     void grib_multi_support_on(grib_context* c)
     void grib_multi_support_off(grib_context* c)
-    int grib_get_message(grib_handle* h ,  void** message,size_t *message_length)
+    int grib_get_message(grib_handle* h , const void** message,size_t *message_length)
     int grib_get_message_copy(grib_handle* h ,  void* message,size_t *message_length)
     long grib_get_api_version()
     grib_handle* grib_handle_clone(grib_handle* h)
@@ -981,7 +979,7 @@ cdef class gribmessage(object):
         """
         cdef grib_keys_iterator* gi
         cdef int err, typ
-        cdef char *name
+        cdef const char *name
         # use cached keys if they exist.
         if self._all_keys is not None: return self._all_keys
         # if not, get keys from grib file.
@@ -1017,7 +1015,7 @@ cdef class gribmessage(object):
         """
         cdef grib_keys_iterator* gi
         cdef int err, typ
-        cdef char *name
+        cdef const char *name
         if self._all_keys is None:
             self._all_keys = self.keys()
         gi = grib_keys_iterator_new(self._gh,\
@@ -1255,7 +1253,7 @@ cdef class gribmessage(object):
         """
         cdef int err
         cdef size_t size
-        cdef void *message
+        cdef const void *message
         cdef char *name
         cdef FILE *out
         bytestr = b'values'
