@@ -150,6 +150,7 @@ setuptools.setup(
     setup_requires=["setuptools", "cython"],
     install_requires=[
         "pyproj",
+        "setuptools",
         "numpy",
     ],
 )
