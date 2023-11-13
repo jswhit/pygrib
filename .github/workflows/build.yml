@@ -9,49 +9,42 @@ jobs:
       PROJ_LIB: /usr/share/proj
     strategy:
       matrix:
-        #python-version: ["3.6", "3.7", "3.8", "3.9"]
+        #python-version: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
         python-version: ["3.9"]
     steps:
 
     - uses: actions/checkout@v2
 
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
 
     - name: Install Ubuntu Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install libproj-dev proj-bin libeccodes-dev
-        sudo apt-get install libgeos-dev
+        sudo apt-get install gfortran libeccodes-dev
 
     - name: Update Pip
       run: |
         python -m pip install --upgrade pip
 
-    - name: Install pygrib dependencies via pip
+    - name: Install some dependencies via pip
       run: |
-        python -m pip install numpy
-        python -m pip install cython
-        python -m pip install pyproj
-        python -m pip install pytest
-        python -m pip install check-manifest
-        python -m pip install twine
-        python -m pip install wheel
+        # Install pyspharm using a few tricks
+        pip install numpy setuptools wheel
+        FFLAGS="-fallow-argument-mismatch" pip install --no-use-pep517 pyspharm
+        # for later building/checking
+        pip install build twine
+        pip install cython check-manifest
         # below here only needed for mpl/cartopy based tests
-        python -m pip install pytest-mpl
-        python -m pip install pyshp
-        python -m pip install six
-        python -m pip install shapely --no-binary shapely
-        python -m pip install matplotlib
-        python -m pip install cartopy
-        python -m pip install scipy
-        python -m pip install pyspharm
+        pip install pytest-mpl
+        pip install cartopy
 
     - name: Install pygrib
       run: |
-        python setup.py install
+        pip install -e .
+
     - name: Test
       run: |
         cd test
@@ -62,7 +55,6 @@ jobs:
 
     - name: Tarball
       run: |
-        python setup.py --version ; 
-        pip wheel . -w dist --no-deps ;
-        check-manifest --verbose ;
-        twine check dist/* ;
+        python -m build --sdist
+        check-manifest --verbose
+        twine check --strict dist/*
