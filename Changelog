@@ -1,8 +1,9 @@
-since version 2.1.4 release
-===========================
+version 2.1.5 release
+=====================
+* remove python 3.6 support, add python 3.11,3.12
 * add __dir__ method so dir(grb) returns grib keys.
-* allow pygrib.open to open a path specified by a pathlib.Path object
-  (issue #193, PR #204)
+* allow pygrib.open to open a path specified by a PathLike object
+* fix compilation issues on macos x
 * allow pygrib.open to take an io.BufferedReader object as an argument
   (issue #83, PR #206)
 * ensure that RuntimeError contains a message of type `str` (PR #212)

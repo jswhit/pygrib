@@ -1,3 +1,4 @@
 [build-system]
 # minimum requiremets for build system
 requires = ["setuptools", "cython", "numpy", "wheel"]
+build-backend = "setuptools.build_meta"
