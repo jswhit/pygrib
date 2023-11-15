@@ -1,0 +1,10 @@
+build/
+*.pyc
+dist/
+*.egg-info/
+src/pygrib/_pygrib.c
+src/pygrib/*.so
+test/out.grib
+venv/
+.eggs/
+.idea/
