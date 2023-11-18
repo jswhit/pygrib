@@ -1,4 +1,55 @@
 [build-system]
-# minimum requiremets for build system
-requires = ["setuptools", "cython", "numpy", "wheel"]
+requires = [
+    "Cython>=0.29",
+    "oldest-supported-numpy",
+    "setuptools>=61",
+]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "pygrib"
+description = "Python module for reading/writing GRIB files"
+readme = "README.md"
+authors = [
+  {name = "Jeff Whitaker", email = "jeffrey.s.whitaker@noaa.gov"},
+]
+requires-python = ">=3.7"
+license = {text = "MIT"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "pyproj",
+    "numpy",
+]
+dynamic = ["version"]
+
+[project.urls]
+Documentation = "https://jswhit.github.io/pygrib/"
+Repository = "https://github.com/jswhit/pygrib"
+
+[tool.check-manifest]
+ignore = [
+    ".gitignore",
+    "src/pygrib/*.c",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
+doctest_optionflags = ["NORMALIZE_WHITESPACE ELLIPSIS"]
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.setuptools.packages.find]
+where = ["src"]

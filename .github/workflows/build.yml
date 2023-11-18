@@ -36,7 +36,7 @@ jobs:
         FFLAGS="-fallow-argument-mismatch" pip install --no-use-pep517 pyspharm
         # for later building/checking
         pip install build twine
-        pip install cython check-manifest
+        pip install check-manifest
         # below here only needed for mpl/cartopy based tests
         pip install pytest-mpl
         pip install cartopy

@@ -1,4 +1,4 @@
-[![Install and Test Status](https://github.com/jswhit/pygrib/workflows/Install%20and%20Test/badge.svg)](https://github.com/jswhit/pygrib/actions)
+[![Install and Test Status](https://github.com/jswhit/pygrib/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/jswhit/pygrib/actions)
 [![PyPI package](https://badge.fury.io/py/pygrib.svg)](http://python.org/pypi/pygrib)
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/pygrib/badges/version.svg)](https://anaconda.org/conda-forge/pygrib)
 [![DOI](https://zenodo.org/badge/28599617.svg)](https://zenodo.org/badge/latestdoi/28599617)

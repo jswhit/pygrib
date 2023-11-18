@@ -1,6 +1,7 @@
-import os, sys
 import glob
+import os
 import setuptools
+import sys
 from Cython.Distutils import build_ext
 
 
@@ -97,11 +98,6 @@ ext_modules = [
     )
 ]
 
-# Import README.md as PyPi long_description
-this_directory = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(this_directory, "README.md")) as f:
-    long_description = f.read()
-
 # man pages installed in MAN_DIR/man1
 if os.environ.get("MAN_DIR"):
     man_dir = os.environ.get("MAN_DIR")
@@ -111,31 +107,11 @@ if os.environ.get("MAN_DIR"):
 else:
     data_files = None
 
+# See pyproject.toml for project metadata
 setuptools.setup(
-    name="pygrib",
+    name="pygrib",  # need by GitHub dependency graph
     version=extract_version("src/pygrib/_pygrib.pyx"),
-    description="Python module for reading/writing GRIB files",
-    author="Jeff Whitaker",
-    author_email="jeffrey.s.whitaker@noaa.gov",
-    url="https://github.com/jswhit/pygrib",
-    download_url="http://python.org/pypi/pygrib",
-    license="License :: OSI Approved :: MIT License",
-    classifiers=[
-        "Development Status :: 4 - Beta",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
-        "Intended Audience :: Science/Research",
-        "License :: OSI Approved :: MIT License",
-        "Topic :: Software Development :: Libraries :: Python Modules",
-    ],
     cmdclass=cmdclass,
-    long_description=long_description,
-    long_description_content_type="text/markdown",
     scripts=[
         "utils/grib_list",
         "utils/grib_repack",
@@ -144,13 +120,5 @@ setuptools.setup(
     ],
     ext_modules=ext_modules,
     data_files=data_files,
-    packages=["pygrib"],
-    package_dir={'':'src'},
     package_data=package_data,
-    setup_requires=["setuptools", "cython"],
-    install_requires=[
-        "pyproj",
-        "setuptools",
-        "numpy",
-    ],
 )
