@@ -9,6 +9,12 @@ import cartopy.crs as ccrs
 grbs = pygrib.open('../sampledata/ecmwf_tigge.grb')
 grb = grbs.select(parameterName='Soil moisture')[0]
 fld = grb.values; lats,lons = grb.latlons()
+
+# test redtoreg function
+grb.expand_grid(False)
+fld_tst = pygrib.redtoreg(grb.values, grb.pl, missval=grb.missingValue)
+assert np.allclose(fld, fld_tst)
+
 lons1 = lons[0,:]; lats1 = lats[:,0]
 # add cyclic (wrap-around) point to global grid
 fld,lons1 = add_cyclic_point(fld, coord=lons1)

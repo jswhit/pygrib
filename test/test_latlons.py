@@ -3,6 +3,7 @@
 # 3rd Party
 import pytest
 import numpy as np
+from pygrib import redtoreg
 
 
 # filename is passed as an argument to samplegribfile fixture
@@ -100,3 +101,16 @@ def test_latlons_randpoint(samplegribfile, pt_ji, expected):
     lats, lons = samplegribfile.message(1).latlons()
     j, i = pt_ji
     assert np.allclose([lons[j, i], lats[j, i]], expected)
+
+@pytest.mark.parametrize(
+    "filename, field",
+    [
+        ("ecmwf_tigge.grb","Soil moisture"),
+    ])
+def test_redtoreg(samplegribfile,field):
+    """Test the redtoreg function"""
+    grb = samplegribfile.select(parameterName=field)[0]
+    fld = grb.values
+    grb.expand_grid(False)
+    fld_tst = redtoreg(grb.values, grb.pl, missval=grb.missingValue)
+    assert np.allclose(fld,fld_tst)
