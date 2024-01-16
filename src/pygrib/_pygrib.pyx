@@ -46,7 +46,7 @@ def _redtoreg(object nlonsin, npc.ndarray lonsperlat, npc.ndarray redgrid, \
         flons = <double>ilons
         for i from 0 <= i < nlons:
             # zxi is the grid index (relative to the reduced grid)
-            # oeint on the full grid. 
+            # of the i'th point on the full grid.
             zxi = i * flons / nlons # goes from 0 to ilons
             im = <long>zxi
             zdx = zxi - <double>im
