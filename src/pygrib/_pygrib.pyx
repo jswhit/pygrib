@@ -9,7 +9,7 @@ import os
 from datetime import datetime
 from io import BufferedReader
 from os import PathLike
-from pkg_resources import parse_version
+from packaging import version
 from numpy import ma
 import pyproj
 npc.import_array()
@@ -1411,7 +1411,7 @@ cdef class gribmessage(object):
                 else:
                     scalea = 1.
                     scaleb = 1.
-                if parse_version(grib_api_version) < parse_version('1.9.0'):
+                if version.parse(grib_api_version) < version.parse('1.9.0'):
                     projparams['a']=self['scaledValueOfMajorAxisOfOblateSpheroidEarth']*scalea
                     projparams['b']=self['scaledValueOfMinorAxisOfOblateSpheroidEarth']*scaleb
                 else:
