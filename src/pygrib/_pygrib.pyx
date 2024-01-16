@@ -222,7 +222,8 @@ def redtoreg(redgrid_data, lonsperlat, missval=None):
     (default NaN).
 
     Takes 1-d array on ECMWF reduced gaussian grid, linearly interpolates to corresponding
-    regular gaussian grid."""
+    regular gaussian grid (with max(lonsperlat) longitudes). If any values equal missing value,
+    a masked array is returned."""
     if missval is None:
         missval = np.nan
     datarr = _redtoreg(lonsperlat.max(),lonsperlat,redgrid_data,missval)
