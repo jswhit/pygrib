@@ -1,6 +1,6 @@
 """pygrib module"""
 
-__version__ = '2.1.5'
+__version__ = '2.1.6'
 
 import numpy as np
 cimport numpy as npc
@@ -215,15 +215,9 @@ def redtoreg(redgrid_data, lonsperlat, missval=None):
     """
     redtoreg(redgrid_data, lonsperlat, missval=None)
 
-    redgrid_data: input 1d array of reduced grid data
-    lonsperlat:  array dimension nlats with number of lons for each latitude on
-    reduced grid.
-    missval: value assigned to missing or invalid data on input reduced grid
-    (default NaN).
-
-    Takes 1-d array on ECMWF reduced gaussian grid, linearly interpolates to corresponding
-    regular gaussian grid (with max(lonsperlat) longitudes). If any values equal missing value,
-    a masked array is returned."""
+    Takes 1-d array on ECMWF reduced gaussian grid (``redgrid_data``), linearly interpolates to corresponding
+    regular gaussian grid (given by ``lonsperlat`` array, with max(lonsperlat) longitudes).
+    If any values equal to specified missing value (``missval``, default NaN), a masked array is returned."""
     if missval is None:
         missval = np.nan
     datarr = _redtoreg(lonsperlat.max(),lonsperlat,redgrid_data,missval)

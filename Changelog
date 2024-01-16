@@ -1,6 +1,8 @@
-since version 2.1.5 release
-===========================
+version 2.1.6 (not yet released)
+================================
 * switch dynamic version handling from pkg_resources (in setuptools) to packaging
+* expose 'redtoreg' function for interpolating reduced to full gaussian
+  gridded fields.
 
 version 2.1.5 release
 =====================

@@ -34,11 +34,11 @@ an error saying ``boot.def`` cannot be found.
 Developing
 ----------
 
-To build from source, clone the github repository and run setup.py:
+To build from source, clone the github repository and install:
 
     >>> git clone https://github.com/jswhit/pygrib
     >>> cd pygrib
-    >>> ECCODES_DIR=path/to/eccodes python setup.py install
+    >>> ECCODES_DIR=path/to/eccodes pip install -e .
 
 where ``$ECCODES_DIR`` is the path to the directory containing ``include/grib_api.h``
 and ``lib/libeccodes.so``. If ``ECCODES_DIR`` is not specified, a few common locations
