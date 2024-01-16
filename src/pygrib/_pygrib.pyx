@@ -14,7 +14,7 @@ from numpy import ma
 import pyproj
 npc.import_array()
 
-cdef _redtoreg(object nlonsin, npc.ndarray lonsperlat, npc.ndarray redgrid, \
+def _redtoreg(object nlonsin, npc.ndarray lonsperlat, npc.ndarray redgrid, \
               object missval):
     """
     convert data on global reduced gaussian to global
@@ -46,7 +46,7 @@ cdef _redtoreg(object nlonsin, npc.ndarray lonsperlat, npc.ndarray redgrid, \
         flons = <double>ilons
         for i from 0 <= i < nlons:
             # zxi is the grid index (relative to the reduced grid)
-            # of the i'th point on the full grid. 
+            # oeint on the full grid. 
             zxi = i * flons / nlons # goes from 0 to ilons
             im = <long>zxi
             zdx = zxi - <double>im
@@ -210,6 +210,25 @@ def tolerate_badgrib_off():
     """
     global tolerate_badgrib
     tolerate_badgrib = False
+
+def redtoreg(redgrid_data, lonsperlat, missval=None):
+    """
+    redtoreg(redgrid_data, lonsperlat, missval=None)
+
+    redgrid_data: input 1d array of reduced grid data
+    lonsperlat:  array dimension nlats with number of lons for each latitude on
+    reduced grid.
+    missval: value assigned to missing or invalid data on input reduced grid
+    (default NaN).
+
+    Takes 1-d array on ECMWF reduced gaussian grid, linearly interpolates to corresponding
+    regular gaussian grid."""
+    if missval is None:
+        missval = np.nan
+    datarr = _redtoreg(lonsperlat.max(),lonsperlat,redgrid_data,missval)
+    if np.count_nonzero(datarr==missval):
+        datarr = ma.masked_values(datarr, missval)
+    return datarr
 
 def gaulats(object nlats):
     """
