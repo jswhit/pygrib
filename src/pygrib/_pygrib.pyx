@@ -39,19 +39,20 @@ def _redtoreg(cython.Py_ssize_t nlons, my_type[:] redgrid_data, long[:] lonsperl
             zxi = i * flons / nlons # goes from 0 to ilons
             im = <long>zxi
             zdx = zxi - <my_type>im
-            im = (im + ilons)%ilons
-            ip = (im + 1 + ilons)%ilons
-            # if one of the nearest values is missing, use nearest
-            # neighbor interpolation.
-            if redgrid_data[indx+im] == missval or\
-               redgrid_data[indx+ip] == missval: 
-                if zdx < 0.5:
-                    reggrid_data_view[j,i] = redgrid_data[indx+im]
-                else:
-                    reggrid_data_view[j,i] = redgrid_data[indx+ip]
-            else: # linear interpolation.
-                reggrid_data_view[j,i] = redgrid_data[indx+im]*(1.-zdx) +\
-                                         redgrid_data[indx+ip]*zdx
+            if ilons != 0:
+                im = (im + ilons)%ilons
+                ip = (im + 1 + ilons)%ilons
+                # if one of the nearest values is missing, use nearest
+                # neighbor interpolation.
+                if redgrid_data[indx+im] == missval or\
+                   redgrid_data[indx+ip] == missval: 
+                    if zdx < 0.5:
+                        reggrid_data_view[j,i] = redgrid_data[indx+im]
+                    else:
+                        reggrid_data_view[j,i] = redgrid_data[indx+ip]
+                else: # linear interpolation.
+                    reggrid_data_view[j,i] = redgrid_data[indx+im]*(1.-zdx) +\
+                                             redgrid_data[indx+ip]*zdx
         indx = indx + ilons
     return reggrid_data
 
