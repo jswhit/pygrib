@@ -27,7 +27,7 @@ def _redtoreg(cython.Py_ssize_t nlons, my_type[:] redgrid_data, long[:] lonsperl
         dtype = np.float32
     elif my_type is double:
         dtype = np.double
-    reggrid_data = np.empty((nlats, nlons), dtype)
+    reggrid_data = np.full((nlats,nlons), missval, dtype)
     cdef my_type[:, ::1] reggrid_data_view = reggrid_data
     indx = 0
     for j in range(nlats):
