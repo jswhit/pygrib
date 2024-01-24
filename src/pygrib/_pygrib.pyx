@@ -15,37 +15,51 @@ from numpy import ma
 import pyproj
 npc.import_array()
 
-ctypedef fused my_type:
+ctypedef fused float_type:
     float
     double
 
-def _redtoreg(cython.Py_ssize_t nlons, my_type[:] redgrid_data, long[:] lonsperlat, my_type missval):
+def redtoreg(float_type[:] redgrid_data, long[:] lonsperlat, missval=None):
+    """
+    redtoreg(redgrid_data, lonsperlat, missval=None)
+
+    Takes 1-d array on ECMWF reduced gaussian grid (redgrid_data), linearly interpolates
+    to corresponding regular gaussian grid.
+
+    Reduced gaussian grid defined by lonsperlat array, regular gaussian
+    grid has the same number of latitudes and max(lonsperlat) longitudes.
+
+    Includes handling of missing values using nearest neighbor interpolation.
+    """
+
+    cdef cython.Py_ssize_t nlons = np.max(lonsperlat)
     cdef cython.Py_ssize_t nlats = lonsperlat.shape[0]
-    cdef cython.Py_ssize_t i,j,n,indx,ilons,im,ip
-    cdef my_type zxi, zdx, flons
-    if my_type is float:
-        dtype = np.float32
-    elif my_type is double:
-        dtype = np.double
-    reggrid_data = np.full((nlats,nlons), missval, dtype)
-    cdef my_type[:, ::1] reggrid_data_view = reggrid_data
+    cdef cython.Py_ssize_t i,j,indx,ilons,im,ip,nlona
+    cdef float_type zxi, zdx, flons, missvalc
+    if float_type is float:
+        float_dtype = np.float32
+    elif float_type is double:
+        float_dtype = np.double
+    if missval is None:
+        missval = np.nan
+    missvalc = missval
+    reggrid_data = np.full((nlats, nlons), missval, float_dtype)
+    cdef float_type[:, ::1] reggrid_data_view = reggrid_data
     indx = 0
     for j in range(nlats):
-        ilons = lonsperlat[j]
-        flons = <my_type>ilons
-        for i in range(nlons):
-            # zxi is the grid index (relative to the reduced grid)
-            # of the i'th point on the full grid.
-            zxi = i * flons / nlons # goes from 0 to ilons
-            im = <long>zxi
-            zdx = zxi - <my_type>im
-            if ilons != 0:
+        ilons = lonsperlat[j]; flons = ilons
+        if ilons != 0:
+            for i in range(nlons):
+                # zxi is the grid index (relative to the reduced grid)
+                # of the i'th point on the full grid.
+                zxi = i * flons / nlons # goes from 0 to ilons
+                im = <cython.Py_ssize_t>zxi; zdx = zxi - im
                 im = (im + ilons)%ilons
                 ip = (im + 1 + ilons)%ilons
                 # if one of the nearest values is missing, use nearest
                 # neighbor interpolation.
-                if redgrid_data[indx+im] == missval or\
-                   redgrid_data[indx+ip] == missval: 
+                if redgrid_data[indx+im] == missvalc or\
+                   redgrid_data[indx+ip] == missvalc: 
                     if zdx < 0.5:
                         reggrid_data_view[j,i] = redgrid_data[indx+im]
                     else:
@@ -53,23 +67,8 @@ def _redtoreg(cython.Py_ssize_t nlons, my_type[:] redgrid_data, long[:] lonsperl
                 else: # linear interpolation.
                     reggrid_data_view[j,i] = redgrid_data[indx+im]*(1.-zdx) +\
                                              redgrid_data[indx+ip]*zdx
-        indx = indx + ilons
+            indx = indx + ilons
     return reggrid_data
-
-def redtoreg(redgrid_data, lonsperlat, missval=None):
-    """
-    redtoreg(redgrid_data, lonsperlat, missval=None)
-
-    Takes 1-d array on ECMWF reduced gaussian grid (``redgrid_data``), linearly interpolates to corresponding
-    regular gaussian grid (given by ``lonsperlat`` array, with max(lonsperlat) longitudes).
-    If any values equal to specified missing value (``missval``, default NaN), a masked array is returned."""
-
-    if missval is None:
-        missval = np.nan
-    datarr = _redtoreg(lonsperlat.max(),redgrid_data,lonsperlat,missval)
-    if np.count_nonzero(datarr==missval):
-        datarr = ma.masked_values(datarr, missval)
-    return datarr
 
 cdef extern from "stdlib.h":
     ctypedef long size_t
@@ -1314,8 +1313,8 @@ cdef class gribmessage(object):
             else:
                 missval = 1.e30
             if self.expand_reduced:
-                nx = 2*ny
-                datarr = _redtoreg(2*ny, datarr, self['pl'], missval)
+                nx = self['pl'].max()
+                datarr = redtoreg(datarr, self['pl'], missval=missval)
             else:
                 nx = None
         elif self.has_key('Nx') and self.has_key('Ny'):
@@ -1550,7 +1549,7 @@ cdef class gribmessage(object):
                 lats = self['distinctLatitudes']
                 if lat2 < lat1 and lats[-1] > lats[0]: lats = lats[::-1]
                 ny = self['Nj']
-                nx = 2*ny
+                nx = self['pl'].max()
                 lon1 = self['longitudeOfFirstGridPointInDegrees']
                 lon2 = self['longitudeOfLastGridPointInDegrees']
                 lons = np.linspace(lon1,lon2,nx)
@@ -1561,7 +1560,7 @@ cdef class gribmessage(object):
         elif self['gridType'] == 'reduced_ll': # reduced lat/lon grid
             if self.expand_reduced:
                 ny = self['Nj']
-                nx = 2*ny
+                nx = self['pl'].max()
                 lat1 = self['latitudeOfFirstGridPointInDegrees']
                 lat2 = self['latitudeOfLastGridPointInDegrees']
                 lon1 = self['longitudeOfFirstGridPointInDegrees']

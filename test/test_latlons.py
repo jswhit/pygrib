@@ -94,7 +94,7 @@ def test_latlons_corners(samplegribfile, expected):
         ("flux.grb", [47, 64], [120.0, -0.952367]),
         ("ecmwf_tigge.grb", [200, 266], [119.7, -0.224718]),
         ("dspr.temp.bin", [112, 113], [-66.676034, 18.2714926]),
-        ("reduced_latlon_surface.grib2", [250, 334], [119.99976, 0.0])
+        ("reduced_latlon_surface.grib2", [250, 334], [120.24, 0.0])
     ])
 def test_latlons_randpoint(samplegribfile, pt_ji, expected):
     """Test the resulting grid data."""
