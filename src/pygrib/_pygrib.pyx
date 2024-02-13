@@ -1539,7 +1539,8 @@ cdef class gribmessage(object):
             lat1 = self['latitudeOfFirstGridPointInDegrees']
             lat2 = self['latitudeOfLastGridPointInDegrees']
             lats = self['distinctLatitudes']
-            if lat2 < lat1 and lats[-1] > lats[0]: lats = lats[::-1]
+            if self['Nj'] > 1:
+                if lat2 < lat1 and lats[-1] > lats[0]: lats = lats[::-1]
             lons = self['distinctLongitudes']
             lons,lats = np.meshgrid(lons,lats) 
         elif self['gridType'] == 'reduced_gg': # reduced global gaussian grid
