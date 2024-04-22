@@ -686,6 +686,8 @@ def setdates(gribmessage grb):
         elif grb.has_key('stepRange'):
             # if forecastTime doesn't exist, use end of stepRange.
             ftime = grb['stepRange'] # computed key, uses stepUnits
+            if grb.has_key('stepUnits') and grb.stepUnits in _ftimedict:
+                grb.fcstimeunits = _ftimedict[grb.stepUnits]
             # if it's a range, use the end of the range to define validDate
             try: 
                 ftime = float(ftime.split('-')[1])
@@ -873,9 +875,9 @@ cdef class gribmessage(object):
             ftime = self['stepRange'] # computed key, uses stepUnits
             if self.valid_key('stepType') and self['stepType'] != 'instant':
                 inventory.append(':fcst time %s %s (%s)'%\
-                    (ftime,self.fcstimeunits,self.stepType))
+                    (ftime,_ftimedict[self.stepUnits],self.stepType))
             else:
-                inventory.append(':fcst time %s %s'% (ftime,self.fcstimeunits))
+                inventory.append(':fcst time %s %s'% (ftime,_ftimedict[self.stepUnits]))
         elif self.valid_key('forecastTime'):
             ftime = repr(self['forecastTime'])
             inventory.append(':fcst time %s %s'% (ftime,self.fcstimeunits))
