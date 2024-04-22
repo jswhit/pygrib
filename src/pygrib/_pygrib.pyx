@@ -871,16 +871,16 @@ cdef class gribmessage(object):
                 inventory.append(levstring)
         elif self.valid_key('level'):
             inventory.append(':level %s' % self['level'])
-        if self.valid_key('forecastTime'):
-            ftime = repr(self['forecastTime'])
-            inventory.append(':fcst time %s %s'% (ftime,self.fcstimeunits))
-        elif self.valid_key('stepRange'):
+        if self.valid_key('stepRange'):
             ftime = self['stepRange'] # computed key, uses stepUnits
             if self.valid_key('stepType') and self['stepType'] != 'instant':
                 inventory.append(':fcst time %s %s (%s)'%\
-                    (ftime,self.fcstimeunits,self.stepType))
+                    (ftime,_ftimedict[self.stepUnits],self.stepType))
             else:
-                inventory.append(':fcst time %s %s'% (ftime,self.fcstimeunits))
+                inventory.append(':fcst time %s %s'% (ftime,_ftimedict[self.stepUnits]))
+        elif self.valid_key('forecastTime'):
+            ftime = repr(self['forecastTime'])
+            inventory.append(':fcst time %s %s'% (ftime,self.fcstimeunits))
         if self.valid_key('dataDate') and self.valid_key('dataTime'):
             inventory.append(
             ':from '+repr(self['dataDate'])+'%04i' % self['dataTime'])
