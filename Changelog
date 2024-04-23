@@ -4,6 +4,7 @@ version 2.1.6 (not yet released)
 * expose 'redtoreg' function for interpolating reduced to full gaussian
   gridded fields, optimize function for 50x speedup.
 * Fix for issue #235 (`latlons` doesn't work when only a single latitude in grid).
+* Fix for issue #241 (forecast time units in inventory wrong for 15 minute HRRR data).
 
 version 2.1.5 release
 =====================
