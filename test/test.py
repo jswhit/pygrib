@@ -235,7 +235,7 @@ def test():
     'min/max 295.40 308.10'
     >>> grbs = pygrib.open('../sampledata/no-radius-shapeOfEarth-7.grb2')
     >>> for grb in grbs: print(grb)
-    1:Total precipitation:kg m-2 (accum):lambert:surface:level 0:fcst time 15-30 mins (accum):from 201804100000
+    1:Total precipitation:kg m-2 (accum):lambert:surface:level 0:fcst time 15m-30m mins (accum):from 201804100000
     >>> str(grb.packingType)
     'grid_simple'
     >>> grbs.close()
