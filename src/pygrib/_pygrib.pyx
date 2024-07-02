@@ -104,7 +104,7 @@ cdef extern from "numpy/arrayobject.h":
     npy_intp PyArray_ISCONTIGUOUS(ndarray arr)
     npy_intp PyArray_ISALIGNED(ndarray arr)
 
-cdef extern from "grib_api.h":
+cdef extern from "eccodes.h":
     ctypedef struct grib_handle
     ctypedef struct grib_index
     ctypedef struct grib_keys_iterator
@@ -193,6 +193,7 @@ def _get_grib_api_version():
     major = v
     return "%d.%d.%d" % (major,minor,revision)
 grib_api_version = _get_grib_api_version()
+eccodes_version = grib_api_version
 if grib_api_version < "2.19.1":
     msg="Warning: ecCodes 2.19.1 or higher is recommended. You are running"
     warnings.warn('%s %s.' % (msg,grib_api_version))
@@ -382,6 +383,8 @@ cdef class open(object):
         else:
             self.has_multi_field_msgs=False
         fseek(self._fd, self._offset, SEEK_SET)
+    def __len__(self):
+        return self.messages
     def __iter__(self):
         return self
     def __next__(self):
