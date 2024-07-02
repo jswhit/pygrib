@@ -19,6 +19,7 @@ ctypedef fused float_type:
     float
     double
 ctypedef fused int_type:
+    int
     long
     long long
 
