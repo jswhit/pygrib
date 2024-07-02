@@ -18,8 +18,11 @@ npc.import_array()
 ctypedef fused float_type:
     float
     double
+ctypedef fused int_type:
+    long
+    long long
 
-def redtoreg(float_type[:] redgrid_data, long[:] lonsperlat, missval=None):
+def redtoreg(float_type[:] redgrid_data, int_type[:] lonsperlat, missval=None):
     """
     redtoreg(redgrid_data, lonsperlat, missval=None)
 
@@ -1318,8 +1321,8 @@ cdef class gribmessage(object):
             else:
                 missval = 1.e30
             if self.expand_reduced:
-                lonsperlat = self['pl'].astype(np.int64)
-                nx = self['pl'].max()
+                lonsperlat = self['pl']
+                nx = lonsperlat.max()
                 datarr = redtoreg(datarr, lonsperlat, missval=missval)
             else:
                 nx = None
