@@ -1321,7 +1321,7 @@ cdef class gribmessage(object):
             else:
                 missval = 1.e30
             if self.expand_reduced:
-                lonsperlat = self['pl']
+                lonsperlat = self['pl'].astype(np.int64)
                 nx = lonsperlat.max()
                 datarr = redtoreg(datarr, lonsperlat, missval=missval)
             else:
@@ -1559,7 +1559,8 @@ cdef class gribmessage(object):
                 lats = self['distinctLatitudes']
                 if lat2 < lat1 and lats[-1] > lats[0]: lats = lats[::-1]
                 ny = self['Nj']
-                nx = self['pl'].max()
+                lonsperlat = self['pl'].astype(np.int64)
+                nx = lonsperlat.max()
                 lon1 = self['longitudeOfFirstGridPointInDegrees']
                 lon2 = self['longitudeOfLastGridPointInDegrees']
                 lons = np.linspace(lon1,lon2,nx)
@@ -1570,7 +1571,8 @@ cdef class gribmessage(object):
         elif self['gridType'] == 'reduced_ll': # reduced lat/lon grid
             if self.expand_reduced:
                 ny = self['Nj']
-                nx = self['pl'].max()
+                lonsperlat = self['pl'].astype(np.int64)
+                nx = lonsperlat.max()
                 lat1 = self['latitudeOfFirstGridPointInDegrees']
                 lat2 = self['latitudeOfLastGridPointInDegrees']
                 lon1 = self['longitudeOfFirstGridPointInDegrees']
