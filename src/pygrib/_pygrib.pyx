@@ -36,9 +36,12 @@ def redtoreg(float_type[:] redgrid_data, int_type[:] lonsperlat, missval=None):
     Includes handling of missing values using nearest neighbor interpolation.
     """
 
-    cdef cython.Py_ssize_t nlons = np.max(lonsperlat)
-    cdef cython.Py_ssize_t nlats = lonsperlat.shape[0]
-    cdef cython.Py_ssize_t i,j,indx,ilons,im,ip,nlona
+    #cdef cython.Py_ssize_t nlons = np.max(lonsperlat)
+    #cdef cython.Py_ssize_t nlats = lonsperlat.shape[0]
+    cdef int nlons = np.max(lonsperlat)
+    cdef int nlats = lonsperlat.shape[0]
+    #cdef cython.Py_ssize_t i,j,indx,ilons,im,ip,nlona
+    cdef int i,j,indx,ilons,im,ip,nlona
     cdef float_type zxi, zdx, flons, missvalc
     if float_type is float:
         float_dtype = np.float32
