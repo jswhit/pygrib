@@ -16,9 +16,6 @@ jobs:
         exclude:
           - os: macos-12
             platform: x32
-        exclude:
-          - os: windows-latest
-            platform: x32
     steps:
     - uses: actions/checkout@v4
 
