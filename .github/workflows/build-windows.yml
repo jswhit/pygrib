@@ -12,14 +12,11 @@ jobs:
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
         os: [windows-latest, macos-latest]
-        platform: [x64, x32]
+        platform: [x64]
 #  debug on a single os/platform/python version
 #       python-version: [ "3.9"]
 #       os: [macosx-latest]
 #       platform: [x64]
-        exclude:
-          - os: macos-latest  
-            platform: x32
     steps:
     - uses: actions/checkout@v4
 

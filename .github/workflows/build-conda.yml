@@ -14,11 +14,14 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-12]
         platform: [x64, x32]
 #  debug on a single os/platform/python version
-#       python-version: [ "3.9"]
+#       python-version: [ "3.11"]
 #       os: [ubuntu-latest]
 #       platform: [x64]
         exclude:
           - os: macos-12
+            platform: x32
+        exclude:
+          - os: windows-latest
             platform: x32
     steps:
     - uses: actions/checkout@v4
