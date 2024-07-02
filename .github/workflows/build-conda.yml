@@ -39,4 +39,4 @@ jobs:
         #fi
         cd test
         python test.py
-        pytest -vv test_latlons.py
+        pytest -vv -s test_latlons.py
