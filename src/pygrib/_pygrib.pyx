@@ -1318,8 +1318,9 @@ cdef class gribmessage(object):
             else:
                 missval = 1.e30
             if self.expand_reduced:
+                lonsperlat = self['pl'].astype(np.int64)
                 nx = self['pl'].max()
-                datarr = redtoreg(datarr, self['pl'], missval=missval)
+                datarr = redtoreg(datarr, lonsperlat, missval=missval)
             else:
                 nx = None
         elif self.has_key('Nx') and self.has_key('Ny'):
