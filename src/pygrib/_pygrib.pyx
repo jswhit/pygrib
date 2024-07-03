@@ -1199,7 +1199,7 @@ cdef class gribmessage(object):
                     raise RuntimeError(_get_error_message(err))
                 return longval
             else: # array
-                datarr = np.zeros(size, int)
+                datarr = np.zeros(size, np.int_)
                 err = grib_get_long_array(self._gh, name, <long *>datarr.data, &size)
                 if err:
                     raise RuntimeError(_get_error_message(err))
@@ -1327,6 +1327,7 @@ cdef class gribmessage(object):
             if self.expand_reduced:
                 lonsperlat = self['pl']
                 nx = lonsperlat.max()
+                print(lonsperlat.dtype,lonsperlat,nx)
                 datarr = redtoreg(datarr, lonsperlat, missval=missval)
             else:
                 nx = None
@@ -1565,6 +1566,7 @@ cdef class gribmessage(object):
                 ny = self['Nj']
                 lonsperlat = self['pl']
                 nx = lonsperlat.max()
+                print(lonsperlat.dtype,lonsperlat,nx)
                 lon1 = self['longitudeOfFirstGridPointInDegrees']
                 lon2 = self['longitudeOfLastGridPointInDegrees']
                 lons = np.linspace(lon1,lon2,nx)
@@ -1577,6 +1579,7 @@ cdef class gribmessage(object):
                 ny = self['Nj']
                 lonsperlat = self['pl']
                 nx = lonsperlat.max()
+                print(lonsperlat.dtype,lonsperlat,nx)
                 lat1 = self['latitudeOfFirstGridPointInDegrees']
                 lat2 = self['latitudeOfLastGridPointInDegrees']
                 lon1 = self['longitudeOfFirstGridPointInDegrees']
