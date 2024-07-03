@@ -1196,13 +1196,12 @@ cdef class gribmessage(object):
                     raise RuntimeError(_get_error_message(err))
                 return longval
             else: # array
-                #if os.name == 'nt':
-                #    # this should not be necessary since np.int_ should
-                #    # be platform-dependent long, which should map to 32-bits on windows?
-                #    datarr = np.zeros(size, np.int32)
-                #else:
-                #    datarr = np.zeros(size, np.int_)
-                datarr = np.zeros(size, np.int_)
+                if os.name == 'nt':
+                    # this should not be necessary since np.int_ should
+                    # be platform-dependent long, which should map to 32-bits on windows?
+                    datarr = np.zeros(size, np.int32)
+                else:
+                    datarr = np.zeros(size, np.int_)
                 err = grib_get_long_array(self._gh, name, <long *>datarr.data, &size)
                 if err:
                     raise RuntimeError(_get_error_message(err))
