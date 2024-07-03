@@ -1199,7 +1199,10 @@ cdef class gribmessage(object):
                     raise RuntimeError(_get_error_message(err))
                 return longval
             else: # array
-                datarr = np.zeros(size, np.int32)
+                if os.name == 'nt':
+                    datarr = np.zeros(size, np.int32)
+                else:
+                    datarr = np.zeros(size, np.int_)
                 print('getting long_array',size)
                 err = grib_get_long_array(self._gh, name, <long *>datarr.data, &size)
                 print('getting long_array',datarr.min(), datarr.max())
