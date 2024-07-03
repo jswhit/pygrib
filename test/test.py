@@ -10,6 +10,10 @@ def test():
     [1:Precipitation rate:kg m**-2 s**-1 (avg):regular_gg:surface:level 0:fcst time 108-120 hrs (avg):from 200402291200, 2:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 120 hrs:from 200402291200, 3:Maximum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200, 4:Minimum temperature:K (instant):regular_gg:heightAboveGround:level 2 m:fcst time 108-120 hrs:from 200402291200]
     >>> grbs = pygrib.open('../sampledata/flux.grb')
 
+    number of messages in file
+    >>> len(grbs)
+    4
+
     acts like a file object
     >>> grbs.tell()
     0
@@ -234,8 +238,8 @@ def test():
     >>> str('min/max %5.2f %5.2f' % (data.min(), data.max()))
     'min/max 295.40 308.10'
     >>> grbs = pygrib.open('../sampledata/no-radius-shapeOfEarth-7.grb2')
-    >>> for grb in grbs: print(grb)
-    1:Total precipitation:kg m-2 (accum):lambert:surface:level 0:fcst time 15-30 mins (accum):from 201804100000
+    >>> for grb in grbs: print(grb) # doctest:+ELLIPSIS
+    1:Total precipitation:kg m-2 (accum):lambert:surface:level 0:fcst time 15...-30... mins (accum):from 201804100000
     >>> str(grb.packingType)
     'grid_simple'
     >>> grbs.close()

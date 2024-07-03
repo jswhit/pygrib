@@ -5,6 +5,10 @@ version 2.1.6 (not yet released)
   gridded fields, optimize function for 50x speedup.
 * Fix for issue #235 (`latlons` doesn't work when only a single latitude in grid).
 * Fix for issue #241 (forecast time units in inventory wrong for 15 minute HRRR data).
+* Add `len` method to open instance (issue #239).
+* Numpy 2 compatibility (issue #251).
+* Fix failing doctest for eccodes >= 2.34.1 (issue #245).
+* use eccodes.h instead of grib_api.h, add `eccodes_version` module variable.
 
 version 2.1.5 release
 =====================

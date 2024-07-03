@@ -11,15 +11,7 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        platform: [x64, x32]
-#  debug on a single os/platform/python version
-#       python-version: [ "3.9"]
-#       os: [ubuntu-latest]
-#       platform: [x64]
-        exclude:
-          - os: macos-latest  
-            platform: x32
+        os: [ubuntu-latest, windows-latest, macos-12]
     steps:
     - uses: actions/checkout@v4
 
@@ -47,4 +39,4 @@ jobs:
         #fi
         cd test
         python test.py
-        pytest -vv test_latlons.py
+        pytest -vv -s test_latlons.py

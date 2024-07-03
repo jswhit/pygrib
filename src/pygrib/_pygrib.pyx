@@ -18,8 +18,12 @@ npc.import_array()
 ctypedef fused float_type:
     float
     double
+ctypedef fused int_type:
+    int
+    long
+    long long
 
-def redtoreg(float_type[:] redgrid_data, long[:] lonsperlat, missval=None):
+def redtoreg(float_type[:] redgrid_data, int_type[:] lonsperlat, missval=None):
     """
     redtoreg(redgrid_data, lonsperlat, missval=None)
 
@@ -104,7 +108,7 @@ cdef extern from "numpy/arrayobject.h":
     npy_intp PyArray_ISCONTIGUOUS(ndarray arr)
     npy_intp PyArray_ISALIGNED(ndarray arr)
 
-cdef extern from "grib_api.h":
+cdef extern from "eccodes.h":
     ctypedef struct grib_handle
     ctypedef struct grib_index
     ctypedef struct grib_keys_iterator
@@ -193,6 +197,7 @@ def _get_grib_api_version():
     major = v
     return "%d.%d.%d" % (major,minor,revision)
 grib_api_version = _get_grib_api_version()
+eccodes_version = grib_api_version
 if grib_api_version < "2.19.1":
     msg="Warning: ecCodes 2.19.1 or higher is recommended. You are running"
     warnings.warn('%s %s.' % (msg,grib_api_version))
@@ -382,6 +387,8 @@ cdef class open(object):
         else:
             self.has_multi_field_msgs=False
         fseek(self._fd, self._offset, SEEK_SET)
+    def __len__(self):
+        return self.messages
     def __iter__(self):
         return self
     def __next__(self):
@@ -1103,7 +1110,7 @@ cdef class gribmessage(object):
             raise RuntimeError(_get_error_message(err))
         elif typ == GRIB_TYPE_LONG:
             # is value an array or a scalar?
-            datarr = np.asarray(value, int)
+            datarr = np.asarray(value, np.int_)
             is_array = False
             if datarr.shape:
                 is_array = True
@@ -1189,7 +1196,12 @@ cdef class gribmessage(object):
                     raise RuntimeError(_get_error_message(err))
                 return longval
             else: # array
-                datarr = np.zeros(size, int)
+                if os.name == 'nt':
+                    # this should not be necessary since np.int_ should
+                    # be platform-dependent long, which should map to 32-bits on windows?
+                    datarr = np.zeros(size, np.int32)
+                else:
+                    datarr = np.zeros(size, np.int_)
                 err = grib_get_long_array(self._gh, name, <long *>datarr.data, &size)
                 if err:
                     raise RuntimeError(_get_error_message(err))
@@ -1315,8 +1327,9 @@ cdef class gribmessage(object):
             else:
                 missval = 1.e30
             if self.expand_reduced:
-                nx = self['pl'].max()
-                datarr = redtoreg(datarr, self['pl'], missval=missval)
+                lonsperlat = self['pl']
+                nx = lonsperlat.max()
+                datarr = redtoreg(datarr, lonsperlat, missval=missval)
             else:
                 nx = None
         elif self.has_key('Nx') and self.has_key('Ny'):
@@ -1552,7 +1565,8 @@ cdef class gribmessage(object):
                 lats = self['distinctLatitudes']
                 if lat2 < lat1 and lats[-1] > lats[0]: lats = lats[::-1]
                 ny = self['Nj']
-                nx = self['pl'].max()
+                lonsperlat = self['pl']
+                nx = lonsperlat.max()
                 lon1 = self['longitudeOfFirstGridPointInDegrees']
                 lon2 = self['longitudeOfLastGridPointInDegrees']
                 lons = np.linspace(lon1,lon2,nx)
@@ -1563,7 +1577,8 @@ cdef class gribmessage(object):
         elif self['gridType'] == 'reduced_ll': # reduced lat/lon grid
             if self.expand_reduced:
                 ny = self['Nj']
-                nx = self['pl'].max()
+                lonsperlat = self['pl']
+                nx = lonsperlat.max()
                 lat1 = self['latitudeOfFirstGridPointInDegrees']
                 lat2 = self['latitudeOfLastGridPointInDegrees']
                 lon1 = self['longitudeOfFirstGridPointInDegrees']
