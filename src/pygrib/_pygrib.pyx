@@ -36,12 +36,9 @@ def redtoreg(float_type[:] redgrid_data, int_type[:] lonsperlat, missval=None):
     Includes handling of missing values using nearest neighbor interpolation.
     """
 
-    #cdef cython.Py_ssize_t nlons = np.max(lonsperlat)
-    #cdef cython.Py_ssize_t nlats = lonsperlat.shape[0]
-    cdef int nlons = np.max(lonsperlat)
-    cdef int nlats = lonsperlat.shape[0]
-    #cdef cython.Py_ssize_t i,j,indx,ilons,im,ip,nlona
-    cdef int i,j,indx,ilons,im,ip,nlona
+    cdef cython.Py_ssize_t nlons = np.max(lonsperlat)
+    cdef cython.Py_ssize_t nlats = lonsperlat.shape[0]
+    cdef cython.Py_ssize_t i,j,indx,ilons,im,ip,nlona
     cdef float_type zxi, zdx, flons, missvalc
     if float_type is float:
         float_dtype = np.float32
@@ -1199,15 +1196,14 @@ cdef class gribmessage(object):
                     raise RuntimeError(_get_error_message(err))
                 return longval
             else: # array
-                if os.name == 'nt':
-                    # this should not be necessary since np.int_ should
-                    # be platform-dependent long, which should map to 32-bits on windows?
-                    datarr = np.zeros(size, np.int32)
-                else:
-                    datarr = np.zeros(size, np.int_)
-                print('getting long_array',size)
+                #if os.name == 'nt':
+                #    # this should not be necessary since np.int_ should
+                #    # be platform-dependent long, which should map to 32-bits on windows?
+                #    datarr = np.zeros(size, np.int32)
+                #else:
+                #    datarr = np.zeros(size, np.int_)
+                datarr = np.zeros(size, np.int_)
                 err = grib_get_long_array(self._gh, name, <long *>datarr.data, &size)
-                print('getting long_array',datarr.min(), datarr.max())
                 if err:
                     raise RuntimeError(_get_error_message(err))
                 if key == 'values':
