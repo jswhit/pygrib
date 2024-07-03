@@ -1200,7 +1200,9 @@ cdef class gribmessage(object):
                 return longval
             else: # array
                 datarr = np.zeros(size, np.int_)
+                print('getting long_array',size)
                 err = grib_get_long_array(self._gh, name, <long *>datarr.data, &size)
+                print('getting long_array',datarr.min(), datarr.max())
                 if err:
                     raise RuntimeError(_get_error_message(err))
                 if key == 'values':
@@ -1327,7 +1329,7 @@ cdef class gribmessage(object):
             if self.expand_reduced:
                 lonsperlat = self['pl']
                 nx = lonsperlat.max()
-                print(lonsperlat.dtype,lonsperlat,nx)
+                print(lonsperlat.dtype,lonsperlat.shape,lonsperlat,nx,ny)
                 datarr = redtoreg(datarr, lonsperlat, missval=missval)
             else:
                 nx = None
