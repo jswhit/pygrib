@@ -1113,7 +1113,7 @@ cdef class gribmessage(object):
             raise RuntimeError(_get_error_message(err))
         elif typ == GRIB_TYPE_LONG:
             # is value an array or a scalar?
-            datarr = np.asarray(value, int)
+            datarr = np.asarray(value, np.int_)
             is_array = False
             if datarr.shape:
                 is_array = True
@@ -1326,8 +1326,7 @@ cdef class gribmessage(object):
                 missval = 1.e30
             if self.expand_reduced:
                 lonsperlat = self['pl']
-                nx = (lonsperlat.astype(np.int32)).max()
-                print(lonsperlat.dtype, nx)
+                nx = lonsperlat.max()
                 datarr = redtoreg(datarr, lonsperlat, missval=missval)
             else:
                 nx = None
@@ -1564,8 +1563,8 @@ cdef class gribmessage(object):
                 lats = self['distinctLatitudes']
                 if lat2 < lat1 and lats[-1] > lats[0]: lats = lats[::-1]
                 ny = self['Nj']
-                lonsperlat = self['pl'].astype(np.int32)
-                nx = (lonsperlat.astype(np.int32)).max()
+                lonsperlat = self['pl']
+                nx = lonsperlat.max()
                 lon1 = self['longitudeOfFirstGridPointInDegrees']
                 lon2 = self['longitudeOfLastGridPointInDegrees']
                 lons = np.linspace(lon1,lon2,nx)
@@ -1576,8 +1575,8 @@ cdef class gribmessage(object):
         elif self['gridType'] == 'reduced_ll': # reduced lat/lon grid
             if self.expand_reduced:
                 ny = self['Nj']
-                lonsperlat = self['pl'].astype(np.int32)
-                nx = (lonsperlat.astype(np.int32)).max()
+                lonsperlat = self['pl']
+                nx = lonsperlat.max()
                 lat1 = self['latitudeOfFirstGridPointInDegrees']
                 lat2 = self['latitudeOfLastGridPointInDegrees']
                 lon1 = self['longitudeOfFirstGridPointInDegrees']
