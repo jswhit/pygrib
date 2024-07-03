@@ -1200,6 +1200,8 @@ cdef class gribmessage(object):
                 return longval
             else: # array
                 if os.name == 'nt':
+                    # this should not be necessary since np.int_ should
+                    # be platform-dependent long, which should map to 32-bits on windows?
                     datarr = np.zeros(size, np.int32)
                 else:
                     datarr = np.zeros(size, np.int_)
@@ -1332,7 +1334,6 @@ cdef class gribmessage(object):
             if self.expand_reduced:
                 lonsperlat = self['pl']
                 nx = lonsperlat.max()
-                print(lonsperlat.dtype,lonsperlat.shape,lonsperlat,nx,ny)
                 datarr = redtoreg(datarr, lonsperlat, missval=missval)
             else:
                 nx = None
@@ -1571,7 +1572,6 @@ cdef class gribmessage(object):
                 ny = self['Nj']
                 lonsperlat = self['pl']
                 nx = lonsperlat.max()
-                print(lonsperlat.dtype,lonsperlat,nx)
                 lon1 = self['longitudeOfFirstGridPointInDegrees']
                 lon2 = self['longitudeOfLastGridPointInDegrees']
                 lons = np.linspace(lon1,lon2,nx)
@@ -1584,7 +1584,6 @@ cdef class gribmessage(object):
                 ny = self['Nj']
                 lonsperlat = self['pl']
                 nx = lonsperlat.max()
-                print(lonsperlat.dtype,lonsperlat,nx)
                 lat1 = self['latitudeOfFirstGridPointInDegrees']
                 lat2 = self['latitudeOfLastGridPointInDegrees']
                 lon1 = self['longitudeOfFirstGridPointInDegrees']
