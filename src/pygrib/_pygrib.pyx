@@ -688,21 +688,17 @@ def setdates(gribmessage grb):
        grb.indicatorOfUnitOfTimeRange in _ftimedict:
         grb.fcstimeunits = _ftimedict[grb.indicatorOfUnitOfTimeRange]
     if grb.has_key('forecastTime'):
-        if grb.has_key('forecastTime'):
-            ftime = grb.forecastTime
-        elif grb.has_key('stepRange'):
-            # if forecastTime doesn't exist, use end of stepRange.
-            ftime = grb['stepRange'] # computed key, uses stepUnits
-            if grb.has_key('stepUnits') and grb.stepUnits in _ftimedict:
-                grb.fcstimeunits = _ftimedict[grb.stepUnits]
-            # if it's a range, use the end of the range to define validDate
-            try: 
-                ftime = float(ftime.split('-')[1])
-            except:
-                ftime = None
-    else:
-        ftime = 0
-    if ftime is None: ftime = 0. # make sure ftime is not None
+        ftime = grb.forecastTime
+    elif grb.has_key('stepRange'):
+        # if forecastTime doesn't exist, use end of stepRange.
+        ftime = grb['stepRange'] # computed key, uses stepUnits
+        if grb.has_key('stepUnits') and grb.stepUnits in _ftimedict:
+            grb.fcstimeunits = _ftimedict[grb.stepUnits]
+        # if it's a range, use the end of the range to define validDate
+        try: 
+            ftime = float(ftime.split('-')[1])
+        except:
+            ftime = 0.
     if grb.has_key('julianDay'):
         # don't do anything if datetime fails (because of a miscoded julianDay)
         try:
