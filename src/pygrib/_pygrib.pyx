@@ -15,6 +15,11 @@ from numpy import ma
 import pyproj
 npc.import_array()
 
+# Print scalars legacy style (e.g. (15.0) not np.float64(15.0))
+# https://numpy.org/doc/2.2/release/2.0.0-notes.html#representation-of-numpy-scalars-changed
+if np.lib.NumpyVersion(np.__version__) >= '2.0.0':
+    np.set_printoptions(legacy="1.25")
+
 ctypedef fused float_type:
     float
     double
