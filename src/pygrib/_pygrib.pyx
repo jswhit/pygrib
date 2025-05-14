@@ -5,6 +5,7 @@ __version__ = '2.1.6'
 import numpy as np
 cimport numpy as npc
 cimport cython
+from ctypes import c_long as long
 import warnings
 import os
 from datetime import datetime
