@@ -9,7 +9,7 @@ jobs:
       PROJ_LIB: /usr/share/proj
     strategy:
       matrix:
-        python-version: ["3.11"]
+        python-version: ["3.13"]
     steps:
 
     - uses: actions/checkout@v4
@@ -31,18 +31,23 @@ jobs:
     - name: Install some dependencies via pip
       run: |
         # Install pyspharm using a few tricks
-        pip install numpy setuptools wheel
-        FFLAGS="-fallow-argument-mismatch" pip install --no-use-pep517 pyspharm
+        python -m pip install numpy setuptools wheel build meson-python
+        #FFLAGS="-fallow-argument-mismatch" python -m pip install --no-use-pep517 pyspharm
+        git clone https://github.com/jswhit/pyspharm
+        cd pyspharm
+        python -m build .
+        python -m pip install dist/*whl
+        cd ..
         # for later building/checking
-        pip install build twine
-        pip install check-manifest
+        python -m pip install build twine
+        python -m pip install check-manifest
         # below here only needed for mpl/cartopy based tests
-        pip install pytest-mpl
-        pip install cartopy
+        python -m pip install pytest-mpl
+        python -m pip install cartopy
 
     - name: Install pygrib
       run: |
-        pip install -e .
+        python -m pip install -e .
 
     - name: Test
       run: |
