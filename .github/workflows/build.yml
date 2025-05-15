@@ -33,8 +33,11 @@ jobs:
         # Install pyspharm using a few tricks
         python -m pip install numpy setuptools wheel build meson-python
         #FFLAGS="-fallow-argument-mismatch" python -m pip install --no-use-pep517 pyspharm
+        git clone https://github.com/jswhit/pyspharm
+        cd pyspharm
         python -m build .
         python -m pip install dist/*whl
+        cd ..
         # for later building/checking
         python -m pip install build twine
         python -m pip install check-manifest
