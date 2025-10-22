@@ -30,12 +30,14 @@ jobs:
           pytest
 
     - name: Install pygrib
-      shell: micromamba-shell {0}
+      #shell: micromamba-shell {0}
+      shell: bash -l {0}
       run: |
         python -m pip install -v -e  . --no-deps --force-reinstall
 
     - name: Tests
-      shell: micromamba-shell {0}
+      #shell: micromamba-shell {0}
+      shell: bash -l {0}
       run: |
         cd test
         python test.py
