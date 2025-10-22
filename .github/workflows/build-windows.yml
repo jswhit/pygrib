@@ -30,6 +30,7 @@ jobs:
           wheel
           pyproj
           eccodes
+          pytest
 
     - name: Install pygrib
       shell: bash -l {0}

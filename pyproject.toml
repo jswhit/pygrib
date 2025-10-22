@@ -1,7 +1,7 @@
 [build-system]
 requires = [
     "Cython>=0.29.2",
-    "setuptools>=61",
+    "setuptools>=77",
     "numpy>=2.0.0",
     "wheel",
 ]
@@ -15,7 +15,7 @@ authors = [
   {name = "Jeff Whitaker", email = "whitaker.jeffrey@gmail.com"},
 ]
 requires-python = ">=3.10"
-license = {text = "MIT"}
+license = "MIT AND (Apache-2.0 OR BSD-2-Clause)"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Programming Language :: Python :: 3",
