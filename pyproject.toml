@@ -1,6 +1,6 @@
 [build-system]
 requires = [
-    "Cython>=0.29",
+    "Cython>=0.29.2",
     "setuptools>=61",
     "numpy>=2.0.0",
     "wheel",
@@ -14,16 +14,16 @@ readme = "README.md"
 authors = [
   {name = "Jeff Whitaker", email = "whitaker.jeffrey@gmail.com"},
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = {text = "MIT"}
 classifiers = [
     "Development Status :: 4 - Beta",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: MIT License",
     "Topic :: Software Development :: Libraries :: Python Modules",

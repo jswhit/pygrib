@@ -17,29 +17,29 @@ jobs:
           - os: macos-latest
             platform: x32
     steps:
-    - uses: actions/checkout@v4
-    steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
-    - name: Setup Conda
-      uses: s-weigand/setup-conda@v1
+    - name: Setup micromamba Env
+      uses: mamba-org/setup-micromamba@v2
       with:
-        activate-conda: false
-        conda-channels: conda-forge
+        environment-name: TEST
+        create-args: >-
+          python=${{ matrix.python-version }}
+          numpy>2.0.0
+          cython>=0.29.20
+          wheel
+          pyproj
+          eccodes
 
-    - name: Python ${{ matrix.python-version }}
+    - name: Install pygrib
       shell: bash -l {0}
       run: |
-        conda create --name TEST python=${{ matrix.python-version }} numpy cython pip pytest wheel pyproj eccodes --strict-channel-priority
-        source activate TEST
-        python -m pip install -e . --no-deps --force-reinstall
-        conda info --all
-        conda list
+        python -m pip install -v -e  . --no-deps --force-reinstall
+
 
     - name: Tests
       shell: bash -l {0}
       run: |
-        source activate TEST
         if [ "windows-latest" == "${{ matrix.os }}" ]; then 
            export ECCODES_DEFINITION_PATH=$CONDA_PREFIX/Library/share/eccodes/definitions
         fi
