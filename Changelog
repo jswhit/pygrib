@@ -1,7 +1,7 @@
 version 2.1.7 release
 =====================
 * update to support Cython 3.1.
-* build 3.14 wheels, drop support for python < 3.10.
+* build 3.14 and aarch64 wheels, drop support for python < 3.10.
 
 version 2.1.6 release
 =====================
