@@ -8,7 +8,7 @@ cimport cython
 import warnings
 import os
 from datetime import datetime
-from io import BufferedReader
+from io import BufferedReader, UnsupportedOperation
 from os import PathLike
 from packaging import version
 from numpy import ma
@@ -335,23 +335,43 @@ cdef class open(object):
     cdef long _offset
     cdef public object name, messagenumber, messages, closed,\
                        has_multi_field_msgs
+    cdef object _inner
     def __cinit__(self, filename):
         # initialize C level objects.
         cdef grib_handle *gh
         cdef FILE *_fd
         cdef size_t bufsize
         if isinstance(filename, BufferedReader):
-            bufsize = filename.seek(0,os.SEEK_END)
-            filename.seek(0) 
-            buf = filename.read()
-            self._fd = fmemopen(<char *>buf, bufsize, 'rb')
+            try: 
+                fileno = filename.fileno()
+            except UnsupportedOperation:
+                fileno = None
+            if fileno is not None:
+                fileno = wrap_dup(filename.fileno())
+                self._fd = fdopen(fileno, "rb")
+                self._offset = filename.tell()
+                self._inner = filename
+                # since BufferedReader has its own read buffer,
+                # BufferedReader.seek() sometimes just changes its
+                # internal position and BufferedReader.tell() returns
+                # a calculated value, we need to ensure the actual
+                # position by fseek().      
+                fseek(self._fd, self._offset, SEEK_SET)
+            else:
+                bufsize = filename.seek(0,os.SEEK_END)
+                filename.seek(0) 
+                buf = filename.read()
+                self._fd = fmemopen(<char *>buf, bufsize, 'rb')
+                self._offset = 0
+                self._inner = None
         else:
             if isinstance(filename, PathLike):
                 bytestr = os.fsencode(filename)
             else:
                 bytestr = _strencode(filename)
             self._fd = fopen(bytestr, "rb")
-        self._offset = 0
+            self._offset = 0
+            self._inner = None
         if self._fd == NULL:
             raise IOError("could not open %s", filename)
             raise OSError("could not open {}".format(filename))
@@ -361,7 +381,10 @@ cdef class open(object):
         cdef grib_handle *gh
         # initalize Python level objects
         if isinstance(filename, BufferedReader):
-            self.name = None
+            try:
+                self.name = filename.name
+            except AttributeError:
+                self.name = None
         elif isinstance(filename, PathLike):
             self.name = str(filename)
         else:
@@ -493,6 +516,9 @@ cdef class open(object):
 
         close GRIB file, deallocate C structures associated with class instance"""
         cdef int err
+        if self._inner is not None:
+            self._inner.seek(ftell(self._fd))
+            self._inner = None
         fclose(self._fd)
         if self._gh != NULL:
             err = grib_handle_delete(self._gh)

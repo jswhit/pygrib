@@ -56,18 +56,28 @@ def test_open_for_path_object(capsys):
 
 
 def test_open_for_bufferedreader_object(capsys):
+    # BufferedReader with underlying file.
     f = open(filename, "rb")
     grbs = pygrib.open(f)
     assert type(grbs.name) == str
-
     assert_message_lines(grbs, capsys, message_lines_expected_for_data_with_zero_offset)
     assert_message_lines(grbs, capsys, "")
     grbs.seek(0)
     assert_message_lines(grbs, capsys, message_lines_expected_for_data_with_zero_offset)
-
     grbs.close()
     f.close()
-
+    
+    # BufferedReader with no fileno (just a byte stream)
+    f = open(filename, "rb")
+    fb = BytesIO(f.read())
+    grbs = pygrib.open(fb)
+    grbs.close()
+    assert grbs.name == None
+    assert_message_lines(grbs, capsys, message_lines_expected_for_data_with_zero_offset)
+    assert_message_lines(grbs, capsys, "")
+    grbs.seek(0)
+    assert_message_lines(grbs, capsys, message_lines_expected_for_data_with_zero_offset)
+    f.close(); fb.close()
 
 @pytest.mark.xfail(reason="unimplemented")
 def test_open_for_bytesio_object(capsys):
