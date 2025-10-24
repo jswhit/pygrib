@@ -1,4 +1,4 @@
-from io import BytesIO, SEEK_CUR
+from io import BufferedReader, BytesIO, SEEK_CUR
 from pathlib import Path
 import os
 
@@ -70,14 +70,14 @@ def test_open_for_bufferedreader_object(capsys):
     # BufferedReader with no fileno (just a byte stream)
     if pygrib.__has_fmemopen__: # not implemented on Windows
         f = open(filename, "rb")
-        fb = BytesIO(f.read())
+        fb = BufferedReader(BytesIO(f.read()))
         grbs = pygrib.open(fb)
-        grbs.close()
         assert grbs.name == None
         assert_message_lines(grbs, capsys, message_lines_expected_for_data_with_zero_offset)
         assert_message_lines(grbs, capsys, "")
         grbs.seek(0)
         assert_message_lines(grbs, capsys, message_lines_expected_for_data_with_zero_offset)
+        grbs.close()
         f.close(); fb.close()
 
 @pytest.mark.xfail(reason="unimplemented")
