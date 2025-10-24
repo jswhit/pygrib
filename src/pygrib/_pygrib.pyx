@@ -88,6 +88,7 @@ cdef extern from "stdio.h":
     ctypedef struct FILE
     FILE *fopen(char *path, char *mode)
     FILE *fdopen(int, char *mode)
+    FILE *fmemopen(void *buf, size_t size, char *mode)
     int	fclose(FILE *)
     size_t fwrite(void *ptr, size_t size, size_t nitems, FILE *stream)
     int fseek(FILE *, long, int)
@@ -332,32 +333,25 @@ cdef class open(object):
     cdef FILE *_fd
     cdef grib_handle *_gh
     cdef long _offset
-    cdef object _inner
     cdef public object name, messagenumber, messages, closed,\
                        has_multi_field_msgs
     def __cinit__(self, filename):
         # initialize C level objects.
         cdef grib_handle *gh
         cdef FILE *_fd
+        cdef size_t bufsize
         if isinstance(filename, BufferedReader):
-            fileno = wrap_dup(filename.fileno())
-            self._fd = fdopen(fileno, "rb")
-            self._offset = filename.tell()
-            self._inner = filename
-            # since BufferedReader has its own read buffer,
-            # BufferedReader.seek() sometimes just changes its
-            # internal position and BufferedReader.tell() returns
-            # a calculated value, we need to ensure the actual
-            # position by fseek().
-            fseek(self._fd, self._offset, SEEK_SET)
+            bufsize = filename.seek(0,os.SEEK_END)
+            filename.seek(0) 
+            buf = filename.read()
+            self._fd = fmemopen(<char *>buf, bufsize, 'rb')
         else:
             if isinstance(filename, PathLike):
                 bytestr = os.fsencode(filename)
             else:
                 bytestr = _strencode(filename)
             self._fd = fopen(bytestr, "rb")
-            self._offset = 0
-            self._inner = None
+        self._offset = 0
         if self._fd == NULL:
             raise IOError("could not open %s", filename)
             raise OSError("could not open {}".format(filename))
@@ -367,7 +361,7 @@ cdef class open(object):
         cdef grib_handle *gh
         # initalize Python level objects
         if isinstance(filename, BufferedReader):
-            self.name = filename.name
+            self.name = None
         elif isinstance(filename, PathLike):
             self.name = str(filename)
         else:
@@ -499,9 +493,6 @@ cdef class open(object):
 
         close GRIB file, deallocate C structures associated with class instance"""
         cdef int err
-        if self._inner is not None:
-            self._inner.seek(ftell(self._fd))
-            self._inner = None
         fclose(self._fd)
         if self._gh != NULL:
             err = grib_handle_delete(self._gh)
