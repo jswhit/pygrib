@@ -41,4 +41,4 @@ jobs:
       run: |
         cd test
         python test.py
-        pytest -vv -s test_latlons.py test_open.py
+        pytest -vv -s test_latlons.py test_open.py test_misc.py
