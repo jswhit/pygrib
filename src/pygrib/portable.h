@@ -6,7 +6,7 @@
 #include <io.h>
 #define wrap_dup _dup
 #define HAS_FMEMOPEN 0
-static inline FILE *fmemopen(void *buf, size_t size, char *mode);
+static inline FILE *fmemopen(void *buf, size_t size, char *mode) { return NULL; }
 
 #else
 
