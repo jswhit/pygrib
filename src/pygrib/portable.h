@@ -5,11 +5,14 @@
 
 #include <io.h>
 #define wrap_dup _dup
+#define HAS_FMEMOPEN 0
+static inline FILE *fmemopen(void *buf, size_t size, char *mode);
 
 #else
 
 #include <unistd.h>
 #define wrap_dup dup
+#define HAS_FMEMOPEN 1
 
 #endif  /* _WIN32 */
 

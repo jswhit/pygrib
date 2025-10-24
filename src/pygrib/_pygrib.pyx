@@ -28,6 +28,8 @@ ctypedef fused int_type:
     long
     long long
 
+__has_fmemopen__ = HAS_FMEMOPEN
+
 def redtoreg(float_type[:] redgrid_data, int_type[:] lonsperlat, missval=None):
     """
     redtoreg(redgrid_data, lonsperlat, missval=None)
@@ -88,7 +90,6 @@ cdef extern from "stdio.h":
     ctypedef struct FILE
     FILE *fopen(char *path, char *mode)
     FILE *fdopen(int, char *mode)
-    FILE *fmemopen(void *buf, size_t size, char *mode)
     int	fclose(FILE *)
     size_t fwrite(void *ptr, size_t size, size_t nitems, FILE *stream)
     int fseek(FILE *, long, int)
@@ -97,6 +98,10 @@ cdef extern from "stdio.h":
 
 cdef extern from "./portable.h":
     int wrap_dup(int)
+    FILE *fmemopen(void *buf, size_t size, char *mode)
+    cdef enum:
+        HAS_FMEMOPEN
+
 
 cdef extern from "Python.h":
     object PyBytes_FromStringAndSize(char *s, size_t size)
@@ -358,6 +363,8 @@ cdef class open(object):
                 # position by fseek().      
                 fseek(self._fd, self._offset, SEEK_SET)
             else:
+                if not HAS_FMEMOPEN:
+                    raise NotImplementedError('reading from a byte stream not implemented on windows')
                 bufsize = filename.seek(0,os.SEEK_END)
                 filename.seek(0) 
                 buf = filename.read()
@@ -373,7 +380,6 @@ cdef class open(object):
             self._offset = 0
             self._inner = None
         if self._fd == NULL:
-            raise IOError("could not open %s", filename)
             raise OSError("could not open {}".format(filename))
         self._gh = NULL
     def __init__(self, filename):
