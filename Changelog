@@ -1,3 +1,7 @@
+version 2.1.8 release
+=====================
+* fix so BufferedReader input works if there is no underlying file (just a byte stream). Issue #259.
+
 version 2.1.7 release
 =====================
 * update to support Cython 3.1.

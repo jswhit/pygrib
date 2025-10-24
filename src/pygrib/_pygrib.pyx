@@ -1,6 +1,6 @@
 """pygrib module"""
 
-__version__ = '2.1.7'
+__version__ = '2.1.8'
 
 import numpy as np
 cimport numpy as npc
@@ -8,7 +8,7 @@ cimport cython
 import warnings
 import os
 from datetime import datetime
-from io import BufferedReader
+from io import BufferedReader, UnsupportedOperation
 from os import PathLike
 from packaging import version
 from numpy import ma
@@ -27,6 +27,8 @@ ctypedef fused int_type:
     int
     long
     long long
+
+__has_fmemopen__ = HAS_FMEMOPEN
 
 def redtoreg(float_type[:] redgrid_data, int_type[:] lonsperlat, missval=None):
     """
@@ -96,6 +98,10 @@ cdef extern from "stdio.h":
 
 cdef extern from "./portable.h":
     int wrap_dup(int)
+    FILE *fmemopen(void *buf, size_t size, char *mode)
+    cdef enum:
+        HAS_FMEMOPEN
+
 
 cdef extern from "Python.h":
     object PyBytes_FromStringAndSize(char *s, size_t size)
@@ -332,24 +338,39 @@ cdef class open(object):
     cdef FILE *_fd
     cdef grib_handle *_gh
     cdef long _offset
-    cdef object _inner
     cdef public object name, messagenumber, messages, closed,\
                        has_multi_field_msgs
+    cdef object _inner
     def __cinit__(self, filename):
         # initialize C level objects.
         cdef grib_handle *gh
         cdef FILE *_fd
+        cdef size_t bufsize
         if isinstance(filename, BufferedReader):
-            fileno = wrap_dup(filename.fileno())
-            self._fd = fdopen(fileno, "rb")
-            self._offset = filename.tell()
-            self._inner = filename
-            # since BufferedReader has its own read buffer,
-            # BufferedReader.seek() sometimes just changes its
-            # internal position and BufferedReader.tell() returns
-            # a calculated value, we need to ensure the actual
-            # position by fseek().
-            fseek(self._fd, self._offset, SEEK_SET)
+            try: 
+                fileno = filename.fileno()
+            except UnsupportedOperation:
+                fileno = None
+            if fileno is not None:
+                fileno = wrap_dup(filename.fileno())
+                self._fd = fdopen(fileno, "rb")
+                self._offset = filename.tell()
+                self._inner = filename
+                # since BufferedReader has its own read buffer,
+                # BufferedReader.seek() sometimes just changes its
+                # internal position and BufferedReader.tell() returns
+                # a calculated value, we need to ensure the actual
+                # position by fseek().      
+                fseek(self._fd, self._offset, SEEK_SET)
+            else:
+                if not HAS_FMEMOPEN:
+                    raise NotImplementedError('reading from a byte stream not implemented on windows')
+                bufsize = filename.seek(0,os.SEEK_END)
+                filename.seek(0) 
+                buf = filename.read()
+                self._fd = fmemopen(<char *>buf, bufsize, 'rb')
+                self._offset = 0
+                self._inner = None
         else:
             if isinstance(filename, PathLike):
                 bytestr = os.fsencode(filename)
@@ -359,7 +380,6 @@ cdef class open(object):
             self._offset = 0
             self._inner = None
         if self._fd == NULL:
-            raise IOError("could not open %s", filename)
             raise OSError("could not open {}".format(filename))
         self._gh = NULL
     def __init__(self, filename):
@@ -367,7 +387,10 @@ cdef class open(object):
         cdef grib_handle *gh
         # initalize Python level objects
         if isinstance(filename, BufferedReader):
-            self.name = filename.name
+            try:
+                self.name = filename.name
+            except AttributeError:
+                self.name = None
         elif isinstance(filename, PathLike):
             self.name = str(filename)
         else:
