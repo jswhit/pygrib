@@ -1,24 +1,22 @@
-
 <!DOCTYPE html>
 
-<html>
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>API &#8212; pygrib  documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/css/nature2.css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css?v=279e0f84" />
+    <link rel="stylesheet" type="text/css" href="_static/css/nature2.css?v=9a3bd955" />
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Installation" href="installing.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -40,12 +38,12 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="api">
-<h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="example-usage">
-<h2>Example usage<a class="headerlink" href="#example-usage" title="Permalink to this headline">¶</a></h2>
+  <section id="api">
+<h1>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h1>
+<section id="example-usage">
+<h2>Example usage<a class="headerlink" href="#example-usage" title="Link to this heading">¶</a></h2>
 <p>from the python interpreter prompt, import the package:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygrib</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pygrib</span>
 </pre></div>
 </div>
 <p>open a GRIB file, create a grib message iterator:</p>
@@ -126,42 +124,42 @@ that offsets are measured in grib messages instead of bytes:</p>
 <span class="go">1:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 240 hrs:from 201001011200</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="module-pygrib">
-<span id="module-docstrings"></span><h2>Module docstrings<a class="headerlink" href="#module-pygrib" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-pygrib">
+<span id="module-docstrings"></span><h2>Module docstrings<a class="headerlink" href="#module-pygrib" title="Link to this heading">¶</a></h2>
 <p>pygrib module</p>
 <dl class="py function">
-<dt id="pygrib.fromstring">
-<code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">fromstring</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">string</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.fromstring" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.fromstring">
+<span class="sig-prename descclassname"><span class="pre">pygrib.</span></span><span class="sig-name descname"><span class="pre">fromstring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.fromstring" title="Link to this definition">¶</a></dt>
 <dd><p>Create a <a class="reference internal" href="#pygrib.gribmessage" title="pygrib.gribmessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">gribmessage</span></code></a> instance from a python bytes object
 representing a binary grib message (the reverse of <a class="reference internal" href="#pygrib.gribmessage.tostring" title="pygrib.gribmessage.tostring"><code class="xref py py-meth docutils literal notranslate"><span class="pre">gribmessage.tostring()</span></code></a>).</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="pygrib.gaulats">
-<code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">gaulats</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nlats</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.gaulats" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.gaulats">
+<span class="sig-prename descclassname"><span class="pre">pygrib.</span></span><span class="sig-name descname"><span class="pre">gaulats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nlats</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.gaulats" title="Link to this definition">¶</a></dt>
 <dd><p>Returns nlats gaussian latitudes, in degrees, oriented from
 north to south.  nlats must be even.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="pygrib.get_definitions_path">
-<code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">get_definitions_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.get_definitions_path" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.get_definitions_path">
+<span class="sig-prename descclassname"><span class="pre">pygrib.</span></span><span class="sig-name descname"><span class="pre">get_definitions_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.get_definitions_path" title="Link to this definition">¶</a></dt>
 <dd><p>return eccodes_definitions_path currently in use.</p>
-<p>If empty, then definitions installed with linked eccodes lib are begin used.</p>
+<p>If None, then definitions installed with linked eccodes lib are begin used.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="pygrib.gribmessage">
-<em class="property">class </em><code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">gribmessage</code><a class="headerlink" href="#pygrib.gribmessage" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dt class="sig sig-object py" id="pygrib.gribmessage">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pygrib.</span></span><span class="sig-name descname"><span class="pre">gribmessage</span></span><a class="headerlink" href="#pygrib.gribmessage" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Grib message object.</p>
 <p>Each grib message has attributes corresponding to GRIB
 <a class="reference external" href="https://confluence.ecmwf.int/display/ECC/GRIB+Keys">keys</a>.
 Parameter names are described by the <code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">shortName</span></code> and <code class="docutils literal notranslate"><span class="pre">paramID</span></code> keys.
 pygrib also defines some special attributes which are defined below</p>
 <dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>messagenumber</strong> – The grib message number in the file.</p></li>
 <li><p><strong>projparams</strong> – A dictionary containing proj4 key/value pairs describing 
@@ -183,8 +181,8 @@ is a range, then <code class="docutils literal notranslate"><span class="pre">va
 </dd>
 </dl>
 <dl class="py method">
-<dt id="pygrib.gribmessage.data">
-<code class="sig-name descname">data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lat1</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">lat2</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">lon1</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">lon2</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.gribmessage.data" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.gribmessage.data">
+<span class="sig-name descname"><span class="pre">data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lat1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.gribmessage.data" title="Link to this definition">¶</a></dt>
 <dd><p>extract data, lats and lons for a subset region defined
 by the keywords lat1,lat2,lon1,lon2.</p>
 <p>The default values of lat1,lat2,lon1,lon2 are None, which
@@ -195,41 +193,41 @@ then 2-d arrays are returned, otherwise 1-d arrays are returned.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pygrib.gribmessage.expand_grid">
-<code class="sig-name descname">expand_grid</code><span class="sig-paren">(</span><em class="sig-param">True or False</em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.gribmessage.expand_grid" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.gribmessage.expand_grid">
+<span class="sig-name descname"><span class="pre">expand_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">True</span> <span class="pre">or</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.gribmessage.expand_grid" title="Link to this definition">¶</a></dt>
 <dd><p>toggle expansion of 1D reduced grid data to a regular (2D) grid (on
 by default).</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pygrib.gribmessage.has_key">
-<code class="sig-name descname">has_key</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.gribmessage.has_key" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.gribmessage.has_key">
+<span class="sig-name descname"><span class="pre">has_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.gribmessage.has_key" title="Link to this definition">¶</a></dt>
 <dd><p>tests whether a grib message object has a specified key.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pygrib.gribmessage.is_missing">
-<code class="sig-name descname">is_missing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.gribmessage.is_missing" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.gribmessage.is_missing">
+<span class="sig-name descname"><span class="pre">is_missing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.gribmessage.is_missing" title="Link to this definition">¶</a></dt>
 <dd><p>returns True if key is invalid or value associated with key is equal
 to grib missing value flag (False otherwise)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pygrib.gribmessage.keys">
-<code class="sig-name descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.gribmessage.keys" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.gribmessage.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.gribmessage.keys" title="Link to this definition">¶</a></dt>
 <dd><p>return keys associated with a grib message in a list</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pygrib.gribmessage.latlons">
-<code class="sig-name descname">latlons</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.gribmessage.latlons" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.gribmessage.latlons">
+<span class="sig-name descname"><span class="pre">latlons</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.gribmessage.latlons" title="Link to this definition">¶</a></dt>
 <dd><p>compute lats and lons (in degrees) of grid.
 Currently handles regular lat/lon, global gaussian, mercator, stereographic,
 lambert conformal, albers equal-area, space-view, azimuthal
 equidistant, reduced gaussian, reduced lat/lon,
 lambert azimuthal equal-area, rotated lat/lon and rotated gaussian grids.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">lats,lons</span></code> numpy arrays
 containing latitudes and longitudes of grid (in degrees).</p>
 </dd>
@@ -237,14 +235,14 @@ containing latitudes and longitudes of grid (in degrees).</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pygrib.gribmessage.tostring">
-<code class="sig-name descname">tostring</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.gribmessage.tostring" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.gribmessage.tostring">
+<span class="sig-name descname"><span class="pre">tostring</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.gribmessage.tostring" title="Link to this definition">¶</a></dt>
 <dd><p>return coded grib message in a binary string.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pygrib.gribmessage.valid_key">
-<code class="sig-name descname">valid_key</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.gribmessage.valid_key" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.gribmessage.valid_key">
+<span class="sig-name descname"><span class="pre">valid_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.gribmessage.valid_key" title="Link to this definition">¶</a></dt>
 <dd><p>tests whether a grib message object has a specified key,
 it is not missing and it has a value that can be read.</p>
 </dd></dl>
@@ -252,16 +250,16 @@ it is not missing and it has a value that can be read.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="pygrib.index">
-<em class="property">class </em><code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">index</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.index" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dt class="sig sig-object py" id="pygrib.index">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pygrib.</span></span><span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.index" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>returns grib index object given GRIB filename indexed by keys given in
 <a href="#id1"><span class="problematic" id="id2">*</span></a>args.  The <a class="reference internal" href="#pygrib.index.select" title="pygrib.index.select"><code class="xref py py-class docutils literal notranslate"><span class="pre">select</span></code></a> or <code class="docutils literal notranslate"><span class="pre">__call__</span></code> method can then be used to selected grib messages
 based on specified values of indexed keys.
 Unlike <a class="reference internal" href="#pygrib.open.select" title="pygrib.open.select"><code class="xref py py-meth docutils literal notranslate"><span class="pre">open.select()</span></code></a>, containers or callables cannot be used to 
 select multiple key values.
 However, using <a class="reference internal" href="#pygrib.index.select" title="pygrib.index.select"><code class="xref py py-meth docutils literal notranslate"><span class="pre">index.select()</span></code></a> is much faster than <a class="reference internal" href="#pygrib.open.select" title="pygrib.open.select"><code class="xref py py-meth docutils literal notranslate"><span class="pre">open.select()</span></code></a>.</p>
-<p><strong>Warning</strong>:  Searching for data within multi-field grib messages does not
+<p>Warning:  Searching for data within multi-field grib messages does not
 work using an index and is not supported by ECCODES library. NCEP
 often puts u and v winds together in a single multi-field grib message.  You
 will get incorrect results if you try to use an index to find data in these
@@ -269,7 +267,7 @@ messages.  Use the slower, but more robust <a class="reference internal" href="#
 <p>If no key are given (i.e. <a href="#id3"><span class="problematic" id="id4">*</span></a>args is empty), it is assumed the filename represents a previously
 saved index (created using the <code class="docutils literal notranslate"><span class="pre">grib_index_build</span></code> tool or <a class="reference internal" href="#pygrib.index.write" title="pygrib.index.write"><code class="xref py py-meth docutils literal notranslate"><span class="pre">index.write()</span></code></a>) instead of a GRIB file.</p>
 <p>Example usage:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygrib</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pygrib</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">grbindx</span><span class="o">=</span><span class="n">pygrib</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;sampledata/gfs.grb&#39;</span><span class="p">,</span><span class="s1">&#39;shortName&#39;</span><span class="p">,</span><span class="s1">&#39;typeOfLevel&#39;</span><span class="p">,</span><span class="s1">&#39;level&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">grbindx</span><span class="o">.</span><span class="n">keys</span>
 <span class="go">[&#39;shortName&#39;, &#39;level&#39;]</span>
@@ -293,11 +291,11 @@ saved index (created using the <code class="docutils literal notranslate"><span 
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><a class="reference internal" href="#pygrib.gribmessage.keys" title="pygrib.gribmessage.keys"><strong>keys</strong></a> – list of strings containing keys used in the index.  Set to <code class="docutils literal notranslate"><span class="pre">None</span></code>
+<li><p><strong>keys</strong> – list of strings containing keys used in the index.  Set to <code class="docutils literal notranslate"><span class="pre">None</span></code>
 when opening a previously saved grib index file.</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/types.html#module-types" title="(in Python v3.9)"><strong>types</strong></a> – if keys are typed, this list contains the type declarations
+<li><p><strong>types</strong> – if keys are typed, this list contains the type declarations
 (<code class="docutils literal notranslate"><span class="pre">l</span></code>, <code class="docutils literal notranslate"><span class="pre">s</span></code> or <code class="docutils literal notranslate"><span class="pre">d</span></code>). Type declarations are specified by appending to the key
 name (i.e. <code class="docutils literal notranslate"><span class="pre">level:l</span></code> will search for values of <code class="docutils literal notranslate"><span class="pre">level</span></code> that are longs). Set
 to <code class="docutils literal notranslate"><span class="pre">None</span></code> when opening a previously saved grib index file.</p></li>
@@ -305,21 +303,21 @@ to <code class="docutils literal notranslate"><span class="pre">None</span></cod
 </dd>
 </dl>
 <dl class="py method">
-<dt id="pygrib.index.close">
-<code class="sig-name descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.index.close" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.index.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.index.close" title="Link to this definition">¶</a></dt>
 <dd><p>deallocate C structures associated with class instance</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pygrib.index.select">
-<code class="sig-name descname">select</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.index.select" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.index.select">
+<span class="sig-name descname"><span class="pre">select</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.index.select" title="Link to this definition">¶</a></dt>
 <dd><p>return a list of <a class="reference internal" href="#pygrib.gribmessage" title="pygrib.gribmessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">gribmessage</span></code></a> instances from grib index object 
 corresponding to specific values of indexed keys (given by kwargs).
 Unlike <a class="reference internal" href="#pygrib.open.select" title="pygrib.open.select"><code class="xref py py-meth docutils literal notranslate"><span class="pre">open.select()</span></code></a>, containers or callables cannot be used to 
 select multiple key values.
 However, using <a class="reference internal" href="#pygrib.index.select" title="pygrib.index.select"><code class="xref py py-meth docutils literal notranslate"><span class="pre">index.select()</span></code></a> is much faster than <a class="reference internal" href="#pygrib.open.select" title="pygrib.open.select"><code class="xref py py-meth docutils literal notranslate"><span class="pre">open.select()</span></code></a>.</p>
 <p>Example usage:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygrib</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pygrib</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">grbindx</span><span class="o">=</span><span class="n">pygrib</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;sampledata/gfs.grb&#39;</span><span class="p">,</span><span class="s1">&#39;shortName&#39;</span><span class="p">,</span><span class="s1">&#39;typeOfLevel&#39;</span><span class="p">,</span><span class="s1">&#39;level&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">selected_grbs</span><span class="o">=</span><span class="n">grbindx</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">shortName</span><span class="o">=</span><span class="s1">&#39;gh&#39;</span><span class="p">,</span><span class="n">typeOfLevel</span><span class="o">=</span><span class="s1">&#39;isobaricInhPa&#39;</span><span class="p">,</span><span class="n">level</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">grb</span> <span class="ow">in</span> <span class="n">selected_grbs</span><span class="p">:</span>
@@ -336,38 +334,40 @@ However, using <a class="reference internal" href="#pygrib.index.select" title="
 </dd></dl>
 
 <dl class="py method">
-<dt id="pygrib.index.write">
-<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.index.write" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.index.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.index.write" title="Link to this definition">¶</a></dt>
 <dd><p>save grib index to file</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
-<dt id="pygrib.julian_to_datetime">
-<code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">julian_to_datetime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">julday</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.julian_to_datetime" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.julian_to_datetime">
+<span class="sig-prename descclassname"><span class="pre">pygrib.</span></span><span class="sig-name descname"><span class="pre">julian_to_datetime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">julday</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.julian_to_datetime" title="Link to this definition">¶</a></dt>
 <dd><p>convert Julian day number to python datetime instance.</p>
 <p>Used to create <code class="docutils literal notranslate"><span class="pre">validDate</span></code> and <code class="docutils literal notranslate"><span class="pre">analDate</span></code> attributes from
 <code class="docutils literal notranslate"><span class="pre">julianDay</span></code> and <code class="docutils literal notranslate"><span class="pre">forecastTime</span></code> keys.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="pygrib.multi_support_off">
-<code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">multi_support_off</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.multi_support_off" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.multi_support_off">
+<span class="sig-prename descclassname"><span class="pre">pygrib.</span></span><span class="sig-name descname"><span class="pre">multi_support_off</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.multi_support_off" title="Link to this definition">¶</a></dt>
 <dd><p>turn off support for multi-field grib messages</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="pygrib.multi_support_on">
-<code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">multi_support_on</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.multi_support_on" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.multi_support_on">
+<span class="sig-prename descclassname"><span class="pre">pygrib.</span></span><span class="sig-name descname"><span class="pre">multi_support_on</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.multi_support_on" title="Link to this definition">¶</a></dt>
 <dd><p>turn on support for multi-field grib messages (default)</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="pygrib.open">
-<em class="property">class </em><code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">open</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.open" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>returns GRIB file iterator object given GRIB filename. When iterated, returns
+<dt class="sig sig-object py" id="pygrib.open">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pygrib.</span></span><span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath_or_buffer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.open" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>returns GRIB file iterator object given GRIB file path (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or
+<a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">os.PathLike</span></code></a> object) or buffer (<a class="reference external" href="https://docs.python.org/3/library/io.html#io.BufferedReader" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">io.BufferedReader</span></code></a> object).
+When iterated, returns
 instances of the <a class="reference internal" href="#pygrib.gribmessage" title="pygrib.gribmessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">gribmessage</span></code></a> class. Behaves much like a python file
 object, with <a class="reference internal" href="#pygrib.open.seek" title="pygrib.open.seek"><code class="xref py py-meth docutils literal notranslate"><span class="pre">seek()</span></code></a>, <a class="reference internal" href="#pygrib.open.tell" title="pygrib.open.tell"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tell()</span></code></a>, <a class="reference internal" href="#pygrib.open.read" title="pygrib.open.read"><code class="xref py py-meth docutils literal notranslate"><span class="pre">read()</span></code></a>
 <a class="reference internal" href="#pygrib.open.readline" title="pygrib.open.readline"><code class="xref py py-meth docutils literal notranslate"><span class="pre">readline()</span></code></a> and <a class="reference internal" href="#pygrib.open.close" title="pygrib.open.close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">close()</span></code></a> methods
@@ -380,7 +380,7 @@ to <a class="reference internal" href="#pygrib.open.select" title="pygrib.open.s
 lists of <a class="reference internal" href="#pygrib.gribmessage" title="pygrib.gribmessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">gribmessage</span></code></a> instances).  The position of the iterator is not
 altered by slicing with <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>messages</strong> – The total number of grib messages in the file.</p></li>
 <li><p><strong>messagenumber</strong> – The grib message number that the iterator currently
@@ -390,21 +390,21 @@ points to (the value returned by <a class="reference internal" href="#pygrib.ope
 </dd>
 </dl>
 <dl class="py method">
-<dt id="pygrib.open.close">
-<code class="sig-name descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.open.close" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.open.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.open.close" title="Link to this definition">¶</a></dt>
 <dd><p>close GRIB file, deallocate C structures associated with class instance</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pygrib.open.message">
-<code class="sig-name descname">message</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">N</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.open.message" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.open.message">
+<span class="sig-name descname"><span class="pre">message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.open.message" title="Link to this definition">¶</a></dt>
 <dd><p>retrieve N’th message in iterator.
 same as <code class="docutils literal notranslate"><span class="pre">seek(N-1)</span></code> followed by <code class="docutils literal notranslate"><span class="pre">readline()</span></code>.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pygrib.open.read">
-<code class="sig-name descname">read</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">N</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.open.read" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.open.read">
+<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.open.read" title="Link to this definition">¶</a></dt>
 <dd><p>read N messages from current position, returning grib messages instances in a
 list.  If N=None, all the messages to the end of the file are read.
 <code class="docutils literal notranslate"><span class="pre">pygrib.open(f).read()</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">list(pygrib.open(f))</span></code>,
@@ -413,29 +413,29 @@ grib messages in the file <code class="docutils literal notranslate"><span class
 </dd></dl>
 
 <dl class="py method">
-<dt id="pygrib.open.readline">
-<code class="sig-name descname">readline</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.open.readline" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.open.readline">
+<span class="sig-name descname"><span class="pre">readline</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.open.readline" title="Link to this definition">¶</a></dt>
 <dd><p>read one entire grib message from the file.
 Returns a <a class="reference internal" href="#pygrib.gribmessage" title="pygrib.gribmessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">gribmessage</span></code></a> instance, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if an <code class="docutils literal notranslate"><span class="pre">EOF</span></code> is encountered.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pygrib.open.rewind">
-<code class="sig-name descname">rewind</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.open.rewind" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.open.rewind">
+<span class="sig-name descname"><span class="pre">rewind</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.open.rewind" title="Link to this definition">¶</a></dt>
 <dd><p>rewind iterator (same as <code class="docutils literal notranslate"><span class="pre">seek(0)</span></code>)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pygrib.open.seek">
-<code class="sig-name descname">seek</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">N</span></em>, <em class="sig-param"><span class="n">from_what</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.open.seek" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.open.seek">
+<span class="sig-name descname"><span class="pre">seek</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_what</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.open.seek" title="Link to this definition">¶</a></dt>
 <dd><p>advance iterator N grib messages from beginning of file 
 (if <code class="docutils literal notranslate"><span class="pre">from_what=0</span></code>), from current position (if <code class="docutils literal notranslate"><span class="pre">from_what=1</span></code>)
 or from the end of file (if <code class="docutils literal notranslate"><span class="pre">from_what=2</span></code>).</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pygrib.open.select">
-<code class="sig-name descname">select</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.open.select" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.open.select">
+<span class="sig-name descname"><span class="pre">select</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.open.select" title="Link to this definition">¶</a></dt>
 <dd><p>return a list of <a class="reference internal" href="#pygrib.gribmessage" title="pygrib.gribmessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">gribmessage</span></code></a> instances from iterator filtered by <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>.
 If keyword is a container object, each grib message
 in the iterator is searched for membership in the container.
@@ -445,7 +445,7 @@ return a boolean).
 If keyword is not a container object or a callable, each 
 grib message in the iterator is tested for equality.</p>
 <p>Example usage:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pygrib</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pygrib</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">grbs</span> <span class="o">=</span> <span class="n">pygrib</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;sampledata/gfs.grb&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">selected_grbs</span><span class="o">=</span><span class="n">grbs</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">shortName</span><span class="o">=</span><span class="s1">&#39;gh&#39;</span><span class="p">,</span><span class="n">typeOfLevel</span><span class="o">=</span><span class="s1">&#39;isobaricInhPa&#39;</span><span class="p">,</span><span class="n">level</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">grb</span> <span class="ow">in</span> <span class="n">selected_grbs</span><span class="p">:</span> <span class="n">grb</span>
@@ -473,8 +473,8 @@ grib message in the iterator is tested for equality.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pygrib.open.tell">
-<code class="sig-name descname">tell</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.open.tell" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.open.tell">
+<span class="sig-name descname"><span class="pre">tell</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.open.tell" title="Link to this definition">¶</a></dt>
 <dd><p>returns position of iterator (grib message number, 0 means iterator
 is positioned at beginning of file).</p>
 </dd></dl>
@@ -482,8 +482,18 @@ is positioned at beginning of file).</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="pygrib.reload">
-<code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">reload</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">grb</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.reload" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.redtoreg">
+<span class="sig-prename descclassname"><span class="pre">pygrib.</span></span><span class="sig-name descname"><span class="pre">redtoreg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">redgrid_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lonsperlat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.redtoreg" title="Link to this definition">¶</a></dt>
+<dd><p>Takes 1-d array on ECMWF reduced gaussian grid (redgrid_data), linearly interpolates
+to corresponding regular gaussian grid.</p>
+<p>Reduced gaussian grid defined by lonsperlat array, regular gaussian
+grid has the same number of latitudes and max(lonsperlat) longitudes.</p>
+<p>Includes handling of missing values using nearest neighbor interpolation.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pygrib.reload">
+<span class="sig-prename descclassname"><span class="pre">pygrib.</span></span><span class="sig-name descname"><span class="pre">reload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grb</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.reload" title="Link to this definition">¶</a></dt>
 <dd><p>Recreate gribmessage object, updating all the keys to be consistent
 with each other.  For example, if the <code class="docutils literal notranslate"><span class="pre">forecastTime</span></code> key is changed,
 recreating the <a class="reference internal" href="#pygrib.gribmessage" title="pygrib.gribmessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">gribmessage</span></code></a> object with this function will cause
@@ -492,14 +502,14 @@ the <code class="docutils literal notranslate"><span class="pre">analDate</span>
 </dd></dl>
 
 <dl class="py function">
-<dt id="pygrib.set_definitions_path">
-<code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">set_definitions_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">eccodes_definition_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.set_definitions_path" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.set_definitions_path">
+<span class="sig-prename descclassname"><span class="pre">pygrib.</span></span><span class="sig-name descname"><span class="pre">set_definitions_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eccodes_definition_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.set_definitions_path" title="Link to this definition">¶</a></dt>
 <dd><p>set path to eccodes definition files (grib tables).</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="pygrib.setdates">
-<code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">setdates</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">grb</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.setdates" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.setdates">
+<span class="sig-prename descclassname"><span class="pre">pygrib.</span></span><span class="sig-name descname"><span class="pre">setdates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grb</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.setdates" title="Link to this definition">¶</a></dt>
 <dd><p>set <code class="docutils literal notranslate"><span class="pre">fcstimeunits</span></code>, <code class="docutils literal notranslate"><span class="pre">analDate</span></code> and <code class="docutils literal notranslate"><span class="pre">validDate</span></code> attributes using
 the <code class="docutils literal notranslate"><span class="pre">julianDay</span></code>, <code class="docutils literal notranslate"><span class="pre">forecastTime</span></code> and <code class="docutils literal notranslate"><span class="pre">indicatorOfUnitOfTimeRange</span></code> keys.
 Called automatically when <a class="reference internal" href="#pygrib.gribmessage" title="pygrib.gribmessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">gribmessage</span></code></a> instance created,
@@ -508,40 +518,86 @@ them is modified after instance creation.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="pygrib.tolerate_badgrib_off">
-<code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">tolerate_badgrib_off</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.tolerate_badgrib_off" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.tolerate_badgrib_off">
+<span class="sig-prename descclassname"><span class="pre">pygrib.</span></span><span class="sig-name descname"><span class="pre">tolerate_badgrib_off</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.tolerate_badgrib_off" title="Link to this definition">¶</a></dt>
 <dd><p>raise an exception when a missing or malformed key is encountered
 (default behavior).</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="pygrib.tolerate_badgrib_on">
-<code class="sig-prename descclassname">pygrib.</code><code class="sig-name descname">tolerate_badgrib_on</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.tolerate_badgrib_on" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pygrib.tolerate_badgrib_on">
+<span class="sig-prename descclassname"><span class="pre">pygrib.</span></span><span class="sig-name descname"><span class="pre">tolerate_badgrib_on</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pygrib.tolerate_badgrib_on" title="Link to this definition">¶</a></dt>
 <dd><p>don’t raise an exception when a missing or malformed key is encountered.</p>
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">API</a><ul>
 <li><a class="reference internal" href="#example-usage">Example usage</a></li>
-<li><a class="reference internal" href="#module-pygrib">Module docstrings</a></li>
+<li><a class="reference internal" href="#module-pygrib">Module docstrings</a><ul>
+<li><a class="reference internal" href="#pygrib.fromstring"><code class="docutils literal notranslate"><span class="pre">fromstring()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.gaulats"><code class="docutils literal notranslate"><span class="pre">gaulats()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.get_definitions_path"><code class="docutils literal notranslate"><span class="pre">get_definitions_path()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.gribmessage"><code class="docutils literal notranslate"><span class="pre">gribmessage</span></code></a><ul>
+<li><a class="reference internal" href="#pygrib.gribmessage.data"><code class="docutils literal notranslate"><span class="pre">gribmessage.data()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.gribmessage.expand_grid"><code class="docutils literal notranslate"><span class="pre">gribmessage.expand_grid()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.gribmessage.has_key"><code class="docutils literal notranslate"><span class="pre">gribmessage.has_key()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.gribmessage.is_missing"><code class="docutils literal notranslate"><span class="pre">gribmessage.is_missing()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.gribmessage.keys"><code class="docutils literal notranslate"><span class="pre">gribmessage.keys()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.gribmessage.latlons"><code class="docutils literal notranslate"><span class="pre">gribmessage.latlons()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.gribmessage.tostring"><code class="docutils literal notranslate"><span class="pre">gribmessage.tostring()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.gribmessage.valid_key"><code class="docutils literal notranslate"><span class="pre">gribmessage.valid_key()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pygrib.index"><code class="docutils literal notranslate"><span class="pre">index</span></code></a><ul>
+<li><a class="reference internal" href="#pygrib.index.close"><code class="docutils literal notranslate"><span class="pre">index.close()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.index.select"><code class="docutils literal notranslate"><span class="pre">index.select()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.index.write"><code class="docutils literal notranslate"><span class="pre">index.write()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pygrib.julian_to_datetime"><code class="docutils literal notranslate"><span class="pre">julian_to_datetime()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.multi_support_off"><code class="docutils literal notranslate"><span class="pre">multi_support_off()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.multi_support_on"><code class="docutils literal notranslate"><span class="pre">multi_support_on()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.open"><code class="docutils literal notranslate"><span class="pre">open</span></code></a><ul>
+<li><a class="reference internal" href="#pygrib.open.close"><code class="docutils literal notranslate"><span class="pre">open.close()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.open.message"><code class="docutils literal notranslate"><span class="pre">open.message()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.open.read"><code class="docutils literal notranslate"><span class="pre">open.read()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.open.readline"><code class="docutils literal notranslate"><span class="pre">open.readline()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.open.rewind"><code class="docutils literal notranslate"><span class="pre">open.rewind()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.open.seek"><code class="docutils literal notranslate"><span class="pre">open.seek()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.open.select"><code class="docutils literal notranslate"><span class="pre">open.select()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.open.tell"><code class="docutils literal notranslate"><span class="pre">open.tell()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pygrib.redtoreg"><code class="docutils literal notranslate"><span class="pre">redtoreg()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.reload"><code class="docutils literal notranslate"><span class="pre">reload()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.set_definitions_path"><code class="docutils literal notranslate"><span class="pre">set_definitions_path()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.setdates"><code class="docutils literal notranslate"><span class="pre">setdates()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.tolerate_badgrib_off"><code class="docutils literal notranslate"><span class="pre">tolerate_badgrib_off()</span></code></a></li>
+<li><a class="reference internal" href="#pygrib.tolerate_badgrib_on"><code class="docutils literal notranslate"><span class="pre">tolerate_badgrib_on()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="installing.html"
-                        title="previous chapter">Installation</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="installing.html"
+                          title="previous chapter">Installation</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -549,21 +605,21 @@ them is modified after instance creation.</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -580,8 +636,8 @@ them is modified after instance creation.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2018, Jeff Whitaker.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
+    &#169; Copyright 2018, Jeff Whitaker.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     </div>
   </body>
 </html>
