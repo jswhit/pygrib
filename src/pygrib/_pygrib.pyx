@@ -12,6 +12,7 @@ from io import BufferedReader, UnsupportedOperation
 from os import PathLike
 from packaging import version
 from numpy import ma
+from cpython.buffer cimport PyObject_GetBuffer, PyBuffer_Release, PyBUF_SIMPLE
 import pyproj
 npc.import_array()
 
@@ -340,12 +341,13 @@ cdef class open(object):
     cdef long _offset
     cdef public object name, messagenumber, messages, closed,\
                        has_multi_field_msgs
-    cdef object _inner
+    cdef object _inner, _buffer_allocated
+    cdef Py_buffer _buffer
     def __cinit__(self, filename):
         # initialize C level objects.
         cdef grib_handle *gh
         cdef FILE *_fd
-        cdef size_t bufsize
+        self._buffer_allocated = False
         if isinstance(filename, BufferedReader):
             try: 
                 fileno = filename.fileno()
@@ -365,10 +367,11 @@ cdef class open(object):
             else:
                 if not HAS_FMEMOPEN:
                     raise NotImplementedError('reading from a byte stream not implemented on windows')
-                bufsize = filename.seek(0,os.SEEK_END)
-                filename.seek(0) 
                 buf = filename.read()
-                self._fd = fmemopen(<char *>buf, bufsize, 'rb')
+                if PyObject_GetBuffer(buf, &self._buffer, PyBUF_SIMPLE) != 0:
+                    raise MemoryError("Could not get memory buffer from BufferedReader object.")
+                self._buffer_allocated = True
+                self._fd = fmemopen(<char*>self._buffer.buf, <size_t>self._buffer.len, 'rb')
                 self._offset = 0
                 self._inner = None
         else:
@@ -530,6 +533,9 @@ cdef class open(object):
             err = grib_handle_delete(self._gh)
             if err:
                 raise RuntimeError(_get_error_message(err))
+        if self._buffer_allocated:
+            PyBuffer_Release(&self._buffer)
+            self._buffer_allocated = False
         self.closed = True
         self._fd = NULL
 
@@ -539,6 +545,9 @@ cdef class open(object):
         cdef int err
         if self._fd:
             fclose(self._fd)
+        if self._buffer_allocated:
+            PyBuffer_Release(&self._buffer)
+            self._buffer_allocated = False
 
     def rewind(self):
         """rewind iterator (same as ``seek(0)``)"""
