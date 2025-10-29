@@ -86,10 +86,13 @@ write the modified message to a new GRIB file:
     >>> pygrib.open('test.grb').readline() 
     1:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 240 hrs:from 201001011200
 
-you can also open an in-memory binary stream instead of on-disk file by creating a io.BufferedRead instance from the binary string
+you can also open an in-memory binary stream instead of on-disk file 
+by creating an io.BufferedReader instance from the binary string:
 
     >>> import requests, io
-    >>> fileurl="https://www.ncei.noaa.gov/data/ncep-global-data-assimilation/access/historical/201910/20191002/gdas.t00z.pgrb2.1p00.anl"
+    >>> fileurl = ("https://www.ncei.noaa.gov/data/"
+    ...            "ncep-global-data-assimilation/access/historical/"
+    ...            "201910/20191002/gdas.t00z.pgrb2.1p00.anl")
     >>> response = requests.get(fileurl)
     >>> buffer_io = io.BufferedReader(io.BytesIO(response.content))
     >>> grbs = pygrib.open(buffer_io)

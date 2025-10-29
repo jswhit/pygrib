@@ -246,7 +246,9 @@ def test():
 
     read binary stream from memory instead of a disk file
     >>> import requests, io
-    >>> fileurl="https://www.ncei.noaa.gov/data/ncep-global-data-assimilation/access/historical/201910/20191002/gdas.t00z.pgrb2.1p00.anl"
+    >>> fileurl = ("https://www.ncei.noaa.gov/data/"
+    ...            "ncep-global-data-assimilation/access/historical/"
+    ...            "201910/20191002/gdas.t00z.pgrb2.1p00.anl")
     >>> response = requests.get(fileurl)
     >>> buffer_io = io.BufferedReader(io.BytesIO(response.content))
     >>> grbs = pygrib.open(buffer_io)
