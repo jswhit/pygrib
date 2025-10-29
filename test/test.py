@@ -243,6 +243,17 @@ def test():
     >>> str(grb.packingType)
     'grid_simple'
     >>> grbs.close()
+
+    read binary stream from memory instead of a disk file
+    >>> import requests, io
+    >>> fileurl="https://www.ncei.noaa.gov/data/ncep-global-data-assimilation/access/historical/201910/20191002/gdas.t00z.pgrb2.1p00.anl"
+    >>> response = requests.get(fileurl)
+    >>> buffer_io = io.BufferedReader(io.BytesIO(response.content))
+    >>> grbs = pygrib.open(buffer_io)
+    >>> grb = grbs.select(shortName='gh',level=500)[0]
+    >>> print(grb)
+    181:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 50000 Pa:fcst time 0 hrs:from 201910020000
+    >>> grbs.close()
     """
 
 if __name__ == "__main__":
