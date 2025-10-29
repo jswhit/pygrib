@@ -124,6 +124,21 @@ that offsets are measured in grib messages instead of bytes:</p>
 <span class="go">1:Surface pressure:Pa (instant):regular_gg:surface:level 0:fcst time 240 hrs:from 201001011200</span>
 </pre></div>
 </div>
+<p>you can also open an in-memory binary stream instead of on-disk file
+by creating an io.BufferedReader instance from the binary string:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span><span class="o">,</span><span class="w"> </span><span class="nn">io</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fileurl</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;https://www.ncei.noaa.gov/data/&quot;</span>
+<span class="gp">... </span>           <span class="s2">&quot;ncep-global-data-assimilation/access/historical/&quot;</span>
+<span class="gp">... </span>           <span class="s2">&quot;201910/20191002/gdas.t00z.pgrb2.1p00.anl&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fileurl</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">buffer_io</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BufferedReader</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grbs</span> <span class="o">=</span> <span class="n">pygrib</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">buffer_io</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grb</span> <span class="o">=</span> <span class="n">grbs</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">shortName</span><span class="o">=</span><span class="s1">&#39;gh&#39;</span><span class="p">,</span><span class="n">level</span><span class="o">=</span><span class="mi">500</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">grb</span><span class="p">)</span>
+<span class="go">181:Geopotential height:gpm (instant):regular_ll:isobaricInhPa:level 50000 Pa:fcst time 0 hrs:from 201910020000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grbs</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
 </section>
 <section id="module-pygrib">
 <span id="module-docstrings"></span><h2>Module docstrings<a class="headerlink" href="#module-pygrib" title="Link to this heading">¶</a></h2>
@@ -259,7 +274,7 @@ based on specified values of indexed keys.
 Unlike <a class="reference internal" href="#pygrib.open.select" title="pygrib.open.select"><code class="xref py py-meth docutils literal notranslate"><span class="pre">open.select()</span></code></a>, containers or callables cannot be used to 
 select multiple key values.
 However, using <a class="reference internal" href="#pygrib.index.select" title="pygrib.index.select"><code class="xref py py-meth docutils literal notranslate"><span class="pre">index.select()</span></code></a> is much faster than <a class="reference internal" href="#pygrib.open.select" title="pygrib.open.select"><code class="xref py py-meth docutils literal notranslate"><span class="pre">open.select()</span></code></a>.</p>
-<p>Warning:  Searching for data within multi-field grib messages does not
+<p><strong>Warning</strong>:  Searching for data within multi-field grib messages does not
 work using an index and is not supported by ECCODES library. NCEP
 often puts u and v winds together in a single multi-field grib message.  You
 will get incorrect results if you try to use an index to find data in these
