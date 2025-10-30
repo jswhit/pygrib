@@ -15,7 +15,7 @@ authors = [
   {name = "Jeff Whitaker", email = "whitaker.jeffrey@gmail.com"},
 ]
 requires-python = ">=3.10"
-license = "MIT AND (Apache-2.0 OR BSD-2-Clause)"
+license = "MIT AND BSD-2-Clause"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Programming Language :: Python :: 3",
