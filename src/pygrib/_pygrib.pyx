@@ -1,4 +1,4 @@
-"""pygrib module"""
+f""pygrib module"""
 
 __version__ = '2.1.8'
 
@@ -204,8 +204,8 @@ missingvalue_float = -1.e100 # value given in grib_api.h version 1.90
 def _get_grib_api_version():
     div = lambda v,d: (v//d,v%d)
     v = grib_get_api_version()
-    v,revision = div(v,100)
-    v,minor = div(v,100)
+    v,revision = int(div(v,100))
+    v,minor = int(div(v,100))
     major = v
     return "%d.%d.%d" % (major,minor,revision)
 grib_api_version = _get_grib_api_version()
