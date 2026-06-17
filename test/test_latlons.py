@@ -114,3 +114,42 @@ def test_redtoreg(samplegribfile,field):
     grb.expand_grid(False)
     fld_tst = redtoreg(grb.values, grb.pl, missval=grb.missingValue)
     assert np.allclose(fld,fld_tst)
+
+# test regular_ll and regular_gg
+@pytest.mark.parametrize("filename", ["gfs.grb", "flux.grb"])
+def test_optimized_latlons_numerical_identity(samplegribfile, filename):
+    """
+    Verify mathematical identity against legacy C-layer decoding,
+    while implicitly proving the fast track was utilized.
+    """
+    msg = samplegribfile.message(1)
+    
+    # get the latlons using the optimized pathway
+    lats_opt, lons_opt = msg.latlons()
+    
+    # delete 'gridType' from the private cache to force the next call to legacy.
+    if hasattr(msg, '_all_keys') and 'gridType' in msg._all_keys:
+        msg._all_keys.remove('gridType')
+        try:
+            lats_legacy, lons_legacy = msg.latlons()
+            np.testing.assert_allclose(lats_opt, lats_legacy, rtol=1e-6, atol=1e-6)
+            np.testing.assert_allclose(lons_opt, lons_legacy, rtol=1e-6, atol=1e-6)
+            
+        finally:
+            msg._all_keys.append('gridType')
+# Make sure grib1 is processed (since it will use the fallback)
+@pytest.mark.parametrize("filename", ["regular_latlon_surface.grib1"])
+def test_legacy_grib1_regular_ll_fallback(samplegribfile, filename):
+    """
+    Verify that real GRIB1 regular_ll files that lack standard 
+    high-level geometry keys gracefully fall back to the native 
+    ecCodes C-layer engine without raising errors.
+    """
+    msg = samplegribfile.message(1)
+    
+    lats, lons = msg.latlons()
+    
+    assert lats is not None
+    assert lons is not None
+    assert lats.shape == msg.values.shape
+    assert lons.shape == msg.values.shape

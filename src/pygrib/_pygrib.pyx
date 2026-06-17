@@ -1584,13 +1584,52 @@ cdef class gribmessage(object):
             raise ValueError('unsupported grid %s' % self['gridType'])
 
         if self['gridType'] in ['regular_gg','regular_ll']: # regular lat/lon grid
-            lat1 = self['latitudeOfFirstGridPointInDegrees']
-            lat2 = self['latitudeOfLastGridPointInDegrees']
-            lats = self['distinctLatitudes']
-            if self['Nj'] > 1:
-                if lat2 < lat1 and lats[-1] > lats[0]: lats = lats[::-1]
-            lons = self['distinctLongitudes']
-            lons,lats = np.meshgrid(lons,lats) 
+            lons = None
+            lats = None
+            # try to calculate the lons, lats rather than relying on the (much slower) distinct lats/lons call
+            try:
+                grid_type = self['gridType']
+                if grid_type in ['regular_ll', 'regular_gg']:
+                    j_points_consec = self['jPointsAreConsecutive'] if self.has_key('jPointsAreConsecutive') else 0
+                    # only for row-major matrix layout
+                    if j_points_consec == 0:
+                        ni, nj = int(self['Ni']), int(self['Nj'])
+                        lat_start = float(self['latitudeOfFirstGridPointInDegrees'])
+                        lon_start = float(self['longitudeOfFirstGridPointInDegrees'])
+                        lat_end = float(self['latitudeOfLastGridPointInDegrees'])
+                        lon_end = float(self['longitudeOfLastGridPointInDegrees'])
+                        i_scans_neg = self['iScansNegatively'] if self.has_key('iScansNegatively') else 0
+                        j_scans_pos = self['jScansPositively'] if self.has_key('jScansPositively') else 0
+                        di = float(self['iDirectionIncrementInDegrees'])
+                        lon_step = -di if i_scans_neg else di
+                        calc_lons = lon_start + np.arange(ni) * lon_step
+                        if lon_start > 180 and lon_end <= 360:
+                            calc_lons = (calc_lons + 180) % 360 - 180
+                        # handle (intended) anti-meridian global wraps when the first lon has the wrong sign
+                        if abs(lon_start) == 180.0:
+                            if (lon_step > 0 and lon_end < 180.0) or (lon_step < 0 and lon_end > -180.0):
+                                calc_lons = (calc_lons + 180.0) % 360.0 - 180.0
+                        if grid_type == 'regular_ll':
+                            dj = float(self['jDirectionIncrementInDegrees'])
+                            lat_step = dj if j_scans_pos else -dj
+                            calc_lats = lat_start + np.arange(nj) * lat_step
+                        else:  # regular_gg
+                            calc_lats = gaulats(nj)
+                            if j_scans_pos:
+                                calc_lats = calc_lats[::-1]
+                        lons, lats = np.meshgrid(calc_lons, calc_lats)
+            except Exception as e:
+                lons = None
+                lats = None
+            # fallback
+            if lats is None or lons is None:
+                lat1 = self['latitudeOfFirstGridPointInDegrees']
+                lat2 = self['latitudeOfLastGridPointInDegrees']
+                lats = self['distinctLatitudes']
+                if self['Nj'] > 1:
+                    if lat2 < lat1 and lats[-1] > lats[0]: lats = lats[::-1]
+                lons = self['distinctLongitudes']
+                lons,lats = np.meshgrid(lons,lats)
         elif self['gridType'] == 'reduced_gg': # reduced global gaussian grid
             if self.expand_reduced:
                 lat1 = self['latitudeOfFirstGridPointInDegrees']
